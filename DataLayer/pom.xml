@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.proyecto</groupId>
-	<artifactId>dataAccess</artifactId>
+	<artifactId>DataLayer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>DataAccess</name>
+	<name>DataLayer</name>
 	<description>Proyecto de Conexion a base de datos</description>
 
 	<parent>
@@ -50,10 +50,10 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>            
         </dependency>
-       	<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			</dependency>
+        <dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+		</dependency>               	
 	</dependencies>
 		
 	<build>
