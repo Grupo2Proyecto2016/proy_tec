@@ -61,16 +61,6 @@
 			<artifactId>spring-security-web</artifactId>
 			<version>4.0.4.RELEASE</version>
 		</dependency>
-		<dependency>
-			<groupId>GoOn.BusinessLogic</groupId>
-			<artifactId>GoOn.BusinessLogic</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>GoOn.BusinessEntities</groupId>
-			<artifactId>GoOn.BusinessEntities</artifactId>
-			<version>1</version>
-		</dependency>
 	</dependencies>
 
 
