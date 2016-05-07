@@ -30,7 +30,7 @@ public class MainDataSourceConfig
 	private String MainDatasourceUsername ="postgres";
 	
 	//@Value("${MainDatasourcePassword}")
-	private String MainDatasourcePassword = "root";
+	private String MainDatasourcePassword = "masterkey";
 	
 	//@Value("${MainDatasourceUrl}")
 	private String MainDatasourceUrl = "jdbc:postgresql://localhost:5432/MainApp";

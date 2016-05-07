@@ -48,7 +48,7 @@ public class TenantDataSourceConfig
 	private String MainDatasourceUsername ="postgres";
 	
 	//@Value("${MainDatasourcePassword}")
-	private String MainDatasourcePassword = "root";
+	private String MainDatasourcePassword = "masterkey";
 	
 	private String DatasourceBaseUrl= "jdbc:postgresql://localhost:5432/";	
 
