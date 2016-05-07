@@ -1,0 +1,6 @@
+<persistence>
+    <persistence-unit name="temf">
+    	<provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <class>com.springmvc.entities.tenant.Usuario</class>
+    </persistence-unit>
+</persistence>
