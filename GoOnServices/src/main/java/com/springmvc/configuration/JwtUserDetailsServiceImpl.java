@@ -6,8 +6,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import com.springmvc.entities.main.Usuario;
 import com.springmvc.logic.implementations.UsersLogic;
 import com.springmvc.logic.interfaces.IUsersLogic;
 
@@ -20,20 +18,6 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
 
 	public String tenant;
 	
-	@Autowired
-    private IUsersLogic usersLogic;
-    
-    public UserDetails loadUserByUsername(String username, String tenant) throws UsernameNotFoundException {
-    	com.springmvc.entities.tenant.Usuario user = usersLogic.GetUserByName(tenant, username);
-        if (user == null) 
-        {
-            throw new UsernameNotFoundException(String.format("No user found with username '%s'.", username));
-        } else 
-        {
-            return JwtUserFactory.create(user);
-        }
-    }
-
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		com.springmvc.entities.tenant.Usuario user = null;
