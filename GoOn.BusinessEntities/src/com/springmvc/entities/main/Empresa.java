@@ -1,9 +1,17 @@
 package com.springmvc.entities.main;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Empresa {
@@ -19,6 +27,24 @@ public class Empresa {
 	private String direccion;
 	private String nombreTenant;
 	
+	@OneToMany(cascade = CascadeType.ALL , fetch = FetchType.LAZY)	
+    @JoinColumn(name = "id_empresa")
+    private List<Contacto> contactos;
+	
+	/*@OneToMany(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+	@JoinTable(name="empresa_modulo", joinColumns={ @JoinColumn(name="id_empresa", referencedColumnName="id_empresa") },
+			   inverseJoinColumns={ @JoinColumn(name="id_modulo", referencedColumnName="id_modulo", unique=true) })*/
+	@ManyToMany(targetEntity=Modulo.class)	
+	private List<Modulo> modulos;
+	
+	public List<Modulo> getModulos() {
+		return modulos;
+	}
+
+	public void setModulos(List<Modulo> modulos) {
+		this.modulos = modulos;
+	}
+
 	public String getRazonSocial() {
 		return razonSocial;
 	}
@@ -96,6 +122,14 @@ public class Empresa {
                 "Empresa[id=%d, nombre='%s']",
                 idEmpresa, nombre);
     }
+
+	public List<Contacto> getContactos() {
+		return contactos;
+	}
+
+	public void setContactos(List<Contacto> contactos) {
+		this.contactos = contactos;
+	}
 	
 	
 
