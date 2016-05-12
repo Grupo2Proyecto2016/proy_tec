@@ -16,6 +16,8 @@ public class JwtTokenUtil implements Serializable {
 
     private static final long serialVersionUID = -3301605591108950415L;
 
+    private static String mainAppTenantCode = "8s7dv7t9ne8ymn798werg7ad9v8qer7";
+    
     private static final String CLAIM_KEY_USERNAME = "sub";
     private static final String CLAIM_KEY_TENANT = "tenant";
     private static final String CLAIM_KEY_AUDIENCE = "audience";
@@ -130,7 +132,11 @@ public class JwtTokenUtil implements Serializable {
         return (AUDIENCE_TABLET.equals(audience) || AUDIENCE_MOBILE.equals(audience));
     }
 
-    public String generateToken(UserDetails userDetails, String tenant) {
+    public String generateToken(UserDetails userDetails, String tenant, boolean isMainApp) {
+    	if(isMainApp)
+    	{
+    		tenant = mainAppTenantCode;
+    	}
         Map<String, Object> claims = new HashMap<>();
         claims.put(CLAIM_KEY_USERNAME, userDetails.getUsername());
         claims.put(CLAIM_KEY_TENANT, tenant);
@@ -165,15 +171,19 @@ public class JwtTokenUtil implements Serializable {
         return refreshedToken;
     }
 
-    public Boolean validateToken(String token, UserDetails userDetails, String tenant) {
-        JwtUser user = (JwtUser) userDetails;
+    public Boolean validateToken(String token, UserDetails userDetails, String tenant, boolean isMainApp) {
+    	if(isMainApp)
+    	{
+    		tenant = mainAppTenantCode;
+    	}
+    	JwtUser user = (JwtUser) userDetails;
         final String username = getUsernameFromToken(token);
         final String currentTenant = getTenantFromToken(token);
         final Date created = getCreatedDateFromToken(token);
         //final Date expiration = getExpirationDateFromToken(token);
         return (
                 username.equals(user.getUsername())
-                		//&&	currentTenant.equals(tenant) SE CAGA PORQUE ES NULL
+                		&&	currentTenant.equals(tenant)
                         && !isTokenExpired(token)
                         && !isCreatedBeforeLastPasswordReset(created, user.getLastPasswordResetDate()));
     }

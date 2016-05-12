@@ -4,6 +4,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.springmvc.dataaccess.context.MainDAContext;
+import com.springmvc.entities.main.Usuario;
 import com.springmvc.logic.interfaces.ITenantLogic;
 
 @Component
@@ -15,5 +16,11 @@ public class TenantLogic implements ITenantLogic {
 	{
 		String tenant = context.GetTenant(tenantid); 
 		return tenant != null;
+	}
+	
+	public Usuario GetUserByName(String username)
+	{
+		Usuario user = context.GetUserByName(username);
+		return user;
 	}
 }

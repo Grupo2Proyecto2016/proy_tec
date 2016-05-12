@@ -30,8 +30,7 @@ import com.springmvc.logic.interfaces.IUsersLogic;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping(value = "/{tenantid}")
-public class AuthenticationRestController {
+public class TenantManagerRestController {
 
     private String tokenHeader = "Authorization";
     
@@ -53,22 +52,8 @@ public class AuthenticationRestController {
 		return "";
     }
     
-    @RequestMapping(value = "/tenantExist", method = RequestMethod.GET)
-    public String tenantExist(@PathVariable String tenantid) throws AuthenticationException 
-    {
-    	boolean tenantExist = tenantLogic.TenantExists(tenantid);
-    	if(tenantExist)
-    	{
-    		return "";    		
-    	}
-    	else
-    	{
-    		throw new HttpNotFoundException();
-    	}
-    }
-    
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(@PathVariable String tenantid, @RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException 
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException 
     {
 
         // Perform the security
@@ -82,7 +67,7 @@ public class AuthenticationRestController {
 
         // Reload password post-security so we can generate token
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-        final String token = jwtTokenUtil.generateToken(userDetails, tenantid, false);
+        final String token = jwtTokenUtil.generateToken(userDetails, null, true);
 
         // Return the token
         return ResponseEntity.ok(new JwtAuthenticationResponse(token));

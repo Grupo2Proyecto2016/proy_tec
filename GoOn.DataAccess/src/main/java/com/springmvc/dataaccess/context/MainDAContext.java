@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +13,7 @@ import com.springmvc.dataaccess.repository.main.UserRepository;
 import com.springmvc.entities.main.Usuario;
 
 @Component
+@Configuration
 public class MainDAContext {
 
 	@Autowired

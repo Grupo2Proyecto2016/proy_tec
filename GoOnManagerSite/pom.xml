@@ -2,10 +2,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.springmvc</groupId>
-	<artifactId>GoOnServices</artifactId>
+	<artifactId>GoOnManagerSite</artifactId>
 	<packaging>war</packaging>
 	<version>1.0.0</version>
-	<name>GoOn Spring Services</name>
+	<name>GoOn Spring Webapp</name>
 
 	<properties>
 		<springframework.version>4.2.0.RELEASE</springframework.version>
@@ -66,11 +66,6 @@
 			<artifactId>GoOn.BusinessEntities</artifactId>
 			<version>1</version>
 		</dependency>
-		<dependency>
-			<groupId>GoOn.BusinessLogic</groupId>
-			<artifactId>GoOn.BusinessLogic</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
 	</dependencies>
 
 
@@ -91,40 +86,14 @@
 					<artifactId>maven-war-plugin</artifactId>
 					<version>2.4</version>
 					<configuration>
-				        <descriptorRefs>
-				            <descriptorRef>jar-with-dependencies</descriptorRef>
-				        </descriptorRefs>
 						<warSourceDirectory>src/main/webapp</warSourceDirectory>
-						<warName>GoOnServices</warName>
+						<warName>GoOnManagerSite</warName>
 						<failOnMissingWebXml>false</failOnMissingWebXml>
 					</configuration>
 				</plugin>
-				<plugin>
-			        <artifactId>maven-resources-plugin</artifactId>
-			        <version>2.7</version>
-			        <executions>
-			          <execution>
-			            <id>copy-resources</id>
-			            <!-- here the phase you need -->
-			            <phase>validate</phase>
-			            <goals>
-			              <goal>copy-resources</goal>
-			            </goals>
-			            <configuration>
-			              <outputDirectory>${basedir}/target/classes</outputDirectory>
-			              <resources>          
-			                <resource>
-			                  <directory>${basedir}/target/lib/GoOn.DataAccess-0.0.1-SNAPSHOT.jar/application.properties</directory>
-			                  <filtering>true</filtering>
-			                </resource>
-			              </resources>              
-			            </configuration>            
-			          </execution>
-			        </executions>
-			    </plugin>
 			</plugins>
 		</pluginManagement>
 
-		<finalName>GoOnServices</finalName>
+		<finalName>GoOnManagerSite</finalName>
 	</build>
 </project>
