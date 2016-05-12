@@ -6,9 +6,12 @@ import java.util.Properties;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -23,26 +26,24 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableJpaRepositories(basePackages = "com.springmvc.dataaccess.repository.main", entityManagerFactoryRef = "emf")
 public class MainDataSourceConfig
 {
-	//@Value("${MainDatasourceDriverClassName}")
-	private String MainDatasourceDriverClassName = "org.postgresql.Driver";
+	@Autowired
+	JPAConfiguration configuration;
 	
-	//@Value("${MainDatasourceUsername}")
-	private String MainDatasourceUsername ="postgres";
-	
-	//@Value("${MainDatasourcePassword}")
-	private String MainDatasourcePassword = "masterkey";
-	
-	//@Value("${MainDatasourceUrl}")
-	private String MainDatasourceUrl = "jdbc:postgresql://localhost:5432/MainApp";
+	@Bean
+	public static PropertySourcesPlaceholderConfigurer properties() {
+	    final PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer = new PropertySourcesPlaceholderConfigurer();
+	    propertySourcesPlaceholderConfigurer.setLocation(new ClassPathResource("/application.properties"));
+	    return propertySourcesPlaceholderConfigurer;
+    }
 	
 	@Bean(name = { "mainDataSource" })
 	public DataSource mainDataSource() 
 	{
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		dataSource.setDriverClassName(MainDatasourceDriverClassName);
-		dataSource.setUrl(MainDatasourceUrl);
-		dataSource.setUsername(MainDatasourceUsername);
-		dataSource.setPassword(MainDatasourcePassword);
+		dataSource.setDriverClassName(configuration.MainDatasourceDriverClassName);
+		dataSource.setUrl(configuration.MainDatasourceUrl);
+		dataSource.setUsername(configuration.MainDatasourceUsername);
+		dataSource.setPassword(configuration.MainDatasourcePassword);
 		return dataSource;
 	}	
 	
