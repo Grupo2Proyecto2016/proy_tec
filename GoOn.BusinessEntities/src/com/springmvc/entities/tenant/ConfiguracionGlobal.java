@@ -1,10 +1,15 @@
 package com.springmvc.entities.tenant;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
 public class ConfiguracionGlobal {
 	
+	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	private long id_configuracion;
 	public double precio_km;
 	public double precio_peaje;
 	public int minuto_retraso;
