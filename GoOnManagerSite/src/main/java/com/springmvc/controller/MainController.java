@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.springmvc.exceptions.HttpUnauthorizedException;
 
 @Controller
@@ -20,9 +22,15 @@ public class MainController {
 	private String AppServer;
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String getIndexPage(@RequestHeader HttpHeaders headers) 
+	public String geteNTRYPage(@RequestHeader HttpHeaders headers) 
 	{
-		if(IsAuthenticated(headers))
+		return "entry";
+	}
+	
+	@RequestMapping(value = "/", method = RequestMethod.POST)
+	public String getIndexPage(@RequestParam String token) 
+	{
+		if(IsAuthenticated(token))
 	    {
 	    	return "index";
 	    }
@@ -45,9 +53,8 @@ public class MainController {
 	    }
 	}
 	
-	boolean IsAuthenticated(HttpHeaders headers)
+	boolean IsAuthenticated(String token)
 	{
-		String token = headers.getFirst("Authorization");
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 		HttpGet getRequest = new HttpGet(AppServer + "isAuthenticated");
 		getRequest.addHeader("accept", "application/json");
@@ -65,5 +72,11 @@ public class MainController {
 		}
 		httpClient.getConnectionManager().shutdown();
 		return responseCode == 200;
+	}
+	
+	boolean IsAuthenticated(HttpHeaders headers)
+	{
+		String token = headers.getFirst("Authorization");
+		return IsAuthenticated(token);
 	}
 }
