@@ -7,5 +7,7 @@
         <class>com.springmvc.entities.tenant.Pago</class>        
         <class>com.springmvc.entities.tenant.Vehiculo</class>
 		<class>com.springmvc.entities.tenant.Asiento</class>            
+		<class>com.springmvc.entities.tenant.Parada</class>
+		<class>com.springmvc.entities.tenant.Linea</class>
     </persistence-unit>
 </persistence>

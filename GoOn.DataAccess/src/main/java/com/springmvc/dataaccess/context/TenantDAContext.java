@@ -6,6 +6,8 @@ import com.springmvc.dataaccess.repository.tenant.ConfiguracionGlobalRepository;
 import com.springmvc.dataaccess.repository.tenant.PagoRepository;
 import com.springmvc.dataaccess.repository.tenant.VehiculoRepository;
 import com.springmvc.dataaccess.repository.tenant.AsientoRepository;
+import com.springmvc.dataaccess.repository.tenant.ParadaRepository;
+import com.springmvc.dataaccess.repository.tenant.LineaRepository;
 
 
 public class TenantDAContext extends TenantDataSourceConfig {
@@ -15,6 +17,8 @@ public class TenantDAContext extends TenantDataSourceConfig {
 	public PagoRepository PagoRepository;
 	public VehiculoRepository VehiculoRepository;
 	public AsientoRepository AsientoRepository;
+	public ParadaRepository ParadaRepository; 
+	public LineaRepository LineaRepository;
 	
 	public TenantDAContext(String tenantName)
 	{
@@ -24,5 +28,7 @@ public class TenantDAContext extends TenantDataSourceConfig {
 		PagoRepository = new PagoRepository(super.EntityManager);
 		VehiculoRepository = new VehiculoRepository(super.EntityManager);
 		AsientoRepository = new AsientoRepository(super.EntityManager);
+		ParadaRepository = new ParadaRepository(super.EntityManager);
+		LineaRepository = new LineaRepository(super.EntityManager);
 	}
 }
