@@ -5,6 +5,7 @@
         <class>com.springmvc.entities.tenant.Usuario</class>
         <class>com.springmvc.entities.tenant.ConfiguracionGlobal</class>
         <class>com.springmvc.entities.tenant.Pago</class>        
-        <class>com.springmvc.entities.tenant.Vehiculo</class>    
+        <class>com.springmvc.entities.tenant.Vehiculo</class>
+		<class>com.springmvc.entities.tenant.Asiento</class>            
     </persistence-unit>
 </persistence>

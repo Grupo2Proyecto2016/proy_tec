@@ -1,9 +1,15 @@
 package com.springmvc.entities.tenant;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Vehiculo {
@@ -21,7 +27,10 @@ public class Vehiculo {
 	private int cantEncomiendas; //basados en bultos de 1 m cubico
 	private int cantBultos;
 	private int pisos;
-	//va la collection de asientos tambien
+
+	@OneToMany(cascade = CascadeType.ALL , fetch = FetchType.LAZY)	
+    @JoinColumn(name = "id_vehiculo")
+    private List<Asiento> asientos;
 	
 	public long getId_vehiculo() {
 		return id_vehiculo;
