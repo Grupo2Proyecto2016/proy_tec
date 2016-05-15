@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.springmvc.exceptions.HttpNotFoundException;
 import com.springmvc.exceptions.HttpUnauthorizedException;
@@ -20,13 +21,6 @@ public class MainController {
 
 	@Value("${AppServer}")
 	private String AppServer;
-	
-//	@RequestMapping(value = "/", method = RequestMethod.GET)
-//	public String getEntryPage(@RequestHeader HttpHeaders headers) 
-//	{
-//		System.out.println("====>Entry /");
-//		return "entry";    	
-//	}
 	
 	@RequestMapping(value = "/{tenantid}", method = RequestMethod.GET)
 	public String getEntryPageTenant(@RequestHeader HttpHeaders headers, @PathVariable String tenantid) 
@@ -42,10 +36,10 @@ public class MainController {
 		}
 	}
 	
-	@RequestMapping(value = "/{tenantid}/index", method = RequestMethod.GET)
-	public String getIndexPage(@RequestHeader HttpHeaders headers, @PathVariable(value="tenantid") String tenantid) 
+	@RequestMapping(value = "/{tenantid}", method = RequestMethod.POST)
+	public String getIndexPage(@RequestParam String token, @PathVariable(value="tenantid") String tenantid) 
 	{
-		if(IsAuthenticated(headers, tenantid))
+		if(IsAuthenticated(token, tenantid))
 	    {
 	    	return "index";	    	
 	    }
@@ -90,6 +84,11 @@ public class MainController {
 	boolean IsAuthenticated(HttpHeaders headers, String tenantid)
 	{
 		String token = headers.getFirst("Authorization");
+		return IsAuthenticated(token, tenantid);
+	}
+	
+	boolean IsAuthenticated(String token, String tenantid)
+	{
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 		HttpGet getRequest = new HttpGet(AppServer + tenantid + "/isAuthenticated");
 		getRequest.addHeader("accept", "application/json");

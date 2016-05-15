@@ -1,9 +1,0 @@
-<persistence>
-    <persistence-unit name="temf">
-    	<provider>org.hibernate.ejb.HibernatePersistence</provider>
-        <class>com.springmvc.entities.tenant.Usuario</class>
-        <class>com.springmvc.entities.tenant.ConfiguracionGlobal</class>
-        <class>com.springmvc.entities.tenant.Pago</class>        
-        <class>com.springmvc.entities.tenant.Vehiculo</class>                
-    </persistence-unit>
-</persistence>
