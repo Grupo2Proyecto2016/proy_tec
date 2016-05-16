@@ -64,11 +64,11 @@ public class TenantDataSourceConfig
     	props.put("hibernate.connection.username" , (String) properties.get("mainDataSourceUsername"));
     	props.put("hibernate.connection.password" , (String) properties.get("mainDataSourcePassword"));
     	props.put("hibernate.dialect", (String) properties.get("postgresDialect"));
-    	props.put("hibernate.hbm2ddl.auto", "update");
-    	
+    	props.put("hibernate.temp.use_jdbc_metadata_defaults", "false"); 
+    	//props.put("hibernate.hbm2ddl.auto", "update");
     	EntityManagerFactory temf = Persistence.createEntityManagerFactory("temf", props);
     	
-    	return temf.createEntityManager(props);
+    	return temf.createEntityManager();
     }
 
     private void LoadProperties()

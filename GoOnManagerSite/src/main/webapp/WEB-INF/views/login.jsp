@@ -1,8 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <!-- This file has been downloaded from Bootsnipp.com. Enjoy! -->
     <title>GoOn</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,17 +15,17 @@
 <body>
 <div id="fullscreen_bg" class="fullscreen_bg"/>
 <div class="alert alert-danger" style="display:none">
-  <strong>Error!</strong> Username and Password do not match.
+  <strong>Error!</strong>El nombre de usuario y la contraseña no coinciden
 </div>
 <div class="container">
 
 	<form class="form-signin" method="post" id="loginForm">
-		<h1 class="form-signin-heading text-muted">Sign In</h1>
+		<h1 class="form-signin-heading text-muted">Ingreso al sitio</h1>
 		<input type="text" name="username" class="form-control" placeholder="Email address" required="" autofocus="">
 		<input type="password" name="password" class="form-control" placeholder="Password" required="">
 		<input type="hidden" name="${_csrf.parameterName}"   value="${_csrf.token}" />
 		<button class="btn btn-lg btn-primary btn-block" type="submit">
-			Sign In
+			Entrar
 		</button>
 	</form>
 

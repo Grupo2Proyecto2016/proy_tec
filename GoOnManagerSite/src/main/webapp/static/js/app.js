@@ -12,15 +12,15 @@
     	})
     	
     	// route for the about page
-    	.when('/about', {
-    		templateUrl : 'pages/about.html',
-    		controller  : 'aboutController'
+    	.when('/companies', {
+    		templateUrl : 'pages/companies.html',
+    		controller  : 'companiesController'
     	})
     	
     	// route for the contact page
-    	.when('/contact', {
-    		templateUrl : 'pages/contact.html',
-    		controller  : 'contactController'
+    	.when('/newCompany', {
+    		templateUrl : 'pages/companyForm.html',
+    		controller  : 'companyController'
     	});
     });
 
@@ -56,7 +56,6 @@
     // create the controller and inject Angular's $scope
     goOnApp.controller('mainController', function($scope) {
         // create a message to display in our view
-        $scope.message = 'Everyone come and see how good I look!';
         $scope.signOut = function()
         {
         	removeJwtToken();
@@ -64,12 +63,12 @@
         };
     });
     
-    goOnApp.controller('aboutController', function($scope) {
-        $scope.message = 'Look! I am an about page.';
+    goOnApp.controller('companyController', function($scope) {
+        $scope.message = 'Ingrese los siguientes datos para completar el registro de una nueva empresa';
     });
 
-    goOnApp.controller('contactController', function($scope) {
-        $scope.message = 'Contact us! JK. This is just a demo.';
+    goOnApp.controller('companiesController', function($scope) {
+        $scope.message = 'A continuación se listan las empresas registradas en la plataforma';
     });
 
 
