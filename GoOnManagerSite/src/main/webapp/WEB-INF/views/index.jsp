@@ -3,6 +3,7 @@
 <html ng-app="goOnApp">
     <head>
       <meta charset=UTF-8">
+      <title>GoOn Manager</title>
       <!-- SCROLLS -->
       <!-- load bootstrap and fontawesome via CDN -->
       <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />

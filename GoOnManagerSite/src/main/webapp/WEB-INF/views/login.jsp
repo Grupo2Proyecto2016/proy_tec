@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <!-- This file has been downloaded from Bootsnipp.com. Enjoy! -->
-    <title>GoOn</title>
+    <title>GoOn Manager</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="<c:url value='/static/css/login.css' />" rel="stylesheet"></link>
     <script src="<c:url value='/static/js/tokenLogic.js' />"></script>
@@ -21,8 +21,8 @@
 
 	<form class="form-signin" method="post" id="loginForm">
 		<h1 class="form-signin-heading text-muted">Ingreso al sitio</h1>
-		<input type="text" name="username" class="form-control" placeholder="Email address" required="" autofocus="">
-		<input type="password" name="password" class="form-control" placeholder="Password" required="">
+		<input type="text" name="username" id="username" class="form-control" placeholder="Email address" required="" autofocus="">
+		<input type="password" name="password" id="password" class="form-control" placeholder="Password" required="">
 		<input type="hidden" name="${_csrf.parameterName}"   value="${_csrf.token}" />
 		<button class="btn btn-lg btn-primary btn-block" type="submit">
 			Entrar
@@ -70,7 +70,10 @@
             error: function (jqXHR, textStatus, errorThrown) {
                 if (jqXHR.status === 401) 
                 {
+                	$("#username").val("");
+                	$("#password").val("");
                     $(".alert").show();
+                    $("#username").focus();
                 } 
                 else 
                 {

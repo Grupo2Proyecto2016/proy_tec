@@ -2,9 +2,14 @@ package com.springmvc.dataacces.config;
 
 import java.beans.PropertyVetoException;
 import java.io.IOException;
+import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -19,6 +24,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
+import org.springframework.data.elasticsearch.core.EntityMapper;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -34,9 +40,13 @@ public class TenantDataSourceConfig
 	
 	static private Properties properties;
 	
+	protected static HashMap<String,EntityManager> EntityManagers;
+	
 	protected EntityManager EntityManager;
 	
 	private String TenantName = null;
+	
+	private final Lock lock = new ReentrantLock();
 
 	public TenantDataSourceConfig(String tenantName)
 	{
@@ -58,17 +68,32 @@ public class TenantDataSourceConfig
 
     public EntityManager CreateTenantEntityManager() throws PropertyVetoException
 	{
-    	Map<String, String> props = new HashMap<>();
-    	props.put("hibernate.connection.url" , properties.get("dbServer") + TenantName);
-    	props.put("hibernate.connection.driver_class" , (String) properties.get("driver-class-name"));
-    	props.put("hibernate.connection.username" , (String) properties.get("mainDataSourceUsername"));
-    	props.put("hibernate.connection.password" , (String) properties.get("mainDataSourcePassword"));
-    	props.put("hibernate.dialect", (String) properties.get("postgresDialect"));
-    	props.put("hibernate.temp.use_jdbc_metadata_defaults", "false"); 
-    	props.put("hibernate.hbm2ddl.auto", "update");
-    	EntityManagerFactory temf = Persistence.createEntityManagerFactory("temf", props);
+    	if (EntityManagers == null)
+    	{
+    		EntityManagers = new HashMap<String, EntityManager>();
+		}
     	
-    	return temf.createEntityManager();
+    	if(EntityManagers.containsKey(TenantName))
+    	{
+    		return EntityManagers.get(TenantName);
+    	}
+    	else
+    	{
+    		Map<String, String> props = new HashMap<>();
+    		props.put("hibernate.connection.url" , properties.get("dbServer") + TenantName);
+    		props.put("hibernate.connection.driver_class" , (String) properties.get("driver-class-name"));
+    		props.put("hibernate.connection.username" , (String) properties.get("mainDataSourceUsername"));
+    		props.put("hibernate.connection.password" , (String) properties.get("mainDataSourcePassword"));
+    		props.put("hibernate.dialect", (String) properties.get("postgresDialect"));
+    		props.put("hibernate.temp.use_jdbc_metadata_defaults", "false"); 
+    		props.put("hibernate.hbm2ddl.auto", "update");
+    		EntityManagerFactory temf = Persistence.createEntityManagerFactory("temf", props);
+    		EntityManager em = temf.createEntityManager();
+    		lock.lock();
+    		EntityManagers.put(TenantName, em);
+    		lock.unlock();
+    		return em;
+    	}    	
     }
 
     private void LoadProperties()
