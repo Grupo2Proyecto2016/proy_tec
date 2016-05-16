@@ -5,9 +5,11 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Usuario {
@@ -21,8 +23,13 @@ public class Usuario {
 	private String 	email;
 	private Boolean	puede_crear;
 	private Boolean	enabled;
+	private Boolean	es_empleado;
 	private Date ultimo_reset_password;
-	
+	private Date fch_nacimiento;
+	private String direccion;	
+	@OneToOne(fetch=FetchType.LAZY)
+	private Rol rol;
+
 	
 	public List<Authority> getAuthorities()
 	{
@@ -93,5 +100,37 @@ public class Usuario {
 	}
 	public void setPuede_crear(Boolean puede_crear) {
 		this.puede_crear = puede_crear;
+	}
+
+	public Boolean getEs_empleado() {
+		return es_empleado;
+	}
+
+	public void setEs_empleado(Boolean es_empleado) {
+		this.es_empleado = es_empleado;
+	}
+
+	public Date getFch_nacimiento() {
+		return fch_nacimiento;
+	}
+
+	public void setFch_nacimiento(Date fch_nacimiento) {
+		this.fch_nacimiento = fch_nacimiento;
+	}
+
+	public String getDireccion() {
+		return direccion;
+	}
+
+	public void setDireccion(String direccion) {
+		this.direccion = direccion;
+	}
+
+	public Rol getRol() {
+		return rol;
+	}
+
+	public void setRol(Rol rol) {
+		this.rol = rol;
 	}
 }

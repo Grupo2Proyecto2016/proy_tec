@@ -9,5 +9,11 @@
 		<class>com.springmvc.entities.tenant.Asiento</class>            
 		<class>com.springmvc.entities.tenant.Parada</class>
 		<class>com.springmvc.entities.tenant.Linea</class>
+		<class>com.springmvc.entities.tenant.Rol</class>		
+		<class>com.springmvc.entities.tenant.Encomienda</class>
+		<class>com.springmvc.entities.tenant.Viaje</class>		
+		<class>com.springmvc.entities.tenant.Taller</class>		
+		<class>com.springmvc.entities.tenant.Mantenimiento</class>
+		<class>com.springmvc.entities.tenant.Pasaje</class>
     </persistence-unit>
 </persistence>
