@@ -12,17 +12,17 @@ import javax.persistence.Id;
 public class Pago {
 	
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
-	private long id_usuario;
+	private long id_pago;
 	private long id_pasaje; //apunta a pasaje, cambiar
 	private Date fecha; 
 	private int metodo; //apunta a metodos? constantes?
 	private Double valor;
 	
-	public long getId_usuario() {
-		return id_usuario;
+	public long getId_pago() {
+		return id_pago;
 	}
-	public void setId_usuario(long id_usuario) {
-		this.id_usuario = id_usuario;
+	public void setId_pago(long id_pago) {
+		this.id_pago = id_pago;
 	}
 	public long getId_pasaje() {
 		return id_pasaje;
