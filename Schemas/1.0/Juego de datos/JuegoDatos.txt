@@ -1,0 +1,61 @@
+/* Esto debe hacerse con las secuencias vacias, si no verificar los id */
+
+/*Pais*/
+insert into pais(nombre) values ('URUGUAY');
+/*Departamento*/
+insert into departamento (id_pais, nombre) values (1,'ARTIGAS');
+insert into departamento (id_pais, nombre) values (1,'CANELONES');
+insert into departamento (id_pais, nombre) values (1,'CERRO LARGO');
+insert into departamento (id_pais, nombre) values (1,'COLONIA');
+insert into departamento (id_pais, nombre) values (1,'DURAZNO');
+insert into departamento (id_pais, nombre) values (1,'FLORES');
+insert into departamento (id_pais, nombre) values (1,'FLORIDA');
+insert into departamento (id_pais, nombre) values (1,'LAVALLEJA');
+insert into departamento (id_pais, nombre) values (1,'MALDONADO');
+insert into departamento (id_pais, nombre) values (1,'MONTEVIDEO');
+insert into departamento (id_pais, nombre) values (1,'PAYSANDÚ');
+insert into departamento (id_pais, nombre) values (1,'RÍO NEGRO');
+insert into departamento (id_pais, nombre) values (1,'RIVERA');
+insert into departamento (id_pais, nombre) values (1,'ROCHA');
+insert into departamento (id_pais, nombre) values (1,'SALTO');
+insert into departamento (id_pais, nombre) values (1,'SAN JOSÉ');
+insert into departamento (id_pais, nombre) values (1,'SORIANO');
+insert into departamento (id_pais, nombre) values (1,'TACUAREMBÓ');
+insert into departamento (id_pais, nombre) values (1,'TREINTA Y TRES');
+/*ciudad*/
+insert into ciudad (id_departamento, id_pais, nombre) values(1,1,'ARTIGAS');
+insert into ciudad (id_departamento, id_pais, nombre) values(2,1,'CANELONES');
+insert into ciudad (id_departamento, id_pais, nombre) values(3,1,'MELO');
+insert into ciudad (id_departamento, id_pais, nombre) values(4,1,'COLONIA DEL SACRAMENTO');
+insert into ciudad (id_departamento, id_pais, nombre) values(5,1,'DURAZNO');
+insert into ciudad (id_departamento, id_pais, nombre) values(6,1,'TRINIDAD');
+insert into ciudad (id_departamento, id_pais, nombre) values(7,1,'FLORIDA');
+insert into ciudad (id_departamento, id_pais, nombre) values(8,1,'MINAS');
+insert into ciudad (id_departamento, id_pais, nombre) values(9,1,'MALDONADO');
+insert into ciudad (id_departamento, id_pais, nombre) values(10,1,'MONTEVIDEO');
+insert into ciudad (id_departamento, id_pais, nombre) values(11,1,'PAYSANDÚ');
+insert into ciudad (id_departamento, id_pais, nombre) values(12,1,'FRAY BENTOS');
+insert into ciudad (id_departamento, id_pais, nombre) values(13,1,'RIVERA');
+insert into ciudad (id_departamento, id_pais, nombre) values(14,1,'ROCHA');
+insert into ciudad (id_departamento, id_pais, nombre) values(15,1,'SALTO');
+insert into ciudad (id_departamento, id_pais, nombre) values(16,1,'SAN JOSÉ DE MAYO');
+insert into ciudad (id_departamento, id_pais, nombre) values(17,1,'MERCEDES');
+insert into ciudad (id_departamento, id_pais, nombre) values(18,1,'TACUAREMBÓ');
+insert into ciudad (id_departamento, id_pais, nombre) values(19,1,'TREINTA Y TRES');
+/*Vehiculo*/
+INSERT INTO vehiculo(ano, cantaccesibles, cantanimales, cantasientos,cantbultos, cantencomiendas, cantparados, marca, modelo, pisos,tienebano)
+    VALUES (2015, 2, 2, 60, 60, 20, 20, 'SCANIA', 'K310', 1, true);
+/*Linea*/    
+INSERT INTO linea(costo_fijo, destino, numero, origen, tiempo_estimado,viaja_parado) VALUES (250, 'PIRIAPOLIS', 10, 'MONTEVIDEO', 90, true);
+/*Parada*/
+INSERT INTO parada(coordenadas, descripcion, es_peaje, es_terminal, id_ciudad,id_departamento, id_pais, reajusta)
+    VALUES ('-34.893903, -56.166463', 'TERMINAL TRES CRUCES', false, true, 10, 10, 1, false);
+INSERT INTO parada(coordenadas, descripcion, es_peaje, es_terminal, id_ciudad,id_departamento, id_pais, reajusta)
+	VALUES ('-34.916784, -54.957819', 'TERMINAL MALDONADO', false, true, 9, 9, 1, false);
+/*Linea-Parada*/
+insert into linea_parada values(1,1);
+insert into linea_parada values(1,2);
+/*Viaje*/
+INSERT INTO viaje(desde, es_directo, fecha, hasta, linea_id_linea, vehiculo_id_vehiculo) VALUES ('MONTEVIDEO', true, '05/17/2016', 'MALDONADO', 1, 1);
+
+
