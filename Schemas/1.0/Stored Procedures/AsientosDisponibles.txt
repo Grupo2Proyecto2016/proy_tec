@@ -9,17 +9,17 @@ $BODY$
 DECLARE PageNumber BIGINT; 
 BEGIN
 
- IF (Tamano_Pagina IS NOT NULL AND NumeroPagina IS NOT NULL) THEN
-  PageNumber := (Tamano_Pagina * (NumeroPagina-1)); 
+ IF (tamano_pagina IS NOT NULL AND numeropagina IS NOT NULL) THEN
+  PageNumber := (tamano_pagina * (numeropagina-1)); 
  END IF; 
 
  RETURN QUERY
  SELECT
   v.id_viaje, v.vehiculo_id_vehiculo 
  FROM public.Viaje v
- WHERE v.desde like '%'||PDesde||'%' and v.hasta like '%'||PHasta||'%' and v.fecha = PFecha
+ WHERE v.desde like '%'||pdesde||'%' and v.hasta like '%'||phasta||'%' and v.fecha = pfecha
  ORDER BY id_viaje desc
- LIMIT Tamano_Pagina
+ LIMIT tamano_pagina
  OFFSET PageNumber; 
  
  EXCEPTION WHEN OTHERS THEN 
