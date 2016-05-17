@@ -3,13 +3,18 @@ package com.springmvc.dataaccess.context;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.springmvc.dataaccess.repository.main.CountryRepository;
 import com.springmvc.dataaccess.repository.main.UserRepository;
+import com.springmvc.entities.main.Pais;
 import com.springmvc.entities.main.Usuario;
 
 @Component
@@ -20,10 +25,19 @@ public class MainDAContext {
 	DataSource mainDataSource;
 	
 	@Autowired UserRepository usersRepository;
+	@Autowired CountryRepository countryRepository;
 	
 	public Usuario GetUserByName(String userName)
 	{
 		return usersRepository.findByUsrname(userName);
+	}
+	
+	public List<Pais> GetCountries()
+	{
+		List<Pais> result = new ArrayList<>();
+		Iterable<Pais> countries = countryRepository.findAll();
+		countries.forEach(result::add);
+		return result;
 	}
 	
 	public String GetTenant(String tenantName)

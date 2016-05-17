@@ -24,7 +24,7 @@
             <nav class="navbar navbar-default">
             <div class="container">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="/">Angular Routing Example</a>
+                    <a class="navbar-brand" href="#"><b>GoOn Manager</b></a>
                 </div>
 
                 <ul class="nav navbar-nav navbar-right">
@@ -47,4 +47,7 @@
 			<div ng-view></div>
         </div>
     </body>
+    <footer style="background-color: beige; height: 60px;">
+    	<p style="text-align: center; padding-top: 20px;">Powered by <b>GoOn Systems</b></p>
+    </footer>
  </html>

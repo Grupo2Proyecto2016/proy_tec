@@ -1,7 +1,9 @@
 package com.springmvc.controller;
 
+import org.hibernate.mapping.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 ///import org.springframework.mobile.device.Device;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,10 +24,16 @@ import com.springmvc.configuration.JwtAuthenticationResponse;
 import com.springmvc.configuration.JwtTokenUtil;
 import com.springmvc.configuration.JwtUser;
 import com.springmvc.configuration.JwtUserDetailsServiceImpl;
+import com.springmvc.entities.main.Pais;
 import com.springmvc.exceptions.HttpNotFoundException;
 import com.springmvc.logic.implementations.UsersLogic;
 import com.springmvc.logic.interfaces.ITenantLogic;
 import com.springmvc.logic.interfaces.IUsersLogic;
+import com.springmvc.model.UserModel;
+import com.springmvc.requestWrappers.CompanyWrapper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -45,6 +53,20 @@ public class TenantManagerRestController {
 
     @Autowired
     private JwtUserDetailsServiceImpl userDetailsService;
+    
+    @RequestMapping(value = "countries", method = RequestMethod.GET)
+    public List<?> GetCountries()
+    {
+    	List<Pais> countries = tenantLogic.GetCountries();
+    	return countries;
+    }
+    
+    @RequestMapping(value = "createCompany", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
+    public ResponseEntity<Void> CreateCompany(@RequestBody CompanyWrapper companyWrapper)
+    {
+    	//TODO: Create tenant call
+    	return new ResponseEntity<Void>(HttpStatus.CREATED);
+    }
     
     @RequestMapping(value = "isAuthenticated", method = RequestMethod.GET)
     public String IsAuthenticated()

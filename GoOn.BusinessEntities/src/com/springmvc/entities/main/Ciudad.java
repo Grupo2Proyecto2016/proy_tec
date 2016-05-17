@@ -1,4 +1,4 @@
-package com.springmvc.entities.tenant;
+package com.springmvc.entities.main;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

@@ -14,7 +14,6 @@ import com.springmvc.dataaccess.repository.tenant.ViajeRepository;
 import com.springmvc.dataaccess.repository.tenant.TallerRepository;
 import com.springmvc.dataaccess.repository.tenant.MantenimientoRepository;
 import com.springmvc.dataaccess.repository.tenant.PasajeRepository;
-import com.springmvc.dataaccess.repository.tenant.PaisRepository;
 import com.springmvc.dataaccess.repository.tenant.DepartamentoRepository;
 import com.springmvc.dataaccess.repository.tenant.CiudadRepository;
 
@@ -34,7 +33,6 @@ public class TenantDAContext extends TenantDataSourceConfig {
 	public TallerRepository TallerRepository;
 	public MantenimientoRepository MantenimientoRepository;
 	public PasajeRepository PasajeRepository;
-	public PaisRepository PaisRepository;
 	public DepartamentoRepository DepartamentoRepository;
 	public CiudadRepository CiudadRepository;
 	
@@ -54,7 +52,6 @@ public class TenantDAContext extends TenantDataSourceConfig {
 		TallerRepository = new TallerRepository(super.EntityManager);
 		MantenimientoRepository = new MantenimientoRepository(super.EntityManager);
 		PasajeRepository = new PasajeRepository(super.EntityManager);
-		PaisRepository = new PaisRepository(super.EntityManager);
 		DepartamentoRepository = new DepartamentoRepository(super.EntityManager);
 		CiudadRepository = new CiudadRepository(super.EntityManager);
 	}

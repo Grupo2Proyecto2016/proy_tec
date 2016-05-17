@@ -40,7 +40,8 @@
     	service.request = function(config) {
         	access_token = getJwtToken(); 
     		if (access_token) { 
-    		     config.headers.authorization = access_token; 
+    		     config.headers.authorization = access_token;
+    		     config.headers.AppId = "MainAPP";
     		} 
             return config;
         }
@@ -63,8 +64,38 @@
         };
     });
     
-    goOnApp.controller('companyController', function($scope) {
+    goOnApp.controller('companyController', function($scope, $http) {
         $scope.message = 'Ingrese los siguientes datos para completar el registro de una nueva empresa';
+        $scope.companyForm = {};
+        $scope.companyForm.name = null;
+        $scope.companyForm.trueName = null;
+        $scope.companyForm.rut = null;
+        $scope.companyForm.phone = null;
+        $scope.companyForm.address = null;
+        $scope.companyForm.tenantName = null;
+        $scope.companyForm.username = null;
+        $scope.companyForm.password = null;
+        $scope.companyForm.country = null;
+        $scope.countries = null;
+        
+    	$http.get(AppName + 'countries').
+	        success(function(data, status, headers, config) 
+			{
+	        	$scope.countries = data;
+	        })
+        ;
+    	
+    	$scope.createCompany = function()
+    	{
+    		$http.post(AppName +'createCompany', JSON.stringify($scope.companyForm))
+    		.success(function(){
+    			alert("Bien!");
+			})
+			.error(function(){
+				alert("Error :(");
+			})
+			;
+    	};
     });
 
     goOnApp.controller('companiesController', function($scope) {
