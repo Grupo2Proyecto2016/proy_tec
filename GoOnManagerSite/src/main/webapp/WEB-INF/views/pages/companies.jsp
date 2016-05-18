@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <div class="jumbotron text-center">
 	<h2>Empresas registradas</h1>
     <p>{{ message }}</p>
@@ -12,17 +13,23 @@
 				<thead>
 					<tr>
 						<th>#</th>
-						<th>First Name</th>
-						<th>Last Name</th>
-						<th>Username</th>
+						<th>Nombre</th>
+						<th>Razón Social</th>
+						<th>Url</th>
+						<th>Teléfono</th>
+						<th>Dirección</th>
+						<th>Administrador</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
 						<th scope="row">1</th>
-						<td>Mark</td>
-						<td>Otto</td>
-						<td>@mdo</td>
+						<td>Dac</td>
+						<td>Dac S.A.</td>
+						<td>dac</td>
+						<td>23229961</td>
+						<td>Av. 18 de julio 2432</td>
+						<td>GonzaloF</td>
 					</tr> 
 				</tbody>
 			</table>

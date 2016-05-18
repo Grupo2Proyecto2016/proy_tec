@@ -38,6 +38,7 @@ import com.springmvc.model.UserModel;
 import com.springmvc.requestWrappers.CompanyWrapper;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -87,6 +88,7 @@ public class TenantManagerRestController {
     	user.setPuede_crear(true);
     	user.setRol(null);
     	user.SetAuthorities(null);
+    	user.setUltimoResetPassword(new Date());
     	tenantLogic.CreateTenant(company, user);
     	
     	return new ResponseEntity<Void>(HttpStatus.CREATED);
