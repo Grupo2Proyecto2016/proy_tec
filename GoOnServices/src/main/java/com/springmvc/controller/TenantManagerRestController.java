@@ -13,6 +13,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,8 +25,12 @@ import com.springmvc.configuration.JwtAuthenticationResponse;
 import com.springmvc.configuration.JwtTokenUtil;
 import com.springmvc.configuration.JwtUser;
 import com.springmvc.configuration.JwtUserDetailsServiceImpl;
+import com.springmvc.entities.main.Empresa;
 import com.springmvc.entities.main.Pais;
+import com.springmvc.entities.tenant.Rol;
+import com.springmvc.entities.tenant.Usuario;
 import com.springmvc.exceptions.HttpNotFoundException;
+import com.springmvc.logic.implementations.TenantLogic;
 import com.springmvc.logic.implementations.UsersLogic;
 import com.springmvc.logic.interfaces.ITenantLogic;
 import com.springmvc.logic.interfaces.IUsersLogic;
@@ -64,7 +69,26 @@ public class TenantManagerRestController {
     @RequestMapping(value = "createCompany", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
     public ResponseEntity<Void> CreateCompany(@RequestBody CompanyWrapper companyWrapper)
     {
-    	//TODO: Create tenant call
+    	Empresa company = new Empresa();
+    	company.setNombre(companyWrapper.getName());
+    	company.setDireccion(companyWrapper.getAddress());
+    	company.setRut(companyWrapper.getRut());
+    	company.setRazonSocial(companyWrapper.getTrueName());
+    	company.setTelefono(companyWrapper.getPhone());
+    	company.setNombreTenant(companyWrapper.getTenantName());
+    	Pais country = tenantLogic.GetCountry(companyWrapper.getCountryId());
+    	company.setPais(country);
+    	
+    	Usuario user = companyWrapper.user;
+    	String hashedPass = new BCryptPasswordEncoder().encode(user.getPasswd());
+    	user.setPasswd(hashedPass);
+    	user.setEnabled(true);
+    	user.setEs_empleado(true);
+    	user.setPuede_crear(true);
+    	user.setRol(null);
+    	user.SetAuthorities(null);
+    	tenantLogic.CreateTenant(company, user);
+    	
     	return new ResponseEntity<Void>(HttpStatus.CREATED);
     }
     

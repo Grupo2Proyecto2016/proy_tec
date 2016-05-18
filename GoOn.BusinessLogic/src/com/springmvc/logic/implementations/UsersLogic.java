@@ -15,71 +15,32 @@ public class UsersLogic implements IUsersLogic {
 	
 	private static final AtomicLong counter = new AtomicLong();
 	
-	private TenantDAContext DAContext;
+	private TenantDAContext TenantContext;
+	@Autowired MainDAContext dataContext;
+	
+	public UsersLogic(String tenant)
+	{
+		TenantContext = new TenantDAContext(tenant);
+	}
 	
 	public UsersLogic()
 	{
 	}
 	
-	public UsersLogic(String tenant)
-	{
-		DAContext = new TenantDAContext(tenant);
-	}
-	
-	@Autowired MainDAContext dataContext;
-	
-	private static List<Usuario> users;
-
-	public List<Usuario> findAllUsers() {
-		return users;
-	}
-	
-	public Usuario findById(long id) {
-		for(Usuario user : users){
-//			if(user.getId() == id){
-//				return user;
-//			}
-		}
-		return null;
-	}
-	
 	public com.springmvc.entities.tenant.Usuario GetUserByName(String tenant, String userName)
 	{
-		com.springmvc.entities.tenant.Usuario user = DAContext.UserRepository.FindByUsername(userName);
+		com.springmvc.entities.tenant.Usuario user = TenantContext.UserRepository.FindByUsername(userName);
     	return user;
 	}
 	
-	public Usuario GetUserByName(String userName)
+	public Usuario GetMainUserByName(String userName)
 	{
 		Usuario user = dataContext.GetUserByName(userName);
     	return user;
 	}
 	
-	public void saveUser(Usuario user) {
-		user.setIdUsuario(counter.incrementAndGet());
-		users.add(user);
-	}
-
-	public void updateUser(Usuario user) {
-		int index = users.indexOf(user);
-		users.set(index, user);
-	}
-
-	public void deleteUserById(long id) {
-		
-		for (Iterator<Usuario> iterator = users.iterator(); iterator.hasNext(); ) {
-			Usuario user = iterator.next();
-		    if (user.getIdUsuario() == id) {
-		        iterator.remove();
-		    }
-		}
-	}
-
-	public boolean isUserExist(String username) {
-		return GetUserByName(null, username)!=null;
-	}
-	
-	public void deleteAllUsers(){
-		users.clear();
+	public void CreateUser(com.springmvc.entities.tenant.Usuario user)
+	{
+		TenantContext.UserRepository.InsertUser(user);
 	}
 }

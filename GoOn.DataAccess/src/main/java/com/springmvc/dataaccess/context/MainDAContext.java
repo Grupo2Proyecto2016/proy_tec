@@ -13,7 +13,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.springmvc.dataaccess.repository.main.CountryRepository;
+import com.springmvc.dataaccess.repository.main.EmpresaRepository;
 import com.springmvc.dataaccess.repository.main.UserRepository;
+import com.springmvc.entities.main.Empresa;
 import com.springmvc.entities.main.Pais;
 import com.springmvc.entities.main.Usuario;
 
@@ -26,6 +28,7 @@ public class MainDAContext {
 	
 	@Autowired UserRepository usersRepository;
 	@Autowired CountryRepository countryRepository;
+	@Autowired EmpresaRepository companyRepository;
 	
 	public Usuario GetUserByName(String userName)
 	{
@@ -48,7 +51,7 @@ public class MainDAContext {
 			Connection c = mainDataSource.getConnection();
 			java.sql.Statement statement = null;
 			statement = c.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
-			ResultSet rs = statement.executeQuery("select nombre_tenant from empresa where UPPER(nombre_tenant) = UPPER('" + tenantName + "')");			
+			ResultSet rs = statement.executeQuery("select nombre_tenant from empresa where LOWER(nombre_tenant) = LOWER('" + tenantName + "')");			
 			if(rs.first())
 			{
 				result = rs.getString("nombre_tenant");				   
@@ -62,14 +65,16 @@ public class MainDAContext {
     }
 	
 	@Transactional
-    public void CreateTenant(String nombreTenant)
+    public void CreateTenant(Empresa company)
 	{
+		String nombreTenant = company.getNombreTenant();
 		try 
 		{
+			InsertCompany(company);
 			Connection c = mainDataSource.getConnection();
 			java.sql.Statement statement = null;
 			statement = c.createStatement();
-			statement.executeUpdate("CREATE DATABASE " + nombreTenant);
+			statement.executeUpdate("CREATE DATABASE " + nombreTenant.toLowerCase());
 		} 
 		catch (SQLException e) 
 		{
@@ -77,4 +82,16 @@ public class MainDAContext {
 			e.printStackTrace();
 		}
     }
+	
+	public Pais GetCountry(long countryId)
+	{
+		return countryRepository.findOne(countryId);
+	}
+	
+	private void InsertCompany(Empresa company)
+	{
+		companyRepository.save(company);
+	}
+	
+	
 }

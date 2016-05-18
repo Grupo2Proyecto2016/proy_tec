@@ -54,7 +54,7 @@ public class TenantDataSourceConfig
 		{
 			LoadProperties();
 		}
-		this.TenantName = tenantName.toUpperCase();
+		this.TenantName = tenantName.toLowerCase();
 		try 
 		{
 			this.EntityManager = CreateTenantEntityManager();

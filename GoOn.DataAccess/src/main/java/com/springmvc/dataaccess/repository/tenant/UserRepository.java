@@ -30,4 +30,19 @@ public class UserRepository
 		}
 		return user;
 	}
+	
+	public void InsertUser(Usuario user)
+	{
+		try
+		{
+			entityManager.getTransaction().begin();
+			entityManager.persist(user);
+			entityManager.flush();
+			entityManager.getTransaction().commit();
+		}
+		catch(Exception ex)
+		{
+			throw ex;
+		}
+	}
 }

@@ -75,7 +75,8 @@
         $scope.companyForm.tenantName = null;
         $scope.companyForm.username = null;
         $scope.companyForm.password = null;
-        $scope.companyForm.country = null;
+        $scope.companyForm.countryId = null;
+        $scope.companyForm.user = null;
         $scope.countries = null;
         
     	$http.get(AppName + 'countries').

@@ -1,5 +1,7 @@
 package com.springmvc.requestWrappers;
 
+import com.springmvc.entities.tenant.Usuario;
+
 public class CompanyWrapper
 {
 	public String address;
@@ -12,12 +14,12 @@ public class CompanyWrapper
 		this.address = address;
 	}
 
-	public String getCountry() {
-		return country;
+	public long getCountryId() {
+		return countryId;
 	}
 
-	public void setCountry(String country) {
-		this.country = country;
+	public void setCountryId(long countryId) {
+		this.countryId = countryId;
 	}
 
 	public String getName() {
@@ -76,7 +78,7 @@ public class CompanyWrapper
 		this.username = username;
 	}
 
-	public String country;
+	public long countryId;
 
 	public String name;
 
@@ -91,4 +93,6 @@ public class CompanyWrapper
 	public String trueName;
 
 	public String username;
+	
+	public Usuario user;
 }
