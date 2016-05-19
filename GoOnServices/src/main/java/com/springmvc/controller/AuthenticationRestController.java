@@ -2,6 +2,7 @@ package com.springmvc.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 ///import org.springframework.mobile.device.Device;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,6 +23,7 @@ import com.springmvc.configuration.JwtAuthenticationResponse;
 import com.springmvc.configuration.JwtTokenUtil;
 import com.springmvc.configuration.JwtUser;
 import com.springmvc.configuration.JwtUserDetailsServiceImpl;
+import com.springmvc.entities.main.Empresa;
 import com.springmvc.exceptions.HttpNotFoundException;
 import com.springmvc.logic.implementations.UsersLogic;
 import com.springmvc.logic.interfaces.ITenantLogic;
@@ -65,6 +67,13 @@ public class AuthenticationRestController {
     	{
     		throw new HttpNotFoundException();
     	}
+    }
+    
+    @RequestMapping(value = "/getCompany", method = RequestMethod.GET)
+    public ResponseEntity<Empresa>  getCompany(@PathVariable String tenantid)
+    {
+    	Empresa company = tenantLogic.GetCompany(tenantid);
+    	return new ResponseEntity<Empresa>(company, HttpStatus.OK);
     }
     
     @RequestMapping(value = "/auth", method = RequestMethod.POST)

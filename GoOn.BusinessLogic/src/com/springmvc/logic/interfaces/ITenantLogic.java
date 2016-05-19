@@ -17,4 +17,6 @@ public interface ITenantLogic
 	void CreateTenant(Empresa company, com.springmvc.entities.tenant.Usuario user);
 
 	Pais GetCountry(long countryId);
+
+	Empresa GetCompany(String tenantid);
 }

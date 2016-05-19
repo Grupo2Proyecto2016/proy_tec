@@ -3,6 +3,7 @@ package com.springmvc.entities.main;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -25,7 +26,7 @@ public class Empresa {
 	private String rut;
 	private String telefono;
 	private String direccion;
-	private String nombre_Tenant;
+	private String nombretenant;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="id_pais", nullable=false, updatable=false)
@@ -91,11 +92,11 @@ public class Empresa {
 	}
 
 	public String getNombreTenant() {
-		return nombre_Tenant;
+		return nombretenant;
 	}
 
 	public void setNombreTenant(String nombreTenant) {
-		this.nombre_Tenant = nombreTenant;
+		this.nombretenant = nombreTenant;
 	}
 
 	public long getIdEmpresa() {

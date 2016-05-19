@@ -52,4 +52,10 @@ public class TenantLogic implements ITenantLogic {
 	{
 		return context.GetCountry(countryId);
 	}
+	
+	@Override
+	public Empresa GetCompany(String tenantid)
+	{
+		return context.GetCompany(tenantid);
+	}
 }

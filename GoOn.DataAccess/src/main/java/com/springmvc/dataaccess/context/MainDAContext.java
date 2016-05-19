@@ -51,10 +51,10 @@ public class MainDAContext {
 			Connection c = mainDataSource.getConnection();
 			java.sql.Statement statement = null;
 			statement = c.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
-			ResultSet rs = statement.executeQuery("select nombre_tenant from empresa where LOWER(nombre_tenant) = LOWER('" + tenantName + "')");			
+			ResultSet rs = statement.executeQuery("select nombretenant from empresa where LOWER(nombretenant) = LOWER('" + tenantName + "')");			
 			if(rs.first())
 			{
-				result = rs.getString("nombre_tenant");				   
+				result = rs.getString("nombretenant");				   
 			}
 		}
 		catch (SQLException e)
@@ -90,8 +90,11 @@ public class MainDAContext {
 	
 	private void InsertCompany(Empresa company)
 	{
-		companyRepository.save(company);
+		//companyRepository.save(company);
 	}
-	
-	
+
+	public Empresa GetCompany(String tenantid) 
+	{
+		return companyRepository.findBynombretenant(tenantid);
+	}
 }
