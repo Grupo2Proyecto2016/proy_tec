@@ -13,8 +13,9 @@
       <!-- load angular and angular route via CDN -->
       <script src="<c:url value='/static/js/tokenLogic.js' />"></script>
       <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js"></script>
-	  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-route.js"></script>
+      <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-route.js"></script>
       <script src="<c:url value='/static/js/app.js' />"></script>
     </head>
     <body ng-controller="mainController as main">

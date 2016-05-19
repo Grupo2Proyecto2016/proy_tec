@@ -76,6 +76,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	                .antMatchers("/countries").permitAll()
 	                .antMatchers("/*/auth/**").permitAll()
 	                //.antMatchers("/**/auth/**").permitAll()
+	                .antMatchers("/tenantExist").permitAll()
 	                .antMatchers("/*/tenantExist/**").permitAll()
 	                .anyRequest().authenticated();
 

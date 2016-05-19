@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="jumbotron text-center">
 	<h2>Registrar Empresa</h2>
 	
@@ -7,7 +8,7 @@
 <div class="row" style="margin-top: 50px;">
 	<div class="col-xs-3"></div>
 	<div class="col-xs-6">
-		<form class="form-horizontal" role="form" ng-submit="createCompany()">
+		<form class="form-horizontal" role="form" name="form" ng-submit="createCompany()">
 		  <h3 style="text-align: center">Datos de la Empresa:</h3>
 		  <div class="form-group">
 		    <label class="control-label col-sm-2" for="email">Nombre:</label>
@@ -56,7 +57,9 @@
 		  <div class="form-group">
 		    <label class="control-label col-sm-2" for="url">Url del sitio:</label>
 	    	<div class="col-sm-10">
-		    	<input type="text" name="url" pattern="[a-zA-Z]+" title="Solo se aceptan letras." class="form-control" ng-model="companyForm.tenantName" required>
+		    	<input type="text" name="url" pattern="[a-zA-Z]+" title="Solo se aceptan letras." class="form-control" ng-model="companyForm.tenantName" tenantexists>
+		    	<img src="<c:url value='/static/images/loader.gif' />" style="margin-top: -25px; margin-left: 80;" ng-show="form.url.$pending.tenantexists"/>
+    			<span class="label label-danger" ng-show="form.url.$error.tenantexists">La Url está en uso</span>
 	    	</div>
 		  </div>
 		  
@@ -112,4 +115,36 @@
 		  </div>
 		</form>
 	</div>
+</div>
+
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: green">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3 class="modal-title" style="color:white" id="myModalLabel">Éxito</h3>
+      </div>
+      <div class="modal-body">
+        La empresa ha sido creada.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" ng-click="changeView('companies')">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: lightcoral">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3 class="modal-title" id="myModalLabel">Error</h3>
+      </div>
+      <div class="modal-body">
+        Ha ocurrido un error al crear la empresa.
+        Intente de nuevo en unos instantes. 
+      </div>
+    </div>
+  </div>
 </div>

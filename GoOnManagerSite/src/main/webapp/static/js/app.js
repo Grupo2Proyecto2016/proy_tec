@@ -35,6 +35,7 @@
         };
     })
     
+    //Add headers to every request
     goOnApp.service('tokenInterceptor', function($rootScope) { 
     	var service = this;
     	service.request = function(config) {
@@ -47,7 +48,7 @@
         }
     }); 
 
-    
+    //Add interceptors
     goOnApp.config(['$httpProvider', function($httpProvider) {
         $httpProvider.interceptors.push('authInterceptor');
         $httpProvider.interceptors.push('tokenInterceptor');
@@ -64,7 +65,7 @@
         };
     });
     
-    goOnApp.controller('companyController', function($scope, $http) {
+    goOnApp.controller('companyController', function($scope, $http, $location) {
         $scope.message = 'Ingrese los siguientes datos para completar el registro de una nueva empresa';
         $scope.companyForm = {};
         $scope.companyForm.name = null;
@@ -88,19 +89,63 @@
     	
     	$scope.createCompany = function()
     	{
-    		$http.post(AppName +'createCompany', JSON.stringify($scope.companyForm))
-    		.success(function(){
-    			alert("Bien!");
-			})
-			.error(function(){
-				alert("Error :(");
-			})
-			;
+    		
+    		if(!$scope.form.$invalid)
+    		{
+    			$http.post(AppName +'createCompany', JSON.stringify($scope.companyForm))
+    			.success(function()
+				{
+    				$("#successModal").modal("toggle");
+    			})
+    			.error(function()
+				{
+    				$("#errorModal").modal("toggle");
+    			})
+    			;    			
+    		}
     	};
+    	
+    	$scope.changeView = function(view)
+    	{
+    		$location.path(view);
+    		$(".modal-backdrop").hide();
+    		$("body").removeClass("modal-open");
+    		$("body").addClass("modal-closed");
+        };
     });
 
     goOnApp.controller('companiesController', function($scope) {
         $scope.message = 'A continuación se listan las empresas registradas en la plataforma';
     });
 
+    goOnApp.directive('tenantexists', function($http, $q) {
+	  return {
+	    require: 'ngModel',
+	    link: function(scope, elm, attrs, ctrl)
+	    {
+	    	ctrl.$asyncValidators.tenantexists = function(modelValue, viewValue) 
+	    	{
+	    		if (ctrl.$isEmpty(modelValue)) 
+	    		{
+	  	          // consider empty model valid
+	  	          return $q.when();
+	    		}
+	    		
+	    		var def = $q.defer();
+	    		
+		    	$http.get(AppName + 'tenantExist?tenantId='+ modelValue)
+		    	.success(function(data, status, headers, config) 
+				{
+		    		return def.reject();
+		        })
+		        .error(function(data, status, headers, config) 
+				{
+		        	return def.resolve();
+		        });
+		    	
+		    	return def.promise;
+	    	};
+	    }
+	  };
+	});
 
