@@ -33,8 +33,6 @@
                     <li><a href="#companies"><i class="fa fa-list"></i> Empresas</a></li>
                     <li><a href="#newCompany"><i class="fa fa-plus-circle"></i> Registrar Empresa</a></li>
                     <li><a href="#" ng-click="signOut()"><i class="fa fa-sign-out" aria-hidden="true"></i> Salir</a></li>
-                    
-                    
                 </ul>
             </div>
             </nav>
@@ -48,7 +46,9 @@
 			<div ng-view></div>
         </div>
     </body>
-    <footer style="background-color: beige; height: 60px;">
-    	<p style="text-align: center; padding-top: 20px;">Powered by <b>GoOn Systems</b></p>
+    <footer>
+    	<div class="panel-footer">
+	    	<p style="text-align: center; padding-top: 20px;">Powered by <b>GoOn Systems</b></p>
+    	</div>
     </footer>
  </html>

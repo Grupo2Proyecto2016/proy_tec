@@ -90,7 +90,7 @@ public class MainDAContext {
 	
 	private void InsertCompany(Empresa company)
 	{
-		//companyRepository.save(company);
+		companyRepository.save(company);
 	}
 
 	public Empresa GetCompany(String tenantid) 

@@ -28,7 +28,7 @@ public class MainController {
 		System.out.println("====>Entry /" + tenantid);
 		if(TenantExist(tenantid))
 		{
-			return "entry";			
+			return "index";			
 		}
 		else
 		{
@@ -36,30 +36,30 @@ public class MainController {
 		}
 	}
 	
-	@RequestMapping(value = "/{tenantid}", method = RequestMethod.POST)
-	public String getIndexPage(@RequestParam String token, @PathVariable(value="tenantid") String tenantid) 
-	{
-		if(IsAuthenticated(token, tenantid))
-	    {
-	    	return "index";	    	
-	    }
-	    else
-	    {
-    		return "login";
-	    }
-	}
+//	@RequestMapping(value = "/{tenantid}", method = RequestMethod.POST)
+//	public String getIndexPage(@RequestParam String token, @PathVariable(value="tenantid") String tenantid) 
+//	{
+//		if(IsAuthenticated(token, tenantid))
+//	    {
+//	    	return "index";	    	
+//	    }
+//	    else
+//	    {
+//    		return "login";
+//	    }
+//	}
 	
 	@RequestMapping(value = "/{tenantid}/pages/{page}", method = RequestMethod.GET)
 	public String getPages(@RequestHeader HttpHeaders headers, @PathVariable(value="tenantid") String tenantid, @PathVariable(value="page") String page) 
 	{
-		if(IsAuthenticated(headers, tenantid))
-		{
+//		if(IsAuthenticated(headers, tenantid))
+//		{
 			return "pages/" + page;
-		}
-		else 
-		{
-			throw new HttpUnauthorizedException();
-	    }
+//		}
+//		else 
+//		{
+//			throw new HttpUnauthorizedException();
+//	    }
 	}
 	
 	boolean TenantExist(String tenantid)

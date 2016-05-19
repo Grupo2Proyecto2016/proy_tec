@@ -1,7 +1,9 @@
 // create the module and name it scotchApp
     var goOnApp = angular.module('goOnApp', ['ngRoute']);
 
-    var tenantUrlPart = getTenant() + "/";
+    var tenantUrlPart =  urlTenant  + "/";
+    var servicesUrl = AppName + tenantUrlPart;
+    
     // configure our routes
     goOnApp.config(function($routeProvider) {
     	$routeProvider
@@ -15,7 +17,7 @@
     	// route for the about page
     	.when('/travels', {
     		templateUrl : tenantUrlPart+ 'pages/travels.html',
-    		controller  : 'aboutController'
+    		controller  : 'travelController'
     	})
     	
     	// route for the contact page
@@ -29,10 +31,19 @@
         var service = this;
 
         service.responseError = function(response) {
-            if (response.status == 401){
-                window.location = document.location.origin + document.location.pathname;
+            if (response.status == 401)
+            {
+            	if($('#loginModal').hasClass('in'))
+            	{
+            		//do nothing
+            	}
+            	else
+            	{
+            		$("#loginModal").modal("toggle");
+            	}
+                //window.location = document.location.origin + document.location.pathname;
             }
-            return $q.reject(response);
+            return $q.resolve(response);
         };
     })
     
@@ -56,28 +67,62 @@
     
     
     // create the controller and inject Angular's $scope
-    goOnApp.controller('mainController', function($scope, $http) {
-        $http.get(AppName + getTenant() + '/getCompany')
+    goOnApp.controller('mainController', function($scope, $http, $location)
+	{
+    	$scope.user = null;
+    	$scope.loginForm = null;
+    	
+    	$http.get(servicesUrl + 'getCompany')
         	.then(function(response) {
         		$scope.company = response.data;
         	}
     	);
-        	
+    	
+    	$http.get(servicesUrl + 'getUserInfo')
+	    	.then(function(response) 
+			{
+	    		if(response.data != null && response.data != "")
+	    		{
+	    			$scope.user = response.data;
+	    		}
+	    	}
+		);
         
-        $scope.message = 'Everyone come and see how good I look!';
+        $scope.signIn = function()
+        {
+        	$http.post(servicesUrl + 'auth', JSON.stringify($scope.loginForm))
+	        	.then(function(response) 
+    			{
+	        		if(response.status == 200)
+	        		{
+	        			$scope.user = response.data.user;
+	        			setJwtToken(response.data.token, $scope.company.nombreTenant);
+	        			$scope.loginForm = null;
+	        			$("#loginModal").modal("toggle");
+	        		}
+	        		else
+	        		{
+	        			$scope.loginForm = null;
+	        			$("#loginAlert").show();
+	        		}
+	        	}
+	    	);
+        };
+        
         $scope.signOut = function()
         {
         	removeJwtToken();
-        	window.location = document.location.origin + document.location.pathname;
+        	$scope.user = null;
+        	$location.path('/');
         };
     });
     
-    goOnApp.controller('aboutController', function($scope) {
-        $scope.message = 'Look! I am an about page.';
+    goOnApp.controller('travelController', function($scope) {
+        $scope.message = 'Desde aquí podrás buscar el viaje que deseas y efectuar la compra o reserve de pasajes.';
     });
 
     goOnApp.controller('contactController', function($scope) {
-        $scope.message = 'Contact us! JK. This is just a demo.';
+        $scope.message = '¿Tienes alguna duda? Comunicate con nosotros para despejarla.';
     });
 
 

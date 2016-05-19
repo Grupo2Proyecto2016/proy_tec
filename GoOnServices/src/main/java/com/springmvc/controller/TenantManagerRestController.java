@@ -96,7 +96,7 @@ public class TenantManagerRestController {
     	company.setPais(country);
     	
     	Usuario user = companyWrapper.user;
-    	String hashedPass = new BCryptPasswordEncoder().encode(user.getPasswd());
+    	String hashedPass = new BCryptPasswordEncoder().encode(companyWrapper.getPassword());
     	user.setPasswd(hashedPass);
     	user.setEnabled(true);
     	user.setEs_empleado(true);

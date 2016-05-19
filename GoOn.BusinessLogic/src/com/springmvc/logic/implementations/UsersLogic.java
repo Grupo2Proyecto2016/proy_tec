@@ -27,7 +27,7 @@ public class UsersLogic implements IUsersLogic {
 	{
 	}
 	
-	public com.springmvc.entities.tenant.Usuario GetUserByName(String tenant, String userName)
+	public com.springmvc.entities.tenant.Usuario GetUserByName(String userName)
 	{
 		com.springmvc.entities.tenant.Usuario user = TenantContext.UserRepository.FindByUsername(userName);
     	return user;

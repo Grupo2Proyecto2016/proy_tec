@@ -103,7 +103,7 @@
 		  <div class="form-group">
 		    <label class="control-label col-sm-2" for="password">Contraseña:</label>
 		    <div class="col-sm-10">
-		    	<input type="password" name="password" class="form-control" ng-model="companyForm.user.passwd" required>
+		    	<input type="password" name="password" class="form-control" ng-model="companyForm.password" required>
 	    	</div>
 		  </div>	  
 		  

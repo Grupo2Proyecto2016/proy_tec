@@ -33,7 +33,7 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
 		
 		if(tenant != null)//TODO: Cambiar la condicion luego de las pruebas
 		{
-			tenantUser = new UsersLogic(tenant).GetUserByName(tenant, username);
+			tenantUser = new UsersLogic(tenant).GetUserByName(username);
 			if (tenantUser == null) 
 	        {
 	            throw new UsernameNotFoundException(String.format("No user found with username '%s' for tenant.", username));

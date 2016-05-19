@@ -11,22 +11,41 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Usuario {
 	
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	@JsonIgnore
 	private long id_usuario;
+	
 	private String 	usrname;
+	
+	@JsonIgnore
 	private String 	passwd;
+	
 	private String 	nombre;
+	
 	private String 	apellido;
+	
 	private String 	email;
+	
+	@JsonIgnore
 	private Boolean	puede_crear;
+	
+	@JsonIgnore
 	private Boolean	enabled;
+	
 	private Boolean	es_empleado;
+	
+	@JsonIgnore
 	private Date ultimo_reset_password;
+	
 	private Date fch_nacimiento;
+	
 	private String direccion;	
+	
 	@OneToOne(fetch=FetchType.LAZY)
 	private Rol rol;
 

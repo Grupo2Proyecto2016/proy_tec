@@ -24,10 +24,13 @@ import com.springmvc.configuration.JwtTokenUtil;
 import com.springmvc.configuration.JwtUser;
 import com.springmvc.configuration.JwtUserDetailsServiceImpl;
 import com.springmvc.entities.main.Empresa;
+import com.springmvc.entities.tenant.Usuario;
 import com.springmvc.exceptions.HttpNotFoundException;
 import com.springmvc.logic.implementations.UsersLogic;
 import com.springmvc.logic.interfaces.ITenantLogic;
 import com.springmvc.logic.interfaces.IUsersLogic;
+import com.springmvc.requestWrappers.TenantAuthWrapper;
+import com.springmvc.utils.UserContext;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -36,6 +39,9 @@ import javax.servlet.http.HttpServletRequest;
 public class AuthenticationRestController {
 
     private String tokenHeader = "Authorization";
+    
+    @Autowired
+    private UserContext context;
     
     @Autowired 
     private ITenantLogic tenantLogic;
@@ -76,6 +82,13 @@ public class AuthenticationRestController {
     	return new ResponseEntity<Empresa>(company, HttpStatus.OK);
     }
     
+    @RequestMapping(value = "/getUserInfo", method = RequestMethod.GET)
+    public ResponseEntity<Usuario>  getUserInfo(@PathVariable String tenantid, HttpServletRequest request)
+    {
+    	Usuario user = context.GetUserFromRequest(request);
+    	return new ResponseEntity<Usuario>(user, HttpStatus.OK);
+    }
+    
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@PathVariable String tenantid, @RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException 
     {
@@ -93,8 +106,11 @@ public class AuthenticationRestController {
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         final String token = jwtTokenUtil.generateToken(userDetails, tenantid, false);
 
-        // Return the token
-        return ResponseEntity.ok(new JwtAuthenticationResponse(token));
+        // Return the token and user info
+        TenantAuthWrapper response = new TenantAuthWrapper();
+        response.user = new UsersLogic(tenantid).GetUserByName(authenticationRequest.getUsername());
+        response.token = token;
+        return ResponseEntity.ok(response);
     }
 
     @RequestMapping(value = "refresh", method = RequestMethod.GET)
