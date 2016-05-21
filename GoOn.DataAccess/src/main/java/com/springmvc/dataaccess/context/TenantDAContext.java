@@ -36,9 +36,9 @@ public class TenantDAContext extends TenantDataSourceConfig {
 	public DepartamentoRepository DepartamentoRepository;
 	public CiudadRepository CiudadRepository;
 	
-	public TenantDAContext(String tenantName)
+	public TenantDAContext(String tenantName, boolean updateSchema)
 	{
-		super(tenantName);
+		super(tenantName, updateSchema);
 		UserRepository = new UserRepository(super.EntityManager);
 		ConfiguracionGlobalRepository = new ConfiguracionGlobalRepository(super.EntityManager);
 		PagoRepository = new PagoRepository(super.EntityManager);

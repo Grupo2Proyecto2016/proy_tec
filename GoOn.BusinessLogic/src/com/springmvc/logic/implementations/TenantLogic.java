@@ -32,7 +32,7 @@ public class TenantLogic implements ITenantLogic {
 		try
 		{
 			context.CreateTenant(company);
-			UsersLogic userLogic = new UsersLogic(company.getNombreTenant());
+			UsersLogic userLogic = new UsersLogic(company.getNombreTenant(), true);
 			userLogic.SetUpRoles();
 			userLogic.CreateUser(user);
 		}

@@ -48,7 +48,7 @@ public class TenantDataSourceConfig
 	
 	private final Lock lock = new ReentrantLock();
 
-	public TenantDataSourceConfig(String tenantName)
+	public TenantDataSourceConfig(String tenantName, boolean updateSchema)
 	{
 		if(properties == null)
 		{
@@ -57,7 +57,7 @@ public class TenantDataSourceConfig
 		this.TenantName = tenantName.toLowerCase();
 		try 
 		{
-			this.EntityManager = CreateTenantEntityManager();
+			this.EntityManager = CreateTenantEntityManager(updateSchema);
 		}
 		catch (PropertyVetoException e) 
 		{
@@ -66,7 +66,7 @@ public class TenantDataSourceConfig
 		}
 	}
 
-    public EntityManager CreateTenantEntityManager() throws PropertyVetoException
+    public EntityManager CreateTenantEntityManager(boolean updateSchema) throws PropertyVetoException
 	{
     	if (EntityManagers == null)
     	{
@@ -86,7 +86,10 @@ public class TenantDataSourceConfig
     		props.put("hibernate.connection.password" , (String) properties.get("mainDataSourcePassword"));
     		props.put("hibernate.dialect", (String) properties.get("postgresDialect"));
     		props.put("hibernate.temp.use_jdbc_metadata_defaults", "false"); 
-    		props.put("hibernate.hbm2ddl.auto", "update");
+    		if (updateSchema)
+    		{
+    			props.put("hibernate.hbm2ddl.auto", "update");
+    		}
     		EntityManagerFactory temf = Persistence.createEntityManagerFactory("temf", props);
     		EntityManager em = temf.createEntityManager();
     		lock.lock();

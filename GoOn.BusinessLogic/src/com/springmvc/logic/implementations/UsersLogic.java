@@ -21,7 +21,12 @@ public class UsersLogic implements IUsersLogic {
 	
 	public UsersLogic(String tenant)
 	{
-		TenantContext = new TenantDAContext(tenant);
+		TenantContext = new TenantDAContext(tenant, false);
+	}
+	
+	public UsersLogic(String tenant, boolean updateSchema)
+	{
+		TenantContext = new TenantDAContext(tenant, true);
 	}
 	
 	public UsersLogic()
