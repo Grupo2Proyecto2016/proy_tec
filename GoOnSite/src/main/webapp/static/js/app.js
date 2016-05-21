@@ -27,6 +27,12 @@
     	.when('/contact', {
     		templateUrl : tenantUrlPart + 'pages/contact.html',
     		controller  : 'contactController'
+    	})
+    	
+    	// route for the buses page
+    	.when('/bus', {
+    		templateUrl : tenantUrlPart + 'pages/buses.html',
+    		controller  : 'busController'
     	});
     });
 
@@ -119,15 +125,6 @@
         	$location.path('/');
         };
     });
-    
-    goOnApp.controller('travelController', function($scope) {
-        $scope.message = 'Desde aquí podrás buscar el viaje que deseas y efectuar la compra o reserve de pasajes.';
-    });
-
-    goOnApp.controller('contactController', function($scope) {
-        $scope.message = '¿Tienes alguna duda? Comunícate con nosotros para despejarla.';
-    });
-
 
     $.blockUI.defaults.css.border = 'none'; 
     $.blockUI.defaults.css.padding = '15px';
