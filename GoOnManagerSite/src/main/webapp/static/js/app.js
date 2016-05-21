@@ -1,5 +1,5 @@
 // create the module and name it scotchApp
-    var goOnApp = angular.module('goOnApp', ['ngRoute']);
+    var goOnApp = angular.module('goOnApp', ['ngRoute', 'ngAnimate']);
 
     // configure our routes
     goOnApp.config(function($routeProvider) {

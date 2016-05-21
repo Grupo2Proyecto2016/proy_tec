@@ -15,6 +15,7 @@
       <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
       <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
 	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-route.js"></script>
+	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.js"></script>
       <script src="<c:url value='/static/js/app.js' />"></script>
     </head>
     <body ng-controller="mainController as main">
@@ -24,12 +25,12 @@
             <nav class="navbar navbar-default">
             <div class="container">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="#"><b>{{company.nombre}}</b></a>
+                    <a class="navbar-brand"><b>{{company.nombre}}</b></a>
                 </div>
 
                 <ul class="nav navbar-nav navbar-right">
                 
-                    <li><a href="#"><i class="fa fa-home"></i> Inicio</a></li>
+                    <li><a href="#home"><i class="fa fa-home"></i> Inicio</a></li>
                     <li><a href="#travels"><i class="fa fa-bus"></i> Pasajes</a></li>
                     <li><a href="#contact"><i class="fa fa-comment"></i> Contacto</a></li>
                     <li><a ng-show="user == null" onclick="shorSignInForm()"><i class="fa fa-sign-in" aria-hidden="true"></i> Entrar</a></li>
@@ -63,10 +64,10 @@
         </header>
 
         <!-- MAIN CONTENT AND INJECTED VIEWS -->
-        <div id="main">
+        <div id="main" style="min-height: 400px;">
             <!-- angular templating -->
             <!-- this is where content will be injected -->
-			<div ng-view></div>
+			<div ng-view style="position: absolute;width: 100%;"></div>
         </div>
     </body>
     <footer>

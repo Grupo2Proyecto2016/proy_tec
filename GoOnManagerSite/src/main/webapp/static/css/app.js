@@ -1,5 +1,5 @@
 // create the module and name it scotchApp
-    var goOnApp = angular.module('goOnApp', ['ngRoute']);
+    var goOnApp = angular.module('goOnApp', ['ngRoute', 'ngAnimate']);
 
     var tenantUrlPart =  urlTenant  + "/";
     var servicesUrl = AppName + tenantUrlPart;
@@ -10,6 +10,11 @@
     	
     	// route for the home page
     	.when('/', {
+    		templateUrl : 'pages/home.html',
+    		controller  : 'mainController'
+    	})
+    	
+    	.when('/home', {
     		templateUrl : 'pages/home.html',
     		controller  : 'mainController'
     	})
@@ -122,7 +127,7 @@
     });
 
     goOnApp.controller('contactController', function($scope) {
-        $scope.message = '¿Tienes alguna duda? Comunicate con nosotros para despejarla.';
+        $scope.message = '¿Tienes alguna duda? Comunícate con nosotros para despejarla.';
     });
 
 
