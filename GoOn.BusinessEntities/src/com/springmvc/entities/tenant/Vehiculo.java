@@ -18,6 +18,7 @@ public class Vehiculo {
 	private long id_vehiculo;
 	private String marca;
 	private String modelo;
+	private String matricula;
 	private int ano;
 	private Boolean tieneBano;
 	private int cantAsientos;
@@ -103,5 +104,11 @@ public class Vehiculo {
 	}
 	public void setPisos(int pisos) {
 		this.pisos = pisos;
+	}
+	public String getMatricula() {
+		return matricula;
+	}
+	public void setMatricula(String matricula) {
+		this.matricula = matricula;
 	}	
 }
