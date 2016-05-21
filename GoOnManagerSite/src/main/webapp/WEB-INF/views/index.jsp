@@ -43,7 +43,7 @@
 			{{ message }}
             <!-- angular templating -->
             <!-- this is where content will be injected -->
-			<div ng-view style="width: 100%; padding-bottom: 100px;"></div>
+			<div ng-view class="viewContainer"></div>
         </div>
     </body>
     <footer>
