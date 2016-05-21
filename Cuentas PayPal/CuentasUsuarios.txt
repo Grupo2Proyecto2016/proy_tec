@@ -1,0 +1,2 @@
+user: marcelod2@gmail.com	clave: marcelod2
+user: ricardogomez@gmail.com	clave: ricardogomez
