@@ -46,8 +46,7 @@ public class Usuario {
 	
 	private String direccion;	
 	
-	@OneToOne(fetch=FetchType.LAZY)
-	private Rol rol;
+	private int rol_id_rol;
 
 	
 	public List<Authority> getAuthorities()
@@ -145,11 +144,12 @@ public class Usuario {
 		this.direccion = direccion;
 	}
 
-	public Rol getRol() {
-		return rol;
+	public int getRol_id_rol() {
+		return rol_id_rol;
 	}
 
-	public void setRol(Rol rol) {
-		this.rol = rol;
+	public void setRol_id_rol(int rol_id_rol) {
+		this.rol_id_rol = rol_id_rol;
 	}
+
 }
