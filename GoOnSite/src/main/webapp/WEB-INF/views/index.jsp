@@ -67,7 +67,7 @@
         <div id="main" style="min-height: 400px;">
             <!-- angular templating -->
             <!-- this is where content will be injected -->
-			<div ng-view style="position: absolute;width: 100%;"></div>
+			<div ng-view style="width: 100%; padding-bottom: 100px; position: absolute;"></div>
         </div>
     </body>
     <footer>

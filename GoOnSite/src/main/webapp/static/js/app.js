@@ -10,24 +10,22 @@
     	
     	// route for the home page
     	.when('/', {
-    		templateUrl : 'pages/home.html',
-    		controller  : 'mainController'
+    		templateUrl : tenantUrlPart + 'pages/home.html',
     	})
     	
     	.when('/home', {
-    		templateUrl : 'pages/home.html',
-    		controller  : 'mainController'
+    		templateUrl : tenantUrlPart + 'pages/home.html',
     	})
     	
     	// route for the about page
     	.when('/travels', {
-    		templateUrl : 'pages/travels.html',
+    		templateUrl :  tenantUrlPart + 'pages/travels.html',
     		controller  : 'travelController'
     	})
     	
     	// route for the contact page
     	.when('/contact', {
-    		templateUrl : 'pages/contact.html',
+    		templateUrl : tenantUrlPart + 'pages/contact.html',
     		controller  : 'contactController'
     	});
     });
