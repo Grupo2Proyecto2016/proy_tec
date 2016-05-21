@@ -49,4 +49,9 @@ public class UsersLogic implements IUsersLogic {
 	{
 		return TenantContext.UserRepository.FindByRole(UserRol.Admin);
 	}
+
+	public void SetUpRoles() 
+	{
+		TenantContext.RolRepository.SetUp();
+	}
 }

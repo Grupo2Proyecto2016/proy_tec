@@ -33,6 +33,7 @@ public class TenantLogic implements ITenantLogic {
 		{
 			context.CreateTenant(company);
 			UsersLogic userLogic = new UsersLogic(company.getNombreTenant());
+			userLogic.SetUpRoles();
 			userLogic.CreateUser(user);
 		}
 		catch(Exception e)

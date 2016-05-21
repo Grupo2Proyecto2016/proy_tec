@@ -8,10 +8,17 @@ import javax.persistence.Id;
 @Entity
 public class Rol 
 {
-	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Id
 	public long id_rol;
 	public String nombre;
 	public String descripcion;
+	
+	public Rol(long idRol, String name, String description)
+	{
+		this.id_rol = idRol;
+		this.nombre = name;
+		this.descripcion = description;
+	}
 	
 	public long getId_rol() {
 		return id_rol;

@@ -1,5 +1,7 @@
 package com.springmvc.enums;
 
+import com.springmvc.entities.tenant.Rol;
+
 public enum UserRol
 {
 	Admin(1),
@@ -17,5 +19,11 @@ public enum UserRol
 	public int getValue()
 	{
 		return value;
+	}
+
+	public Rol ToRol()
+	{
+		Rol rol = new Rol(value, this.name(), this.name());
+		return rol;
 	}
 }
