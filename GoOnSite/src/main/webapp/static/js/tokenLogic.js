@@ -1,7 +1,7 @@
 var TOKEN_KEY = "tenantJwtToken"
 var TENANT_KEY = "c_tenant"
 var AppName = "http://localhost:8080/GoOnServices/"
-var urlTenant = window.location.pathname.split('/').pop();
+var urlTenant = window.location.pathname.split('/')[2];
 
 function createAuthorizationTokenHeader() {
     var token = getJwtToken();
