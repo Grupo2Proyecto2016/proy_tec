@@ -5,6 +5,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import com.springmvc.entities.tenant.Usuario;
+import com.springmvc.enums.UserRol;
 
 public class UserRepository
 {
@@ -44,5 +45,21 @@ public class UserRepository
 		{
 			throw ex;
 		}
+	}
+
+	public Usuario FindByRole(UserRol rol) 
+	{
+		Usuario user = null;
+		Query q = entityManager.createQuery("FROM Usuario WHERE rol_id_rol = :rol");
+		q.setParameter("rol", rol.getValue());
+		try
+		{
+			user = (Usuario)q.getSingleResult();
+		}
+		catch(NoResultException ex)
+		{
+			return null;
+		}
+		return user;
 	}
 }

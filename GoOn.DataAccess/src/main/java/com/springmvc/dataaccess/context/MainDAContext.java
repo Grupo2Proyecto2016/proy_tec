@@ -97,4 +97,12 @@ public class MainDAContext {
 	{
 		return companyRepository.findBynombretenant(tenantid);
 	}
+	
+	public List<Empresa> GetCompanies() 
+	{
+		List<Empresa> result = new ArrayList<>();
+		Iterable<Empresa> companies = companyRepository.findAll();
+		companies.forEach(result::add);
+		return result;
+	}
 }

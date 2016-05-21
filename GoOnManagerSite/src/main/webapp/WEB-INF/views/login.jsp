@@ -21,8 +21,8 @@
 
 	<form class="form-signin" method="post" id="loginForm">
 		<h1 class="form-signin-heading text-muted">Ingreso al sitio</h1>
-		<input type="text" name="username" id="username" class="form-control" placeholder="Email address" required="" autofocus="">
-		<input type="password" name="password" id="password" class="form-control" placeholder="Password" required="">
+		<input type="text" name="username" id="username" class="form-control" placeholder="nombre de usuario" required="" autofocus="">
+		<input type="password" name="password" id="password" class="form-control" placeholder="contraseña" required="">
 		<input type="hidden" name="${_csrf.parameterName}"   value="${_csrf.token}" />
 		<button class="btn btn-lg btn-primary btn-block" type="submit">
 			Entrar

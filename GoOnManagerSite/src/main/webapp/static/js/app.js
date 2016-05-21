@@ -5,19 +5,16 @@
     goOnApp.config(function($routeProvider) {
     	$routeProvider
     	
-    	// route for the home page
+    	// route for the companies page
     	.when('/', {
-    		templateUrl : 'pages/home.html',
-    		controller  : 'mainController'
+    		templateUrl : 'pages/companies.html',
+    		controller  : 'companiesController'
     	})
-    	
-    	// route for the about page
     	.when('/companies', {
     		templateUrl : 'pages/companies.html',
     		controller  : 'companiesController'
     	})
-    	
-    	// route for the contact page
+    	// route for the company form page
     	.when('/newCompany', {
     		templateUrl : 'pages/companyForm.html',
     		controller  : 'companyController'
@@ -92,13 +89,17 @@
     		
     		if(!$scope.form.$invalid)
     		{
+    			$.blockUI();
+    			
     			$http.post(AppName +'createCompany', JSON.stringify($scope.companyForm))
     			.success(function()
 				{
+    				$.unblockUI();
     				$("#successModal").modal("toggle");
     			})
     			.error(function()
 				{
+    				$.unblockUI();
     				$("#errorModal").modal("toggle");
     			})
     			;    			
@@ -114,8 +115,25 @@
         };
     });
 
-    goOnApp.controller('companiesController', function($scope) {
+    goOnApp.controller('companiesController', function($scope, $http) {
         $scope.message = 'A continuación se listan las empresas registradas en la plataforma';
+        
+        $http.get(AppName + 'getCompanies')
+        	.success(function(data, status, headers, config) 
+			{
+	        	$scope.companies = data;
+		});
+        
+        $scope.getUserDetails = function(tenantName)
+        {
+        	$scope.tenantAdmin = null;
+        	$http.get(AppName + 'getTenantAdmin?tenantId='+ tenantName)
+        		.success(function(data, status, headers, config) 
+				{
+		        	$scope.tenantAdmin = data;
+		        	$("#adminDetailsModal").modal('toggle');
+		    });
+        };
     });
 
     goOnApp.directive('tenantexists', function($http, $q) {
@@ -149,3 +167,9 @@
 	  };
 	});
 
+    $.blockUI.defaults.css.border = 'none'; 
+    $.blockUI.defaults.css.padding = '15px';
+    $.blockUI.defaults.css.backgroundColor = '#000'; 
+    $.blockUI.defaults.css.opacity = 0.5; 
+    $.blockUI.defaults.css.color = '#fff'; 
+    $.blockUI.defaults.message = 'Espere por favor...'; 

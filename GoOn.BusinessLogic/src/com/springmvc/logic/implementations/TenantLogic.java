@@ -58,4 +58,9 @@ public class TenantLogic implements ITenantLogic {
 	{
 		return context.GetCompany(tenantid);
 	}
+	
+	public List<Empresa> GetCompanies()
+	{
+		return context.GetCompanies();
+	}
 }

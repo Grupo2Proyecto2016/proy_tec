@@ -30,6 +30,7 @@ import com.springmvc.entities.main.Empresa;
 import com.springmvc.entities.main.Pais;
 import com.springmvc.entities.tenant.Rol;
 import com.springmvc.entities.tenant.Usuario;
+import com.springmvc.enums.UserRol;
 import com.springmvc.exceptions.HttpNotFoundException;
 import com.springmvc.logic.implementations.TenantLogic;
 import com.springmvc.logic.implementations.UsersLogic;
@@ -75,6 +76,20 @@ public class TenantManagerRestController {
     	}
     }
     
+    @RequestMapping(value = "/getCompanies", method = RequestMethod.GET)
+    public ResponseEntity<List<Empresa>>  getCompany()
+    {
+    	List<Empresa> companies = tenantLogic.GetCompanies();
+    	return new ResponseEntity<List<Empresa>>(companies, HttpStatus.OK);
+    }
+    
+    @RequestMapping(value="/getTenantAdmin", method = RequestMethod.GET)
+    public ResponseEntity<Usuario>GetTenantAdmin(@RequestParam(value="tenantId") String tenantId)
+    {
+    	Usuario user = new UsersLogic(tenantId).GetTenantAdmin();
+    	return new ResponseEntity<Usuario>(user, HttpStatus.OK);
+    }
+    
     @RequestMapping(value = "countries", method = RequestMethod.GET)
     public List<?> GetCountries()
     {
@@ -101,7 +116,7 @@ public class TenantManagerRestController {
     	user.setEnabled(true);
     	user.setEs_empleado(true);
     	user.setPuede_crear(true);
-    	user.setRol(null);
+    	user.setRol_id_rol(UserRol.Admin.getValue());
     	user.SetAuthorities(null);
     	user.setUltimoResetPassword(new Date());
     	tenantLogic.CreateTenant(company, user);

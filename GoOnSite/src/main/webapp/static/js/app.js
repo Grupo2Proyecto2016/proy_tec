@@ -126,3 +126,9 @@
     });
 
 
+    $.blockUI.defaults.css.border = 'none'; 
+    $.blockUI.defaults.css.padding = '15px';
+    $.blockUI.defaults.css.backgroundColor = '#000'; 
+    $.blockUI.defaults.css.opacity = 0.5; 
+    $.blockUI.defaults.css.color = '#fff'; 
+    $.blockUI.defaults.message = 'Espere por favor...'; 

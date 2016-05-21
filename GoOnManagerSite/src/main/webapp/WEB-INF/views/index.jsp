@@ -4,15 +4,15 @@
     <head>
       <meta charset=UTF-8">
       <title>GoOn Manager</title>
-      <!-- SCROLLS -->
-      <!-- load bootstrap and fontawesome via CDN -->
+      <!-- CSS -->
       <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
       <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css" />
-
-      <!-- SPELLS -->
-      <!-- load angular and angular route via CDN -->
+      <link rel="stylesheet" href="<c:url value='/static/css/app.css' />" />
+      
+      <!-- SCRIPTS -->
       <script src="<c:url value='/static/js/tokenLogic.js' />"></script>
       <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+      <script src="<c:url value='/static/js/jquery/jquery.blockUI.js' />"></script>
       <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
       <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
 	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-route.js"></script>
@@ -29,7 +29,6 @@
                 </div>
 
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#"><i class="fa fa-home"></i> Inicio</a></li>
                     <li><a href="#companies"><i class="fa fa-list"></i> Empresas</a></li>
                     <li><a href="#newCompany"><i class="fa fa-plus-circle"></i> Registrar Empresa</a></li>
                     <li><a href="#" ng-click="signOut()"><i class="fa fa-sign-out" aria-hidden="true"></i> Salir</a></li>

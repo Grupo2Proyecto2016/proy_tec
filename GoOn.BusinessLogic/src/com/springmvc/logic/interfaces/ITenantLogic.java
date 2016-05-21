@@ -19,4 +19,6 @@ public interface ITenantLogic
 	Pais GetCountry(long countryId);
 
 	Empresa GetCompany(String tenantid);
+	
+	List<Empresa> GetCompanies();
 }

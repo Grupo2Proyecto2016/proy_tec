@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import com.springmvc.dataaccess.context.MainDAContext;
 import com.springmvc.dataaccess.context.TenantDAContext;
 import com.springmvc.entities.main.Usuario;
+import com.springmvc.enums.UserRol;
 import com.springmvc.logic.interfaces.IUsersLogic;
 
 @Component
@@ -42,5 +43,10 @@ public class UsersLogic implements IUsersLogic {
 	public void CreateUser(com.springmvc.entities.tenant.Usuario user)
 	{
 		TenantContext.UserRepository.InsertUser(user);
+	}
+
+	public com.springmvc.entities.tenant.Usuario GetTenantAdmin()
+	{
+		return TenantContext.UserRepository.FindByRole(UserRol.Admin);
 	}
 }
