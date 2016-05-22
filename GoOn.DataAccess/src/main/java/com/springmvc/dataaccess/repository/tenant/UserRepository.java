@@ -1,5 +1,8 @@
 package com.springmvc.dataaccess.repository.tenant;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -61,5 +64,20 @@ public class UserRepository
 			return null;
 		}
 		return user;
+	}
+
+	public List<Usuario> GetEmployees() 
+	{
+		List<Usuario> result = new ArrayList<>();
+		Query q = entityManager.createQuery("FROM Usuario WHERE es_empleado = TRUE");
+		try
+		{
+			result = q.getResultList();
+		}
+		catch(NoResultException ex)
+		{
+			return null;
+		}
+		return result;
 	}
 }

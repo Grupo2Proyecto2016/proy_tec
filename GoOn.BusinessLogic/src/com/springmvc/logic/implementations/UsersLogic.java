@@ -59,4 +59,9 @@ public class UsersLogic implements IUsersLogic {
 	{
 		TenantContext.RolRepository.SetUp();
 	}
+
+	public List<com.springmvc.entities.tenant.Usuario> GetEmployees() 
+	{
+		return TenantContext.UserRepository.GetEmployees();
+	}
 }

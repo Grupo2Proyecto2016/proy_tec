@@ -1,5 +1,5 @@
 // create the module and name it scotchApp
-    var goOnApp = angular.module('goOnApp', ['ngRoute', 'ngAnimate']);
+    var goOnApp = angular.module('goOnApp', ['ngRoute', 'ngAnimate', 'ui.grid']);
 
     var tenantUrlPart =  urlTenant  + "/";
     var servicesUrl = AppName + tenantUrlPart;
@@ -33,6 +33,15 @@
     	.when('/bus', {
     		templateUrl : tenantUrlPart + 'pages/buses.html',
     		controller  : 'busController'
+    	})
+    	
+    	// route for the employees page
+    	.when('/employees', {
+    		templateUrl : tenantUrlPart + 'pages/employees.html',
+    		controller  : 'employeesController'
+    	})
+		.otherwise({
+			redirectTo: '/'
     	});
     });
 
@@ -122,7 +131,7 @@
         {
         	removeJwtToken();
         	$scope.user = null;
-        	$location.path('/');
+        	$location.path('home');
         };
     });
 

@@ -7,6 +7,7 @@
       <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
       <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.css" />
 	  <link rel="stylesheet" href="<c:url value='/static/css/custom.css' />" />
+	  <link rel="stylesheet" href="<c:url value='/static/css/ui-grid.min.css' />" />
       
       <!-- SCRIPTS -->
       <script src="<c:url value='/static/js/tokenLogic.js' />"></script>
@@ -18,10 +19,15 @@
 	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.js"></script>
       <script src="<c:url value='/static/js/app.js' />"></script>
       
+
+      <script src="<c:url value='/static/js/ui-grid/ui-grid.min.js' />"></script>
+      
+      
 	  <!--BUS CONTROLLER -->
       <script src="<c:url value='/static/js/controllers/busController.js' />"></script>
       <script src="<c:url value='/static/js/controllers/travelController.js' />"></script>
       <script src="<c:url value='/static/js/controllers/contactController.js' />"></script>
+      <script src="<c:url value='/static/js/controllers/employeesController.js' />"></script>
     </head>
     <body ng-controller="mainController as main">
 
@@ -39,6 +45,7 @@
                     <li><a href="#travels"><i class="fa fa-bus"></i> Pasajes</a></li>
                     
                     <li><a ng-show="user != null && user.rol_id_rol == 1" href="#bus"><i class="fa fa-bus"></i> Vehículos</a></li>
+                    <li><a ng-show="user != null && user.rol_id_rol == 1" href="#employees"><i class="fa fa-users"></i> Personal</a></li>
                     
                     <li><a href="#contact"><i class="fa fa-comment"></i> Contacto</a></li>
                     <li><a ng-show="user == null" onclick="shorSignInForm()"><i class="fa fa-sign-in" aria-hidden="true"></i> Entrar</a></li>
@@ -57,7 +64,7 @@
 	                                        <p class="text-left"><strong>{{user.nombre}} {{user.apellido}}</strong></p>
 	                                        <p class="text-left small">{{user.email}}</p>
 	                                        <p class="text-left">
-	                                            <a href="#" ng-click="signOut()" class="btn btn-danger btn-block btn-sm">Salir</a>
+	                                            <a ng-click="signOut()" class="btn btn-danger btn-block btn-sm">Salir</a>
 	                                        </p>
 	                                    </div>
 	                                </div>
