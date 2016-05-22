@@ -7,6 +7,11 @@
     height: 400px
   }
 
+.modal-body label
+{
+	padding-top: 0px!important;
+}
+
 #loginModal input
 {
 	margin-bottom: 20px;
