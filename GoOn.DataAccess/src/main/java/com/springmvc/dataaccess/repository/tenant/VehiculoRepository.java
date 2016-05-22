@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
+import com.springmvc.entities.tenant.Usuario;
 import com.springmvc.entities.tenant.Vehiculo;
 
 public class VehiculoRepository {
@@ -22,19 +23,22 @@ EntityManager entityManager;
 		List<Vehiculo> vehiculos = null;
 		Query q = entityManager.createQuery("FROM Vehiculo");
 		vehiculos = (List<Vehiculo>)q.getResultList();
-		return vehiculos;
-		/*Usuario user = null;
-		Query q = entityManager.createQuery("FROM Usuario WHERE usrname = :name");
-		q.setParameter("name", username);
+		return vehiculos;	
+	}
+	
+	public void InsertBus(Vehiculo vehiculo)
+	{
 		try
 		{
-			user = (Usuario)q.getSingleResult();
+			entityManager.getTransaction().begin();
+			entityManager.persist(vehiculo);
+			entityManager.flush();
+			entityManager.getTransaction().commit();
 		}
-		catch(NoResultException ex)
+		catch(Exception ex)
 		{
-			return null;
+			throw ex;
 		}
-		return user;*/		
 	}
 
 }

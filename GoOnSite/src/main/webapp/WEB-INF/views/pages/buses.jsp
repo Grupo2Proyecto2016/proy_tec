@@ -79,15 +79,15 @@
 		    		</div>
 		  		</div>
 		  		<div class="form-group">
-			    	<label class="control-label col-sm-4" for="cantAnimales">Lugares Equipaje:</label>
+			    	<label class="control-label col-sm-4" for="cantBultos">Lugares Equipaje:</label>
 			    	<div class="col-sm-6">
-			    		<input type="number" class="form-control" name="cantAnimales" ng-model="busForm.cantAnimales" required>
+			    		<input type="number" class="form-control" name="cantBultos" ng-model="busForm.cantBultos" required>
 		    		</div>
 		  		</div>
 		  		<div class="form-group">
-			    	<label class="control-label col-sm-4" for="cantAnimales">Lugares Encomienda:</label>
+			    	<label class="control-label col-sm-4" for="cantEncomiendas">Lugares Encomienda:</label>
 			    	<div class="col-sm-6">
-			    		<input type="number" class="form-control" name="cantAnimales" ng-model="busForm.cantAnimales" required>
+			    		<input type="number" class="form-control" name="cantEncomiendas" ng-model="busForm.cantEncomiendas" required>
 		    		</div>
 		  		</div>
 		  		<div class="form-group"> 
@@ -101,6 +101,17 @@
 			
 		</div>
 	</div>
+</div>
+
+
+<div id="successAlert" class="row hidden">
+	<div class="col-xs-1"></div>
+	<div class="col-xs-10">
+		<div class="alert alert-success" style="">
+		  <strong>Exito!</strong> Vehiculo creado.
+		</div>
+	</div>
+	<div class="col-xs-1"></div>
 </div>
 
 <div class="row">
@@ -154,10 +165,10 @@
 					<div class="form-group">
 						<label class="control-label col-sm-4" for="name">Tiene Baño:</label>
 						<div ng-show="elBus.tieneBano == true" class="col-sm-8">
-							<p>SI</p>
+							<p>Si</p>
 						</div>
 						<div ng-show="elBus.tieneBano == false"  class="col-sm-8">
-							<p>NO</p>
+							<p>No</p>
 						</div>
 					</div>
 					<div class="form-group">
@@ -190,3 +201,17 @@
 	</div>
 </div>
 
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: lightcoral">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3 class="modal-title" id="myModalLabel">Error</h3>
+      </div>
+      <div class="modal-body">
+        Ha ocurrido un error al crear el vehículo.
+        Intente de nuevo en unos instantes. 
+      </div>
+    </div>
+  </div>
+</div>

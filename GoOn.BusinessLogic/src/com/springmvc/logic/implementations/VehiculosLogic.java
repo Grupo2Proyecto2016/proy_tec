@@ -22,4 +22,9 @@ public class VehiculosLogic implements IVehiculosLogic{
 		return TenantContext.VehiculoRepository.getVehiculos();
 	}
 
+	public void createBus(Vehiculo vehiculo) 
+	{
+		TenantContext.VehiculoRepository.InsertBus(vehiculo);
+	}
+
 }

@@ -2,24 +2,27 @@ goOnApp.controller('busController', function($scope, $http, $location)
 {
     $scope.message = 'Maneje su flota de vehículos con facilidad.';
     
-    /*$scope.busForm = {};
-    $scope.companyForm.name = null;
-    $scope.companyForm.trueName = null;
-    $scope.companyForm.rut = null;
-    $scope.companyForm.phone = null;
-    $scope.companyForm.address = null;
-    $scope.companyForm.tenantName = null;
-    $scope.companyForm.username = null;
-    $scope.companyForm.password = null;
-    $scope.companyForm.countryId = null;
-    $scope.companyForm.user = null;
-    $scope.countries = null;*/
-   
-    $http.get(servicesUrl + 'getBuses').success(function(data, status, headers, config) 
-	{
-    	$scope.buses = data;
-	});
+    $scope.busForm = {};
+    $scope.busForm.matricula = null;
+    $scope.busForm.marca = null;
+    $scope.busForm.modelo = null;
+    $scope.busForm.ano = null;
+    $scope.busForm.cantAsientos = null;
+    $scope.busForm.cantParados = null;
+    $scope.busForm.tieneBano = false;
+    $scope.busForm.cantAccesibles = null;
+    $scope.busForm.cantAnimales = null;
+    $scope.busForm.cantBultos = null;
+    $scope.busForm.cantEncomiendas = null;
     
+    $scope.getBuses = function(){
+    	$http.get(servicesUrl + 'getBuses').success(function(data, status, headers, config) 
+    	{
+        	$scope.buses = data;
+    	});
+    };
+    
+    $scope.getBuses();
     
     $scope.getBusDetails = function(bus)
     {
@@ -40,7 +43,25 @@ goOnApp.controller('busController', function($scope, $http, $location)
     };
 
     $scope.createBus = function()
-    {
-    	
-    };
+	{		
+		if(!$scope.form.$invalid)
+		{
+			$.blockUI();
+			
+			$http.post(servicesUrl +'createBus', JSON.stringify($scope.busForm))
+			.success(function()
+			{
+				$.unblockUI();
+				$("#successAlert").removeClass('hidden');
+				$scope.getBuses();
+				$scope.hideForm();
+			})
+			.error(function()
+			{
+				$.unblockUI();
+				$("#errorModal").modal("toggle");
+			})
+			;    			
+		}
+	};
 });

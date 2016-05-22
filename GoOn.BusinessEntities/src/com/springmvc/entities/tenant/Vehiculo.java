@@ -1,5 +1,6 @@
 package com.springmvc.entities.tenant;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -31,8 +32,14 @@ public class Vehiculo {
 
 	@OneToMany(cascade = CascadeType.ALL , fetch = FetchType.LAZY)	
     @JoinColumn(name = "id_vehiculo")
-    private List<Asiento> asientos;
+    private Collection <Asiento> asientos;
 	
+	public Collection<Asiento> getAsientos() {
+		return asientos;
+	}
+	public void setAsientos(Collection<Asiento> asientos) {
+		this.asientos = asientos;
+	}
 	public long getId_vehiculo() {
 		return id_vehiculo;
 	}
