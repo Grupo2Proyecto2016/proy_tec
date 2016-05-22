@@ -61,7 +61,7 @@
 	                            <div class="navbar-login">
 	                                <div class="row" style="padding: 10px;">
 	                                    <div class="col-sm-12">
-	                                        <p class="text-left"><strong>{{user.nombre}} {{user.apellido}}</strong></p>
+	                                        <p class="text-center"><strong>{{user.nombre}} {{user.apellido}}</strong></p>
 	                                        <p class="text-left small">{{user.email}}</p>
 	                                        <p class="text-left">
 	                                            <a ng-click="signOut()" class="btn btn-danger btn-block btn-sm">Salir</a>
@@ -82,13 +82,13 @@
         <div id="main" style="min-height: 400px;">
             <!-- angular templating -->
             <!-- this is where content will be injected -->
-			<div ng-view class="viewContainer"></div>
+			<div ng-view ng-animate class="viewContainer"></div>
         </div>
     </body>
     <footer>
     	<div class="panel-footer">
-    	<p style="text-align: center; padding-top: 20px;"><b>{{company.razonSocial}}  |   Dirección: {{company.direccion}}   |   Tel: {{company.telefono}}</b></p>
-    	<p style="text-align: center; padding-top: 20px;">Powered by <b>GoOn Systems</b></p>
+    	<p class="text-center"><b>{{company.razonSocial}}  |   Dirección: {{company.direccion}}   |   Tel: {{company.telefono}}</b></p>
+    	<p class="text-center">Powered by <b>GoOn Systems</b></p>
     	</div>
     </footer>
     

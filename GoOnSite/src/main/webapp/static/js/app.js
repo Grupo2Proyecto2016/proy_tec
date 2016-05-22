@@ -1,5 +1,5 @@
 // create the module and name it scotchApp
-    var goOnApp = angular.module('goOnApp', ['ngRoute', 'ngAnimate', 'ui.grid']);
+    var goOnApp = angular.module('goOnApp', ['ngRoute', 'ngAnimate', 'ui.grid', 'ui.grid.pagination']);
 
     var tenantUrlPart =  urlTenant  + "/";
     var servicesUrl = AppName + tenantUrlPart;

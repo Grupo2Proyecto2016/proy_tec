@@ -43,12 +43,12 @@
 			{{ message }}
             <!-- angular templating -->
             <!-- this is where content will be injected -->
-			<div ng-view class="viewContainer"></div>
+			<div ng-view  class="viewContainer"></div>
         </div>
     </body>
     <footer>
     	<div class="panel-footer">
-	    	<p style="text-align: center; padding-top: 20px;">Powered by <b>GoOn Systems</b></p>
+	    	<p class="text-center">Powered by <b>GoOn Systems</b></p>
     	</div>
     </footer>
  </html>

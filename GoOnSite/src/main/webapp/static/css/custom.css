@@ -1,11 +1,24 @@
+/* GRID STYLE CORRECTIONS */
 .genericGridHeader {
     width: 100%;
-    height: 30px;
+    height: 55%;
   }
   
- .genericGridHeader div.grid {
-    height: 400px
-  }
+div.ui-grid-header-cell-wrapper 
+{
+	height: inherit;	
+}
+
+i.ui-grid-icon-cancel
+{
+	margin-top: -8px!important;
+}
+  
+div.jumbotron
+{
+    padding-top: 10px!important;
+    padding-bottom: 20px!important;
+}
 
 .modal-body label
 {
@@ -24,7 +37,7 @@ a:hover {
 div.viewContainer
 {
 	width: 100%; 
-	padding-bottom: 100px; 
+	padding-bottom: 150px; 
 	padding-top: 70px;
 }
 
@@ -88,5 +101,14 @@ body.modal-open[style]
     to    { opacity: 1.0; }
 }
 
-.ng-enter           { animation: apear 0.5s both ease-in; z-index: 1020; }
-/* .ng-leave           { animation: disapear 0.3s both ease-in; z-index: 9999; } */
+.ng-enter 
+{
+	animation: apear 0.5s both ease-in!important;
+	 z-index: 1020; 
+}
+ 
+/* .ng-leave            */
+/* {  */
+/* 	animation: disapear 0.3s both ease-in !important; */
+/* 	z-index: 9999;  */
+/* } */
