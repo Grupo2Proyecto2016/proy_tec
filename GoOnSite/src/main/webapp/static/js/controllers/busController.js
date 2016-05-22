@@ -13,5 +13,11 @@ goOnApp.controller('busController', function($scope, $http, $location)
     	$scope.elBus = bus; 
 		$("#busDetailsModal").modal('toggle');
     };
+    
+    $scope.muestraForm = function(bus)
+    {
+    	$scope.elBus = bus; 
+		$("#divBusForm").toggleClass('hidden');
+    };
 
 });
