@@ -34,9 +34,8 @@ public class Usuario {
 	
 	private String 	email;
 	
-	@JsonIgnore
-	private Boolean	puede_crear;
-	
+	private String 	telefono;
+
 	@JsonIgnore
 	private Boolean	enabled;
 	
@@ -72,6 +71,14 @@ public class Usuario {
 	}
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
+	}
+	
+	public String getTelefono() {
+		return telefono;
+	}
+
+	public void setTelefono(String telefono) {
+		this.telefono = telefono;
 	}
 	
 	public Date getUltimoResetPassword() {
@@ -115,12 +122,6 @@ public class Usuario {
 	}
 	public void setEmail(String email) {
 		this.email = email;
-	}
-	public Boolean getPuede_crear() {
-		return puede_crear;
-	}
-	public void setPuede_crear(Boolean puede_crear) {
-		this.puede_crear = puede_crear;
 	}
 
 	public Boolean getEs_empleado() {

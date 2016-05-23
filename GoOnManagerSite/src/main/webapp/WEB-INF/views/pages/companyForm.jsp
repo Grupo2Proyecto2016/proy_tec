@@ -57,10 +57,15 @@
 		  <div class="form-group">
 		    <label class="control-label col-sm-2" for="url">Url del sitio:</label>
 	    	<div class="col-sm-10">
-		    	<input type="text" name="url" pattern="[a-zA-Z]+" title="Solo se aceptan letras." class="form-control" ng-model="companyForm.tenantName" tenantexists>
+		    	<input type="text" autocomplete="off" name="url" pattern="[a-zA-Z]+" title="Solo se aceptan letras." class="form-control" ng-model="companyForm.tenantName" tenantexists>
 		    	<img src="<c:url value='/static/images/loader.gif' />" style="margin-top: -25px; margin-left: 80;" ng-show="form.url.$pending.tenantexists"/>
-    			<span class="label label-danger" ng-show="form.url.$error.tenantexists">La Url está en uso</span>
+<!--     			<span class="label label-danger" ng-show="form.url.$error.tenantexists">La Url está en uso</span> -->
 	    	</div>
+		  </div>
+		  <div class="form-group has-error">
+			<div ng-messages="form.url.$error" role="alert" class="col-sm-offset-2 col-sm-10 text-center">
+				<span ng-message="tenantexists" class="help-block">La Url ya está en uso</span>
+		    </div>
 		  </div>
 		  
 		  <h3 style="text-align: center; padding-top: 30px;">Datos del Administrador:</h3>
@@ -89,6 +94,12 @@
 	    	</div>
 		  </div>
 		  <div class="form-group">
+		    <label class="control-label col-sm-2" for="telefono">Teléfono:</label>
+		    <div class="col-sm-10">
+		    	<input type="text" pattern="[0-9]+" title="Solo se aceptan números" name="telefono" class="form-control" ng-model="companyForm.user.telefono" required>
+	    	</div>
+		  </div>
+		  <div class="form-group">
 		    <label class="control-label col-sm-2" for="address">Dirección:</label>
 		    <div class="col-sm-10">
 		    	<input type="text" name="address" class="form-control" ng-model="companyForm.user.direccion" required>
@@ -97,7 +108,7 @@
 		  <div class="form-group">
 		    <label class="control-label col-sm-2" for="username">Nombre de usuario:</label>
 		    <div class="col-sm-10">
-		    	<input type="text" name="username" class="form-control" ng-model="companyForm.user.usrname" required>
+		    	<input type="text" autocomplete="off" name="username" class="form-control" ng-model="companyForm.user.usrname" required>
 	    	</div>
 		  </div>
 		  <div class="form-group">
@@ -106,7 +117,17 @@
 		    	<input type="password" name="password" class="form-control" ng-model="companyForm.password" required>
 	    	</div>
 		  </div>	  
-		  
+		  <div class="form-group">
+		    <label class="control-label col-sm-2" for="passwordConfirm">Confirmación:</label>
+		    <div class="col-sm-10">
+		    	<input type="password" name="passwordConfirm" class="form-control" ng-model="companyForm.passwordConfirm" required compare-to="companyForm.password">
+	    	</div>
+		  </div>
+		  <div class="form-group has-error">
+			<div ng-messages="form.passwordConfirm.$error" role="alert" class="col-sm-offset-2 col-sm-10 text-center">
+				<span ng-message="compareTo" class="help-block">La contraseña y su confirmación no coinciden</span>
+		    </div>
+		  </div>
 		  
 		  <div class="form-group"> 
 		    <div class="col-sm-offset-2 col-sm-10">

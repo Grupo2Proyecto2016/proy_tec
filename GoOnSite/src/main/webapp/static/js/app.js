@@ -1,5 +1,5 @@
 // create the module and name it scotchApp
-    var goOnApp = angular.module('goOnApp', ['ngRoute', 'ngAnimate', 'ui.grid', 'ui.grid.pagination']);
+    var goOnApp = angular.module('goOnApp', ['ngRoute', 'ngAnimate', 'ngMessages', 'ui.grid', 'ui.grid.pagination']);
 
     var tenantUrlPart =  urlTenant  + "/";
     var servicesUrl = AppName + tenantUrlPart;
@@ -60,6 +60,10 @@
             		$("#loginModal").modal("toggle");
             	}
                 //window.location = document.location.origin + document.location.pathname;
+            }
+            else if(response.status == 500)
+            {
+            	$("#errorModal").modal("toggle");
             }
             return $q.resolve(response);
         };
@@ -134,6 +138,59 @@
         	$location.path('home');
         };
     });
+    
+    goOnApp.directive("compareTo", function() {
+        return {
+            require: "ngModel",
+            scope: {
+                otherModelValue: "=compareTo"
+            },
+            link: function(scope, element, attributes, ngModel) {
+                 
+                ngModel.$validators.compareTo = function(modelValue) {
+                    return modelValue == scope.otherModelValue;
+                };
+     
+                scope.$watch("otherModelValue", function() {
+                    ngModel.$validate();
+                });
+            }
+        };
+    });
+
+    goOnApp.directive('userexists', function($http, $q) {
+  	  return {
+  	    require: 'ngModel',
+  	    link: function(scope, elm, attrs, ctrl)
+  	    {
+  	    	ctrl.$asyncValidators.userexists = function(modelValue, viewValue) 
+  	    	{
+  	    		if (ctrl.$isEmpty(modelValue)) 
+  	    		{
+  	  	          // consider empty model valid
+  	  	          return $q.when();
+  	    		}
+  	    		
+  	    		var def = $q.defer();
+  	    		
+  		    	$http.get(servicesUrl + 'userExists?username='+ modelValue)
+	  		    	.then(function(response) 
+	    			{
+	  		    		if(response.status == 200)
+		        		{
+	  		    			return def.reject();
+		        		}
+	  		    		else if (response.status == 404)
+	  		    		{
+	  		    			return def.resolve();
+	  		    		}
+    			});
+  		    	
+  		    	return def.promise;
+  	    	};
+  	    }
+  	  };
+  	});
 
     $.blockUI.defaults.css.border = 'none'; 
     $.blockUI.defaults.css.padding = '15px';

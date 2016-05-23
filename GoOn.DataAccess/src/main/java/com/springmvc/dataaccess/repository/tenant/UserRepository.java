@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
@@ -37,15 +38,18 @@ public class UserRepository
 	
 	public void InsertUser(Usuario user)
 	{
+		EntityTransaction t = entityManager.getTransaction();
+		
 		try
 		{
-			entityManager.getTransaction().begin();
+			t.begin();
 			entityManager.persist(user);
 			entityManager.flush();
-			entityManager.getTransaction().commit();
+			t.commit();
 		}
 		catch(Exception ex)
 		{
+			t.rollback();
 			throw ex;
 		}
 	}
@@ -66,10 +70,10 @@ public class UserRepository
 		return user;
 	}
 
-	public List<Usuario> GetEmployees() 
+	public List<Usuario> GetEmployees() //ADMIN NO ES INCLUIDO EN EL RESULTADO
 	{
 		List<Usuario> result = new ArrayList<>();
-		Query q = entityManager.createQuery("FROM Usuario WHERE es_empleado = TRUE");
+		Query q = entityManager.createQuery("FROM Usuario WHERE es_empleado = TRUE AND rol_id_rol NOT IN (1, 4)");
 		try
 		{
 			result = q.getResultList();

@@ -1,5 +1,5 @@
 // create the module and name it scotchApp
-    var goOnApp = angular.module('goOnApp', ['ngRoute', 'ngAnimate']);
+    var goOnApp = angular.module('goOnApp', ['ngRoute', 'ngAnimate', 'ngMessages']);
 
     // configure our routes
     goOnApp.config(function($routeProvider) {
@@ -167,6 +167,25 @@
 	  };
 	});
 
+    goOnApp.directive("compareTo", function() {
+        return {
+            require: "ngModel",
+            scope: {
+                otherModelValue: "=compareTo"
+            },
+            link: function(scope, element, attributes, ngModel) {
+                 
+                ngModel.$validators.compareTo = function(modelValue) {
+                    return modelValue == scope.otherModelValue;
+                };
+     
+                scope.$watch("otherModelValue", function() {
+                    ngModel.$validate();
+                });
+            }
+        };
+    });
+    
     $.blockUI.defaults.css.border = 'none'; 
     $.blockUI.defaults.css.padding = '15px';
     $.blockUI.defaults.css.backgroundColor = '#000'; 

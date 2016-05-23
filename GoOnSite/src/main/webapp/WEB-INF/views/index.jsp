@@ -17,6 +17,7 @@
       <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
 	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-route.js"></script>
 	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.js"></script>
+	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.js"></script>
       <script src="<c:url value='/static/js/app.js' />"></script>
       
 
@@ -82,7 +83,7 @@
         <div id="main" style="min-height: 400px;">
             <!-- angular templating -->
             <!-- this is where content will be injected -->
-			<div ng-view ng-animate class="viewContainer"></div>
+			<div ng-view ng-animate	 class="viewContainer"></div>
         </div>
     </body>
     <footer>
@@ -112,6 +113,20 @@
 					Entrar
 				</button>
 			</form>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header" style="background-color: red">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h3 class="modal-title" style="color:white" id="myModalLabel">Error</h3>
+	      </div>
+	      <div class="modal-body">
+ 	        <h3>Ups! Ha ocurrido un error. Intente de nuevo en unos instantes.</h3>
 	      </div>
 	    </div>
 	  </div>

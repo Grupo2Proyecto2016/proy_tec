@@ -115,7 +115,6 @@ public class TenantManagerRestController {
     	user.setPasswd(hashedPass);
     	user.setEnabled(true);
     	user.setEs_empleado(true);
-    	user.setPuede_crear(true);
     	user.setRol_id_rol(UserRol.Admin.getValue());
     	user.SetAuthorities(null);
     	user.setUltimoResetPassword(new Date());

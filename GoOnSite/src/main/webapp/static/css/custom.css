@@ -13,7 +13,18 @@ i.ui-grid-icon-cancel
 {
 	margin-top: -8px!important;
 }
-  
+/**/
+
+nav.navbar
+{
+	margin-bottom: 0px !important;	
+}
+
+a.btn-md i
+{
+	margin-top: 4px;
+}
+
 div.jumbotron
 {
     padding-top: 10px!important;
