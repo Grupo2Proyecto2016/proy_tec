@@ -9,8 +9,7 @@ import javax.persistence.Id;
 public class Asiento {
 	
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
-	public long id_asiento;
-	public long id_vehiculo;
+	public long id_asiento;	
 	public int  numero;
 	public Boolean es_ventana;
 	public Boolean es_accesible;
@@ -22,12 +21,7 @@ public class Asiento {
 	public void setId_asiento(long id_asiento) {
 		this.id_asiento = id_asiento;
 	}
-	public long getId_vehiculo() {
-		return id_vehiculo;
-	}
-	public void setId_vehiculo(long id_vehiculo) {
-		this.id_vehiculo = id_vehiculo;
-	}
+	
 	public int getNumero() {
 		return numero;
 	}

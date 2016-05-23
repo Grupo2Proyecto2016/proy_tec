@@ -34,19 +34,14 @@ public class BusesRestController {
     public ResponseEntity<Void> CreateBus(@RequestBody Vehiculo vehiculo, @PathVariable String tenantid)
     {
 		VehiculosLogic vl = new VehiculosLogic(tenantid);
-		//List<Asiento> asientos = new ArrayList<>();
-		Collection<Asiento> asientos = new ArrayList<Asiento>();
-		for (int i = 0; i < vehiculo.getCantAsientos(); i++) 
+	    for (int i = 0; i < vehiculo.getCantAsientos(); i++) 
 		{
 			Asiento auxAsiento = new Asiento();
 			auxAsiento.setNumero(i+1);
 			auxAsiento.setEs_ventana(false);
-			auxAsiento.setHabilitado(true);
-			//auxAsiento.setVehiculo(vehiculo);
-			asientos.add(auxAsiento);
-			
-		}
-		vehiculo.setAsientos(asientos);
+			auxAsiento.setHabilitado(true);						
+			vehiculo.getAsientos().add(auxAsiento);			
+		}		
 		vl.createBus(vehiculo);		
 		return new ResponseEntity<Void>(HttpStatus.CREATED);		
     }
