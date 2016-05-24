@@ -18,7 +18,12 @@ header, footer
 {
 	position: fixed;
     width: 100%;
-    z-index: 1030;
+    z-index: 999;
+}
+
+div.row
+{
+	margin: 0px;	
 }
 
 header

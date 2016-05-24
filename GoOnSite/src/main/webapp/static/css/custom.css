@@ -66,7 +66,7 @@ header, footer
 {
 	position: fixed;
     width: 100%;
-    z-index: 1030;
+    z-index: 999;
 }
 
 header
@@ -77,6 +77,11 @@ header
 footer
 {
 	bottom: 0;	
+}
+
+div.row
+{
+	margin: 0px;	
 }
 
 body.modal-open 

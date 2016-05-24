@@ -64,4 +64,9 @@ public class UsersLogic implements IUsersLogic {
 	{
 		return TenantContext.UserRepository.GetEmployees();
 	}
+
+	public void UpdateUser(com.springmvc.entities.tenant.Usuario userUpdateData) 
+	{
+		TenantContext.UserRepository.UpdateUser(userUpdateData);
+	}
 }

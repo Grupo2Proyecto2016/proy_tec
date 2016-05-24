@@ -111,6 +111,78 @@
 	</div>
 </div>
 
+<div id="userEditForm" class="hidden">
+	<div class="row" style="margin-top: 50px;">
+		<div class="col-xs-3"></div>
+		<div class="col-xs-6">
+			<form class="form-horizontal" role="form" name="userEditForm" ng-submit="updateUser()">
+				<div class="panel panel-default">				
+				<div class="panel-heading">
+					<div> 
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="hideUserUpdateForm()">
+						<span aria-hidden="true">×</span>
+						</button> 
+						<h4 class="modal-title">Datos de Usuario</h4>
+					</div>
+				</div>
+				<div class="panel-body">
+				  <div class="form-group">
+				    <label class="control-label col-sm-4" for="name">Nombre:</label>
+				    <div class="col-sm-6">
+				    	<input type="text" name="name" class="form-control" ng-model="userModel.nombre" required>
+			    	</div>
+				  </div>
+				  <div class="form-group">
+				    <label class="control-label col-sm-4" for="surname">Apellido:</label>
+				    <div class="col-sm-6">
+				    	<input type="text" name="surname" class="form-control" ng-model="userModel.apellido" required>
+			    	</div>
+				  </div>
+				  <div class="form-group">
+				    <label class="control-label col-sm-4" for="birth">Fecha de nacimiento:</label>
+				    <div class="col-sm-6">
+				    	<input type="date" name="birth" class="form-control" ng-model="userModel.fch_nacimiento" required>
+			    	</div>
+				  </div>
+				  <div class="form-group">
+				    <label class="control-label col-sm-4" for="mail">Correo:</label>
+				    <div class="col-sm-6">
+				    	<input type="email" placeholder="Email" name="mail" class="form-control" ng-model="userModel.email" required>
+			    	</div>
+				  </div>
+				  <div class="form-group">
+				    <label class="control-label col-sm-4" for="address">Dirección:</label>
+				    <div class="col-sm-6">
+				    	<input type="text" name="address" class="form-control" ng-model="userModel.direccion" required>
+			    	</div>
+				  </div>
+				  <div class="form-group">
+				    <label class="control-label col-sm-4" for="telefono">Teléfono:</label>
+				    <div class="col-sm-6">
+				    	<input type="text" pattern="[0-9]+" title="Solo se aceptan números" name="telefono" class="form-control" ng-model="userModel.telefono" required>
+			    	</div>
+				  </div>
+				  
+				  <div class="form-group">
+				    <label class="control-label col-sm-4" for="rol">Rol:</label>
+				    <div class="col-sm-6">
+				    	<select name="rol" ng-model="userModel.rol_id_rol" ng-options="rol.id as rol.name for rol in roles" class="form-control" required>
+				    	</select>
+			    	</div>
+				  </div>
+				  
+			  	  <div class="form-group"> 
+		    		<div class="col-sm-10">
+		      			<button style="float: right" type="submit" class="btn btn-info">Actualizar</button>
+		      		</div>
+		  		  </div>
+		  		</div>
+		  		</div>
+			</form>	
+		</div>
+	</div>
+</div>
+
 <div class="row" style="margin-top: 50px;">
 	<div class="col-xs-2"></div>
 	<div class="col-xs-8">

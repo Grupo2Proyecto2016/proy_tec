@@ -84,4 +84,28 @@ public class UserRepository
 		}
 		return result;
 	}
+
+	public void UpdateUser(com.springmvc.entities.tenant.Usuario userUpdateData)
+	{
+		Usuario user = FindByUsername(userUpdateData.getUsrname());
+		EntityTransaction t = entityManager.getTransaction();
+		
+		try
+		{
+			t.begin();
+			user.setNombre(userUpdateData.getNombre());
+			user.setApellido(userUpdateData.getApellido());
+			user.setDireccion(userUpdateData.getDireccion());
+			user.setTelefono(userUpdateData.getTelefono());
+			user.setEmail(userUpdateData.getEmail());
+			user.setFch_nacimiento(userUpdateData.getFch_nacimiento());
+			user.setRol_id_rol(userUpdateData.getRol_id_rol());
+			t.commit();
+		}
+		catch(Exception ex)
+		{
+			t.rollback();
+			throw ex;
+		}
+	}
 }
