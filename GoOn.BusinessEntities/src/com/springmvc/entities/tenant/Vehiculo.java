@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 @Entity
 public class Vehiculo {
@@ -30,7 +31,10 @@ public class Vehiculo {
 	private int cantEncomiendas; //basados en bultos de 1 m cubico
 	private int cantBultos;
 	private int pisos;
-
+	
+	@Transient
+	private boolean puedeBorrarse; //Atributo que no es persistido es solo para utilizar en tiempo de ejecucion
+	
 	@OneToMany(cascade = {CascadeType.ALL})
     @JoinColumn(name = "id_vehiculo")
     private List<Asiento> asientos = new ArrayList<Asiento>();
@@ -118,5 +122,12 @@ public class Vehiculo {
 	}
 	public void setMatricula(String matricula) {
 		this.matricula = matricula;
-	}	
+	}
+	
+	public boolean isPuedeBorrarse() {
+		return puedeBorrarse;
+	}
+	public void setPuedeBorrarse(boolean puedeBorrarse) {
+		this.puedeBorrarse = puedeBorrarse;
+	}
 }

@@ -41,19 +41,19 @@
 			  	<div class="form-group">
 				    <label class="control-label col-sm-4" for="ano">Año:</label>
 				    <div class="col-sm-6">
-				    	<input type="number" class="form-control" name="ano" ng-model="busForm.ano" required>
+				    	<input type="number" class="form-control" name="ano" ng-model="busForm.ano" min="1990" max="2016" required>
 			    	</div>
 			  	</div>
 			  	<div class="form-group">
 				    <label class="control-label col-sm-4" for="cantAsientos">Cant.Asientos:</label>
 				    <div class="col-sm-6">
-				    	<input type="number" class="form-control" name="cantAsientos" ng-model="busForm.cantAsientos" required>
+				    	<input type="number" class="form-control" name="cantAsientos" ng-model="busForm.cantAsientos" min="1" max="150" required>
 			    	</div>
 			  	</div>
 			  	<div class="form-group">
 			    	<label class="control-label col-sm-4" for="cantParados">Cant.Parados:</label>
 			    	<div class="col-sm-6">
-			    		<input type="number" class="form-control" name="cantParados" ng-model="busForm.cantParados" required>
+			    		<input type="number" class="form-control" name="cantParados" ng-model="busForm.cantParados" min="0" max ="20" value="0" required>
 		    		</div>
 		    	</div>
 		    	<div class="form-group">
@@ -69,25 +69,25 @@
 		  		<div class="form-group">
 			    	<label class="control-label col-sm-4" for="cantAccesibles">Asientos Accesibles:</label>
 			    	<div class="col-sm-6">
-			    		<input type="number" class="form-control" name="cantAccesibles" ng-model="busForm.cantAccesibles" required>
+			    		<input type="number" class="form-control" name="cantAccesibles" ng-model="busForm.cantAccesibles"  min="0" value="0" max="150" required>
 		    		</div>
 		  		</div>
 		  		<div class="form-group">
 			    	<label class="control-label col-sm-4" for="cantAnimales">Lugares Animales:</label>
 			    	<div class="col-sm-6">
-			    		<input type="number" class="form-control" name="cantAnimales" ng-model="busForm.cantAnimales" required>
+			    		<input type="number" class="form-control" name="cantAnimales" ng-model="busForm.cantAnimales" min="0" value="2" required>
 		    		</div>
 		  		</div>
 		  		<div class="form-group">
 			    	<label class="control-label col-sm-4" for="cantBultos">Lugares Equipaje:</label>
 			    	<div class="col-sm-6">
-			    		<input type="number" class="form-control" name="cantBultos" ng-model="busForm.cantBultos" required>
+			    		<input type="number" class="form-control" name="cantBultos" ng-model="busForm.cantBultos" min="0" value="0" max="150" required>
 		    		</div>
 		  		</div>
 		  		<div class="form-group">
 			    	<label class="control-label col-sm-4" for="cantEncomiendas">Lugares Encomienda:</label>
 			    	<div class="col-sm-6">
-			    		<input type="number" class="form-control" name="cantEncomiendas" ng-model="busForm.cantEncomiendas" required>
+			    		<input type="number" class="form-control" name="cantEncomiendas" ng-model="busForm.cantEncomiendas" min="0" value="0" required>
 		    		</div>
 		  		</div>
 		  		<div class="form-group"> 
@@ -109,7 +109,8 @@
 	<div class="col-xs-10">
 		<div class="alert alert-success" style="">
 		  <strong>Exito!</strong> Vehiculo creado.
-		</div>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="hideSuccess()"><span aria-hidden="true">×</span>
+		</div>		
 	</div>
 	<div class="col-xs-1"></div>
 </div>
@@ -140,8 +141,8 @@
 						<td>{{c.cantAsientos}}</td>
 						<td>{{c.cantParados}}</td>
 						<td>
-							<button type="button" ng-click="getBusDetails(c)"
-								class="btn btn-primary btn-sm">Detalles</button>
+							<button type="button" ng-click="getBusDetails(c)" class="btn btn-primary btn-sm">Detalles</button>
+							<button type="button" ng-click="deleteBus(c)" class="btn btn-danger btn-sm">Eliminar</button>
 						</td>
 					</tr>
 				</tbody>
@@ -209,8 +210,7 @@
         <h3 class="modal-title" id="myModalLabel">Error</h3>
       </div>
       <div class="modal-body">
-        Ha ocurrido un error al crear el vehículo.
-        Intente de nuevo en unos instantes. 
+      	{{ error_message }}        
       </div>
     </div>
   </div>

@@ -3,6 +3,7 @@ package com.springmvc.dataaccess.repository.tenant;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
@@ -28,15 +29,17 @@ EntityManager entityManager;
 	
 	public void InsertBus(Vehiculo vehiculo)
 	{
+		EntityTransaction t = entityManager.getTransaction();
 		try
 		{
-			entityManager.getTransaction().begin();
+			t.begin();
 			entityManager.persist(vehiculo);
 			entityManager.flush();
-			entityManager.getTransaction().commit();
+			t.commit();
 		}
 		catch(Exception ex)
 		{
+			t.rollback();
 			throw ex;
 		}
 	}
