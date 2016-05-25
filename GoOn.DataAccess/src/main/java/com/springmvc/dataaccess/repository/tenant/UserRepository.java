@@ -23,7 +23,7 @@ public class UserRepository
 	public Usuario FindByUsername(String username)
 	{
 		Usuario user = null;
-		Query q = entityManager.createQuery("FROM Usuario WHERE usrname = :name");
+		Query q = entityManager.createQuery("FROM Usuario WHERE usrname = :name AND enabled = TRUE");
 		q.setParameter("name", username);
 		try
 		{
@@ -73,7 +73,7 @@ public class UserRepository
 	public List<Usuario> GetEmployees() //ADMIN NO ES INCLUIDO EN EL RESULTADO
 	{
 		List<Usuario> result = new ArrayList<>();
-		Query q = entityManager.createQuery("FROM Usuario WHERE es_empleado = TRUE AND rol_id_rol NOT IN (1, 4)");
+		Query q = entityManager.createQuery("FROM Usuario WHERE es_empleado = TRUE AND rol_id_rol NOT IN (1, 4) AND enabled = TRUE");
 		try
 		{
 			result = q.getResultList();
@@ -100,6 +100,24 @@ public class UserRepository
 			user.setEmail(userUpdateData.getEmail());
 			user.setFch_nacimiento(userUpdateData.getFch_nacimiento());
 			user.setRol_id_rol(userUpdateData.getRol_id_rol());
+			t.commit();
+		}
+		catch(Exception ex)
+		{
+			t.rollback();
+			throw ex;
+		}
+	}
+
+	public void DeleteUser(String usrname)
+	{
+		Usuario user = FindByUsername(usrname);
+		EntityTransaction t = entityManager.getTransaction();
+		
+		try
+		{
+			t.begin();
+			user.setEnabled(false);
 			t.commit();
 		}
 		catch(Exception ex)
