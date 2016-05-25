@@ -1,8 +1,11 @@
-goOnApp.controller('busController', function($scope, $http, $location) 
+goOnApp.controller('busController', function($scope, $http, uiGridConstants, i18nService)									 
 {
     $scope.message = 'Maneje su flota de vehículos con facilidad.';
     $scope.error_message = '';
     $scope.custom_response = null;
+    $scope.busToDelete = null;
+    
+    i18nService.setCurrentLang('es');
     
     $scope.busForm = {};
     
@@ -27,6 +30,7 @@ goOnApp.controller('busController', function($scope, $http, $location)
     	$http.get(servicesUrl + 'getBuses').success(function(data, status, headers, config) 
     	{
         	$scope.buses = data;
+        	$scope.busesGrid.data = $scope.buses;
     	});
     };
     
@@ -58,15 +62,14 @@ goOnApp.controller('busController', function($scope, $http, $location)
 	{		
 		if(!$scope.form.$invalid)
 		{
-			$.blockUI();
-			
+			$.blockUI();			
 			$http.post(servicesUrl +'createBus', JSON.stringify($scope.busForm))
 			.success(function()
 			{
 				$.unblockUI();
 				$scope.hideForm();
 				$scope.initForm();
-				$("#successAlert").removeClass('hidden');				
+				$scope.showSuccessAlert('Vehiculo creado.');			
 				$scope.getBuses();				
 			})
 			.error(function()
@@ -79,19 +82,72 @@ goOnApp.controller('busController', function($scope, $http, $location)
 		}
 	};
 	
-	$scope.deleteBus = function(bus)
+	$scope.deleteBus = function()
 	{
 		$.blockUI();
-		$http.post(servicesUrl +'deleteBus', JSON.stringify(bus.id_vehiculo))
-		.success(function(data, status, headers, config)
-		{
-			$.unblockUI();
-			$scope.custom_response = data;
-			if (!$scope.custom_response.success)
+		$http.post(servicesUrl +'deleteBus', JSON.stringify($scope.busToDelete))
+		.then(function(response) 
 			{
-				$scope.error_message = $scope.custom_response.msg;
-		    	$("#errorModal").modal("toggle");
-			}
-		});				
+				$.unblockUI();		
+	        	if(response.status == 200)
+	        	{	       
+	        		if (!response.data.success)
+	    			{
+	    				$scope.error_message = response.data.msg;
+	    		    	$("#errorModal").modal("toggle");
+	    			}
+	        		else
+	        		{
+	        			$scope.getBuses();	
+		        		$scope.showSuccessAlert("El vehiculo ha sido borrado.");	
+	        		}	        		
+	        	}
+	        	$scope.hideDeleteDialog();
+    		});				
 	};
+	
+	$scope.closeSuccessAlert = function()
+    {
+    	$("#successAlert").hide();
+    }
+    
+    $scope.showSuccessAlert = function(message)
+    {
+    	$('#successMessage').text(message);
+		$("#successAlert").show();
+    };
+	
+	$scope.busesGrid = 
+    {
+		paginationPageSizes: [15, 30, 45],
+	    paginationPageSize: 15,
+		enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
+		enableFiltering: true,
+        columnDefs:
+    	[
+          { name:'Matricula', field: 'matricula' },
+          { name:'Marca', field: 'marca' },
+          { name:'Modelo', field: 'modelo'},
+          { name:'Año', field: 'ano' },
+          { name: 'Asientos', field: 'cantAsientos' },
+          { name: 'Lug. Parados', field: 'cantParados' },
+          
+          { name: 'Acciones',
+        	enableFiltering: false,
+        	enableSorting: false,
+            cellTemplate:'<button style="width: 50%" class="btn-xs btn-danger" ng-click="grid.appScope.showDeleteDialog(row)">Eliminar</button>' 
+    	  }
+        ]
+     };
+	
+	$scope.showDeleteDialog = function(row)
+    {
+    	$scope.busToDelete = row.entity.id_vehiculo;
+    	$("#deleteModal").modal('show');
+    };
+    
+    $scope.hideDeleteDialog = function(row)
+    {
+    	$("#deleteModal").modal('hide');
+    };
 });
