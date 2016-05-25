@@ -108,7 +108,7 @@
 	<div class="col-xs-1"></div>
 	<div class="col-xs-10">
 		<div class="alert alert-success" style="">
-		  <strong>Exito!</strong> Vehiculo creado.
+		  <strong>Exito! </strong> Vehiculo creado.
 		</div>
 	</div>
 	<div class="col-xs-1"></div>

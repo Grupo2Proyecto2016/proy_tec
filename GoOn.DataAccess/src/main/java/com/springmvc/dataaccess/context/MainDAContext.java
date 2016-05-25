@@ -95,7 +95,7 @@ public class MainDAContext {
 
 	public Empresa GetCompany(String tenantid) 
 	{
-		return companyRepository.findBynombretenant(tenantid);
+		return companyRepository.findBynombretenant(tenantid.toUpperCase());
 	}
 	
 	public List<Empresa> GetCompanies() 

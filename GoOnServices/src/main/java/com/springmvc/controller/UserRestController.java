@@ -85,6 +85,13 @@ public class UserRestController
     	
     	new UsersLogic(tenantid).UpdateUser(userUpdateData);
     	
-    	return new ResponseEntity<Void>(HttpStatus.CREATED);
+    	return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+	
+	@RequestMapping(value = "/deleteUser", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
+    public ResponseEntity<Void> DeleteUser(@RequestBody UserWrapper username, @PathVariable String tenantid)
+    {
+    	new UsersLogic(tenantid).DeleteUser(username.usrname);
+    	return new ResponseEntity<Void>(HttpStatus.OK);
     }
 }

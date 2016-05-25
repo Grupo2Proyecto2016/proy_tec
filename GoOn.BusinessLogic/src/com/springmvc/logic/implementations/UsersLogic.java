@@ -69,4 +69,9 @@ public class UsersLogic implements IUsersLogic {
 	{
 		TenantContext.UserRepository.UpdateUser(userUpdateData);
 	}
+
+	public void DeleteUser(String usrname) 
+	{
+		TenantContext.UserRepository.DeleteUser(usrname);
+	}
 }

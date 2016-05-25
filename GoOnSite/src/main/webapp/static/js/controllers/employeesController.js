@@ -1,12 +1,35 @@
 goOnApp.controller('employeesController', function($scope, $http, $filter, uiGridConstants, i18nService) 
 {
+	$scope.userToDelete = null; //Variable temporal para almacenar nombre de usuario que se desea borrar
 	$scope.roles = [{id: 2, name: "Ventas"}, { id:3, name: "Guarda/Conductor"}];
 	
 	$scope.userModel = {};
 	
 	i18nService.setCurrentLang('es');
     $scope.message = 'Desde aquí puedes gestionar usuarios para el personal de la empresa.';
-     
+    
+    $scope.closeSuccessAlert = function()
+    {
+    	$("#successAlert").hide();
+    }
+    
+    $scope.showSuccessAlert = function(message)
+    {
+    	$('#successMessage').text(message);
+		$("#successAlert").show();
+    };
+    
+    $scope.showDeleteDialog = function(row)
+    {
+    	$scope.userToDelete = row.entity.usrname;
+    	$("#deleteModal").modal('show');
+    };
+    
+    $scope.hideDeleteDialog = function(row)
+    {
+    	$("#deleteModal").modal('hide');
+    };
+    
     $scope.showUserForm = function()
     {
     	$scope.userModel = {}; 
@@ -87,16 +110,27 @@ goOnApp.controller('employeesController', function($scope, $http, $filter, uiGri
           { name: 'Acciones',
         	enableFiltering: false,
         	enableSorting: false,
-            cellTemplate:'<button class="btn-xs btn-warning" style="width: 50%" ng-click="grid.appScope.showUserUpdateForm(row)">Editar</button><button style="width: 50%" class="btn-xs btn-danger" ng-click="grid.appScope.showMe()">Eliminar</button>' 
+            cellTemplate:'<button class="btn-xs btn-warning" style="width: 50%" ng-click="grid.appScope.showUserUpdateForm(row)">Editar</button><button style="width: 50%" class="btn-xs btn-danger" ng-click="grid.appScope.showDeleteDialog(row)">Eliminar</button>' 
     	  }
         ]
      };
      
-    $scope.someProp = 'abc';
-    
-    $scope.showMe = function(){
-        alert($scope.someProp);
-     };
+    $scope.deleteUser = function()
+    {
+    	$.blockUI();
+    	$http.post(servicesUrl + 'deleteUser', JSON.stringify({ 'usrname': $scope.userToDelete }))
+    		.then(function(response) {
+	        	if(response.status == 200)
+	        	{
+	        		$scope.userModel = {};
+	        		$scope.getUsers();
+	        		$scope.showSuccessAlert("El usuario ha sido borrado.");
+	        		$scope.hideDeleteDialog();
+	        	}
+    		})
+		;
+    	$.unblockUI();
+    };
      
     $scope.getUsers();
     
@@ -110,6 +144,7 @@ goOnApp.controller('employeesController', function($scope, $http, $filter, uiGri
 	        		$scope.userModel = {};
 	        		$scope.hideUserForm();
 	        		$scope.getUsers();
+	        		$scope.showSuccessAlert("El usuario ha sido creado.");
 	        	}
     		})
 		;
@@ -121,11 +156,12 @@ goOnApp.controller('employeesController', function($scope, $http, $filter, uiGri
     	$.blockUI();
     	$http.post(servicesUrl + 'updateUser', JSON.stringify($scope.userModel))
     		.then(function(response) {
-	        	if(response.status == 201)
+	        	if(response.status == 200)
 	        	{
 	        		$scope.userModel = {};
 	        		$scope.hideUserUpdateForm();
 	        		$scope.getUsers();
+	        		$scope.showSuccessAlert("El usuario ha sido actualizado.");
 	        	}
     		})
 		;
