@@ -54,9 +54,18 @@ public class BusesRestController {
 	@RequestMapping(value = "/deleteBus", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
     public ResponseEntity<CustomResponseWrapper> DeleteBus(@RequestBody long id_vehiculo, @PathVariable String tenantid)
     {
+		VehiculosLogic vl = new VehiculosLogic(tenantid);
 		CustomResponseWrapper respuesta = new CustomResponseWrapper();
-		respuesta.setMsg("No se puede eliminar vehiculo, tiene viajes asociados.");
-		respuesta.setSuccess(false);
+		if (vl.TieneViajes(id_vehiculo))
+		{
+			respuesta.setMsg("No se puede eliminar vehiculo, tiene viajes asociados.");
+			respuesta.setSuccess(false);	
+		}	
+		else
+		{
+			vl.deleteBus(id_vehiculo);
+			respuesta.setSuccess(true);
+		}
 		return new ResponseEntity<CustomResponseWrapper>(respuesta, HttpStatus.OK);
     }
 }

@@ -105,51 +105,14 @@
 
 
 <div id="successAlert" class="row" style="display: none">
-	<div class="col-xs-1"></div>
-	<div class="col-xs-10">
+	<div class="col-xs-2"></div>
+	<div class="col-xs-8">
 		<div class="alert alert-success" style="">
 		  <button type="button" class="close" ng-click="closeSuccessAlert()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 		  <strong>Exito! </strong> <p id="successMessage"></p>
 		</div>
 	</div>
-	<div class="col-xs-1"></div>
-</div>
-
-<div class="row">
-	<div class="col-xs-1"></div>
-	<div class="col-xs-10">
-		<div class="panel panel-default">
-			<div class="panel-heading"></div>
-			<table class="table">
-				<thead>
-					<tr>
-						<th>Matricula</th>
-						<th>Marca</th>
-						<th>Modelo</th>
-						<th>Año</th>
-						<th>Asientos</th>
-						<th>Lug. Parados</th>
-						<th>Operaciones</th>												
-					</tr>
-				</thead>
-				<tbody>
-					<tr ng-repeat="c in buses">
-						<td>{{c.matricula}}</td>
-						<td>{{c.marca}}</td>
-						<td>{{c.modelo}}</td>
-						<td>{{c.ano}}</td>
-						<td>{{c.cantAsientos}}</td>
-						<td>{{c.cantParados}}</td>
-						<td>
-							<button type="button" ng-click="getBusDetails(c)" class="btn btn-primary btn-sm">Detalles</button>
-							<button type="button" ng-click="deleteBus(c)" class="btn btn-danger btn-sm">Eliminar</button>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
-	<div class="col-xs-1"></div>
+	<div class="col-xs-2"></div>
 </div>
 
 <div class="row" style="margin-top: 50px;">

@@ -26,5 +26,15 @@ public class VehiculosLogic implements IVehiculosLogic{
 	{
 		TenantContext.VehiculoRepository.InsertBus(vehiculo);
 	}
+	
+	public Boolean TieneViajes(long id_vehiculo)
+	{
+		return TenantContext.VehiculoRepository.TieneViajes(id_vehiculo);
+	}
+
+	public void deleteBus(long id_vehiculo) 
+	{
+		TenantContext.VehiculoRepository.deleteBus(id_vehiculo);
+	}
 
 }
