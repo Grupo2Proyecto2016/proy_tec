@@ -55,7 +55,7 @@ public class BusesRestController {
     public ResponseEntity<CustomResponseWrapper> DeleteBus(@RequestBody long id_vehiculo, @PathVariable String tenantid)
     {
 		CustomResponseWrapper respuesta = new CustomResponseWrapper();
-		respuesta.setMsg("No se puede eliminar vehiculo.<BR>Tiene viajes asociados.");
+		respuesta.setMsg("No se puede eliminar vehiculo, tiene viajes asociados.");
 		respuesta.setSuccess(false);
 		return new ResponseEntity<CustomResponseWrapper>(respuesta, HttpStatus.OK);
     }
