@@ -36,12 +36,6 @@ goOnApp.controller('busController', function($scope, $http, uiGridConstants, i18
     
     $scope.getBuses();
     
-    $scope.getBusDetails = function(bus)
-    {
-    	$scope.elBus = bus; 
-		$("#busDetailsModal").modal('toggle');
-    };
-    
     $scope.showForm = function()
     {
     	$("#divBusForm").removeClass('hidden');
@@ -55,7 +49,7 @@ goOnApp.controller('busController', function($scope, $http, uiGridConstants, i18
 
     $scope.hideSuccess = function()
     {
-    	$("#successAlert").addClass('hidden');
+    	//$("#successAlert").addClass('hidden');
     };
     
     $scope.createBus = function()
@@ -69,7 +63,7 @@ goOnApp.controller('busController', function($scope, $http, uiGridConstants, i18
 				$.unblockUI();
 				$scope.hideForm();
 				$scope.initForm();
-				$scope.showSuccessAlert('Vehiculo creado.');			
+				$scope.showSuccessAlert("Vehiculo creado.");			
 				$scope.getBuses();				
 			})
 			.error(function()
@@ -135,7 +129,9 @@ goOnApp.controller('busController', function($scope, $http, uiGridConstants, i18
           { name: 'Acciones',
         	enableFiltering: false,
         	enableSorting: false,
-            cellTemplate:'<button style="width: 50%" class="btn-xs btn-danger" ng-click="grid.appScope.showDeleteDialog(row)">Eliminar</button>' 
+            cellTemplate:'<button style="width: 50%" class="btn-xs btn-primary" ng-click="grid.appScope.getBusDetails(row)">Detalles</button>'+
+            			 '<button style="width: 50%" class="btn-xs btn-danger" ng-click="grid.appScope.showDeleteDialog(row)">Eliminar</button>' 
+            			  
     	  }
         ]
      };
@@ -144,6 +140,12 @@ goOnApp.controller('busController', function($scope, $http, uiGridConstants, i18
     {
     	$scope.busToDelete = row.entity.id_vehiculo;
     	$("#deleteModal").modal('show');
+    };
+    
+    $scope.getBusDetails = function(row)
+    {
+    	$scope.elBus = row.entity; 
+		$("#busDetailsModal").modal('toggle');
     };
     
     $scope.hideDeleteDialog = function(row)

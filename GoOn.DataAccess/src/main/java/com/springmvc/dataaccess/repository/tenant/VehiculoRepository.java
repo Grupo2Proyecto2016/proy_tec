@@ -43,5 +43,62 @@ EntityManager entityManager;
 			throw ex;
 		}
 	}
+	
+	public Boolean TieneViajes(long id_vehiculo)
+	{
+		Query q = entityManager.createQuery("select max(id_viaje) from Viaje where vehiculo_id_vehiculo = :idv");
+		q.setParameter("idv", id_vehiculo);
+		long maxID;
+		try
+		{
+			maxID = (long) q.getSingleResult();
+		} 
+		catch(NoResultException ex) 
+		{
+			return false;
+		}
+		catch(NullPointerException ex) 
+		{
+			return false;
+		}
+		return (maxID>0);		
+	}
+
+	public void deleteBus(long id_vehiculo) 
+	{	
+		EntityTransaction t = entityManager.getTransaction();
+		Vehiculo vehiculo = FindByID(id_vehiculo);
+		if (vehiculo != null)
+		{
+			try
+			{
+				t.begin();
+				entityManager.remove(vehiculo);
+				entityManager.flush();
+				t.commit();
+			}
+			catch(Exception ex)
+			{
+				t.rollback();
+				throw ex;
+			}
+		}
+	}
+	
+	public Vehiculo FindByID(long id_vehiculo)
+	{
+		Vehiculo vehiculo = null;
+		Query q = entityManager.createQuery("FROM Vehiculo WHERE id_vehiculo = :idv");
+		q.setParameter("idv", id_vehiculo);
+		try
+		{
+			vehiculo = (Vehiculo)q.getSingleResult();
+		}
+		catch(NoResultException ex)
+		{
+			return null;
+		}
+		return vehiculo;
+	}
 
 }
