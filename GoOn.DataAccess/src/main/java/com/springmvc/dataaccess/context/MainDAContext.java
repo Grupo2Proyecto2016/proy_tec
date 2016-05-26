@@ -90,12 +90,13 @@ public class MainDAContext {
 	
 	private void InsertCompany(Empresa company)
 	{
+		company.setNombreTenant(company.getNombreTenant().toLowerCase());
 		companyRepository.save(company);
 	}
 
 	public Empresa GetCompany(String tenantid) 
 	{
-		return companyRepository.findBynombretenant(tenantid.toUpperCase());
+		return companyRepository.findBynombretenant(tenantid.toLowerCase());
 	}
 	
 	public List<Empresa> GetCompanies() 

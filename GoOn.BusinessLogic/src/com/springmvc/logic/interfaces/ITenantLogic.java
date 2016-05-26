@@ -14,7 +14,7 @@ public interface ITenantLogic
 	
 	List<Pais> GetCountries();
 	
-	void CreateTenant(Empresa company, com.springmvc.entities.tenant.Usuario user);
+	void CreateTenant(Empresa company, com.springmvc.entities.tenant.Usuario user)throws Exception;
 
 	Pais GetCountry(long countryId);
 

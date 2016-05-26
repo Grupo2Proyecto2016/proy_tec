@@ -27,7 +27,7 @@ public class TenantLogic implements ITenantLogic {
 		return user;
 	}
 
-	public void CreateTenant(Empresa company, com.springmvc.entities.tenant.Usuario user)
+	public void CreateTenant(Empresa company, com.springmvc.entities.tenant.Usuario user) throws Exception
 	{
 		try
 		{

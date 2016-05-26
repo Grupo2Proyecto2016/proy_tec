@@ -9,23 +9,29 @@ import com.springmvc.dataaccess.context.MainDAContext;
 import com.springmvc.dataaccess.context.TenantDAContext;
 import com.springmvc.entities.main.Usuario;
 import com.springmvc.enums.UserRol;
+import com.springmvc.exceptions.UserAlreadyExistsException;
 import com.springmvc.logic.interfaces.IUsersLogic;
+import com.springmvc.logic.utils.MailMessages;
+import com.springmvc.logic.utils.MailSender;
 
 @Component
 public class UsersLogic implements IUsersLogic {
 	
 	private static final AtomicLong counter = new AtomicLong();
+	private String CurrentTenant;
 	
 	private TenantDAContext TenantContext;
 	@Autowired MainDAContext dataContext;
 	
 	public UsersLogic(String tenant)
 	{
+		CurrentTenant = tenant;
 		TenantContext = new TenantDAContext(tenant, false);
 	}
 	
 	public UsersLogic(String tenant, boolean updateSchema)
 	{
+		CurrentTenant = tenant;
 		TenantContext = new TenantDAContext(tenant, true);
 	}
 	
@@ -45,9 +51,42 @@ public class UsersLogic implements IUsersLogic {
     	return user;
 	}
 	
-	public void CreateUser(com.springmvc.entities.tenant.Usuario user)
+	public void CreateUser(com.springmvc.entities.tenant.Usuario user) throws UserAlreadyExistsException
 	{
-		TenantContext.UserRepository.InsertUser(user);
+		boolean userExists = TenantContext.UserRepository.FindByUsername(user.getUsrname()) != null;
+		if(userExists)
+		{
+			throw new UserAlreadyExistsException(user.getUsrname());
+		}
+		else
+		{
+			
+			TenantContext.UserRepository.InsertUser(user);
+			if(user.getRol_id_rol() == UserRol.Admin.getValue())
+			{
+				MailSender.Send(
+					user.getEmail(),
+					MailMessages.TenantCreatedTitle,
+					String.format(MailMessages.TenantCreatedMsg, user.getNombre(), user.getUsrname(), CurrentTenant)
+				);
+			}
+			else if(user.getRol_id_rol() == UserRol.Client.getValue())
+			{
+				MailSender.Send(
+					user.getEmail(),
+					MailMessages.ClientCreatedTitle,
+					String.format(MailMessages.ClientCreatedMsg, user.getNombre(), user.getUsrname(), CurrentTenant)
+				);
+			}
+			else
+			{
+				MailSender.Send(
+					user.getEmail(),
+					MailMessages.EmployeeCreatedTitle,
+					String.format(MailMessages.EmployeeCreatedMsg, user.getNombre(), user.getUsrname(), CurrentTenant)
+				);
+			}
+		}
 	}
 
 	public com.springmvc.entities.tenant.Usuario GetTenantAdmin()

@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -22,7 +23,6 @@ public class Usuario {
 	@JsonIgnore
 	private long id_usuario;
 	
-	@Column(unique=true)
 	private String 	usrname;
 	
 	@JsonIgnore

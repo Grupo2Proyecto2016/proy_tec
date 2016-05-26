@@ -29,6 +29,7 @@
       <script src="<c:url value='/static/js/controllers/travelController.js' />"></script>
       <script src="<c:url value='/static/js/controllers/contactController.js' />"></script>
       <script src="<c:url value='/static/js/controllers/employeesController.js' />"></script>
+      <script src="<c:url value='/static/js/controllers/registerController.js' />"></script>
     </head>
     <body ng-controller="mainController as main">
 
@@ -50,7 +51,8 @@
                     
                     <li><a href="#contact"><i class="fa fa-comment"></i> Contacto</a></li>
                     <li><a ng-show="user == null" onclick="shorSignInForm()"><i class="fa fa-sign-in" aria-hidden="true"></i> Entrar</a></li>
-      
+      				<li><a href="#register" ng-show="user == null"><i class="fa fa-user-plus" aria-hidden="true"></i> Registrarme</a></li>
+      				
       				<li ng-show="user != null" class="dropdown">
 	                    <a class="dropdown-toggle" data-toggle="dropdown">
 	                        <span class="glyphicon glyphicon-user"></span> 

@@ -1,0 +1,3 @@
+Para que la aplicacion pueda mandar correos es necesario que habiliten un modulo en el wildfly
+Primero se debe ubicar el archivo module.xml (en mi caso estaba en C:\Users\Pablo\wildfly-9.0.2.Final\modules\system\layers\base\sun\jdk\main)
+Entran al archivo y dentro de los paths agregan al final este: <path name="com/sun/net/ssl/internal/ssl"/>

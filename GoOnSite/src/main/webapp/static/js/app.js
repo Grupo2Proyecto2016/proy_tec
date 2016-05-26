@@ -17,6 +17,11 @@
     		templateUrl : tenantUrlPart + 'pages/home.html',
     	})
     	
+    	.when('/register', {
+    		templateUrl : tenantUrlPart + 'pages/register.html',
+    		controller  : 'registerController'
+    	})
+    	
     	// route for the about page
     	.when('/travels', {
     		templateUrl :  tenantUrlPart + 'pages/travels.html',
@@ -103,10 +108,14 @@
     	$http.get(servicesUrl + 'getUserInfo')
 	    	.then(function(response) 
 			{
-	    		if(response.data != null && response.data != "")
+	    		if(response.status == 200)
 	    		{
 	    			$scope.user = response.data;
 	    		}
+    			else
+    			{
+    				$scope.user = null;
+    			}
 	    	}
 		);
         

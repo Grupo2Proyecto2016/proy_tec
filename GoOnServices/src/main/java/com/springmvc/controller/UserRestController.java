@@ -18,6 +18,7 @@ import com.springmvc.entities.main.Empresa;
 import com.springmvc.entities.main.Pais;
 import com.springmvc.entities.tenant.Usuario;
 import com.springmvc.enums.UserRol;
+import com.springmvc.exceptions.UserAlreadyExistsException;
 import com.springmvc.logic.implementations.UsersLogic;
 import com.springmvc.requestWrappers.CompanyWrapper;
 import com.springmvc.requestWrappers.UserWrapper;
@@ -48,7 +49,7 @@ public class UserRestController
     }
 	
 	@RequestMapping(value = "/createUser", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
-    public ResponseEntity<Void> CreateUser(@RequestBody UserWrapper user, @PathVariable String tenantid)
+    public ResponseEntity<Void> CreateUser(@RequestBody UserWrapper user, @PathVariable String tenantid) throws UserAlreadyExistsException
     {
 		Usuario userToPersist = new Usuario();
     	String hashedPass = new BCryptPasswordEncoder().encode(user.passwd);
@@ -64,6 +65,29 @@ public class UserRestController
     	userToPersist.setFch_nacimiento(user.fch_nacimiento);
     	userToPersist.setEnabled(true);
     	userToPersist.setEs_empleado(true);
+    	
+    	new UsersLogic(tenantid).CreateUser(userToPersist);
+    	
+    	return new ResponseEntity<Void>(HttpStatus.CREATED);
+    }
+	
+	@RequestMapping(value = "/registerUser", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
+    public ResponseEntity<Void> RegisterUser(@RequestBody UserWrapper user, @PathVariable String tenantid) throws UserAlreadyExistsException
+    {
+		Usuario userToPersist = new Usuario();
+    	String hashedPass = new BCryptPasswordEncoder().encode(user.passwd);
+    	userToPersist.setPasswd(hashedPass);
+    	userToPersist.setNombre(user.nombre);
+    	userToPersist.setApellido(user.apellido);
+    	userToPersist.setUsrname(user.usrname);
+    	userToPersist.setEmail(user.email);
+    	userToPersist.setTelefono(user.telefono);
+    	userToPersist.setDireccion(user.direccion);
+    	userToPersist.setUltimoResetPassword(new Date());
+    	userToPersist.setRol_id_rol(UserRol.Client.getValue());
+    	userToPersist.setFch_nacimiento(user.fch_nacimiento);
+    	userToPersist.setEnabled(true);
+    	userToPersist.setEs_empleado(false);
     	
     	new UsersLogic(tenantid).CreateUser(userToPersist);
     	

@@ -98,7 +98,7 @@ public class TenantManagerRestController {
     }
     
     @RequestMapping(value = "createCompany", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
-    public ResponseEntity<Void> CreateCompany(@RequestBody CompanyWrapper companyWrapper)
+    public ResponseEntity<Void> CreateCompany(@RequestBody CompanyWrapper companyWrapper) throws Exception
     {
     	Empresa company = new Empresa();
     	company.setNombre(companyWrapper.getName());
