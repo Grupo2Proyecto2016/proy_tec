@@ -40,6 +40,12 @@
     		controller  : 'busController'
     	})
     	
+    	// route for the user dashboard page
+    	.when('/userPanel', {
+    		templateUrl : tenantUrlPart + 'pages/userPanel.html',
+    		controller  : 'userPanelController'
+    	})
+    	
     	// route for the employees page
     	.when('/employees', {
     		templateUrl : tenantUrlPart + 'pages/employees.html',

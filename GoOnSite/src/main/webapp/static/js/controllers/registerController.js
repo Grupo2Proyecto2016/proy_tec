@@ -1,6 +1,6 @@
 goOnApp.controller('registerController', function($scope, $http) 
 {
-	$scope.message = 'Registrate para hacer uso de nuestros servicios de la forma más eficiente';
+	$scope.message = 'Regístrate para hacer uso de nuestros servicios de la forma más eficiente';
 	$scope.userModel = {};
     
     $scope.showSuccessAlert = function(message)

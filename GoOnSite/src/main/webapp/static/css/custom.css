@@ -15,6 +15,11 @@ i.ui-grid-icon-cancel
 }
 /**/
 
+div.userPanel
+{
+    margin-bottom: 30px;
+}
+
 div.modal-header.warning
 {
 	background: darkorange;

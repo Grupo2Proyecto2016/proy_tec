@@ -30,6 +30,7 @@
       <script src="<c:url value='/static/js/controllers/contactController.js' />"></script>
       <script src="<c:url value='/static/js/controllers/employeesController.js' />"></script>
       <script src="<c:url value='/static/js/controllers/registerController.js' />"></script>
+      <script src="<c:url value='/static/js/controllers/userPanelController.js' />"></script>
     </head>
     <body ng-controller="mainController as main">
 
@@ -66,6 +67,9 @@
 	                                    <div class="col-sm-12">
 	                                        <p class="text-center"><strong>{{user.nombre}} {{user.apellido}}</strong></p>
 	                                        <p class="text-left small">{{user.email}}</p>
+	                                        <p class="text-left" ng-show="user != null && user.rol_id_rol == 4">
+	                                            <a href="#userPanel" class="btn btn-primary btn-block btn-sm">Mi Cuenta</a>
+	                                        </p>
 	                                        <p class="text-left">
 	                                            <a ng-click="signOut()" class="btn btn-danger btn-block btn-sm">Salir</a>
 	                                        </p>
@@ -97,7 +101,7 @@
     
     <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 	  <div class="modal-dialog" role="document">
-	    <div class="modal-content">
+	    <div class="modal-content" style="width: 440px">
 	      <div class="modal-header" style="background-color: green">
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 	        <h3 class="modal-title" style="color:white" id="myModalLabel">Ingreso al sitio</h3>
@@ -135,6 +139,10 @@
 	</div>
 	
 	<script>
+		$("#loginModal").on('hidden.bs.modal', function (e) {
+			$("#loginAlert").hide();
+		});
+		
 		function shorSignInForm()
 		{
 			$("#loginModal").modal("toggle");
