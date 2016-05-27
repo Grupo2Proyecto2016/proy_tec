@@ -15,6 +15,7 @@
 		<class>com.springmvc.entities.tenant.Taller</class>		
 		<class>com.springmvc.entities.tenant.Mantenimiento</class>
 		<class>com.springmvc.entities.tenant.Pasaje</class>
+		<class>com.springmvc.entities.tenant.Sucursal</class>
 <!-- 		<class>com.springmvc.entities.tenant.Pais</class> -->
 <!-- 		<class>com.springmvc.entities.tenant.Departamento</class> -->
 <!-- 		<class>com.springmvc.entities.tenant.Ciudad</class>		 -->

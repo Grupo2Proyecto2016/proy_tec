@@ -46,6 +46,12 @@
     		controller  : 'userPanelController'
     	})
     	
+    	// route for the branch office page
+    	.when('/branches', {
+    		templateUrl : tenantUrlPart + 'pages/branches.html',
+    		controller  : 'branchController'
+    	})
+    	
     	// route for the employees page
     	.when('/employees', {
     		templateUrl : tenantUrlPart + 'pages/employees.html',
