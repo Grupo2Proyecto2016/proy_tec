@@ -113,4 +113,9 @@ public class UsersLogic implements IUsersLogic {
 	{
 		TenantContext.UserRepository.DeleteUser(usrname);
 	}
+
+	public void UpdateUserPassword(com.springmvc.entities.tenant.Usuario signedUser, String newPassword) 
+	{
+		TenantContext.UserRepository.UpdateUserPassword(signedUser, newPassword);
+	}
 }

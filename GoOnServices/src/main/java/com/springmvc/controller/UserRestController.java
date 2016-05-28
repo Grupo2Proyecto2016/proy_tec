@@ -3,6 +3,8 @@ package com.springmvc.controller;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
@@ -22,11 +24,15 @@ import com.springmvc.exceptions.UserAlreadyExistsException;
 import com.springmvc.logic.implementations.UsersLogic;
 import com.springmvc.requestWrappers.CompanyWrapper;
 import com.springmvc.requestWrappers.UserWrapper;
+import com.springmvc.utils.UserContext;
 
 @RestController
 @RequestMapping(value = "/{tenantid}")
 public class UserRestController 
 {
+	@Autowired
+    private UserContext context;
+	
 	@RequestMapping(value = "/getUsers", method = RequestMethod.GET)
     public ResponseEntity<List<Usuario>>  getUsers(@PathVariable String tenantid, HttpServletRequest request)
     {
@@ -94,6 +100,16 @@ public class UserRestController
     	return new ResponseEntity<Void>(HttpStatus.CREATED);
     }
 	
+	@RequestMapping(value = "/changePassword", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
+    public ResponseEntity<Void> ChangePassword(@RequestBody UserWrapper user, @PathVariable String tenantid, HttpServletRequest request)
+    {
+		Usuario signedUser = context.GetUserFromRequest(request);
+		String newPassword = new BCryptPasswordEncoder().encode(user.passwd);
+    	new UsersLogic(tenantid).UpdateUserPassword(signedUser, newPassword);
+    	
+    	return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+	
 	@RequestMapping(value = "/updateUser", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
     public ResponseEntity<Void> UpdateUser(@RequestBody UserWrapper user, @PathVariable String tenantid)
     {
@@ -118,4 +134,12 @@ public class UserRestController
     	new UsersLogic(tenantid).DeleteUser(username.usrname);
     	return new ResponseEntity<Void>(HttpStatus.OK);
     }
+	
+	@RequestMapping(value = "/deleteSignedUser", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
+    public ResponseEntity<Void> DeleteSignedUser(@RequestBody String empty, @PathVariable String tenantid, HttpServletRequest request)
+    {
+		Usuario signedUser = context.GetUserFromRequest(request);
+    	new UsersLogic(tenantid).DeleteUser(signedUser.getUsrname());
+    	return new ResponseEntity<Void>(HttpStatus.OK);
+    }	
 }

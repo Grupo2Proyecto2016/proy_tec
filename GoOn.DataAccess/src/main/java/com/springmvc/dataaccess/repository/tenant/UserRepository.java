@@ -1,6 +1,7 @@
 package com.springmvc.dataaccess.repository.tenant;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -125,5 +126,24 @@ public class UserRepository
 			t.rollback();
 			throw ex;
 		}
+	}
+
+	public void UpdateUserPassword(com.springmvc.entities.tenant.Usuario signedUser, String newPassword)
+	{
+		EntityTransaction t = entityManager.getTransaction();
+		
+		try
+		{
+			t.begin();
+			signedUser.setUltimoResetPassword(new Date());
+			signedUser.setPasswd(newPassword);
+			t.commit();
+		}
+		catch(Exception ex)
+		{
+			t.rollback();
+			throw ex;
+		}
+		
 	}
 }

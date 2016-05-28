@@ -25,6 +25,12 @@ div.modal-header.warning
 	background: darkorange;
 }
 
+div.modal-header.danger
+{
+	background: brown;
+	color: white;
+}
+
 nav.navbar
 {
 	margin-bottom: 0px !important;	
@@ -43,10 +49,10 @@ div.jumbotron
 
 .modal-body label
 {
-	padding-top: 0px!important;
+	padding-top: 8px!important;
 }
 
-#loginModal input
+#loginModal input, #passwordModal input
 {
 	margin-bottom: 20px;
 }
