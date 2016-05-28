@@ -1,4 +1,3 @@
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXLMRyM-qhBcFx4Lvv6XxACYvWYY8ey-U&callback=initMap" async defer></script>
 <div id="divTitleBranches" class="jumbotron text-center">
 	<h2>Sucursales</h2>
 	
@@ -65,6 +64,7 @@
 			</form>
 		</div>		
 	</div>
+	<div ng-controller = "branchController"  >
 		<div class="col-xs-5">
 			<div class="panel panel-default">				
 				<div class="panel-heading">
@@ -76,36 +76,14 @@
 					</div>				
 				</div>
 				<div class="panel-body">
-					<div id="map" style="height: 50%" ng-controller="branchController">
+					<div id="map" style="height: 50%">
 					
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>		
 </div>
 
-<script>
-var map;
-
-function initMap() {
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: -34.893819, lng: -56.166349}, 
-    zoom: 12
-  });
-  
-  map.addListener('click', function(e) {
-	    placeMarkerAndPanTo(e.latLng, map);
-	  });
-  
-  function placeMarkerAndPanTo(latLng, map) {
-	  var marker = new google.maps.Marker({
-	    position: latLng,
-	    map: map
-	  });
-	  angular.element(document.getElementById('map')).scope().actualizoMarker(latLng.lat(), latLng.lng());
-	  map.panTo(latLng);
-	}
-}
-</script>
 
  
