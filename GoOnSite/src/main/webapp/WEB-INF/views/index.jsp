@@ -102,7 +102,7 @@
     
     <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 	  <div class="modal-dialog" role="document">
-	    <div class="modal-content" style="width: 440px">
+	    <div class="modal-content" style="width: 340px">
 	      <div class="modal-header" style="background-color: green">
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 	        <h3 class="modal-title" style="color:white" id="myModalLabel">Ingreso al sitio</h3>
@@ -116,7 +116,7 @@
 				  <strong>Error! </strong> El nombre de usuario y la contraseña no coinciden
 				</div>
 				
-				<button class="btn btn-lg btn-primary btn-block"">
+				<button class="btn btn-single btn-primary btn-block"">
 					Entrar
 				</button>
 			</form>

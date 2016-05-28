@@ -13,16 +13,29 @@ i.ui-grid-icon-cancel
 {
 	margin-top: -8px!important;
 }
-/**/
+/* END GRID STYLE CORRECTIONS */
 
 div.userPanel
 {
     margin-bottom: 30px;
 }
 
+/* MODALS */
 div.modal-header.warning
 {
 	background: darkorange;
+}
+
+div.modal-header.form
+{
+	background: cadetblue;
+    color: white;
+}
+
+div.modal button.btn-single
+{
+	width: 50%;
+    margin-left: 23%;	
 }
 
 div.modal-header.danger
@@ -30,6 +43,33 @@ div.modal-header.danger
 	background: brown;
 	color: white;
 }
+
+.modal-body label
+{
+	padding-top: 8px!important;
+}
+
+#loginModal input, #passwordModal input
+{
+	margin-bottom: 20px;
+}
+
+body.modal-open 
+{
+    overflow: auto;
+}
+
+body.modal-open[style] 
+{
+    padding-right: 0px !important;
+}
+
+.modal::-webkit-scrollbar 
+{
+    width: 0 !important; /*removes the scrollbar but still scrollable*/
+    /* reference: http://stackoverflow.com/a/26500272/2259400 */
+}
+/* END MODALS */
 
 nav.navbar
 {
@@ -45,16 +85,6 @@ div.jumbotron
 {
     padding-top: 10px!important;
     padding-bottom: 20px!important;
-}
-
-.modal-body label
-{
-	padding-top: 8px!important;
-}
-
-#loginModal input, #passwordModal input
-{
-	margin-bottom: 20px;
 }
 
 a:hover {
@@ -100,21 +130,6 @@ div.row
 	margin: 0px;	
 }
 
-body.modal-open 
-{
-    overflow: auto;
-}
-
-body.modal-open[style] 
-{
-    padding-right: 0px !important;
-}
-
-.modal::-webkit-scrollbar 
-{
-    width: 0 !important; /*removes the scrollbar but still scrollable*/
-    /* reference: http://stackoverflow.com/a/26500272/2259400 */
-}
 
 /* ANIMATIONS
 ============================================================================= */

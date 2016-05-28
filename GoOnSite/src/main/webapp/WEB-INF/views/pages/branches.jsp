@@ -46,13 +46,13 @@
 				  		<div class="form-group">
 						    <label class="control-label col-sm-4" for="telefono">Teléfono:</label>
 						    <div class="col-sm-6">
-						    	<input type="text" class="form-control" name="telefono" ng-model="branchForm.telefono" required>
+						    	<input type="text" pattern="[0-9]+" title="Solo se aceptan números" class="form-control" name="telefono" ng-model="branchForm.telefono" required>
 					    	</div>
 				    	</div>
 				  		<div class="form-group">
 						    <label class="control-label col-sm-4" for="mail">Correo:</label>
 						    <div class="col-sm-6">
-						    	<input type="text" class="form-control" name="mail" ng-model="branchForm.mail" required>
+						    	<input type="email" class="form-control" name="mail" ng-model="branchForm.mail" required>
 					    	</div>
 				    	</div>
 				    	<div class="form-group"> 
@@ -64,7 +64,7 @@
 			</form>
 		</div>		
 	</div>
-	<div ng-controller = "branchController"  >
+	<div>
 		<div class="col-xs-5">
 			<div class="panel panel-default">				
 				<div class="panel-heading">
@@ -78,12 +78,11 @@
 				<div class="panel-body">
 					<div id="map" style="height: 50%">
 					
-					</div>
+ 					</div>
 				</div>
 			</div>
 		</div>
 	</div>		
 </div>
-
 
  

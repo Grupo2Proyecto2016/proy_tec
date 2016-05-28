@@ -110,8 +110,8 @@ public class UserRestController
     	return new ResponseEntity<Void>(HttpStatus.OK);
     }
 	
-	@RequestMapping(value = "/updateUser", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
-    public ResponseEntity<Void> UpdateUser(@RequestBody UserWrapper user, @PathVariable String tenantid)
+	@RequestMapping(value = "/updateEmployee", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
+    public ResponseEntity<Void> UpdateEmployee(@RequestBody UserWrapper user, @PathVariable String tenantid)
     {
 		Usuario userUpdateData = new Usuario();
 		userUpdateData.setUsrname(user.usrname);
@@ -121,6 +121,24 @@ public class UserRestController
 		userUpdateData.setTelefono(user.telefono);
 		userUpdateData.setDireccion(user.direccion);
 		userUpdateData.setRol_id_rol(user.rol_id_rol);
+		userUpdateData.setFch_nacimiento(user.fch_nacimiento);
+    	
+    	new UsersLogic(tenantid).UpdateUser(userUpdateData);
+    	
+    	return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+	
+	@RequestMapping(value = "/updateClient", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
+    public ResponseEntity<Void> UpdateClient(@RequestBody UserWrapper user, @PathVariable String tenantid)
+    {
+		Usuario userUpdateData = new Usuario();
+		userUpdateData.setUsrname(user.usrname);
+		userUpdateData.setNombre(user.nombre);
+		userUpdateData.setApellido(user.apellido);
+		userUpdateData.setEmail(user.email);
+		userUpdateData.setTelefono(user.telefono);
+		userUpdateData.setDireccion(user.direccion);
+		userUpdateData.setRol_id_rol(UserRol.Client.getValue());
 		userUpdateData.setFch_nacimiento(user.fch_nacimiento);
     	
     	new UsersLogic(tenantid).UpdateUser(userUpdateData);

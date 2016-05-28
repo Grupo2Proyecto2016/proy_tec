@@ -154,7 +154,7 @@ goOnApp.controller('employeesController', function($scope, $http, $filter, uiGri
     $scope.updateUser = function()
     {
     	$.blockUI();
-    	$http.post(servicesUrl + 'updateUser', JSON.stringify($scope.userModel))
+    	$http.post(servicesUrl + 'updateEmployee', JSON.stringify($scope.userModel))
     		.then(function(response) {
 	        	if(response.status == 200)
 	        	{

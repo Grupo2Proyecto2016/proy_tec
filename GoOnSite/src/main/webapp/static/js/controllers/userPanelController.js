@@ -74,56 +74,29 @@ goOnApp.controller('userPanelController', function($scope, $http, $location, uiG
 		});
     };
     
-    $scope.showUserForm = function()
+    $scope.showUpdateUserModal = function()
     {
-    	$scope.userModel = {}; 
-    	$("#userEditForm").addClass('hidden');
-    	$("#userForm").removeClass('hidden');
+    	$scope.userModel = angular.copy($scope.$parent.user);
+    	$scope.userModel.fch_nacimiento = new Date($scope.userModel.fch_nacimiento);
+    	$("#updateUserModal").modal('show');
     };
-    
-    $scope.hideUserForm = function()
+    $scope.hideUpdateUserModal = function()
     {
-    	$("#userForm").addClass('hidden');		
+    	$("#updateUserModal").modal('hide');		
     	$scope.userModel = {};
     };
-    
-    $scope.hideUserUpdateForm = function()
-    {
-    	$("#userEditForm").addClass('hidden');		
-    	$scope.userModel = {};
-    };
-    
-    $scope.showUserUpdateForm = function(userRow)
-    {
-    	$scope.userModel.usrname = userRow.entity.usrname;
-    	$scope.userModel.nombre = userRow.entity.nombre;
-    	$scope.userModel.apellido = userRow.entity.apellido;
-    	$scope.userModel.telefono = userRow.entity.telefono;
-    	$scope.userModel.email = userRow.entity.email;
-    	$scope.userModel.direccion = userRow.entity.direccion;
-    	$scope.userModel.telefono = userRow.entity.telefono;
-    	$scope.userModel.fch_nacimiento = new Date(userRow.entity.fch_nacimiento);
-    	$scope.userModel.rol_id_rol = 2;
-    	//$("select[name=rol]").val($scope.userModel.rol_id_rol); //SELECT DE MIERDA!
-    	
-    	$("#userForm").addClass('hidden');
-    	$("#userEditForm").removeClass('hidden');
-    };
-     
     $scope.updateUser = function()
     {
     	$.blockUI();
-    	$http.post(servicesUrl + 'updateUser', JSON.stringify($scope.userModel))
+    	$http.post(servicesUrl + 'updateClient', JSON.stringify($scope.userModel))
     		.then(function(response) {
 	        	if(response.status == 200)
 	        	{
-	        		$scope.userModel = {};
-	        		$scope.hideUserUpdateForm();
-	        		$scope.getUsers();
-	        		$scope.showSuccessAlert("El usuario ha sido actualizado.");
+	        		$scope.$parent.user = $scope.userModel;
+	        		$scope.hideUpdateUserModal();
 	        	}
+	        	$.unblockUI();
     		})
 		;
-    	$.unblockUI();
     };
 });
