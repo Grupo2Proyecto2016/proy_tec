@@ -19,7 +19,7 @@
 	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.js"></script>
 	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.js"></script>
       <script src="<c:url value='/static/js/app.js' />"></script>
-      
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXLMRyM-qhBcFx4Lvv6XxACYvWYY8ey-U" async defer></script>
 
       <script src="<c:url value='/static/js/ui-grid/ui-grid.min.js' />"></script>
       
@@ -31,6 +31,7 @@
       <script src="<c:url value='/static/js/controllers/employeesController.js' />"></script>
       <script src="<c:url value='/static/js/controllers/registerController.js' />"></script>
       <script src="<c:url value='/static/js/controllers/userPanelController.js' />"></script>
+      <script src="<c:url value='/static/js/controllers/branchController.js' />"></script>
     </head>
     <body ng-controller="mainController as main">
 
@@ -49,7 +50,7 @@
                     
                     <li><a ng-show="user != null && user.rol_id_rol == 1" href="#bus"><i class="fa fa-bus"></i> Vehículos</a></li>
                     <li><a ng-show="user != null && user.rol_id_rol == 1" href="#employees"><i class="fa fa-users"></i> Personal</a></li>
-                    
+					<li><a ng-show="user != null && user.rol_id_rol == 1" href="#branches"><i class="fa fa-building"></i> Sucursales</a></li>                    
                     <li><a href="#contact"><i class="fa fa-comment"></i> Contacto</a></li>
                     <li><a ng-show="user == null" onclick="shorSignInForm()"><i class="fa fa-sign-in" aria-hidden="true"></i> Entrar</a></li>
       				<li><a href="#register" ng-show="user == null"><i class="fa fa-user-plus" aria-hidden="true"></i> Registrarme</a></li>

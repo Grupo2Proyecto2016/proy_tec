@@ -16,6 +16,7 @@ import com.springmvc.dataaccess.repository.tenant.MantenimientoRepository;
 import com.springmvc.dataaccess.repository.tenant.PasajeRepository;
 import com.springmvc.dataaccess.repository.tenant.DepartamentoRepository;
 import com.springmvc.dataaccess.repository.tenant.CiudadRepository;
+import com.springmvc.dataaccess.repository.tenant.SucursalRepository;
 
 
 public class TenantDAContext extends TenantDataSourceConfig {
@@ -35,6 +36,7 @@ public class TenantDAContext extends TenantDataSourceConfig {
 	public PasajeRepository PasajeRepository;
 	public DepartamentoRepository DepartamentoRepository;
 	public CiudadRepository CiudadRepository;
+	public SucursalRepository SucursalRepository;
 	
 	public TenantDAContext(String tenantName, boolean updateSchema)
 	{
@@ -54,5 +56,6 @@ public class TenantDAContext extends TenantDataSourceConfig {
 		PasajeRepository = new PasajeRepository(super.EntityManager);
 		DepartamentoRepository = new DepartamentoRepository(super.EntityManager);
 		CiudadRepository = new CiudadRepository(super.EntityManager);
+		SucursalRepository = new SucursalRepository(super.EntityManager);
 	}
 }
