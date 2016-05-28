@@ -25,4 +25,6 @@ public class UserWrapper
 	public String direccion;	
 	
 	public int rol_id_rol;
+	
+	public int id_sucursal;
 }

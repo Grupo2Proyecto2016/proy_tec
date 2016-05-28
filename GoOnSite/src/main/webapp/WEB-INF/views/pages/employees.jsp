@@ -80,6 +80,15 @@
 			    	</div>
 				  </div>
 				  
+				  <div class="form-group" ng-show="userModel.rol_id_rol == 2">
+				    <label class="control-label col-sm-4" for="rol">Sucursal:</label>
+				    <div class="col-sm-6">
+				    	<select name="sucursal" ng-model="userModel.id_sucursal" ng-options="branch.id_sucursal as branch.nombre for branch in branches" class="form-control" ng-required='userModel.rol_id_rol == 2'>
+				    		<option value="">Selecciones una sucursal</option>
+				    	</select>
+			    	</div>
+				  </div>
+				  
 				  <div class="form-group">
 				    <label class="control-label col-sm-4" for="password">Contraseña:</label>
 				    <div class="col-sm-6">
@@ -167,6 +176,14 @@
 				    <label class="control-label col-sm-4" for="rol">Rol:</label>
 				    <div class="col-sm-6">
 				    	<select name="rol" ng-model="userModel.rol_id_rol" ng-options="rol.id as rol.name for rol in roles" class="form-control" required>
+				    	</select>
+			    	</div>
+				  </div>
+				  <div class="form-group" ng-show="userModel.rol_id_rol == 2">
+				    <label class="control-label col-sm-4" for="rol">Sucursal:</label>
+				    <div class="col-sm-6">
+				    	<select name="sucursal" ng-model="userModel.id_sucursal" ng-options="branch.id_sucursal as branch.nombre for branch in branches" class="form-control" ng-required='userModel.rol_id_rol == 2'>
+				    		<option value="">Selecciones una sucursal</option>
 				    	</select>
 			    	</div>
 				  </div>

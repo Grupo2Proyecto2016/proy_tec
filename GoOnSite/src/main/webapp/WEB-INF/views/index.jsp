@@ -101,8 +101,8 @@
     </footer>
     
     <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-	  <div class="modal-dialog" role="document">
-	    <div class="modal-content" style="width: 340px">
+	  <div class="modal-dialog" role="document" style="width: 340px">
+	    <div class="modal-content">
 	      <div class="modal-header" style="background-color: green">
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 	        <h3 class="modal-title" style="color:white" id="myModalLabel">Ingreso al sitio</h3>

@@ -14,8 +14,8 @@ public class Sucursal {
 	private String direccion;
 	private String telefono;
 	private String mail;
-	private long latitud;
-	private long longitud;
+	private double latitud;
+	private double longitud;
 	public long getId_sucursal() {
 		return id_sucursal;
 	}
@@ -46,16 +46,16 @@ public class Sucursal {
 	public void setMail(String mail) {
 		this.mail = mail;
 	}
-	public long getLatidud() {
+	public double getLatidud() {
 		return latitud;
 	}
-	public void setLatidud(long latidud) {
+	public void setLatidud(double latidud) {
 		this.latitud = latidud;
 	}
-	public long getLongitud() {
+	public double getLongitud() {
 		return longitud;
 	}
-	public void setLongitud(long longitud) {
+	public void setLongitud(double longitud) {
 		this.longitud = longitud;
 	}
 }

@@ -8,21 +8,9 @@ goOnApp.controller('branchController', function($scope, $http, uiGridConstants, 
     
     $scope.branchForm = {};
     
-//    $scope.initForm = function()
-//    {
-//	    $scope.branchForm.nombre = null;
-//	    $scope.branchForm.direccion = null;
-//	    $scope.branchForm.telefono = null;
-//	    $scope.branchForm.mail = null;
-//	    $scope.branchForm.latitud = 0;
-//	    $scope.branchForm.longitud = 0;
-//    };   
-    
-    
     $scope.showForm = function()
     {
     	$scope.branchForm = {};
-    	//$scope.initForm();
     	$("#divBranchForm").removeClass('hidden');    	
     	google.maps.event.trigger(map, 'resize');//refresh map
     };
@@ -43,7 +31,6 @@ goOnApp.controller('branchController', function($scope, $http, uiGridConstants, 
 			{
 				$.unblockUI();
 				$scope.hideForm();
-				$scope.initForm();
 				$scope.showSuccessAlert("Sucursal creada.");			
 				//$scope.getBranches();				
 			})

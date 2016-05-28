@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.springmvc.entities.main.Empresa;
 import com.springmvc.entities.main.Pais;
+import com.springmvc.entities.tenant.Sucursal;
 import com.springmvc.entities.tenant.Usuario;
 import com.springmvc.enums.UserRol;
 import com.springmvc.exceptions.UserAlreadyExistsException;
+import com.springmvc.logic.implementations.BranchesLogic;
 import com.springmvc.logic.implementations.UsersLogic;
 import com.springmvc.requestWrappers.CompanyWrapper;
 import com.springmvc.requestWrappers.UserWrapper;
@@ -71,6 +73,16 @@ public class UserRestController
     	userToPersist.setFch_nacimiento(user.fch_nacimiento);
     	userToPersist.setEnabled(true);
     	userToPersist.setEs_empleado(true);
+    	if(user.rol_id_rol == UserRol.Sales.getValue() && user.id_sucursal != 0)
+    	{
+    		BranchesLogic bl = new BranchesLogic(tenantid);
+    		Sucursal branch = bl.GetBranch(user.id_sucursal);
+    		userToPersist.setSucursal(branch);
+    	}
+    	else
+    	{
+    		userToPersist.setSucursal(null);
+    	}
     	
     	new UsersLogic(tenantid).CreateUser(userToPersist);
     	

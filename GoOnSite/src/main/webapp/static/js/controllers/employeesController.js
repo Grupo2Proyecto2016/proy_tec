@@ -2,8 +2,23 @@ goOnApp.controller('employeesController', function($scope, $http, $filter, uiGri
 {
 	$scope.userToDelete = null; //Variable temporal para almacenar nombre de usuario que se desea borrar
 	$scope.roles = [{id: 2, name: "Ventas"}, { id:3, name: "Guarda/Conductor"}];
-	
+	$scope.branches = {};
+	$scope.branchesToGrid = [];
 	$scope.userModel = {};
+	
+	//GET BRANCHES
+	$http.get(servicesUrl + 'getBranches')
+		.then(function(response) 
+		{
+	    	if(response.status == 200)
+	    	{
+	    		$scope.branches = response.data;
+	    		angular.forEach(response.data, function(b)
+				{
+	    			$scope.branchesToGrid.push({ label: b.nombre, value: b.nombre });
+				});
+	    	}
+	});
 	
 	i18nService.setCurrentLang('es');
     $scope.message = 'Desde aquí puedes gestionar usuarios para el personal de la empresa.';
@@ -106,6 +121,11 @@ goOnApp.controller('employeesController', function($scope, $http, $filter, uiGri
         	  , filter: {
               type: uiGridConstants.filter.SELECT,
               selectOptions: [ { value: 'Administrador', label: 'Administrador' }, { value: 'Ventas', label: 'Ventas' }, { value: 'Guarda/Conductor', label: 'Guarda/Conductor'} ]
+          }},
+          { name: 'Sucursal', field: 'sucursal.nombre'
+        	  , filter: {
+              type: uiGridConstants.filter.SELECT,
+              selectOptions: $scope.branchesToGrid
           }},
           { name: 'Acciones',
         	enableFiltering: false,
