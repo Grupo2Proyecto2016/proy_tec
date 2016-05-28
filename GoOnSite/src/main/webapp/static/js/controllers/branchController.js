@@ -212,7 +212,30 @@ goOnApp.controller('branchController', function($scope, $http, uiGridConstants, 
   	  var g = latLng.lng();
   	  $scope.actualizoMarker(l, g);
   	  $scope.map.panTo(latLng);
-  	}
+  	  //
+  	  var elevationService = new google.maps.ElevationService();
+  	  var requestElevation = 
+  	  {
+  		'locations': [marker.getPosition()]
+  	  };  	  
+   	 elevationService.getElevationForLocations(requestElevation, function(results, status) 
+   	 {
+  	    if (status == google.maps.ElevationStatus.OK) {
+  	      if (results[0]) 
+  	      {
+  	        if (parseFloat(results[0].elevation) < 1)
+  	        {
+  	        	//Es Agua
+  	        	marker.setMap(null);
+  	        	$scope.markers = [];
+  	        	$scope.error_message = 'Punto del mapa incorrecto, esta en el agua!';
+  	        	$scope.$digest();
+				$("#errorModal").modal("toggle");
+  	        }  	    	  
+  	      }
+  	    }
+  	  });
+   	}
     
     $scope.actualizoMarker = function (lat, lng)
     {
