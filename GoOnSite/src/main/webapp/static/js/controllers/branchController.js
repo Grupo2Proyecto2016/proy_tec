@@ -37,7 +37,14 @@ goOnApp.controller('branchController', function($scope, $http, uiGridConstants, 
 	{		
 		if(!$scope.form.$invalid)
 		{
-			$.blockUI();			
+			$.blockUI();		
+			if (($scope.branchForm.latitud == null) || ($scope.branchForm.longitud == null))
+			{
+				$.unblockUI();
+				$scope.error_message = 'Debe serleccionar un punto en el mapa.'; 
+				$("#errorModal").modal("toggle");
+				return;
+			}
 			$http.post(servicesUrl +'createBranch', JSON.stringify($scope.branchForm))
 			.success(function()
 			{
@@ -229,6 +236,8 @@ goOnApp.controller('branchController', function($scope, $http, uiGridConstants, 
   	        	marker.setMap(null);
   	        	$scope.markers = [];
   	        	$scope.error_message = 'Punto del mapa incorrecto, esta en el agua!';
+  	        	$scope.branchForm.latitud = null;
+  	        	$scope.branchForm.longitud = null;
   	        	$scope.$digest();
 				$("#errorModal").modal("toggle");
   	        }  	    	  
@@ -241,8 +250,7 @@ goOnApp.controller('branchController', function($scope, $http, uiGridConstants, 
     {
     	$scope.branchForm.latitud = lat;    	                  
     	$scope.branchForm.longitud = lng;
-    };
-    
+    };    
     
   
 });
