@@ -10,6 +10,7 @@ import javax.persistence.Query;
 
 import com.springmvc.entities.tenant.Sucursal;
 import com.springmvc.entities.tenant.Usuario;
+import com.springmvc.entities.tenant.Vehiculo;
 
 
 public class SucursalRepository {
@@ -67,5 +68,46 @@ public class SucursalRepository {
 			return null;
 		}
 		return result;
+	}
+
+	public boolean TieneEmpleados(long id_sucursal) 
+	{
+		Query q = entityManager.createQuery("select max(id_usuario) from Usuario where id_sucursal = :ids");
+		q.setParameter("ids", id_sucursal);
+		long maxID;
+		try
+		{
+			maxID = (long) q.getSingleResult();
+		} 
+		catch(NoResultException ex) 
+		{
+			return false;
+		}
+		catch(NullPointerException ex) 
+		{
+			return false;
+		}
+		return (maxID>0);
+	}
+
+	public void deleteBranch(long id_sucursal) 
+	{
+		EntityTransaction t = entityManager.getTransaction();
+		Sucursal sucursal = GetBranch(id_sucursal);
+		if (sucursal != null)
+		{
+			try
+			{
+				t.begin();
+				entityManager.remove(sucursal);
+				entityManager.flush();
+				t.commit();
+			}
+			catch(Exception ex)
+			{
+				t.rollback();
+				throw ex;
+			}
+		}
 	}
 }
