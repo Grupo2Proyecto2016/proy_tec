@@ -65,6 +65,12 @@ public class TenantLogic implements ITenantLogic {
 		return context.GetCompany(tenantid);
 	}
 	
+	@Override
+	public void UpdateCompany(String tenantid, Empresa companyUpdateData)
+	{
+		 context.UpdateCompany(tenantid, companyUpdateData);
+	}
+	
 	public List<Empresa> GetCompanies()
 	{
 		return context.GetCompanies();

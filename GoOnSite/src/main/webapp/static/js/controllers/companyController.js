@@ -26,16 +26,43 @@ goOnApp.controller('companyController', function($scope, $http, $filter, uiGridC
 		{ name: 'Superhero', value: 'superhero' },
 		{ name: 'Yeti', value: 'yeti' }              
     ];
+	
+	$scope.showUpdateCompanyModal = function()
+	{
+		$("#updateCompanyModal").modal('show');
+	};
+	$scope.hideUpdateCompanyModal = function()
+	{
+		$("#updateCompanyModal").modal('hide');
+	};
+	$scope.updateCompany = function()
+	{
+		$.blockUI();
+		$scope.companyForm.css = $scope.$parent.company.css;
+		$http.post(servicesUrl + 'updateCompany', JSON.stringify($scope.companyForm))
+		.then(function(response) {
+			if(response.status == 200)
+			{
+				$scope.$parent.getCompany();
+				$scope.$parent.company = angular.copy($scope.companyForm);
+				$scope.hideUpdateCompanyModal();
+				$scope.showSuccessAlert("El datos de la empresa han sido actualizados.");
+			}
+			$.unblockUI();
+		})
+		;
+	};
+	
     $scope.closeSuccessAlert = function()
     {
     	$("#successAlert").hide();
     }
-    
     $scope.showSuccessAlert = function(message)
     {
     	$('#successMessage').text(message);
-		$("#successAlert").show();
+    	$("#successAlert").show();
     };
+    
     
     $scope.showDeleteDialog = function(row)
     {
@@ -67,20 +94,4 @@ goOnApp.controller('companyController', function($scope, $http, $filter, uiGridC
     	$scope.userModel = {};
     };
        
-    $scope.updateUser = function()
-    {
-    	$.blockUI();
-    	$http.post(servicesUrl + 'updateEmployee', JSON.stringify($scope.userModel))
-    		.then(function(response) {
-	        	if(response.status == 200)
-	        	{
-	        		$scope.userModel = {};
-	        		$scope.hideUserUpdateForm();
-	        		$scope.getUsers();
-	        		$scope.showSuccessAlert("El usuario ha sido actualizado.");
-	        	}
-    		})
-		;
-    	$.unblockUI();
-    };
 });

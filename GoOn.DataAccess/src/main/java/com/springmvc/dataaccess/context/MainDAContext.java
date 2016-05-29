@@ -107,4 +107,18 @@ public class MainDAContext {
 		companies.forEach(result::add);
 		return result;
 	}
+
+	public void UpdateCompany(String tenantid, Empresa companyUpdateData) 
+	{
+		Empresa company = GetCompany(tenantid);
+		Pais country = GetCountry(companyUpdateData.getPais().getId_pais());
+		company.setNombre(companyUpdateData.getNombre());
+		company.setDireccion(companyUpdateData.getDireccion());
+		company.setRazonSocial(companyUpdateData.getRazonSocial());
+		company.setRut(companyUpdateData.getRut());
+		company.setTelefono(companyUpdateData.getTelefono());
+		company.setCss(companyUpdateData.getCss());
+		company.setPais(country);
+		companyRepository.save(company);
+	}
 }

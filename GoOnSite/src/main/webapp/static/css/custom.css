@@ -86,6 +86,16 @@ nav.navbar
 	margin-bottom: 0px !important;	
 }
 
+a.navbar-brand
+{
+	padding:2%;	
+} 
+a.navbar-brand img
+{
+	height: 100%;
+	float: left;
+}
+
 a.btn-md i
 {
 	margin-top: 4px;

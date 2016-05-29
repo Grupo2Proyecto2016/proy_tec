@@ -87,10 +87,7 @@
             	}
             	else
             	{
-            		if($location.url() != "/" && $location.url() != "/home")
-            		{
-        				$("#loginModal").modal("toggle");
-            		}
+    				$("#loginModal").modal("toggle");
             	}
             }
             else if(response.status == 500)
@@ -127,11 +124,15 @@
     	$scope.company = null;
     	$scope.loginForm = null;
     	
-    	$http.get(servicesUrl + 'getCompany')
-        	.then(function(response) {
-        		$scope.company = response.data;
-        	}
-    	);
+    	$scope.getCompany = function()
+    	{
+    		$http.get(servicesUrl + 'getCompany')
+	        	.then(function(response) {
+	        		$scope.company = response.data;
+        	});
+    	};
+    	
+    	$scope.getCompany();
     	
     	$http.get(servicesUrl + 'getUserInfo')
 	    	.then(function(response) 
