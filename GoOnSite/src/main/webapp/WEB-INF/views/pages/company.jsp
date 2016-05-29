@@ -74,7 +74,7 @@
 				  <div class="form-group">
 				    <label class="control-label col-sm-4" for="logo">Logo:</label>
 				    <div class="col-sm-8">
-				    	<input type="image" class="form-control" name="logo" ng-model="companyForm.logo" required>
+				    	<input type="file" class="form-control" name="logo" accept=".png" ng-model="companyForm.logo" required>
 			    	</div>
 				  </div>
 				  <div class="form-group">

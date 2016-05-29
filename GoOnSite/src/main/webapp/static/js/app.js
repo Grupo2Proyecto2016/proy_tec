@@ -87,10 +87,7 @@
             	}
             	else
             	{
-            		if($location.url() != "/" && $location.url() != "/home")
-            		{
-        				$("#loginModal").modal("toggle");
-            		}
+    				$("#loginModal").modal("toggle");
             	}
             }
             else if(response.status == 500)

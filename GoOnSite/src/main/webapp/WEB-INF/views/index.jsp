@@ -42,10 +42,17 @@
             <div class="container">
                 <div class="navbar-header">
                     <a class="navbar-brand">
-	                    <img alt="bebe" height="auto" src="http://cdn.revistagq.com/uploads/images/thumbs/es/gq/3/s/2016/13/tipologias_foto_whastapp_606053640_511x384.jpg" style="height: 50px; float: left;">
-	                    <div style="float: left; margin: 13px;">
-	                    	<b>{{company.nombre}}</b>
-	                   	</div>	
+                    	<div>
+                    		<div class="col-sm-6">
+			                    <img ng-show="company.logo != null" src="http://cdn.revistagq.com/uploads/images/thumbs/es/gq/3/s/2016/13/tipologias_foto_whastapp_606053640_511x384.jpg">
+                    		</div>
+		                    <div ng-show="company.logo == null" class="col-sm-6" style="float: left; padding: 15%;">
+		                    	<b>{{company.nombre}}</b>
+		                   	</div>
+		                   	<div ng-show="company.logo != null" class="col-sm-6" style="float: left; padding: 9%;">
+		                    	<b>{{company.nombre}}</b>
+		                   	</div>	
+                    	</div>
   					</a>
                 </div>
 
