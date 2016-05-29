@@ -17,7 +17,7 @@ public class UserContext
 	@Autowired
     private JwtTokenUtil jwtTokenUtil;
 	
-	public Usuario GetUserFromRequest(HttpServletRequest request)
+	public Usuario GetUser(HttpServletRequest request)
 	{
 		String token = request.getHeader(tokenHeader);
         if(token != null)
@@ -27,5 +27,12 @@ public class UserContext
         	return new UsersLogic(tenantId).GetUserByName(username);
         }
         return null;
+	}
+
+	public String GetUsername(HttpServletRequest request) 
+	{
+		String token = request.getHeader(tokenHeader);	
+		String username = jwtTokenUtil.getUsernameFromToken(token);
+		return username;
 	}
 }

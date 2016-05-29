@@ -27,7 +27,9 @@ public class Empresa {
 	private String telefono;
 	private String direccion;
 	private String nombretenant;
+	private String css;
 	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="id_pais", nullable=false, updatable=false)
 	private Pais pais;
@@ -49,6 +51,14 @@ public class Empresa {
 //	public void setModulos(List<Modulo> modulos) {
 //		this.modulos = modulos;
 //	}
+
+	public String getCss() {
+		return css;
+	}
+	
+	public void setCss(String css) {
+		this.css = css;
+	}
 
 	public Pais getPais() {
 		return pais;

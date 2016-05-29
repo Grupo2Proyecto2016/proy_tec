@@ -1,8 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
 <div ng-show="$parent.user != null">
 	<div class="jumbotron text-center">
-		<h2>Mi Cuenta</h2>
+		<h3>Mi Cuenta</h3>
 
 		<p>{{ message }}</p>
 	</div>
@@ -86,13 +85,6 @@
 									<label class="control-label col-sm-4" for="address">Dirección:</label>
 									<div class="col-sm-8">
 										<p>{{$parent.user.direccion}}</p>
-									</div>
-								</div>
-								<div class="form-group row">
-									<label class="control-label col-sm-4" for="username">Nombre
-										de usuario:</label>
-									<div class="col-sm-8">
-										<p>{{$parent.user.usrname}}</p>
 									</div>
 								</div>
 							</div>

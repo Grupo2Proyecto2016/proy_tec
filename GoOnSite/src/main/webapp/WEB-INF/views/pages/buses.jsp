@@ -1,8 +1,8 @@
 <div id="divTitleBuses" class="jumbotron text-center">
-	<h2>Vehículos</h2>
+	<h3>Vehículos</h3>
 	
 	<p>{{ message }}</p>
-	<p><a class="btn btn-md btn-primary" ng-click="showForm()"><i class="fa fa-plus fa-md pull-left"></i>Agregar</a></p>
+	<p><button class="btn btn-sm btn-primary" ng-click="showForm()"><i class="fa fa-plus fa-md pull-left"></i>Agregar</button></p>
 </div>
 
 <div id="divBusForm" class="hidden">

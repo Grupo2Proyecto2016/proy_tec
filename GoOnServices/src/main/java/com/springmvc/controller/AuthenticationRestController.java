@@ -79,7 +79,7 @@ public class AuthenticationRestController {
     @RequestMapping(value = "/getUserInfo", method = RequestMethod.GET)
     public ResponseEntity<Usuario>  getUserInfo(@PathVariable String tenantid, HttpServletRequest request)
     {
-    	Usuario user = context.GetUserFromRequest(request);
+    	Usuario user = context.GetUser(request);
     	return new ResponseEntity<Usuario>(user, HttpStatus.OK);
     }
     

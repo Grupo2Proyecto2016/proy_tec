@@ -81,11 +81,18 @@ a.btn-md i
 	margin-top: 4px;
 }
 
+/* JUMBOTRON */
 div.jumbotron
 {
-    padding-top: 10px!important;
-    padding-bottom: 20px!important;
+    padding-top: 5px!important;
+    padding-bottom: 5px!important;
 }
+
+div.jumbotron button i
+{
+    margin-top: 3px;
+}
+/* END JUMBOTRON */
 
 a:hover {
     cursor: pointer;
@@ -98,9 +105,14 @@ div.viewContainer
 	padding-top: 70px;
 }
 
-.jumbotron h2
+ul.admin-menu a
 {
-    font-weight: 800;
+	text-align: center;
+}
+
+ul.admin-menu a i
+{
+	float: left;
 }
 
 body 
@@ -115,6 +127,16 @@ header, footer
     z-index: 999;
 }
 
+footer p
+{
+   margin: 0 0 4px !important;
+}
+
+div.panel-footer
+{
+	padding: 4px 0px 1px 0px !important;
+}
+ 
 header
 {
 	top: 0;

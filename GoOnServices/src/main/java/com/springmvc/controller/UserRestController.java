@@ -115,7 +115,7 @@ public class UserRestController
 	@RequestMapping(value = "/changePassword", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
     public ResponseEntity<Void> ChangePassword(@RequestBody UserWrapper user, @PathVariable String tenantid, HttpServletRequest request)
     {
-		Usuario signedUser = context.GetUserFromRequest(request);
+		Usuario signedUser = context.GetUser(request);
 		String newPassword = new BCryptPasswordEncoder().encode(user.passwd);
     	new UsersLogic(tenantid).UpdateUserPassword(signedUser, newPassword);
     	
@@ -134,17 +134,28 @@ public class UserRestController
 		userUpdateData.setDireccion(user.direccion);
 		userUpdateData.setRol_id_rol(user.rol_id_rol);
 		userUpdateData.setFch_nacimiento(user.fch_nacimiento);
-    	
+		
+		if(user.rol_id_rol == UserRol.Sales.getValue() && user.id_sucursal != 0)
+    	{
+    		BranchesLogic bl = new BranchesLogic(tenantid);
+    		Sucursal branch = bl.GetBranch(user.id_sucursal);
+    		userUpdateData.setSucursal(branch);
+    	}
+    	else
+    	{
+    		userUpdateData.setSucursal(null);
+    	}
     	new UsersLogic(tenantid).UpdateUser(userUpdateData);
     	
     	return new ResponseEntity<Void>(HttpStatus.OK);
     }
 	
 	@RequestMapping(value = "/updateClient", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
-    public ResponseEntity<Void> UpdateClient(@RequestBody UserWrapper user, @PathVariable String tenantid)
+    public ResponseEntity<Void> UpdateClient(@RequestBody UserWrapper user, @PathVariable String tenantid, HttpServletRequest request)
     {
+		String username = new UserContext().GetUsername(request);
 		Usuario userUpdateData = new Usuario();
-		userUpdateData.setUsrname(user.usrname);
+		userUpdateData.setUsrname(username);
 		userUpdateData.setNombre(user.nombre);
 		userUpdateData.setApellido(user.apellido);
 		userUpdateData.setEmail(user.email);
@@ -168,7 +179,7 @@ public class UserRestController
 	@RequestMapping(value = "/deleteSignedUser", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
     public ResponseEntity<Void> DeleteSignedUser(@RequestBody String empty, @PathVariable String tenantid, HttpServletRequest request)
     {
-		Usuario signedUser = context.GetUserFromRequest(request);
+		Usuario signedUser = context.GetUser(request);
     	new UsersLogic(tenantid).DeleteUser(signedUser.getUsrname());
     	return new ResponseEntity<Void>(HttpStatus.OK);
     }	

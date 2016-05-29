@@ -57,6 +57,12 @@
     		templateUrl : tenantUrlPart + 'pages/employees.html',
     		controller  : 'employeesController'
     	})
+    	
+    	// route for the employees page
+    	.when('/company', {
+    		templateUrl : tenantUrlPart + 'pages/company.html',
+    		controller  : 'companyController'
+    	})
 		.otherwise({
 			redirectTo: '/'
     	});
@@ -64,7 +70,7 @@
 
     goOnApp.service('authInterceptor', function($q) {
         var service = this;
-
+        
         service.responseError = function(response) {
             if (response.status == 401)
             {
@@ -109,6 +115,7 @@
     goOnApp.controller('mainController', function($scope, $http, $location)
 	{
     	$scope.user = null;
+    	$scope.company = null;
     	$scope.loginForm = null;
     	
     	$http.get(servicesUrl + 'getCompany')

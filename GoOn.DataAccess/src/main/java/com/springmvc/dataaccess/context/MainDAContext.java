@@ -90,6 +90,7 @@ public class MainDAContext {
 	
 	private void InsertCompany(Empresa company)
 	{
+		company.setCss("paper");
 		company.setNombreTenant(company.getNombreTenant().toLowerCase());
 		companyRepository.save(company);
 	}

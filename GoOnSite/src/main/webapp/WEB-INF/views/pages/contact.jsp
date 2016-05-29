@@ -1,5 +1,5 @@
 <div class="jumbotron text-center">
-	<h2>Contáctanos</h2>
+	<h3>Contáctanos</h3>
 
     <p>{{ message }}</p>
 </div>

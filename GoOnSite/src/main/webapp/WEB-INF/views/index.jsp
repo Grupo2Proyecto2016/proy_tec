@@ -1,10 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<html ng-app="goOnApp">
+<html ng-app="goOnApp" ng-controller="mainController as main" ng-show="company != null">
     <head>
       <meta charset=UTF-8">
       <!-- STYLES -->
-      <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.6/{{company.css}}/bootstrap.min.css" />
       <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.css" />
 	  <link rel="stylesheet" href="<c:url value='/static/css/custom.css' />" />
 	  <link rel="stylesheet" href="<c:url value='/static/css/ui-grid.min.css' />" />
@@ -32,8 +32,9 @@
       <script src="<c:url value='/static/js/controllers/registerController.js' />"></script>
       <script src="<c:url value='/static/js/controllers/userPanelController.js' />"></script>
       <script src="<c:url value='/static/js/controllers/branchController.js' />"></script>
+      <script src="<c:url value='/static/js/controllers/companyController.js' />"></script>
     </head>
-    <body ng-controller="mainController as main">
+    <body>
 
         <!-- HEADER AND NAVBAR -->
         <header>
@@ -45,16 +46,36 @@
 
                 <ul class="nav navbar-nav navbar-right">
                 
+					<!--PUBLICAS -->
                     <li><a href="#home"><i class="fa fa-home"></i> Inicio</a></li>
+                    <li><a href="#packagingCalc"><i class="fa fa-calculator"></i> Calcular Encomienda</a></li>
                     <li><a href="#travels"><i class="fa fa-bus"></i> Pasajes</a></li>
                     
-                    <li><a ng-show="user != null && user.rol_id_rol == 1" href="#bus"><i class="fa fa-bus"></i> Vehículos</a></li>
-                    <li><a ng-show="user != null && user.rol_id_rol == 1" href="#employees"><i class="fa fa-users"></i> Personal</a></li>
-					<li><a ng-show="user != null && user.rol_id_rol == 1" href="#branches"><i class="fa fa-building"></i> Sucursales</a></li>                    
-                    <li><a href="#contact"><i class="fa fa-comment"></i> Contacto</a></li>
-                    <li><a ng-show="user == null" onclick="shorSignInForm()"><i class="fa fa-sign-in" aria-hidden="true"></i> Entrar</a></li>
-      				<li><a href="#register" ng-show="user == null"><i class="fa fa-user-plus" aria-hidden="true"></i> Registrarme</a></li>
+                    <!--ADMINISTRADOR-->
+                    <li ng-show="user != null && user.rol_id_rol == 1" class="dropdown">
+	                    <a class="dropdown-toggle" data-toggle="dropdown">
+<!-- 	                        <span class="glyphicon glyphicon-user"></span>  -->
+	                        <i class="fa fa-cogs"></i>
+	                        <strong>Administrar</strong>
+	                        <span class="glyphicon glyphicon-chevron-down"></span>
+	                    </a>
+	                    <ul class="dropdown-menu admin-menu">
+	                    	<li ng-show="user != null && user.rol_id_rol == 1"><a href="#company"><i class="fa fa-cog"></i> Empresa</a></li>
+	                    	<li ng-show="user != null && user.rol_id_rol == 1"><a href="#manageTravels"><i class="fa fa-calendar-check-o"></i> Viajes</a></li>
+		                    <li ng-show="user != null && user.rol_id_rol == 1"><a href="#lines"><i class="fa fa-map-o"></i> Lineas</a></li>
+		                    <li ng-show="user != null && user.rol_id_rol == 1"><a href="#bus"><i class="fa fa-wrench"></i> Vehículos</a></li>
+		                    <li ng-show="user != null && user.rol_id_rol == 1"><a href="#employees"><i class="fa fa-users"></i> Personal</a></li>
+							<li ng-show="user != null && user.rol_id_rol == 1"><a href="#branches"><i class="fa fa-bars"></i> Sucursales</a></li>
+							<li ng-show="user != null && user.rol_id_rol == 1"><a href="#parameters"><i class="fa fa-building"></i> Parámetros</a></li>
+	                    </ul>
+               		</li>
+                    <li ng-show="user == null || user.rol_id_rol != 1"><a href="#outBranches"><i class="fa fa-building"></i> Nuestras Sucursales</a></li>
+                    
+					<!--DE INGRESO -->
+                    <li ng-show="user == null"><a onclick="shorSignInForm()"><i class="fa fa-sign-in" aria-hidden="true"></i> Entrar</a></li>
+      				<li ng-show="user == null"><a href="#register"><i class="fa fa-user-plus" aria-hidden="true"></i> Registrarme</a></li>
       				
+      				<!-- USUARIO LOGEADO -->
       				<li ng-show="user != null" class="dropdown">
 	                    <a class="dropdown-toggle" data-toggle="dropdown">
 	                        <span class="glyphicon glyphicon-user"></span> 

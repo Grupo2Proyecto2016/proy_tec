@@ -1,8 +1,8 @@
 <div class="jumbotron text-center">
-	<h2>Manejo del Personal</h2>
+	<h3>Manejo del Personal</h2>
 	
 	<p>{{ message }}</p>
-	<p><a class="btn btn-md btn-primary" ng-click="showUserForm()"><i class="fa fa-plus fa-md pull-left"></i>Agregar</a></p>
+	<p><button class="btn btn-sm btn-primary" ng-click="showUserForm()"><i class="fa fa-plus fa-md pull-left"></i>Agregar</button></p>
 </div>
 
 <div id="userForm" class="hidden">
@@ -183,7 +183,7 @@
 				    <label class="control-label col-sm-4" for="rol">Sucursal:</label>
 				    <div class="col-sm-6">
 				    	<select name="sucursal" ng-model="userModel.id_sucursal" ng-options="branch.id_sucursal as branch.nombre for branch in branches" class="form-control" ng-required='userModel.rol_id_rol == 2'>
-				    		<option value="">Selecciones una sucursal</option>
+<!-- 				    		<option value="">Selecciones una sucursal</option> -->
 				    	</select>
 			    	</div>
 				  </div>

@@ -101,6 +101,7 @@ public class UserRepository
 			user.setEmail(userUpdateData.getEmail());
 			user.setFch_nacimiento(userUpdateData.getFch_nacimiento());
 			user.setRol_id_rol(userUpdateData.getRol_id_rol());
+			user.setSucursal(userUpdateData.getSucursal());
 			t.commit();
 		}
 		catch(Exception ex)

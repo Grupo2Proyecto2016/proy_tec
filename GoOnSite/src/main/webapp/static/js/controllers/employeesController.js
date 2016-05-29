@@ -74,8 +74,11 @@ goOnApp.controller('employeesController', function($scope, $http, $filter, uiGri
     	$scope.userModel.direccion = userRow.entity.direccion;
     	$scope.userModel.telefono = userRow.entity.telefono;
     	$scope.userModel.fch_nacimiento = new Date(userRow.entity.fch_nacimiento);
-    	$scope.userModel.rol_id_rol = 2;
-    	//$("select[name=rol]").val($scope.userModel.rol_id_rol); //SELECT DE MIERDA!
+    	$scope.userModel.rol_id_rol = userRow.entity.rol_id_rol;
+    	if(userRow.entity.rol_id_rol == 2)
+    	{
+    		$scope.userModel.id_sucursal = userRow.entity.sucursal.id_sucursal;
+    	}
     	
     	$("#userForm").addClass('hidden');
     	$("#userEditForm").removeClass('hidden');

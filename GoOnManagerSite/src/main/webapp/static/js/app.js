@@ -64,6 +64,7 @@
     
     goOnApp.controller('companyController', function($scope, $http, $location) {
         $scope.message = 'Ingrese los siguientes datos para completar el registro de una nueva empresa';
+        
         $scope.companyForm = {};
         $scope.companyForm.name = null;
         $scope.companyForm.trueName = null;
@@ -75,6 +76,7 @@
         $scope.companyForm.password = null;
         $scope.companyForm.countryId = null;
         $scope.companyForm.user = null;
+        $scope.companyForm.css = null;
         $scope.countries = null;
         
     	$http.get(AppName + 'countries').
