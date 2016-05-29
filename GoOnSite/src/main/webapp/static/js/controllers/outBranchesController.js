@@ -6,6 +6,21 @@ goOnApp.controller('outBranchesController', function($scope, $http, uiGridConsta
     
     i18nService.setCurrentLang('es');
    
+    $scope.markers = [];
+    $scope.branchesMarkers = [];
+   
+    
+    $scope.getBranches = function()
+    {
+    	$http.get(servicesUrl + 'getBranches').success(function(data, status, headers, config) 
+    	{
+        	$scope.branches = data;
+        	$scope.cargoMarkers();
+    	});
+    };
+    
+    $scope.getBranches();
+    
     //MAPA\\    
     $scope.map = new google.maps.Map(document.getElementById('map'), 
     {
@@ -22,11 +37,67 @@ goOnApp.controller('outBranchesController', function($scope, $http, uiGridConsta
     $scope.map.addListener('bounds_changed', function() 
     {
       searchBox.setBounds($scope.map.getBounds());
-    });
+    }); 
     
-    $scope.markers = [];
-    $scope.branchesMarkers = [];
     
+    $scope.cargoMarkers = function()
+    {
+    	//var infowindow = null;
+    	var contenido = "";
+    	
+    	
+    	angular.forEach($scope.branches, function(b, key)
+		{
+    		var i = key;
+    		i++; 
+    		 
+    		
+    		var infowindow = new google.maps.InfoWindow(
+	    	{
+	    		content: '<div id="content">' +
+      			'<div id="siteNotice">'+
+      			'</div>'+
+      			'<h3 id="firstHeading" class="firstHeading">' + b.nombre +'</h3>'+
+      			'<div id="bodyContent">'+
+      			'<p><b>Direccion:</b>&nbsp; ' + b.direccion + '</p>'+
+      			'<p><b>Telefono:</b>&nbsp; ' + b.telefono + '</p>'+
+      			'<p><b>Email:</b>&nbsp; ' + b.email + '</p>'+
+      			'</div></div>'
+	    	});
+    		
+			marker = new google.maps.Marker(
+			  {
+			    map: $scope.map,
+			    title: b.nombre,
+			    position: {lat: b.latitud, lng: b.longitud},
+			    label:i.toString(),
+			    title:b.nombre
+			  });
+			
+			bindInfoWindow(marker, $scope.map, infowindow, "");
+			
+			$scope.branchesMarkers.push(marker);
+		});
+    	/*
+    	for (var i = 0; i < $scope.branchesMarkers.length; i++) 
+    	{
+    		var marker = $scope.branchesMarkers[i];
+    		google.maps.event.addListener(marker, 'click', function () 
+    		{	    		
+	    		infowindow.setContent(contenido);
+	    		infowindow.open($scope.map, this);
+    		});
+    	}*/
+    	
+    }
+    
+    function bindInfoWindow(marker, map, infowindow, html) 
+    {
+        marker.addListener('click', function() {
+            //infowindow.setContent(html);
+            infowindow.open(map, marker);
+        });
+    } 
     
     searchBox.addListener('places_changed', function() 
     {
@@ -65,7 +136,6 @@ goOnApp.controller('outBranchesController', function($scope, $http, uiGridConsta
           }
         });                 
         $scope.map.fitBounds(bounds);        
-        $scope.$digest();
     });
     
     google.maps.event.trigger(map, 'resize');//refresh map

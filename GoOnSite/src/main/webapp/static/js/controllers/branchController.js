@@ -191,7 +191,7 @@ goOnApp.controller('branchController', function($scope, $http, uiGridConstants, 
         });                 
         $scope.map.fitBounds(bounds);
         $scope.branchForm.direccion = places[0].formatted_address;
-        $scope.actualizoMarker(places[0].geometry.location.lat(), places[0].geometry.location.lat());
+        $scope.actualizoMarker(places[0].geometry.location.lat(), places[0].geometry.location.lng());
         $scope.$digest();
     });
 	     

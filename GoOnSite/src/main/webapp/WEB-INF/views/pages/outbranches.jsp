@@ -10,7 +10,7 @@
 				<div><h4 class="modal-title">Mapa</h4></div>
 			</div>
 			<div class="panel-body">
-				<input id="pac-input" class="controls" type="text" placeholder="Search Box">
+				<input id="pac-input" class="controls" type="text" placeholder="Especificá tu ubicación">
 				<div id="map" style="height: 50%">
 				
 				</div>
