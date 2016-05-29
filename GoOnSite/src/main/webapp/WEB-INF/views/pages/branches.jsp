@@ -17,7 +17,7 @@
 </div>
 
 <div id="divBranchForm" class="hidden">
-	<div class="row" style="margin-top: 50px;">
+	<div class="row">
 		<div class="col-xs-1"></div>
 		<div class="col-xs-5">
 			<form class="form-horizontal" role="form" name="form" ng-submit="createBranch()">

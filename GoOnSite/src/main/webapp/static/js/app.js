@@ -63,6 +63,13 @@
     		templateUrl : tenantUrlPart + 'pages/company.html',
     		controller  : 'companyController'
     	})
+    	
+    	// route rot the outBranches page
+    	.when('/outbranches', {
+    		templateUrl : tenantUrlPart + 'pages/outbranches.html',
+    		controller  : 'outBranchesController'
+    	})
+    	
 		.otherwise({
 			redirectTo: '/'
     	});
