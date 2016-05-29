@@ -29,6 +29,7 @@ import com.springmvc.configuration.JwtUserDetailsServiceImpl;
 import com.springmvc.entities.main.Empresa;
 import com.springmvc.entities.main.Pais;
 import com.springmvc.entities.tenant.Rol;
+import com.springmvc.entities.tenant.Sucursal;
 import com.springmvc.entities.tenant.Usuario;
 import com.springmvc.enums.UserRol;
 import com.springmvc.exceptions.HttpNotFoundException;
@@ -118,7 +119,16 @@ public class TenantManagerRestController {
     	user.setRol_id_rol(UserRol.Admin.getValue());
     	user.SetAuthorities(null);
     	user.setUltimoResetPassword(new Date());
-    	tenantLogic.CreateTenant(company, user);
+    	
+    	Sucursal sucursal = new Sucursal();
+    	sucursal.setNombre(company.getNombre());
+    	sucursal.setDireccion(company.getDireccion());
+    	sucursal.setMail(user.getEmail());
+    	sucursal.setTelefono(company.getTelefono());
+    	sucursal.setLatitud(0);
+    	sucursal.setLongitud(0);
+    	
+    	tenantLogic.CreateTenant(company, user, sucursal);
     	
     	return new ResponseEntity<Void>(HttpStatus.CREATED);
     }

@@ -5,6 +5,7 @@ import java.util.List;
 import com.springmvc.entities.main.Empresa;
 import com.springmvc.entities.main.Pais;
 import com.springmvc.entities.main.Usuario;
+import com.springmvc.entities.tenant.Sucursal;
 
 public interface ITenantLogic 
 {
@@ -14,7 +15,7 @@ public interface ITenantLogic
 	
 	List<Pais> GetCountries();
 	
-	void CreateTenant(Empresa company, com.springmvc.entities.tenant.Usuario user)throws Exception;
+	void CreateTenant(Empresa company, com.springmvc.entities.tenant.Usuario user, Sucursal sucursal)throws Exception;
 
 	Pais GetCountry(long countryId);
 

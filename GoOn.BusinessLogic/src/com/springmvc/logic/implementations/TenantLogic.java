@@ -8,6 +8,7 @@ import com.springmvc.dataaccess.context.MainDAContext;
 import com.springmvc.entities.main.Empresa;
 import com.springmvc.entities.main.Pais;
 import com.springmvc.entities.main.Usuario;
+import com.springmvc.entities.tenant.Sucursal;
 import com.springmvc.logic.interfaces.ITenantLogic;
 
 @Component
@@ -27,14 +28,18 @@ public class TenantLogic implements ITenantLogic {
 		return user;
 	}
 
-	public void CreateTenant(Empresa company, com.springmvc.entities.tenant.Usuario user) throws Exception
+	public void CreateTenant(Empresa company, com.springmvc.entities.tenant.Usuario user, Sucursal sucursal) throws Exception
 	{
 		try
 		{
 			context.CreateTenant(company);
 			UsersLogic userLogic = new UsersLogic(company.getNombreTenant(), true);
 			userLogic.SetUpRoles();
+			user.setSucursal(sucursal);
 			userLogic.CreateUser(user);
+			//BranchesLogic branchLogic = new BranchesLogic(company.getNombreTenant());
+			//branchLogic.createBranch(sucursal);
+			
 		}
 		catch(Exception e)
 		{
