@@ -32,6 +32,7 @@
       <script src="<c:url value='/static/js/controllers/userPanelController.js' />"></script>
       <script src="<c:url value='/static/js/controllers/branchController.js' />"></script>
       <script src="<c:url value='/static/js/controllers/companyController.js' />"></script>
+      <script src="<c:url value='/static/js/controllers/outBranchesControllerr.js' />"></script>
     </head>
     <body>
 
