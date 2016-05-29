@@ -22,4 +22,6 @@ public interface ITenantLogic
 	Empresa GetCompany(String tenantid);
 	
 	List<Empresa> GetCompanies();
+	
+	void UpdateCompany(String tenantid, Empresa companyUpdateData);
 }

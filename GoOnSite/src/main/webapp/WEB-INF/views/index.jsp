@@ -40,7 +40,12 @@
             <nav class="navbar navbar-default">
             <div class="container">
                 <div class="navbar-header">
-                    <a class="navbar-brand"><b>{{company.nombre}}</b></a>
+                    <a class="navbar-brand">
+	                    <img alt="bebe" height="auto" src="http://cdn.revistagq.com/uploads/images/thumbs/es/gq/3/s/2016/13/tipologias_foto_whastapp_606053640_511x384.jpg" style="height: 50px; float: left;">
+	                    <div style="float: left; margin: 13px;">
+	                    	<b>{{company.nombre}}</b>
+	                   	</div>	
+  					</a>
                 </div>
 
                 <ul class="nav navbar-nav navbar-right">
@@ -64,8 +69,8 @@
 		                    <li ng-show="user != null && user.rol_id_rol == 1"><a href="#lines"><i class="fa fa-map-o"></i> Lineas</a></li>
 		                    <li ng-show="user != null && user.rol_id_rol == 1"><a href="#bus"><i class="fa fa-wrench"></i> Vehículos</a></li>
 		                    <li ng-show="user != null && user.rol_id_rol == 1"><a href="#employees"><i class="fa fa-users"></i> Personal</a></li>
-							<li ng-show="user != null && user.rol_id_rol == 1"><a href="#branches"><i class="fa fa-bars"></i> Sucursales</a></li>
-							<li ng-show="user != null && user.rol_id_rol == 1"><a href="#parameters"><i class="fa fa-building"></i> Parámetros</a></li>
+							<li ng-show="user != null && user.rol_id_rol == 1"><a href="#branches"><i class="fa fa-building"></i> Sucursales</a></li>
+							<li ng-show="user != null && user.rol_id_rol == 1"><a href="#parameters"><i class="fa fa-bars"></i> Parámetros</a></li>
 	                    </ul>
                		</li>
                     <li ng-show="user == null || user.rol_id_rol != 1"><a href="#outBranches"><i class="fa fa-building"></i> Nuestras Sucursales</a></li>
@@ -121,7 +126,7 @@
     </footer>
     
     <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-	  <div class="modal-dialog" role="document" style="width: 340px">
+	  <div class="modal-dialog" role="document" style="width: 400px">
 	    <div class="modal-content">
 	      <div class="modal-header" style="background-color: green">
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
