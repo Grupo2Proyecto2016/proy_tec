@@ -32,7 +32,7 @@
       <script src="<c:url value='/static/js/controllers/userPanelController.js' />"></script>
       <script src="<c:url value='/static/js/controllers/branchController.js' />"></script>
       <script src="<c:url value='/static/js/controllers/companyController.js' />"></script>
-      <script src="<c:url value='/static/js/controllers/outBranchesControllerr.js' />"></script>
+      <script src="<c:url value='/static/js/controllers/outBranchesController.js' />"></script>
     </head>
     <body>
 
@@ -69,7 +69,7 @@
 							<li ng-show="user != null && user.rol_id_rol == 1"><a href="#parameters"><i class="fa fa-building"></i> Parámetros</a></li>
 	                    </ul>
                		</li>
-                    <li ng-show="user == null || user.rol_id_rol != 1"><a href="#outBranches"><i class="fa fa-building"></i> Nuestras Sucursales</a></li>
+                    <li ng-show="user == null || user.rol_id_rol != 1"><a href="#outbranches"><i class="fa fa-building"></i> Nuestras Sucursales</a></li>
                     
 					<!--DE INGRESO -->
                     <li ng-show="user == null"><a onclick="shorSignInForm()"><i class="fa fa-sign-in" aria-hidden="true"></i> Entrar</a></li>
