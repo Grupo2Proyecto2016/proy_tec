@@ -23,6 +23,14 @@
 				<div><h4 class="modal-title">Datos</h4></div>
 			</div>
 			<div class="panel-body">
+				<table class="table table-striped">
+   					<tr ng-repeat="b in branches track by $index">
+						<td>
+							<p><span class="badge pull-left">{{$index + 1}}</span>&nbsp; <b>{{b.nombre}}</b></p>
+							<p>{{b.direccion}}</p>
+						</td>			        
+					</tr>				
+				</table>
 			</div>
 		</div>
 	</div>

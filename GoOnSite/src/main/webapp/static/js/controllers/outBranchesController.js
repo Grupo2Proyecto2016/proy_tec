@@ -25,7 +25,7 @@ goOnApp.controller('outBranchesController', function($scope, $http, uiGridConsta
     $scope.map = new google.maps.Map(document.getElementById('map'), 
     {
         center: {lat: -34.894418, lng: -56.165775},
-        zoom: 13
+        zoom: 25
     });
     
     //Create the search box and link it to the UI element.
@@ -61,7 +61,7 @@ goOnApp.controller('outBranchesController', function($scope, $http, uiGridConsta
       			'<div id="bodyContent">'+
       			'<p><b>Direccion:</b>&nbsp; ' + b.direccion + '</p>'+
       			'<p><b>Telefono:</b>&nbsp; ' + b.telefono + '</p>'+
-      			'<p><b>Email:</b>&nbsp; ' + b.email + '</p>'+
+      			'<p><b>Email:</b>&nbsp; ' + b.mail + '</p>'+
       			'</div></div>'
 	    	});
     		
@@ -77,24 +77,13 @@ goOnApp.controller('outBranchesController', function($scope, $http, uiGridConsta
 			bindInfoWindow(marker, $scope.map, infowindow, "");
 			
 			$scope.branchesMarkers.push(marker);
-		});
-    	/*
-    	for (var i = 0; i < $scope.branchesMarkers.length; i++) 
-    	{
-    		var marker = $scope.branchesMarkers[i];
-    		google.maps.event.addListener(marker, 'click', function () 
-    		{	    		
-	    		infowindow.setContent(contenido);
-	    		infowindow.open($scope.map, this);
-    		});
-    	}*/
+		}); 
     	
     }
     
     function bindInfoWindow(marker, map, infowindow, html) 
     {
         marker.addListener('click', function() {
-            //infowindow.setContent(html);
             infowindow.open(map, marker);
         });
     } 
