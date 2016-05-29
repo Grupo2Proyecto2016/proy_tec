@@ -28,4 +28,14 @@ public class BranchesLogic {
 	{
 		return TenantContext.SucursalRepository.GetBranch(id);
 	}
+
+	public boolean TieneEmpleados(long id_sucursal) 
+	{
+		return TenantContext.SucursalRepository.TieneEmpleados(id_sucursal);
+	}
+
+	public void deleteBranch(long id_sucursal) 
+	{
+		TenantContext.SucursalRepository.deleteBranch(id_sucursal);
+	}
 }

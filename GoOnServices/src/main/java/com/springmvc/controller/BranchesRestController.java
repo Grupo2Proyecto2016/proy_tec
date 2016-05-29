@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.springmvc.entities.tenant.Sucursal;
 import com.springmvc.logic.implementations.BranchesLogic;
+import com.springmvc.logic.implementations.VehiculosLogic;
+import com.springmvc.requestWrappers.CustomResponseWrapper;
 
 @RestController
 @RequestMapping(value = "/{tenantid}")
@@ -34,5 +36,23 @@ public class BranchesRestController {
 		List<Sucursal> branches = bl.GetBranches();		
 		return new ResponseEntity<List<Sucursal>>(branches, HttpStatus.OK);		
     }
-
+	
+	
+	@RequestMapping(value = "/deleteBranch", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
+	public ResponseEntity<CustomResponseWrapper> DeleteBranch(@RequestBody long id_sucursal, @PathVariable String tenantid)
+	{
+		BranchesLogic bl = new BranchesLogic(tenantid);
+		CustomResponseWrapper respuesta = new CustomResponseWrapper();
+		if (bl.TieneEmpleados(id_sucursal))
+		{
+			respuesta.setMsg("No se puede eliminar la sucursal, tiene empleados asociados.");
+			respuesta.setSuccess(false);
+		}
+		else
+		{
+			bl.deleteBranch(id_sucursal);
+			respuesta.setSuccess(true);
+		}
+		return new ResponseEntity<CustomResponseWrapper>(respuesta, HttpStatus.OK);
+	}	
 }
