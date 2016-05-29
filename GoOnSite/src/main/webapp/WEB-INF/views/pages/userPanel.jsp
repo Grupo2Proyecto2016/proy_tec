@@ -9,7 +9,7 @@
 	<div class="row">
 		<div class="col-sm-7 col-sm-offset-1">
 			<div class="row">
-				<div class="container userPanel">
+				<div class="container userPanel fix-panel">
 					<div class="panel-group">
 						<div class="panel panel-default">
 							<div class="panel-heading">
@@ -27,7 +27,7 @@
 			</div>
 
 			<div class="row">
-				<div class="container userPanel">
+				<div class="container userPanel fix-panel">
 					<div class="panel-group">
 						<div class="panel panel-default">
 							<div class="panel-heading">
@@ -46,7 +46,7 @@
 		</div>
 
 		<div class="col-sm-3">
-			<div class="container userPanel">
+			<div class="container userPanel fix-panel">
 				<div class="panel-group">
 					<div class="panel panel-primary">
 						<div class="panel-heading">
@@ -105,7 +105,7 @@
 	<div class="modal fade" id="passwordModal" tabindex="-1" role="dialog"
 		aria-labelledby="myModalLabel">
 		<div class="modal-dialog" role="document">
-			<div class="modal-content" style="width: 380px">
+			<div class="modal-content" style="width: 400px">
 				<div class="modal-header warning">
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">

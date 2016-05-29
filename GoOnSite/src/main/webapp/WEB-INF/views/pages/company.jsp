@@ -6,7 +6,7 @@
 </div>
 
 <div id="userForm">
-	<div class="row" style="margin-top: 50px;">
+	<div class="row">
 		<div class="col-xs-2"></div>
 		<div class="col-xs-4">
 			<form class="form-horizontal" role="form" name="form" ng-submit="createCompany()">

@@ -125,7 +125,7 @@
 	    <div class="modal-content">
 	      <div class="modal-header" style="background-color: green">
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	        <h3 class="modal-title" style="color:white" id="myModalLabel">Ingreso al sitio</h3>
+	        <h3 class="modal-title" id="myModalLabel">Ingreso al sitio</h3>
 	      </div>
 	      <div class="modal-body">
  	        <form class="form-signin" id="loginForm" name="lform" role="form" ng-submit="signIn()">
@@ -150,7 +150,7 @@
 	    <div class="modal-content">
 	      <div class="modal-header" style="background-color: red">
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	        <h3 class="modal-title" style="color:white" id="myModalLabel">Error</h3>
+	        <h3 class="modal-title" id="myModalLabel">Error</h3>
 	      </div>
 	      <div class="modal-body">
  	        <h3>Ups! Ha ocurrido un error. Intente de nuevo en unos instantes.</h3>
@@ -160,6 +160,9 @@
 	</div>
 
 	<script>
+// 		$(document).ready(function(){
+// 			$('div.modal-backdrop.fade.in').remove();
+// 		});
 		$("#loginModal").on('hidden.bs.modal', function (e) {
 			$("#loginAlert").hide();
 		});

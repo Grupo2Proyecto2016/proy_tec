@@ -68,7 +68,6 @@ goOnApp.controller('userPanelController', function($scope, $http, $location, uiG
         	if(response.status == 200)
         	{
         		$scope.hideUserDeleteDialog();
-        		$('div.modal-backdrop.fade.in').remove();
         		$scope.$parent.signOut();
         	}
 		});

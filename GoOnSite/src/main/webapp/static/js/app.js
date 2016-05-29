@@ -68,7 +68,7 @@
     	});
     });
 
-    goOnApp.service('authInterceptor', function($q) {
+    goOnApp.service('authInterceptor', function($q, $location) {
         var service = this;
         
         service.responseError = function(response) {
@@ -80,9 +80,11 @@
             	}
             	else
             	{
-            		$("#loginModal").modal("toggle");
+            		if($location.url() != "/" && $location.url() != "/home")
+            		{
+        				$("#loginModal").modal("toggle");
+            		}
             	}
-                //window.location = document.location.origin + document.location.pathname;
             }
             else if(response.status == 500)
             {
