@@ -47,12 +47,12 @@ goOnApp.controller('branchController', function($scope, $http, uiGridConstants, 
 			}
 			$http.post(servicesUrl +'createBranch', JSON.stringify($scope.branchForm))
 			.success(function()
-			{
-				$.unblockUI();
+			{				
 				$scope.hideForm();
 		    	$scope.branchForm = {};
-				$scope.showSuccessAlert("Sucursal creada.");			
-				//$scope.getBranches();				
+		    	$scope.getBranches();
+		    	$.unblockUI();
+				$scope.showSuccessAlert("Sucursal creada.");							
 			})
 			.error(function()
 			{

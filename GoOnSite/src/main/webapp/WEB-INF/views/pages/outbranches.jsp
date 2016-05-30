@@ -7,7 +7,7 @@
 	<div class="col-xs-7">
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<div><h4 class="modal-title">Mapa</h4></div>
+				<div><h4 class="modal-title">Ubicaciones</h4></div>
 			</div>
 			<div class="panel-body">
 				<input id="pac-input" class="controls" type="text" placeholder="Especificá tu ubicación">
@@ -20,14 +20,16 @@
 	<div class="col-xs-5">
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<div><h4 class="modal-title">Datos</h4></div>
+				<div><h4 class="modal-title">Lista de Sucursales</h4></div>
 			</div>
 			<div class="panel-body">
 				<table class="table table-striped">
    					<tr ng-repeat="b in branches track by $index">
 						<td>
-							<p><span class="badge pull-left">{{$index + 1}}</span>&nbsp; <b>{{b.nombre}}</b></p>
-							<p>{{b.direccion}}</p>
+							<div><i class="fa fa-hashtag fa-lg" aria-hidden="true"></i><b>{{$index + 1}}-&nbsp; {{b.nombre}}</b></div>
+							<div><i class="fa fa-building fa-lg" aria-hidden="true"></i>&nbsp;{{b.direccion}}</div>
+							<div><i class="fa fa-skype fa-lg" aria-hidden="true"></i>&nbsp;<a ng-href="skype:{{b.telefono}}?call">>{{b.telefono}}</a></div>							
+							<div><i class="fa fa-envelope fa-lg" aria-hidden="true"></i>&nbsp;<a ng-href="mailto:{{b.mail}}?Subject=Contacto desde GoOnSite">{{b.mail}}</a></div>
 						</td>			        
 					</tr>				
 				</table>
