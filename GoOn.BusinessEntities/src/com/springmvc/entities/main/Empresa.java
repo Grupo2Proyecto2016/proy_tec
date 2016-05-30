@@ -14,6 +14,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Empresa {
@@ -28,30 +31,24 @@ public class Empresa {
 	private String direccion;
 	private String nombretenant;
 	private String css;
-	
+	@JsonIgnore
+	private byte[] logocontent;
+
+	@Transient
+	public String logo;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="id_pais", nullable=false, updatable=false)
 	private Pais pais;
-	
-//	@OneToMany(cascade = CascadeType.ALL , fetch = FetchType.LAZY)	
-//    @JoinColumn(name = "id_empresa")
-//    private List<Contacto> contactos;
-	
-	/*@OneToMany(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
-	@JoinTable(name="empresa_modulo", joinColumns={ @JoinColumn(name="id_empresa", referencedColumnName="id_empresa") },
-			   inverseJoinColumns={ @JoinColumn(name="id_modulo", referencedColumnName="id_modulo", unique=true) })*/
-//	@ManyToMany(targetEntity=Modulo.class)	
-//	private List<Modulo> modulos;
-//	
-//	public List<Modulo> getModulos() {
-//		return modulos;
-//	}
 
-//	public void setModulos(List<Modulo> modulos) {
-//		this.modulos = modulos;
-//	}
+	public byte[] getLogocontent() {
+		return logocontent;
+	}
 
+	public void setLogocontent(byte[] logocontent) {
+		this.logocontent = logocontent;
+	}
+	
 	public String getCss() {
 		return css;
 	}

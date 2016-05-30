@@ -112,6 +112,10 @@ public class MainDAContext {
 	{
 		Empresa company = GetCompany(tenantid);
 		Pais country = GetCountry(companyUpdateData.getPais().getId_pais());
+		if(companyUpdateData.logo != null)
+		{
+			company.setLogocontent(companyUpdateData.getLogocontent());
+		}
 		company.setNombre(companyUpdateData.getNombre());
 		company.setDireccion(companyUpdateData.getDireccion());
 		company.setRazonSocial(companyUpdateData.getRazonSocial());

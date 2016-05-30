@@ -111,7 +111,7 @@
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
-					<h3 class="modal-title" style="color: white" id="myModalLabel">Cambio de contraseña</h3>
+					<h3 class="modal-title" id="myModalLabel">Cambio de contraseña</h3>
 				</div>
 				<div class="modal-body">
 					<form class="form-signin" id="loginForm" name="passForm"
@@ -155,12 +155,12 @@
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
-					<h5 class="modal-title">
+					<h3 class="modal-title">
 						Solicitud de confirmación
-						</h5>
+					</h3>
 				</div>
 				<div class="modal-body">
-					<h4>¿Está seguro que deseas dar de baja tu usuario?</h4>
+					<h5>¿Está seguro que deseas dar de baja tu usuario?</h5>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
@@ -227,15 +227,6 @@
 								<input type="text" pattern="[0-9]+"
 									title="Solo se aceptan números" name="telefono"
 									class="form-control" ng-model="userModel.telefono" required>
-							</div>
-						</div>
-
-						<div class="form-group">
-							<label class="control-label col-sm-4" for="username">Nombre de usuario:</label>
-							<div class="col-sm-6">
-								<input type="text" autocomplete="off" name="username"
-									placeholder="username" class="form-control"
-									ng-model="userModel.usrname" required userexists>
 							</div>
 						</div>
 					</form>

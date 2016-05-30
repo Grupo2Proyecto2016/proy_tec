@@ -1,5 +1,6 @@
 package com.springmvc.controller;
 
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,9 @@ import com.springmvc.logic.implementations.UsersLogic;
 import com.springmvc.logic.interfaces.ITenantLogic;
 import com.springmvc.requestWrappers.TenantAuthWrapper;
 import com.springmvc.utils.UserContext;
+
+import java.io.UnsupportedEncodingException;
+
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
@@ -73,6 +77,10 @@ public class AuthenticationRestController {
     public ResponseEntity<Empresa>  getCompany(@PathVariable String tenantid)
     {
     	Empresa company = tenantLogic.GetCompany(tenantid);
+    	if(company.getLogocontent() != null)
+    	{
+    		company.logo = new String(company.getLogocontent());
+    	}
     	return new ResponseEntity<Empresa>(company, HttpStatus.OK);
     }
     

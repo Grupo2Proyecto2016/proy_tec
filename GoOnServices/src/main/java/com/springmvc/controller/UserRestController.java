@@ -153,7 +153,7 @@ public class UserRestController
 	@RequestMapping(value = "/updateClient", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
     public ResponseEntity<Void> UpdateClient(@RequestBody UserWrapper user, @PathVariable String tenantid, HttpServletRequest request)
     {
-		String username = new UserContext().GetUsername(request);
+		String username = context.GetUsername(request);
 		Usuario userUpdateData = new Usuario();
 		userUpdateData.setUsrname(username);
 		userUpdateData.setNombre(user.nombre);

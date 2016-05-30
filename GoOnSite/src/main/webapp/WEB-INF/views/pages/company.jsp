@@ -74,7 +74,7 @@
 				  <div class="form-group">
 				    <label class="control-label col-sm-4" for="logo">Logo:</label>
 				    <div class="col-sm-8">
-				    	<input type="file" class="form-control" name="logo" accept=".png" ng-model="companyForm.logo" required>
+				    	<input type="file" class="form-control" name="logo" accept=".png" fileread="companyForm.logo">
 			    	</div>
 				  </div>
 				  <div class="form-group">
@@ -83,6 +83,9 @@
 					    <select name="country" class="form-control" ng-model="$parent.company.css" ng-options="style.value as style.name for style in styles" required>
 				        </select>
 			    	</div>
+				  </div>
+				  <div class="form-group has-error text-center">
+					<span class="help-block">Los cambios no tendrán efecto para todos los usuarios hasta que no presione ACTUALIZAR</span>
 				  </div>
 				</div>
 			</form>

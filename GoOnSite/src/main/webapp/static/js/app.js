@@ -120,6 +120,8 @@
     // create the controller and inject Angular's $scope
     goOnApp.controller('mainController', function($scope, $http, $location)
 	{
+    	$scope.userInfoReady = false;
+    	$scope.companyInfoReady = false;
     	$scope.user = null;
     	$scope.company = null;
     	$scope.loginForm = null;
@@ -129,6 +131,9 @@
     		$http.get(servicesUrl + 'getCompany')
 	        	.then(function(response) {
 	        		$scope.company = response.data;
+	        		$("#logo").attr("src", $scope.company.logo);
+	        		
+	        		$scope.companyInfoReady = true;
         	});
     	};
     	
@@ -145,6 +150,7 @@
     			{
     				$scope.user = null;
     			}
+	    		$scope.userInfoReady = true;
 	    	}
 		);
         
@@ -229,6 +235,25 @@
   	    }
   	  };
   	});
+    
+    goOnApp.directive("fileread", [function () {
+        return {
+            scope: {
+                fileread: "="
+            },
+            link: function (scope, element, attributes) {
+                element.bind("change", function (changeEvent) {
+                    var reader = new FileReader();
+                    reader.onload = function (loadEvent) {
+                        scope.$apply(function () {
+                            scope.fileread = loadEvent.target.result;
+                        });
+                    }
+                    reader.readAsDataURL(changeEvent.target.files[0]);
+                });
+            }
+        }
+    }]);
 
     $.blockUI.defaults.css.border = 'none'; 
     $.blockUI.defaults.css.padding = '15px';

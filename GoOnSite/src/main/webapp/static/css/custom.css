@@ -26,6 +26,15 @@ div.userPanel
 }
 
 /* MODALS */
+div.modal-backdrop
+{
+	z-index: 998 !important;
+}
+
+div.modal
+{
+	z-index: 999 !important;	
+}
 
 div.modal-header h3
 {
@@ -88,12 +97,20 @@ nav.navbar
 
 a.navbar-brand
 {
-	padding:2%;	
+	padding:3px;	
 } 
 a.navbar-brand img
 {
 	height: 100%;
 	float: left;
+}
+a.navbar-brand b
+{
+    padding-left: 8px;
+    position: relative;
+    bottom: -15px;
+    top: 15px;
+    white-space: nowrap;
 }
 
 a.btn-md i
@@ -144,7 +161,7 @@ header, footer
 {
 	position: fixed;
     width: 100%;
-    z-index: 999;
+    z-index: 997;
 }
 
 footer p

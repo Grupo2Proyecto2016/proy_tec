@@ -69,6 +69,7 @@ goOnApp.controller('userPanelController', function($scope, $http, $location, uiG
         	{
         		$scope.hideUserDeleteDialog();
         		$scope.$parent.signOut();
+        		$("div.modal-backdrop").remove();
         	}
 		});
     };

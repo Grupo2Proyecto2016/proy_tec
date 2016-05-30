@@ -1,12 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<html ng-app="goOnApp" ng-controller="mainController as main" ng-show="company != null">
+<html ng-app="goOnApp" ng-controller="mainController as main">
     <head>
       <meta charset=UTF-8">
       <!-- STYLES -->
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.6/{{company.css}}/bootstrap.min.css" />
-      <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.css" />
 	  <link rel="stylesheet" href="<c:url value='/static/css/custom.css' />" />
+      <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.css" />
 	  <link rel="stylesheet" href="<c:url value='/static/css/ui-grid.min.css' />" />
       
       <!-- SCRIPTS -->
@@ -33,26 +32,18 @@
       <script src="<c:url value='/static/js/controllers/branchController.js' />"></script>
       <script src="<c:url value='/static/js/controllers/companyController.js' />"></script>
       <script src="<c:url value='/static/js/controllers/outBranchesController.js' />"></script>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.6/{{company.css}}/bootstrap.min.css" />
     </head>
-    <body>
+    <body style="visibility: hidden">
 
         <!-- HEADER AND NAVBAR -->
         <header>
             <nav class="navbar navbar-default">
             <div class="container">
                 <div class="navbar-header">
-                    <a class="navbar-brand">
-                    	<div>
-                    		<div class="col-sm-6">
-			                    <img ng-show="company.logo != null" src="http://cdn.revistagq.com/uploads/images/thumbs/es/gq/3/s/2016/13/tipologias_foto_whastapp_606053640_511x384.jpg">
-                    		</div>
-		                    <div ng-show="company.logo == null" class="col-sm-6" style="float: left; padding: 15%;">
-		                    	<b>{{company.nombre}}</b>
-		                   	</div>
-		                   	<div ng-show="company.logo != null" class="col-sm-6" style="float: left; padding: 9%;">
-		                    	<b>{{company.nombre}}</b>
-		                   	</div>	
-                    	</div>
+                    <a class="navbar-brand pull-left">
+	                    <img id="logo" ng-show="company.logo != null" src="">
+                    	<b>{{company.nombre}}</b>
   					</a>
                 </div>
 
@@ -173,9 +164,13 @@
 	</div>
 
 	<script>
-// 		$(document).ready(function(){
-// 			$('div.modal-backdrop.fade.in').remove();
-// 		});
+		$(document).ready(function(){
+			setTimeout(function(){
+				$('body').css('visibility', 'visible');
+			}, 1200);
+			
+		});
+		
 		$("#loginModal").on('hidden.bs.modal', function (e) {
 			$("#loginAlert").hide();
 		});
