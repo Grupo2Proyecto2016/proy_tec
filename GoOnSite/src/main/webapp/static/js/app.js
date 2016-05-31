@@ -100,6 +100,11 @@
             {
             	$("#errorModal").modal("toggle");
             }
+            else if(response.status == 403)
+            {
+            	$location.path('home');
+            	$("div.modal-backdrop").remove();
+            }
             return $q.resolve(response);
         };
     })

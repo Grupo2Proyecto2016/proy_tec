@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +21,7 @@ import com.springmvc.requestWrappers.CustomResponseWrapper;
 @RequestMapping(value = "/{tenantid}")
 public class BranchesRestController {
 	
-	
+	@Secured({"ROLE_ADMIN"})
 	@RequestMapping(value = "/createBranch", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
     public ResponseEntity<Void> CreateBranch(@RequestBody Sucursal sucursal, @PathVariable String tenantid)
     {
@@ -38,6 +39,7 @@ public class BranchesRestController {
     }
 	
 	
+	@Secured({"ROLE_ADMIN"})
 	@RequestMapping(value = "/deleteBranch", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
 	public ResponseEntity<CustomResponseWrapper> DeleteBranch(@RequestBody long id_sucursal, @PathVariable String tenantid)
 	{

@@ -172,12 +172,13 @@
 			
 		});
 		
-// 		$("#loginModal").on('hidden.bs.modal', function (e) {
-// 			$("#loginAlert").hide();
-// 		});
+		$("#loginModal").on('hidden.bs.modal', function (e) {
+			$("#loginAlert").hide();
+		});
 		
 		function shorSignInForm()
 		{
+			$("#loginAlert").hide()
 			$("#loginModal").modal("toggle");
 		}
 		

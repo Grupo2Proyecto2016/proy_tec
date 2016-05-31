@@ -23,7 +23,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 @Configuration
 @EnableWebSecurity
 @ComponentScan(basePackages = {"com.springmvc", "com.springmvc.logic"})
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(securedEnabled = true)
 @EnableWebMvc
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	

@@ -8,6 +8,7 @@ import java.util.ListIterator;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +28,7 @@ public class BusesRestController {
 	
     private IVehiculosLogic vehiculosLogic;
 
+    @Secured({"ROLE_ADMIN"})
 	@RequestMapping(value = "/getBuses", method = RequestMethod.GET)
     public ResponseEntity<List<Vehiculo>>  getBuses(@PathVariable String tenantid)
     {
@@ -34,6 +36,7 @@ public class BusesRestController {
     	return new ResponseEntity<List<Vehiculo>>(buses, HttpStatus.OK);
     }
 	
+    @Secured({"ROLE_ADMIN"})
 	@RequestMapping(value = "/createBus", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
     public ResponseEntity<Void> CreateBus(@RequestBody Vehiculo vehiculo, @PathVariable String tenantid)
     {
@@ -51,6 +54,7 @@ public class BusesRestController {
 		return new ResponseEntity<Void>(HttpStatus.CREATED);		
     }
 	
+    @Secured({"ROLE_ADMIN"})
 	@RequestMapping(value = "/deleteBus", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
     public ResponseEntity<CustomResponseWrapper> DeleteBus(@RequestBody long id_vehiculo, @PathVariable String tenantid)
     {
