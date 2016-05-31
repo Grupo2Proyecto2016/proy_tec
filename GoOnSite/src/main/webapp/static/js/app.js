@@ -70,6 +70,12 @@
     		controller  : 'outBranchesController'
     	})
     	
+    	// route rot the parameters page
+    	.when('/parameters', {
+    		templateUrl : tenantUrlPart + 'pages/parameters.html',
+    		controller  : 'parametersController'
+    	})
+    	
 		.otherwise({
 			redirectTo: '/'
     	});

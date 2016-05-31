@@ -32,6 +32,7 @@
       <script src="<c:url value='/static/js/controllers/branchController.js' />"></script>
       <script src="<c:url value='/static/js/controllers/companyController.js' />"></script>
       <script src="<c:url value='/static/js/controllers/outBranchesController.js' />"></script>
+      <script src="<c:url value='/static/js/controllers/parametersController.js' />"></script>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.6/{{company.css}}/bootstrap.min.css" />
     </head>
     <body style="visibility: hidden">
@@ -64,12 +65,12 @@
 	                    </a>
 	                    <ul class="dropdown-menu admin-menu">
 	                    	<li ng-show="user != null && user.rol_id_rol == 1"><a href="#company"><i class="fa fa-cog"></i> Empresa</a></li>
-	                    	<li ng-show="user != null && user.rol_id_rol == 1"><a href="#manageTravels"><i class="fa fa-calendar-check-o"></i> Viajes</a></li>
-		                    <li ng-show="user != null && user.rol_id_rol == 1"><a href="#lines"><i class="fa fa-map-o"></i> Lineas</a></li>
-		                    <li ng-show="user != null && user.rol_id_rol == 1"><a href="#bus"><i class="fa fa-wrench"></i> Vehículos</a></li>
-		                    <li ng-show="user != null && user.rol_id_rol == 1"><a href="#employees"><i class="fa fa-users"></i> Personal</a></li>
-							<li ng-show="user != null && user.rol_id_rol == 1"><a href="#branches"><i class="fa fa-building"></i> Sucursales</a></li>
 							<li ng-show="user != null && user.rol_id_rol == 1"><a href="#parameters"><i class="fa fa-bars"></i> Parámetros</a></li>
+							<li ng-show="user != null && user.rol_id_rol == 1"><a href="#branches"><i class="fa fa-building"></i> Sucursales</a></li>
+		                    <li ng-show="user != null && user.rol_id_rol == 1"><a href="#employees"><i class="fa fa-users"></i> Personal</a></li>
+		                    <li ng-show="user != null && user.rol_id_rol == 1"><a href="#bus"><i class="fa fa-wrench"></i> Vehículos</a></li>
+		                    <li ng-show="user != null && user.rol_id_rol == 1"><a href="#lines"><i class="fa fa-map-o"></i> Lineas</a></li>
+	                    	<li ng-show="user != null && user.rol_id_rol == 1"><a href="#manageTravels"><i class="fa fa-calendar-check-o"></i> Viajes</a></li>
 	                    </ul>
                		</li>
                     <li ng-show="user == null || user.rol_id_rol != 1"><a href="#outbranches"><i class="fa fa-building"></i> Nuestras Sucursales</a></li>
@@ -171,9 +172,9 @@
 			
 		});
 		
-		$("#loginModal").on('hidden.bs.modal', function (e) {
-			$("#loginAlert").hide();
-		});
+// 		$("#loginModal").on('hidden.bs.modal', function (e) {
+// 			$("#loginAlert").hide();
+// 		});
 		
 		function shorSignInForm()
 		{

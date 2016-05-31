@@ -31,7 +31,7 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
 		com.springmvc.entities.tenant.Usuario tenantUser = null;
 		com.springmvc.entities.main.Usuario user = null;
 		
-		if(tenant != null)//TODO: Cambiar la condicion luego de las pruebas
+		if(tenant != null)
 		{
 			tenantUser = new UsersLogic(tenant).GetUserByName(username);
 			if (tenantUser == null) 
