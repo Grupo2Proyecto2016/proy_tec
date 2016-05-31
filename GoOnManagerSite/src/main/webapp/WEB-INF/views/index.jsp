@@ -19,6 +19,7 @@
 	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.js"></script>
 	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.js"></script>
       <script src="<c:url value='/static/js/app.js' />"></script>
+	  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXLMRyM-qhBcFx4Lvv6XxACYvWYY8ey-U&libraries=places" async defer></script>      
     </head>
     <body ng-controller="mainController as main">
 

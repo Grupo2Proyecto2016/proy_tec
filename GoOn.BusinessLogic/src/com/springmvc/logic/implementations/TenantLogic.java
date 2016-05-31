@@ -33,12 +33,16 @@ public class TenantLogic implements ITenantLogic {
 		try
 		{
 			context.CreateTenant(company);
+			
 			UsersLogic userLogic = new UsersLogic(company.getNombreTenant(), true);
+			
+			BranchesLogic branchLogic = new BranchesLogic(company.getNombreTenant());
+			branchLogic.createBranch(sucursal);
+			
 			userLogic.SetUpRoles();
-			user.setSucursal(sucursal);
+			//user.setSucursal(sucursal);
 			userLogic.CreateUser(user);
-			//BranchesLogic branchLogic = new BranchesLogic(company.getNombreTenant());
-			//branchLogic.createBranch(sucursal);
+					
 			
 		}
 		catch(Exception e)

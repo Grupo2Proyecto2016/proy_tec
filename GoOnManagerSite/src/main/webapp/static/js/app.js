@@ -64,6 +64,7 @@
     
     goOnApp.controller('companyController', function($scope, $http, $location) {
         $scope.message = 'Ingrese los siguientes datos para completar el registro de una nueva empresa';
+        $scope.error_message = '';
         
         $scope.companyForm = {};
         $scope.companyForm.name = null;
@@ -75,6 +76,8 @@
         $scope.companyForm.username = null;
         $scope.companyForm.password = null;
         $scope.companyForm.countryId = null;
+        $scope.companyForm.latitud = null;
+        $scope.companyForm.longitud = null;
         $scope.companyForm.user = null;
         $scope.companyForm.css = null;
         $scope.countries = null;
@@ -92,7 +95,13 @@
     		if(!$scope.form.$invalid)
     		{
     			$.blockUI();
-    			
+    			if (($scope.companyForm.latitud == null) || ($scope.companyForm.longitud == null))
+    			{
+    				$.unblockUI();
+    				$scope.error_message = 'Debe serleccionar un punto en el mapa.';    				
+    				$("#errorModal").modal("toggle");
+    				return;
+    			}
     			$http.post(AppName +'createCompany', JSON.stringify($scope.companyForm))
     			.success(function()
 				{
@@ -102,11 +111,128 @@
     			.error(function()
 				{
     				$.unblockUI();
+    				$scope.error_message = ' Ha ocurrido un error al crear la empresa. Intente de nuevo en unos instantes.';    				
     				$("#errorModal").modal("toggle");
     			})
     			;    			
     		}
     	};
+    	
+    	$scope.map = new google.maps.Map(document.getElementById('map'), 
+	    {
+	        center: {lat: -34.894418, lng: -56.165775},
+	        zoom: 13
+	    });
+    	
+    	// Create the search box and link it to the UI element.
+        var input = document.getElementById('pac-input');
+        var searchBox = new google.maps.places.SearchBox(input);
+        $scope.map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+        
+        //Bias the SearchBox results towards current map's viewport.
+        $scope.map.addListener('bounds_changed', function() 
+        {
+          searchBox.setBounds($scope.map.getBounds());
+        });
+        
+        $scope.markers = [];
+        
+        searchBox.addListener('places_changed', function() 
+	    {
+	    	var places = searchBox.getPlaces();
+
+	        if (places.length == 0) 
+	        {
+	          return;
+	        }
+	        
+	        //Clear out the old markers.
+	        $scope.markers.forEach(function(marker) 
+	        {
+	          marker.setMap(null);
+	        });
+	        $scope.markers = [];
+	        
+	     // For each place, get the icon, name and location.
+	        var bounds = new google.maps.LatLngBounds();
+	        places.forEach(function(place) 
+	        {
+	         
+	       // Create a marker for each place.
+	          $scope.markers.push(new google.maps.Marker({
+	            map: $scope.map,
+	            title: place.name,
+	            position: place.geometry.location
+	          }));
+
+	          if (place.geometry.viewport) {
+	            // Only geocodes have viewport.
+	            bounds.union(place.geometry.viewport);
+	          } else {
+	            bounds.extend(place.geometry.location);
+	          }
+	        });                 
+	        $scope.map.fitBounds(bounds);
+	        $scope.companyForm.address = places[0].formatted_address;
+	        $scope.actualizoMarker(places[0].geometry.location.lat(), places[0].geometry.location.lng());
+	        $scope.$digest();
+	    });
+        
+        $scope.map.addListener('click', function(e) 
+	    {
+	    	//Clear out the old markers.
+	        $scope.markers.forEach(function(marker) 
+	        {
+	          marker.setMap(null);
+	        });
+	        $scope.markers = [];
+	        
+	    	$scope.placeMarkerAndPanTo(e.latLng, $scope.map);
+		});
+        
+        $scope.placeMarkerAndPanTo = function (latLng, map) 
+        {
+      	  var marker = new google.maps.Marker({
+      	    position: latLng,
+      	    map: $scope.map
+      	  });
+      	  $scope.markers.push(marker);
+      	  var l = latLng.lat();
+      	  var g = latLng.lng();
+      	  $scope.actualizoMarker(l, g);
+      	  $scope.map.panTo(latLng);
+      	  //
+      	  var elevationService = new google.maps.ElevationService();
+      	  var requestElevation = 
+      	  {
+      		'locations': [marker.getPosition()]
+      	  };  	  
+       	 elevationService.getElevationForLocations(requestElevation, function(results, status) 
+       	 {
+      	    if (status == google.maps.ElevationStatus.OK) {
+      	      if (results[0]) 
+      	      {
+      	        if (parseFloat(results[0].elevation) < 1)
+      	        {
+      	        	//Es Agua
+      	        	marker.setMap(null);
+      	        	$scope.markers = [];
+      	        	$scope.error_message = 'Punto del mapa incorrecto, esta en el agua!';
+      	        	$scope.companyForm.latitud = null;
+      	        	$scope.companyForm.longitud = null;
+      	        	$scope.$digest();
+    				$("#errorModal").modal("toggle");
+      	        }  	    	  
+      	      }
+      	    }
+      	  });
+       	}
+        
+        $scope.actualizoMarker = function (lat, lng)
+        {
+        	$scope.companyForm.latitud = lat;    	                  
+        	$scope.companyForm.longitud = lng;
+        };    
     	
     	$scope.changeView = function(view)
     	{

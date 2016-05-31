@@ -125,8 +125,8 @@ public class TenantManagerRestController {
     	sucursal.setDireccion(company.getDireccion());
     	sucursal.setMail(user.getEmail());
     	sucursal.setTelefono(company.getTelefono());
-    	sucursal.setLatitud(0);
-    	sucursal.setLongitud(0);
+    	sucursal.setLatitud(companyWrapper.getLatitud());
+    	sucursal.setLongitud(companyWrapper.getLongitud());
     	
     	tenantLogic.CreateTenant(company, user, sucursal);
     	
