@@ -31,6 +31,7 @@ public class CompanyRestController
 	@Autowired 
     private ITenantLogic tenantLogic;
 	
+	@Secured({"ROLE_ADMIN"})
 	@RequestMapping(value = "/updateCompany", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
     public ResponseEntity<Void> UpdateCompany(@RequestBody Empresa company, @PathVariable String tenantid)
     {

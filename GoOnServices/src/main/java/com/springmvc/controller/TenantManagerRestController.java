@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 ///import org.springframework.mobile.device.Device;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -77,6 +78,7 @@ public class TenantManagerRestController {
     	}
     }
     
+    @Secured({"ROLE_ADMIN"})
     @RequestMapping(value = "/getCompanies", method = RequestMethod.GET)
     public ResponseEntity<List<Empresa>>  getCompany()
     {
@@ -84,6 +86,7 @@ public class TenantManagerRestController {
     	return new ResponseEntity<List<Empresa>>(companies, HttpStatus.OK);
     }
     
+    @Secured({"ROLE_ADMIN"})
     @RequestMapping(value="/getTenantAdmin", method = RequestMethod.GET)
     public ResponseEntity<Usuario>GetTenantAdmin(@RequestParam(value="tenantId") String tenantId)
     {
@@ -98,6 +101,7 @@ public class TenantManagerRestController {
     	return countries;
     }
     
+    @Secured({"ROLE_ADMIN"})
     @RequestMapping(value = "createCompany", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
     public ResponseEntity<Void> CreateCompany(@RequestBody CompanyWrapper companyWrapper) throws Exception
     {
