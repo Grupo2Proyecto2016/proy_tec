@@ -8,7 +8,9 @@ import com.springmvc.dataaccess.context.MainDAContext;
 import com.springmvc.entities.main.Empresa;
 import com.springmvc.entities.main.Pais;
 import com.springmvc.entities.main.Usuario;
+import com.springmvc.entities.tenant.Parametro;
 import com.springmvc.entities.tenant.Sucursal;
+import com.springmvc.enums.Parameter;
 import com.springmvc.logic.interfaces.ITenantLogic;
 
 @Component
@@ -33,8 +35,10 @@ public class TenantLogic implements ITenantLogic {
 		try
 		{
 			context.CreateTenant(company);
-			UsersLogic userLogic = new UsersLogic(company.getNombreTenant(), true);
+			UsersLogic userLogic = new UsersLogic(company.getNombreTenant(), true);//CREA LAS TABLAS
 			userLogic.SetUpRoles();
+			ParametersLogic paramLogic = new ParametersLogic(company.getNombreTenant());
+			paramLogic.SetUpParameters();
 			user.setSucursal(sucursal);
 			userLogic.CreateUser(user);
 			//BranchesLogic branchLogic = new BranchesLogic(company.getNombreTenant());
@@ -47,6 +51,8 @@ public class TenantLogic implements ITenantLogic {
 		}
 	}
 	
+	
+
 	@Override
 	public List<Pais> GetCountries() {
 		List<Pais> countries = context.GetCountries();
