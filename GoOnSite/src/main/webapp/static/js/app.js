@@ -127,6 +127,10 @@
         $httpProvider.interceptors.push('tokenInterceptor');
     }])
     
+     goOnApp.config(['$compileProvider',function($compileProvider) {
+        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|skype):/);
+    }])
+    
     
     // create the controller and inject Angular's $scope
     goOnApp.controller('mainController', function($scope, $http, $location)
