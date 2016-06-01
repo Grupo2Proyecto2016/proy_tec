@@ -15,6 +15,115 @@
 	<div class="col-xs-1"></div>
 </div>
 
-<div id="divLinesForm" class="hidden">
-
+<div id="divLineForm" class="hidden">
+	<div class="row">
+		<div class="col-xs-1"></div>
+		<div class="col-xs-10">			
+			<form class="form-horizontal" role="form" name="form" ng-submit="createLine()">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<div> 
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="hideForm()">
+							<span aria-hidden="true">×</span>
+							</button> 
+							<h4 class="modal-title">Datos Básicos</h4>
+						</div>
+					</div>
+					<div class="panel-body">											
+						<div class="form-group">
+						    <div class="col-sm-6">
+							    <label class="control-label col-sm-3" for="origen">Desde:</label>
+							    <div class="col-sm-9">
+							    	<input type="text" class="form-control" name="origen" ng-model="lineForm.origen" required>
+						    	</div>
+					    	</div>
+					    	<div class="col-sm-6">
+						    	<label class="control-label col-sm-3" for="destino">Hasta:</label>
+							    <div class="col-sm-9">
+							    	<input type="text" class="form-control" name="destino" ng-model="lineForm.destino" required>
+						    	</div>
+					    	</div>
+				    	</div>				
+				    	<div class="form-group">
+				    		<div class="col-sm-6">
+								<label class="control-label col-sm-3" for="numero">Número:</label>
+								<div class="col-sm-9">
+									<input type="text" pattern="[0-9]+" title="Solo se aceptan números" class="form-control" name="numero" ng-model="lineForm.numero" required>
+							    </div>
+							</div>
+							<div class="col-sm-6">
+								<label class="control-label col-sm-3" for="tiempo_estimado">Duración:</label>
+								<div class="col-sm-9">
+									<input type="text" pattern="[0-9]+" title="Solo se aceptan números" class="form-control" name="tiempo_estimado" ng-model="lineForm.tiempo_estimado" required>
+							    </div>				
+							</div>		    
+						</div>
+						<div class="form-group">
+							<div class="col-sm-6">
+					    		<label class="control-label col-sm-3" for="viaja_parado">Admite Parados:</label>
+								<div class="col-sm-9">
+								  <div class="checkbox">
+								    <label>
+								      <input type="checkbox" name="viaja_parado" ng-model="busForm.viaja_parado">
+								    </label>
+								  </div>
+								</div>						
+							</div>
+							<div class="col-sm-6">
+								<label class="control-label 	col-sm-3" for="costo_fijo">Valor Fijo (UYU):</label>
+								<div class="col-sm-9">
+									<input type="text" pattern="[0-9]+" title="Solo se aceptan números" class="form-control" name="costo_fijo" ng-model="lineForm.costo_fijo" required>
+							    </div>						    
+							</div>
+						</div>
+						<div class="form-group"> 
+			    		<div class="col-sm-12">
+			      			<button style="float: right" type="submit" class="btn btn-info">Crear</button>
+			    		</div>
+				    </div>
+		    	</div>
+		    	</div>
+			</form>			
+		</div>
+		<div class="col-xs-1"></div>
+	</div>
+	<div class="row">
+		<div class="col-xs-1"></div>	
+		<div class="col-xs-5">
+			<div class="panel panel-default">				
+				<div class="panel-heading">
+					<div> 
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="hideForm()">
+						<span aria-hidden="true">×</span>
+						</button> 
+						<h4 class="modal-title">Mapa
+							<button type="button" class="btn btn-default btn-xs" id="btnRuta"><i class="fa fa-road fa-lg"></i>Trazar Ruta</button>
+						</h4>
+						
+					</div>				
+				</div>
+				<div class="panel-body">
+					<input id="pac-input" class="controls" type="text" placeholder="Search Box">
+					<div id="map" style="height: 50%">
+					
+ 					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-5">
+			<div class="panel panel-default">				
+				<div class="panel-heading">
+					<div> 
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="hideForm()">
+						<span aria-hidden="true">×</span>
+						</button> 
+						<h4 class="modal-title">Lista Paradas</h4>
+					</div>				
+				</div>
+				<div class="panel-body">					
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-1"></div>		
+	</div>
 </div>
