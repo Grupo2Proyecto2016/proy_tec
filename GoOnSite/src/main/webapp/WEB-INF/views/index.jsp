@@ -33,6 +33,7 @@
       <script src="<c:url value='/static/js/controllers/companyController.js' />"></script>
       <script src="<c:url value='/static/js/controllers/outBranchesController.js' />"></script>
       <script src="<c:url value='/static/js/controllers/parametersController.js' />"></script>
+      <script src="<c:url value='/static/js/controllers/linesController.js' />"></script>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.6/{{company.css}}/bootstrap.min.css" />
     </head>
     <body style="visibility: hidden">

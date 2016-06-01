@@ -76,6 +76,11 @@
     		controller  : 'parametersController'
     	})
     	
+    	.when('/lines', {
+    		templateUrl : tenantUrlPart + 'pages/lines.html',
+    		controller  : 'linesController'
+    	})
+    	
 		.otherwise({
 			redirectTo: '/'
     	});
