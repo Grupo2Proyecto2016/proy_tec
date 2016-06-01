@@ -5,6 +5,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.servlet.HandlerMapping;
@@ -57,15 +58,22 @@ public class JwtAuthenticationTokenFilter extends UsernamePasswordAuthentication
         String tenant = jwtTokenUtil.getTenantFromToken(authToken);
         
         //ESTA VALIDACION SE TIENE QUE HACER CUANDO ESTE ANDANDO
-        if (username != null && (isMainApp ||(tenant != null && reqTenant != null && reqTenant.equals(tenant))) && SecurityContextHolder.getContext().getAuthentication() == null) 
+        if (username != null && (isMainApp ||(tenant != null && reqTenant != null && reqTenant.equalsIgnoreCase(tenant))) && SecurityContextHolder.getContext().getAuthentication() == null) 
         {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-            if (jwtTokenUtil.validateToken(authToken, userDetails, tenant, isMainApp)) 
-            {
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
+        	try
+        	{
+        		UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+        		if (jwtTokenUtil.validateToken(authToken, userDetails, tenant, isMainApp)) 
+        		{
+        			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        			authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
+        			SecurityContextHolder.getContext().setAuthentication(authentication);
+        		}
+        	}
+        	catch(UsernameNotFoundException ex)
+        	{
+        		System.out.println(ex.getMessage());
+        	}
         }
 
         chain.doFilter(request, response);

@@ -87,7 +87,7 @@ public class AuthenticationRestController {
     @RequestMapping(value = "/getUserInfo", method = RequestMethod.GET)
     public ResponseEntity<?>  getUserInfo(@PathVariable String tenantid, HttpServletRequest request)
     {
-    	Usuario user = context.GetUser(request);
+    	Usuario user = context.GetUser(request, tenantid);
     	if(user == null)
     	{
     		return new ResponseEntity(HttpStatus.NOT_FOUND);

@@ -94,4 +94,8 @@ goOnApp.controller('companyController', function($scope, $http, $filter, uiGridC
     	$scope.userModel = {};
     };
        
+    $("#stylec").on('change', function(){
+    	$.blockUI({ overlayCSS:  { opacity: 0.93  }}); //ESCONDEMOS LA CHANCHADA
+    	setTimeout(function(){ $.unblockUI(); }, 1000);
+	});
 });

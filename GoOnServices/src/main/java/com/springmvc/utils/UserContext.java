@@ -17,14 +17,17 @@ public class UserContext
 	@Autowired
     private JwtTokenUtil jwtTokenUtil;
 	
-	public Usuario GetUser(HttpServletRequest request)
+	public Usuario GetUser(HttpServletRequest request, String tenantId)
 	{
 		String token = request.getHeader(tokenHeader);
         if(token != null)
         {
         	String username = jwtTokenUtil.getUsernameFromToken(token);
-        	String tenantId = jwtTokenUtil.getTenantFromToken(token);
-        	return new UsersLogic(tenantId).GetUserByName(username);
+        	String tokenTenant = jwtTokenUtil.getTenantFromToken(token);
+        	if(tokenTenant.equalsIgnoreCase(tenantId))
+        	{
+        		return new UsersLogic(tenantId).GetUserByName(username);        		
+        	}
         }
         return null;
 	}

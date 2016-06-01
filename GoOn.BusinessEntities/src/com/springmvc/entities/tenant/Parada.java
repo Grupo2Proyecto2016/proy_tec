@@ -10,13 +10,19 @@ public class Parada {
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long id_parada;
 	private String descripcion;
-	private int id_pais;
-	private int id_departamento;
-	private int id_ciudad;
-	private String coordenadas;
+	private String direccion;
+	private double latitud;
+	private double longitud;
 	private Boolean es_terminal;
 	private Boolean es_peaje;
-	private Boolean reajusta;
+	private float reajuste;
+	
+	public String getDireccion() {
+		return direccion;
+	}
+	public void setDireccion(String direccion) {
+		this.direccion = direccion;
+	}
 	
 	public long getId_parada() {
 		return id_parada;
@@ -24,52 +30,46 @@ public class Parada {
 	public void setId_parada(long id_parada) {
 		this.id_parada = id_parada;
 	}
+	
 	public String getDescripcion() {
 		return descripcion;
 	}
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
-	public int getId_pais() {
-		return id_pais;
+	
+	public double getLatitud() {
+		return latitud;
 	}
-	public void setId_pais(int id_pais) {
-		this.id_pais = id_pais;
+	public void setLatitud(double latitud) {
+		this.latitud = latitud;
 	}
-	public int getId_departamento() {
-		return id_departamento;
+	
+	public double getLongitud() {
+		return longitud;
 	}
-	public void setId_departamento(int id_departamento) {
-		this.id_departamento = id_departamento;
+	public void setLongitud(double longitud) {
+		this.longitud = longitud;
 	}
-	public int getId_ciudad() {
-		return id_ciudad;
-	}
-	public void setId_ciudad(int id_ciudad) {
-		this.id_ciudad = id_ciudad;
-	}
-	public String getCoordenadas() {
-		return coordenadas;
-	}
-	public void setCoordenadas(String coordenadas) {
-		this.coordenadas = coordenadas;
-	}
+	
 	public Boolean getEs_terminal() {
 		return es_terminal;
 	}
 	public void setEs_terminal(Boolean es_terminal) {
 		this.es_terminal = es_terminal;
 	}
+	
 	public Boolean getEs_peaje() {
 		return es_peaje;
 	}
 	public void setEs_peaje(Boolean es_peaje) {
 		this.es_peaje = es_peaje;
 	}
-	public Boolean getReajusta() {
-		return reajusta;
+	
+	public void setReajuste(float reajuste) {
+		this.reajuste = reajuste;
 	}
-	public void setReajusta(Boolean reajusta) {
-		this.reajusta = reajusta;
+	public float getReajuste() {
+		return reajuste;
 	}
 }
