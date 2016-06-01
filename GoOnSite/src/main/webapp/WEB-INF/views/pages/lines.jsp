@@ -97,7 +97,7 @@
 						<span aria-hidden="true">×</span>
 						</button> 
 						<h4 class="modal-title">Mapa
-							<button type="button" class="btn btn-default btn-xs" id="btnRuta"><i class="fa fa-road fa-lg"></i>Trazar Ruta</button>
+							<button type="button" class="btn btn-default btn-xs" id="btnRuta" ng-click="createRoute()"><i class="fa fa-road fa-lg"></i>Trazar Ruta</button>
 						</h4>
 						
 					</div>				
