@@ -97,9 +97,8 @@
 						<span aria-hidden="true">×</span>
 						</button> 
 						<h4 class="modal-title">Mapa
-							<button type="button" class="btn btn-default btn-xs" id="btnRuta" ng-click="createRoute()"><i class="fa fa-road fa-lg"></i>Trazar Ruta</button>
-						</h4>
-						
+							<button type="button" class="btn btn-default btn-xs" id="btnRuta" ng-click="createRoute()"><i class="fa fa-road fa-lg"></i>Trazar Ruta</button>							
+						</h4>						
 					</div>				
 				</div>
 				<div class="panel-body">
@@ -120,9 +119,34 @@
 						<h4 class="modal-title">Lista Paradas</h4>
 					</div>				
 				</div>
-				<div class="panel-body">					
+				<div class="panel-body">	
+					<table class="table table-striped">
+						<tr>
+						<th>Dirección</th>
+						<th>Acciones</th>
+						</tr>
+	   					<tr ng-repeat="m in markers track by $index">	   					
+	   						<td>
+	   							<span style="float:left;">{{$index + 1}} - {{m.descripcion}}</span>	   								   							
+	   						</td>
+	   						<td>
+	   							<span style="float:right">
+	   								<a><i class="fa fa-chevron-circle-down fa-lg" ng-click="changeIndex($index, $index+1)">&nbsp;</i></a>
+	   								<a><i class="fa fa-chevron-circle-up fa-lg" ng-click="changeIndex($index, $index-1)">&nbsp;</i></a>
+	   								<a><i class="fa fa-trash fa-lg" ng-click="deleteMarker($index)">&nbsp;</i></a>
+	   							</span>
+	   						</td>
+	   					</tr>
+	   				</table>				
 				</div>
 			</div>
+			<div class="panel panel-default">				
+				<div class="panel-heading">
+					<div>
+						<h4 class="modal-title">Estimados: &nbsp;<i class="fa fa-clock-o fa-lg">&nbsp;</i>{{txt_minutos}} min.&nbsp;<i class="fa fa-arrows-h fa-lg">&nbsp;</i>{{txt_km}} km.</h4>
+					</div>
+				</div>
+			</div> 
 		</div>
 		<div class="col-xs-1"></div>		
 	</div>

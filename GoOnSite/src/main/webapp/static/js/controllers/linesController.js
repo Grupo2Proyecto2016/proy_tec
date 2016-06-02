@@ -3,10 +3,12 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
 	$scope.message = 'Genera nuevas lineas de manera cómoda.';
     $scope.error_message = '';
     $scope.custom_response = null;    
-    
+    $scope.txt_minutos = "";
+    $scope.txt_km = "";
     i18nService.setCurrentLang('es');
     
     $scope.lineForm = {};
+    $scope.stops = {};
     
     $scope.showForm = function()
     {
@@ -25,9 +27,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     });
     
     
-
-    //Create a renderer for directions and bind it to the map.
-    
+    //Create a renderer for directions and bind it to the map.    
     var directionsDisplay = new google.maps.DirectionsRenderer({map: $scope.map});
     //directionsDisplay.setMap($scope.map);
     
@@ -42,7 +42,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     	    markerArray[i].setMap(null);
     	}
     	
-    	var waypts = [];
+       	var waypts = [];
     	for (var i = 1; i < markerArray.length-1; i++) 
     	{
     	    waypts.push({location: markerArray[i].position,stopover: true});    	    
@@ -61,9 +61,12 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     	    // markers for each step.
     	    if (status === google.maps.DirectionsStatus.OK) 
     	    {
-    	      //document.getElementById('warnings-panel').innerHTML = '<b>' + response.routes[0].warnings + '</b>';
-    	      directionsDisplay.setDirections(response);
-    	      showSteps(response, markerArray, stepDisplay, map);
+    	    	//document.getElementById('warnings-panel').innerHTML = '<b>' + response.routes[0].warnings + '</b>';
+    	    	directionsDisplay.setDirections(response);
+    	    	$scope.actualizoKm(response.routes[0].legs);
+    	    	$scope.actualizoMinutos(response.routes[0].legs);
+    	    	$scope.$digest();
+    	      	//$scope.showSteps(response, markerArray, stepDisplay, map);
     	    } 
     	    else 
     	    {
@@ -71,6 +74,25 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     	    }
     	  });
     };
+    
+    $scope.geocodePosition = function (marker) 
+    {
+    	geocoder = new google.maps.Geocoder();
+    	geocoder.geocode({
+	    latLng: marker.getPosition()
+		  }, function(responses) {
+		    if (responses && responses.length > 0) 
+		    {		      
+		      var indice = responses[0].formatted_address.indexOf(",");
+		      marker.descripcion = responses[0].formatted_address.substring(0, indice);
+		      $scope.$digest();      
+		    } 
+		    else 
+		    {
+		      marker.descripcion = 'No se pudo obtener dirección.' 
+		    }
+		  });    	
+    }
     
     $scope.showSteps = function(directionResult, markerArray, stepDisplay, map) 
     {
@@ -93,6 +115,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     	    // Open an info window when the marker is clicked on, containing the text
     	    // of the step.
     	    stepDisplay.setContent(text);
+    	    marker.descipcion = text;
     	    stepDisplay.open(map, marker);
     	  });
     };
@@ -122,21 +145,26 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
         {
           marker.setMap(null);
         });
-        $scope.markers = [];*/
-        
-    	$scope.placeMarkerAndPanTo(e.latLng, $scope.map);
+        $scope.markers = [];*/        
+    	$scope.placeMarkerAndPanTo(e.latLng, $scope.map);    	
+    	$scope.$digest();
 	});
     
     $scope.placeMarkerAndPanTo = function (latLng, map) 
     {
   	  var marker = new google.maps.Marker({
   	    position: latLng,
-  	    map: $scope.map
+  	    map: $scope.map,
+  	    es_terminal: false,
+  	    es_peaje: false,
+  	    descripcion: '',
+  	    reajuste: 0
   	  });
   	  $scope.markers.push(marker);
   	  var l = latLng.lat();
   	  var g = latLng.lng();
   	 // $scope.actualizoMarker(l, g);
+  	  $scope.geocodePosition(marker);
   	  $scope.map.panTo(latLng);
   	  //
   	/* var elevationService = new google.maps.ElevationService();
@@ -164,4 +192,47 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
   	    }
   	  });*/
    	}//fin de placemarker
+    
+    $scope.deleteMarker = function(indice)
+    {
+    	$scope.markers[indice].map = null;
+    	$scope.markers.splice(indice, 1);    	
+    	$scope.createRoute();
+    }
+    
+    $scope.changeIndex = function(old_index, new_index)
+    {
+    	var tope = $scope.markers.length;
+    	if ((new_index < 0) || (new_index >= tope))
+    	{
+    		return;
+    	}
+    	var auxMarker = $scope.markers[old_index];
+    	$scope.markers[old_index] = $scope.markers[new_index];
+    	$scope.markers[new_index] = auxMarker;
+    	$scope.createRoute();
+    }
+    
+    $scope.actualizoKm = function (legs)
+    {
+    	var km = 0; 
+    	for (var i = 0; i < legs.length; i++) 
+    	{
+    		km = km + legs[i].distance.value;
+    	}
+    	km = km/1000
+    	$scope.txt_km = Math.round(km * 100) / 100;
+    }
+    
+    $scope.actualizoMinutos = function (legs)
+    {
+    	var min = 0; 
+    	for (var i = 0; i < legs.length; i++) 
+    	{
+    		min = min + legs[i].duration.value;    		
+    	}
+    	min = min/60;
+    	$scope.txt_minutos = Math.round(min * 100) / 100;
+    }
+    
 });
