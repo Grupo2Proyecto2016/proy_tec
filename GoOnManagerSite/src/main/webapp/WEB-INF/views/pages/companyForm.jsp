@@ -188,7 +188,7 @@
 			</div>
 		</form>
 	</div>
-	<div class="col-xs-5" style="height: 500px;">
+	<div class="col-xs-4" style="height: 600px;">
 		<div class="panel panel-default">
 			<div class="panel-body">
 				<input id="pac-input" class="controls" type="text" placeholder="Search Box">

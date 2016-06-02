@@ -22,7 +22,7 @@
 			<div class="panel-heading">
 				<div><h4 class="modal-title">Lista de Sucursales</h4></div>
 			</div>
-			<div class="panel-body">
+			<div class="panel-body" style="height: 54%; overflow: auto;">
 				<table class="table table-striped">
    					<tr ng-repeat="b in branches track by $index">
 						<td>

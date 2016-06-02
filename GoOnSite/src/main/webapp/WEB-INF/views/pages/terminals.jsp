@@ -27,7 +27,7 @@
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="hideForm()">
 							<span aria-hidden="true">×</span>
 							</button> 
-							<h4 class="modal-title">Datos de Terminal</h4>
+							<h5 class="modal-title">Datos de Terminal</h5>
 						</div>
 					</div>
 					<div class="panel-body">
@@ -59,7 +59,7 @@
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="hideForm()">
 						<span aria-hidden="true">×</span>
 						</button> 
-						<h4 class="modal-title">Mapa</h4>
+						<h5 class="modal-title">Mapa</h5>
 					</div>				
 				</div>
 				<div class="panel-body">

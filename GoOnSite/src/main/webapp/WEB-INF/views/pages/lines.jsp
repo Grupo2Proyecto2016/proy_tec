@@ -26,7 +26,7 @@
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="hideForm()">
 							<span aria-hidden="true">×</span>
 							</button> 
-							<h4 class="modal-title">Datos Básicos</h4>
+							<h5 class="modal-title">Datos Básicos</h5>
 						</div>
 					</div>
 					<div class="panel-body">											
@@ -108,9 +108,9 @@
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="hideForm()">
 						<span aria-hidden="true">×</span>
 						</button> 
-						<h4 class="modal-title">Mapa
+						<h5 class="modal-title">Mapa
 							<button type="button" class="btn btn-default btn-xs" id="btnRuta" ng-click="createRoute()"><i class="fa fa-road fa-lg"></i>Trazar Ruta</button>							
-						</h4>						
+						</h5>						
 					</div>				
 				</div>
 				<div class="panel-body">
@@ -128,11 +128,16 @@
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="hideForm()">
 						<span aria-hidden="true">×</span>
 						</button> 
-						<h4 class="modal-title">Lista Paradas</h4>
+						<h5 class="modal-title">Lista Paradas</h5>
 					</div>				
 				</div>
-				<div class="panel-body">	
+				<div class="panel-body" style="height: 55%;overflow: auto;">	
 					<table class="table table-striped">
+						<colgroup>
+					       <col span="1">
+					       <col span="1" style="width: 130px;">
+					       <col span="1" style="width: 95px;">
+					    </colgroup>
 						<thead>
 							<tr>
 								<th>Dirección</th>

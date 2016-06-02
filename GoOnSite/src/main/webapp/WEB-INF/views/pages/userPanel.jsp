@@ -13,9 +13,9 @@
 					<div class="panel-group">
 						<div class="panel panel-default">
 							<div class="panel-heading">
-								<h4 class="panel-title text-center">
+								<h5 class="panel-title text-center">
 									<a data-toggle="collapse" data-target="#myTravelsPanel"><b>Pasajes</b></a>
-								</h4>
+								</h5>
 							</div>
 							<div id="myTravelsPanel" class="panel-collapse collapse">
 								<div class="panel-body"></div>
@@ -31,9 +31,9 @@
 					<div class="panel-group">
 						<div class="panel panel-default">
 							<div class="panel-heading">
-								<h4 class="panel-title text-center">
+								<h5 class="panel-title text-center">
 									<a data-toggle="collapse" data-target="#myTicketsPanel"><b>Encomiendas</b></a>
-								</h4>
+								</h5>
 							</div>
 							<div id="myTicketsPanel" class="panel-collapse collapse">
 								<div class="panel-body"></div>
@@ -50,9 +50,9 @@
 				<div class="panel-group">
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h4 class="panel-title">
+							<h5 class="panel-title">
 								<b>Datos personales</b>
-							</h4>
+							</h5>
 						</div>
 						<div id="myDataPanel" class="panel">
 							<div class="panel-body">

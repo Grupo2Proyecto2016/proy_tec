@@ -22,7 +22,7 @@
 				<div class="panel panel-default">				
 					<div class="panel-heading">
 						<div>  
-							<h4 class="modal-title">Tus Datos</h4>
+							<h5 class="modal-title">Tus Datos</h5>
 						</div>
 					</div>
 				<div class="panel-body">
