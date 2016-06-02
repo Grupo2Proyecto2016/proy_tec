@@ -115,7 +115,7 @@ public class UserRestController
 	@RequestMapping(value = "/changePassword", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
     public ResponseEntity<Void> ChangePassword(@RequestBody UserWrapper user, @PathVariable String tenantid, HttpServletRequest request)
     {
-		Usuario signedUser = context.GetUser(request);
+		Usuario signedUser = context.GetUser(request, tenantid);
 		String newPassword = new BCryptPasswordEncoder().encode(user.passwd);
     	new UsersLogic(tenantid).UpdateUserPassword(signedUser, newPassword);
     	
@@ -153,20 +153,24 @@ public class UserRestController
 	@RequestMapping(value = "/updateClient", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
     public ResponseEntity<Void> UpdateClient(@RequestBody UserWrapper user, @PathVariable String tenantid, HttpServletRequest request)
     {
-		String username = context.GetUsername(request);
-		Usuario userUpdateData = new Usuario();
-		userUpdateData.setUsrname(username);
-		userUpdateData.setNombre(user.nombre);
-		userUpdateData.setApellido(user.apellido);
-		userUpdateData.setEmail(user.email);
-		userUpdateData.setTelefono(user.telefono);
-		userUpdateData.setDireccion(user.direccion);
-		userUpdateData.setRol_id_rol(UserRol.Client.getValue());
-		userUpdateData.setFch_nacimiento(user.fch_nacimiento);
-    	
-    	new UsersLogic(tenantid).UpdateUser(userUpdateData);
-    	
-    	return new ResponseEntity<Void>(HttpStatus.OK);
+		Usuario userUpdateData = context.GetUser(request, tenantid);
+		if(userUpdateData != null)
+		{
+			userUpdateData.setNombre(user.nombre);
+			userUpdateData.setApellido(user.apellido);
+			userUpdateData.setEmail(user.email);
+			userUpdateData.setTelefono(user.telefono);
+			userUpdateData.setDireccion(user.direccion);
+			userUpdateData.setRol_id_rol(UserRol.Client.getValue());
+			userUpdateData.setFch_nacimiento(user.fch_nacimiento);
+			
+			new UsersLogic(tenantid).UpdateUser(userUpdateData);
+			return new ResponseEntity<Void>(HttpStatus.OK);
+		}
+		else
+		{
+			return new ResponseEntity<Void>(HttpStatus.FORBIDDEN);
+		}
     }
 	
 	@RequestMapping(value = "/deleteUser", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
@@ -179,7 +183,7 @@ public class UserRestController
 	@RequestMapping(value = "/deleteSignedUser", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
     public ResponseEntity<Void> DeleteSignedUser(@RequestBody String empty, @PathVariable String tenantid, HttpServletRequest request)
     {
-		Usuario signedUser = context.GetUser(request);
+		Usuario signedUser = context.GetUser(request, tenantid);
     	new UsersLogic(tenantid).DeleteUser(signedUser.getUsrname());
     	return new ResponseEntity<Void>(HttpStatus.OK);
     }	

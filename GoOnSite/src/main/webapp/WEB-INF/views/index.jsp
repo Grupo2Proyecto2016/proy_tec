@@ -6,9 +6,9 @@
       <!-- STYLES -->
 	  <link rel="stylesheet" href="<c:url value='/static/css/custom.css' />" />
       <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.css" />
-	  <link rel="stylesheet" href="<c:url value='/static/css/ui-grid.min.css' />" />
       
       <!-- SCRIPTS -->
+	  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXLMRyM-qhBcFx4Lvv6XxACYvWYY8ey-U&libraries=places" async defer></script>
       <script src="<c:url value='/static/js/tokenLogic.js' />"></script>
       <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
       <script src="<c:url value='/static/js/jquery/jquery.blockUI.js' />"></script>
@@ -18,7 +18,11 @@
 	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.js"></script>
 	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.js"></script>
       <script src="<c:url value='/static/js/app.js' />"></script>
-	  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXLMRyM-qhBcFx4Lvv6XxACYvWYY8ey-U&libraries=places" async defer></script>
+      
+	  <!--ESTILO CUSTOM -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.6/{{company.css}}/bootstrap.min.css" />
+      
+	  <link rel="stylesheet" href="<c:url value='/static/css/ui-grid.min.css' />" />
       <script src="<c:url value='/static/js/ui-grid/ui-grid.min.js' />"></script>
       
       
@@ -34,7 +38,7 @@
       <script src="<c:url value='/static/js/controllers/outBranchesController.js' />"></script>
       <script src="<c:url value='/static/js/controllers/parametersController.js' />"></script>
       <script src="<c:url value='/static/js/controllers/linesController.js' />"></script>
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.6/{{company.css}}/bootstrap.min.css" />
+      <script src="<c:url value='/static/js/controllers/terminalController.js' />"></script>
     </head>
     <body style="visibility: hidden">
 
@@ -70,6 +74,7 @@
 							<li ng-show="user != null && user.rol_id_rol == 1"><a href="#branches"><i class="fa fa-building"></i> Sucursales</a></li>
 		                    <li ng-show="user != null && user.rol_id_rol == 1"><a href="#employees"><i class="fa fa-users"></i> Personal</a></li>
 		                    <li ng-show="user != null && user.rol_id_rol == 1"><a href="#bus"><i class="fa fa-wrench"></i> Vehículos</a></li>
+		                    <li ng-show="user != null && user.rol_id_rol == 1"><a href="#terminals"><i class="fa fa-flag-o"></i> Terminales</a></li>
 		                    <li ng-show="user != null && user.rol_id_rol == 1"><a href="#lines"><i class="fa fa-map-o"></i> Lineas</a></li>
 	                    	<li ng-show="user != null && user.rol_id_rol == 1"><a href="#manageTravels"><i class="fa fa-calendar-check-o"></i> Viajes</a></li>
 	                    </ul>
@@ -166,11 +171,9 @@
 	</div>
 
 	<script>
-		$(document).ready(function(){
-			setTimeout(function(){
-				$('body').css('visibility', 'visible');
-			}, 1200);
-			
+		$(window).on("load", function(){
+			$('body').css('visibility', 'visible');
+			$(window).resize();
 		});
 		
 		$("#loginModal").on('hidden.bs.modal', function (e) {

@@ -81,6 +81,11 @@
     		controller  : 'linesController'
     	})
     	
+    	.when('/terminals', {
+    		templateUrl : tenantUrlPart + 'pages/terminals.html',
+    		controller  : 'terminalController'
+    	})
+    	
 		.otherwise({
 			redirectTo: '/'
     	});
@@ -169,6 +174,7 @@
     			else
     			{
     				$scope.user = null;
+    				removeJwtToken();
     			}
 	    		$scope.userInfoReady = true;
 	    	}

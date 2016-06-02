@@ -13,7 +13,7 @@ function createAuthorizationTokenHeader() {
 }
 
 function getJwtToken() {
-    return localStorage.getItem(TOKEN_KEY + urlTenant);
+    return localStorage.getItem(TOKEN_KEY + urlTenant.toLowerCase());
 }
 
 function getTenant() {
@@ -21,8 +21,8 @@ function getTenant() {
 }
 
 function setJwtToken(token, tenant) {
-    localStorage.setItem(TOKEN_KEY + urlTenant, token);
-    localStorage.setItem(TENANT_KEY, tenant);
+    localStorage.setItem(TOKEN_KEY + urlTenant.toLowerCase(), token);
+    localStorage.setItem(TENANT_KEY, tenant.toLowerCase());
 }
 
 function removeJwtToken() {
