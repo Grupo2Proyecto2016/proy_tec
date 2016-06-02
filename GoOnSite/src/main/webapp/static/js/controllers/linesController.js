@@ -28,6 +28,15 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     
     $scope.getTerminals();
     
+    $scope.createLine = function()
+    {
+    	if(!$scope.form.$invalid)
+		{
+    		//$scope.markers
+    		$scope.lineForm.paradas = $scope.markers;
+		}
+    };
+    
     $scope.getTerminalById = function(id)
     {
     	for (var i = 0; i < $scope.terminals.length; i++) 
@@ -56,7 +65,8 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
 	  	    es_peaje: false,
 	  	    es_origen: false,
 	  	    descripcion: '',
-	  	    reajuste: 0
+	  	    reajuste: 0, 
+	  	    id_parada:$scope.lineForm.destino
 	  	});
     	
     	
@@ -103,7 +113,8 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
 	  	    es_peaje: false,
 	  	    es_origen: true,
 	  	    descripcion: '',
-	  	    reajuste: 0
+	  	    reajuste: 0,
+	  	    id_parada:$scope.lineForm.origen
 	  	});
     	
     	if($scope.markers.length == 0)
@@ -272,7 +283,8 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
   	    es_peaje: false,
   	    es_origen: false,  	    
   	    descripcion: '',
-  	    reajuste: 0
+  	    reajuste: 0,
+  	    id_parada:0
   	  });
   	  
   	  if($scope.markers.length ==0)
@@ -317,6 +329,10 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     
     $scope.deleteMarker = function(indice)
     {
+    	if ((indice == 0) || (indice == $scope.markers.length -1))
+    	{
+    		return;
+    	}
     	$scope.markers[indice].map = null;
     	$scope.markers.splice(indice, 1);    	
     	$scope.createRoute();
