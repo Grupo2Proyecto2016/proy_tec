@@ -121,13 +121,21 @@
 				</div>
 				<div class="panel-body">	
 					<table class="table table-striped">
-						<tr>
-						<th>Dirección</th>
-						<th>Acciones</th>
-						</tr>
+						<thead>
+							<tr>
+								<th>Dirección</th>
+								<th>Reajuste&nbsp;(UYU)</th>
+								<th>Acciones</th>
+							</tr>
+						</thead>
 	   					<tr ng-repeat="m in markers track by $index">	   					
 	   						<td>
 	   							<span style="float:left;">{{$index + 1}} - {{m.descripcion}}</span>	   								   							
+	   						</td>
+	   						<td>
+	  	 						<div class="col-xs-10">  						
+  									<input type="text" class="form-control" name="origen" ng-model="m.reajuste" required>
+								</div>	  							 							
 	   						</td>
 	   						<td>
 	   							<span style="float:right">
