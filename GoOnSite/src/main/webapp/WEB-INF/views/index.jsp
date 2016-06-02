@@ -164,7 +164,21 @@
 	        <h3 class="modal-title" id="myModalLabel">Error</h3>
 	      </div>
 	      <div class="modal-body">
- 	        <h3>Ups! Ha ocurrido un error. Intente de nuevo en unos instantes.</h3>
+ 	        <h3>Ups! Ha ocurrido un error. Intenta de nuevo en unos instantes.</h3>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<div class="modal fade" id="connectErrorModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header warning">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h3 class="modal-title" id="myModalLabel">Mantenimiento</h3>
+	      </div>
+	      <div class="modal-body">
+ 	        <h4>Estamos realizando mantenimiento en el sitio. Intenta de nuevo en unos instantes.</h4>
 	      </div>
 	    </div>
 	  </div>

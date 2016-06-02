@@ -116,6 +116,10 @@
             {
             	$("#errorModal").modal("toggle");
             }
+            else if(response.status == -1)
+            {
+            	$("#connectErrorModal").modal("toggle");
+            }
             else if(response.status == 403)
             {
             	$location.path('home');
