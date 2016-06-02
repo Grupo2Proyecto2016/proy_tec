@@ -9,12 +9,125 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     
     $scope.lineForm = {};
     $scope.stops = {};
+    $scope.terminals = null;
     
     $scope.showForm = function()
     {
     	$scope.lineForm = {};
     	$("#divLineForm").removeClass('hidden');    	
     	google.maps.event.trigger($scope.map, 'resize');	//refresh map
+    };
+    
+    $scope.getTerminals = function()
+    {
+    	$http.get(servicesUrl + 'getTerminals').success(function(data, status, headers, config) 
+    	{
+        	$scope.terminals = data;        	
+    	});
+    };    
+    
+    $scope.getTerminals();
+    
+    $scope.getTerminalById = function(id)
+    {
+    	for (var i = 0; i < $scope.terminals.length; i++) 
+    	{
+    		if($scope.terminals[i].id_parada == id)
+    		{
+    			return $scope.terminals[i];
+    		}
+    	}
+    	return null;
+    };
+    
+    $scope.updateTerminalDestino = function ()   
+    {
+    	var term = $scope.getTerminalById($scope.lineForm.destino);
+    	
+    	var myLatlng = new google.maps.LatLng(term.latitud, term.longitud);
+    	
+    	var esprimero = false;
+    	
+    	var marker = new google.maps.Marker(
+    	{
+    		position: myLatlng,
+	  	    map: $scope.map,
+	  	    es_terminal: true,
+	  	    es_peaje: false,
+	  	    es_origen: false,
+	  	    descripcion: '',
+	  	    reajuste: 0
+	  	});
+    	
+    	
+    	
+    	if($scope.markers.length == 0)
+    	{
+    		$scope.markers.splice(1, 0, marker);
+    		esprimero = true;
+    	}
+    	
+    	var tope = $scope.markers.length;
+    	
+    	if (($scope.markers[tope-1].es_terminal) && ($scope.markers[tope-1].es_origen === false))
+    	{
+    		if (esprimero === false){$scope.markers[tope-1].setMap(null)};
+    		$scope.markers[tope-1] = marker;    
+    	}
+    	else
+    	{
+    		$scope.markers.push(marker);
+    	}
+    	
+    	var l = myLatlng.lat();
+		var g = myLatlng.lng();
+		$scope.geocodePosition(marker);
+		$scope.map.panTo(myLatlng);
+    	
+    	//$scope.$digest();
+    }
+    
+    $scope.updateTerminalOrigen = function ()   
+    {
+    	var term = $scope.getTerminalById($scope.lineForm.origen);
+    	
+    	var myLatlng = new google.maps.LatLng(term.latitud, term.longitud);
+    	
+    	var esprimero = false;
+    	
+    	var marker = new google.maps.Marker(
+    	{
+    		position: myLatlng,
+	  	    map: $scope.map,
+	  	    es_terminal: true,
+	  	    es_peaje: false,
+	  	    es_origen: true,
+	  	    descripcion: '',
+	  	    reajuste: 0
+	  	});
+    	
+    	if($scope.markers.length == 0)
+    	{
+    		$scope.markers.splice(1, 0, marker);
+    		esprimero = true;
+    	}    	
+    	
+    	if(($scope.markers[0].es_terminal) && ($scope.markers[0].es_origen))
+    	{  
+    		if (esprimero === false){$scope.markers[0].setMap(null)};
+    		$scope.markers[0] = marker;    		
+    	}
+    	else
+    	{
+    		$scope.markers.splice(0, 0, marker);    		
+    	}
+    	
+    	var l = myLatlng.lat();
+		var g = myLatlng.lng();
+		$scope.geocodePosition(marker);
+		$scope.map.panTo(myLatlng);
+    	
+    	//$scope.$digest();
     };
     
     /*Mapa*/
@@ -157,10 +270,19 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
   	    map: $scope.map,
   	    es_terminal: false,
   	    es_peaje: false,
+  	    es_origen: false,  	    
   	    descripcion: '',
   	    reajuste: 0
   	  });
-  	  $scope.markers.push(marker);
+  	  
+  	  if($scope.markers.length ==0)
+  	  {
+  		$scope.markers.push(marker);  
+  	  }
+  	  else
+  	  {
+  		$scope.markers.splice($scope.markers.length-1, 0, marker);  
+  	  }  	  
   	  var l = latLng.lat();
   	  var g = latLng.lng();
   	 // $scope.actualizoMarker(l, g);
@@ -203,6 +325,12 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     $scope.changeIndex = function(old_index, new_index)
     {
     	var tope = $scope.markers.length;
+    	
+    	if ((new_index == 0) || (new_index == tope-1) || (old_index == 0) || (old_index == tope-1))
+    	{
+    		return;
+    	}
+    	
     	if ((new_index < 0) || (new_index >= tope))
     	{
     		return;

@@ -33,14 +33,26 @@
 						<div class="form-group">
 						    <div class="col-sm-6">
 							    <label class="control-label col-sm-3" for="origen">Desde:</label>
-							    <div class="col-sm-9">
-							    	<input type="text" class="form-control" name="origen" ng-model="lineForm.origen" required>
+							    <div class="col-sm-9">			
+									<select name="origen" class="form-control"
+										ng-model="lineForm.origen"
+										ng-options="terminal.id_parada as terminal.descripcion for terminal in terminals"
+										ng-change="updateTerminalOrigen()"
+										required>
+										<option value="">Seleccione una terminal</option>
+									</select>							    	
 						    	</div>
 					    	</div>
 					    	<div class="col-sm-6">
 						    	<label class="control-label col-sm-3" for="destino">Hasta:</label>
 							    <div class="col-sm-9">
-							    	<input type="text" class="form-control" name="destino" ng-model="lineForm.destino" required>
+							    	<select name="destino" class="form-control"
+										ng-model="lineForm.destino"
+										ng-options="terminal.id_parada as terminal.descripcion for terminal in terminals"
+										ng-change="updateTerminalDestino()"
+										required>
+										<option value="">Seleccione una terminal</option>
+									</select>	
 						    	</div>
 					    	</div>
 				    	</div>				
