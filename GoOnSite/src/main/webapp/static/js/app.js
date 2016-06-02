@@ -6,6 +6,12 @@
         $rootScope.user = null;
     });
     
+    goOnApp.filter('SiNo', function() {
+        return function(input) {
+            return input ? 'Si' : 'No';
+        }
+    });
+    
     var tenantUrlPart =  urlTenant  + "/";
     var servicesUrl = AppName + tenantUrlPart;
 
