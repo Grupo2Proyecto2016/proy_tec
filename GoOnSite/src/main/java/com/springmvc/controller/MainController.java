@@ -1,6 +1,10 @@
 package com.springmvc.controller;
 
 import java.io.IOException;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -37,9 +41,16 @@ public class MainController {
 	}
 	
 	@RequestMapping(value = "/{tenantid}/pages/{page}", method = RequestMethod.GET)
-	public String getPages(@RequestHeader HttpHeaders headers, @PathVariable(value="tenantid") String tenantid, @PathVariable(value="page") String page) 
+	public String getPages(@RequestHeader HttpHeaders headers, @PathVariable(value="tenantid") String tenantid, @PathVariable(value="page") String page, HttpServletResponse response) 
 	{
+		String token = headers.getFirst("Authorization");
+		String newToken = RefreshToken(token, tenantid);
+		if(newToken != null)
+		{
+			response.setHeader("Authorization", newToken);
+		}
 		return "pages/" + page;
+		
 	}
 	
 	boolean TenantExist(String tenantid)
@@ -64,26 +75,35 @@ public class MainController {
 	boolean IsAuthenticated(HttpHeaders headers, String tenantid)
 	{
 		String token = headers.getFirst("Authorization");
-		return IsAuthenticated(token, tenantid);
+		return RefreshToken(token, tenantid) != null;
 	}
 	
-	boolean IsAuthenticated(String token, String tenantid)
+	String RefreshToken(String token, String tenantid)
 	{
-		DefaultHttpClient httpClient = new DefaultHttpClient();
-		HttpGet getRequest = new HttpGet(AppServer + tenantid + "/isAuthenticated");
-		getRequest.addHeader("accept", "application/json");
-		getRequest.addHeader("Authorization", token);
-		int responseCode = 401;//Default Unauthorize
+		String newToken = null;
 		
-		try 
+		if(token != null && tenantid != null)
 		{
-			HttpResponse response = httpClient.execute(getRequest);
-			responseCode = response.getStatusLine().getStatusCode();
-		} 
-		catch (IOException e) 
-		{
+			DefaultHttpClient httpClient = new DefaultHttpClient();
+			HttpGet getRequest = new HttpGet(AppServer + tenantid + "/isAuthenticated");
+			getRequest.addHeader("accept", "application/json");
+			getRequest.addHeader("Authorization", token);
+			int responseCode = 401;//Default Unauthorize
+			
+			try 
+			{
+				HttpResponse response = httpClient.execute(getRequest);
+				Header[] authHeaders = response.getHeaders("Authorization");
+				if(authHeaders.length > 0)
+				{
+					newToken = authHeaders[0].getValue();
+				}
+			} 
+			catch (IOException e) 
+			{
+			}
+			httpClient.getConnectionManager().shutdown();
 		}
-		httpClient.getConnectionManager().shutdown();
-		return responseCode == 200;
+		return newToken;
 	}
 }

@@ -20,14 +20,11 @@
 		<div class="col-xs-6">
 			<form class="form-horizontal" role="form" name="userForm" ng-submit="registerUser()">
 				<div class="panel panel-default">				
-				<div class="panel-heading">
-					<div> 
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="hideUserForm()">
-						<span aria-hidden="true">×</span>
-						</button> 
-						<h4 class="modal-title">Tus Datos</h4>
+					<div class="panel-heading">
+						<div>  
+							<h4 class="modal-title">Tus Datos</h4>
+						</div>
 					</div>
-				</div>
 				<div class="panel-body">
 				  <div class="form-group">
 				    <label class="control-label col-sm-4" for="name">Nombre:</label>

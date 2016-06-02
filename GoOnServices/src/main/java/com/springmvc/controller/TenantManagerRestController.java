@@ -29,6 +29,7 @@ import com.springmvc.configuration.JwtUser;
 import com.springmvc.configuration.JwtUserDetailsServiceImpl;
 import com.springmvc.entities.main.Empresa;
 import com.springmvc.entities.main.Pais;
+import com.springmvc.entities.tenant.Parada;
 import com.springmvc.entities.tenant.Rol;
 import com.springmvc.entities.tenant.Sucursal;
 import com.springmvc.entities.tenant.Usuario;
@@ -132,7 +133,20 @@ public class TenantManagerRestController {
     	sucursal.setLatitud(companyWrapper.getLatitud());
     	sucursal.setLongitud(companyWrapper.getLongitud());
     	
-    	tenantLogic.CreateTenant(company, user, sucursal);
+    	Parada terminal = null;
+    	if(companyWrapper.isAddTerminal())
+    	{
+    		terminal = new Parada();
+    		terminal.setDireccion(company.getDireccion());
+    		terminal.setDescripcion("Terminal " + company.getNombre());
+    		terminal.setEs_peaje(false);
+    		terminal.setEs_terminal(true);
+    		terminal.setLatitud(companyWrapper.getLatitud());
+    		terminal.setLongitud(companyWrapper.getLongitud());
+    		terminal.setReajuste(0);
+    	}
+    	
+    	tenantLogic.CreateTenant(company, user, sucursal, terminal);
     	
     	return new ResponseEntity<Void>(HttpStatus.CREATED);
     }

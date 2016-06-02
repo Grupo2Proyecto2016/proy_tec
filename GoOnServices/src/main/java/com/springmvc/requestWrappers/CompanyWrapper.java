@@ -6,6 +6,38 @@ public class CompanyWrapper
 {
 	public String address;
 
+	public long countryId;
+
+	public String name;
+
+	public String password;
+
+	public String phone;
+
+	public String rut;
+	
+	public String tenantName;
+
+	public String trueName;
+
+	public String username;
+	
+	public Usuario user;
+	
+	private double latitud;
+	
+	private double longitud;
+	
+	private boolean addTerminal;
+	
+	public boolean isAddTerminal() {
+		return addTerminal;
+	}
+
+	public void setAddTerminal(boolean addTerminal) {
+		this.addTerminal = addTerminal;
+	}
+
 	public String getAddress() {
 		return address;
 	}
@@ -77,27 +109,6 @@ public class CompanyWrapper
 	public void setUsername(String username) {
 		this.username = username;
 	}
-
-	public long countryId;
-
-	public String name;
-
-	public String password;
-
-	public String phone;
-
-	public String rut;
-	
-	public String tenantName;
-
-	public String trueName;
-
-	public String username;
-	
-	public Usuario user;
-	
-	private double latitud;
-	private double longitud;
 
 	public double getLatitud() {
 		return latitud;

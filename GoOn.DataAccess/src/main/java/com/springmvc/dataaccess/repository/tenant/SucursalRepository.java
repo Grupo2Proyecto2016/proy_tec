@@ -29,6 +29,10 @@ public class SucursalRepository {
 		{
 			t.begin();
 			entityManager.persist(sucursal);
+			if(sucursal.getTerminal() != null)
+			{
+				sucursal.getTerminal().setSucursal(sucursal);
+			}
 			entityManager.flush();
 			t.commit();
 		}

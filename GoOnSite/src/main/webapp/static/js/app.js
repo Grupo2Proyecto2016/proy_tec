@@ -1,9 +1,14 @@
 // create the module and name it scotchApp
     var goOnApp = angular.module('goOnApp', ['ngRoute', 'ngAnimate', 'ngMessages', 'ui.grid', 'ui.grid.pagination']);
-
+    
+    goOnApp.run(function($rootScope) 
+	{
+        $rootScope.user = null;
+    });
+    
     var tenantUrlPart =  urlTenant  + "/";
     var servicesUrl = AppName + tenantUrlPart;
-    
+
     // configure our routes
     goOnApp.config(function($routeProvider) {
     	$routeProvider
@@ -91,12 +96,13 @@
     	});
     });
 
-    goOnApp.service('authInterceptor', function($q, $location) {
+    goOnApp.service('authInterceptor', function($q, $location, $rootScope) {
         var service = this;
         
         service.responseError = function(response) {
             if (response.status == 401)
             {
+            	$rootScope.user = null;
             	if($('#loginModal').hasClass('in'))
             	{
             		//do nothing
@@ -122,16 +128,23 @@
     goOnApp.service('tokenInterceptor', function($rootScope) { 
     	var service = this;
     	service.request = function(config) {
-    		//config.url = getTenant() + '/' + config.url;
         	access_token = getJwtToken(); 
     		if (access_token) { 
     		     config.headers.authorization = access_token; 
     		} 
             return config;
+        };
+        service.response = function(response) {
+    		var headers = response.headers();
+    		var authToken = headers['authorization'];
+    		if(authToken != undefined)
+    		{
+    			setJwtToken(authToken);
+    		}
+            return response;
         }
     }); 
-
-    
+                                 
     goOnApp.config(['$httpProvider', function($httpProvider) {
         $httpProvider.interceptors.push('authInterceptor');
         $httpProvider.interceptors.push('tokenInterceptor');
@@ -143,13 +156,17 @@
     
     
     // create the controller and inject Angular's $scope
-    goOnApp.controller('mainController', function($scope, $http, $location)
+    goOnApp.controller('mainController', function($scope, $http, $location, $rootScope)
 	{
     	$scope.userInfoReady = false;
     	$scope.companyInfoReady = false;
     	$scope.user = null;
     	$scope.company = null;
     	$scope.loginForm = null;
+    	
+    	$rootScope.$watch('user', function(user) {
+    		  $scope.user = user;
+		});
     	
     	$scope.getCompany = function()
     	{
@@ -169,11 +186,11 @@
 			{
 	    		if(response.status == 200)
 	    		{
-	    			$scope.user = response.data;
+	    			$rootScope.user = response.data;
 	    		}
     			else
     			{
-    				$scope.user = null;
+    				$rootScope.user = null;
     				removeJwtToken();
     			}
 	    		$scope.userInfoReady = true;
@@ -187,8 +204,8 @@
     			{
 	        		if(response.status == 200)
 	        		{
-	        			$scope.user = response.data.user;
-	        			setJwtToken(response.data.token, $scope.company.nombreTenant);
+	        			$rootScope.user = response.data.user;
+	        			setJwtToken(response.data.token);
 	        			$scope.loginForm = null;
 	        			$("#loginModal").modal("toggle");
 	        		}
@@ -196,6 +213,7 @@
 	        		{
 	        			$scope.loginForm = null;
 	        			$("#loginAlert").show();
+	        			$('#username').focus();
 	        		}
 	        	}
 	    	);

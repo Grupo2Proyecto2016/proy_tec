@@ -1,9 +1,16 @@
 package com.springmvc.entities.tenant;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Parada {
@@ -17,6 +24,16 @@ public class Parada {
 	private Boolean es_peaje;
 	private float reajuste;
 	
+	@OneToOne(mappedBy="terminal", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+	@JsonManagedReference
+	private Sucursal sucursal;
+	
+	public Sucursal getSucursal() {
+		return sucursal;
+	}
+	public void setSucursal(Sucursal sucursal) {
+		this.sucursal = sucursal;
+	}
 	public String getDireccion() {
 		return direccion;
 	}

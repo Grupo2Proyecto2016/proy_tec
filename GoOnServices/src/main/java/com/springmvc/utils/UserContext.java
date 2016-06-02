@@ -23,10 +23,14 @@ public class UserContext
         if(token != null)
         {
         	String username = jwtTokenUtil.getUsernameFromToken(token);
-        	String tokenTenant = jwtTokenUtil.getTenantFromToken(token);
-        	if(tokenTenant.equalsIgnoreCase(tenantId))
+        	Usuario user = new UsersLogic(tenantId).GetUserByName(username);
+        	if(user != null)
         	{
-        		return new UsersLogic(tenantId).GetUserByName(username);        		
+        		boolean isValid = jwtTokenUtil.validateToken(token, user, tenantId);
+        		if(isValid)
+        		{
+        			return user;
+        		}
         	}
         }
         return null;

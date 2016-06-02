@@ -8,6 +8,7 @@ import com.springmvc.dataaccess.context.MainDAContext;
 import com.springmvc.entities.main.Empresa;
 import com.springmvc.entities.main.Pais;
 import com.springmvc.entities.main.Usuario;
+import com.springmvc.entities.tenant.Parada;
 import com.springmvc.entities.tenant.Parametro;
 import com.springmvc.entities.tenant.Sucursal;
 import com.springmvc.enums.Parameter;
@@ -30,7 +31,7 @@ public class TenantLogic implements ITenantLogic {
 		return user;
 	}
 
-	public void CreateTenant(Empresa company, com.springmvc.entities.tenant.Usuario user, Sucursal sucursal) throws Exception
+	public void CreateTenant(Empresa company, com.springmvc.entities.tenant.Usuario user, Sucursal sucursal, Parada terminal) throws Exception
 	{
 		try
 		{
@@ -38,16 +39,21 @@ public class TenantLogic implements ITenantLogic {
 			
 			UsersLogic userLogic = new UsersLogic(company.getNombreTenant(), true);
 			
+			if(terminal != null)
+			{
+				LinesLogic lineLogic = new LinesLogic(company.getNombreTenant());
+				lineLogic.createTerminal(terminal);
+				sucursal.setTerminal(terminal);
+			}
 			BranchesLogic branchLogic = new BranchesLogic(company.getNombreTenant());
 			branchLogic.createBranch(sucursal);
 
 			ParametersLogic paramLogic = new ParametersLogic(company.getNombreTenant());
 			paramLogic.SetUpParameters();
 
+			
 			userLogic.SetUpRoles();
 			userLogic.CreateUser(user);
-					
-			
 		}
 		catch(Exception e)
 		{

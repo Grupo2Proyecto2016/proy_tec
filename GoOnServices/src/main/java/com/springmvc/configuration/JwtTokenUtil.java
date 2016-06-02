@@ -6,6 +6,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import com.springmvc.entities.tenant.Usuario;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
@@ -32,7 +34,7 @@ public class JwtTokenUtil implements Serializable {
     private String secret = "mySecret";
 
     ///@Value("${jwt.expiration}")
-    private Long expiration = 604800L;
+    private Long expiration = 60L;
 
     public String getUsernameFromToken(String token) {
         String username;
@@ -180,11 +182,22 @@ public class JwtTokenUtil implements Serializable {
         final String username = getUsernameFromToken(token);
         final String currentTenant = getTenantFromToken(token);
         final Date created = getCreatedDateFromToken(token);
-        //final Date expiration = getExpirationDateFromToken(token);
         return (
                 username.equals(user.getUsername())
                 		&&	currentTenant.equals(tenant)
                         && !isTokenExpired(token)
                         && !isCreatedBeforeLastPasswordReset(created, user.getLastPasswordResetDate()));
+    }
+    
+    public Boolean validateToken(String token, Usuario user, String tenant) {
+        final String username = getUsernameFromToken(token);
+        final String currentTenant = getTenantFromToken(token);
+        final Date created = getCreatedDateFromToken(token);
+        
+        return (
+                username.equals(user.getUsrname())
+                		&&	currentTenant.equals(tenant)
+                        && !isTokenExpired(token)
+                        && !isCreatedBeforeLastPasswordReset(created, user.getUltimoResetPassword()));
     }
 }

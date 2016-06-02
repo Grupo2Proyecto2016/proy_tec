@@ -16,6 +16,8 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.util.Map;
 
@@ -57,6 +59,8 @@ public class JwtAuthenticationTokenFilter extends UsernamePasswordAuthentication
         String username = jwtTokenUtil.getUsernameFromToken(authToken);
         String tenant = jwtTokenUtil.getTenantFromToken(authToken);
         
+        HttpServletResponse resp = (HttpServletResponse)response;
+        
         //ESTA VALIDACION SE TIENE QUE HACER CUANDO ESTE ANDANDO
         if (username != null && (isMainApp ||(tenant != null && reqTenant != null && reqTenant.equalsIgnoreCase(tenant))) && SecurityContextHolder.getContext().getAuthentication() == null) 
         {
@@ -68,6 +72,8 @@ public class JwtAuthenticationTokenFilter extends UsernamePasswordAuthentication
         			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         			authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
         			SecurityContextHolder.getContext().setAuthentication(authentication);
+        			String refreshedToken = jwtTokenUtil.refreshToken(authToken);
+        			resp.addHeader(tokenHeader, refreshedToken);
         		}
         	}
         	catch(UsernameNotFoundException ex)
@@ -76,6 +82,6 @@ public class JwtAuthenticationTokenFilter extends UsernamePasswordAuthentication
         	}
         }
 
-        chain.doFilter(request, response);
+        chain.doFilter(request, resp);
     }
 }
