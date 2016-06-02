@@ -178,6 +178,11 @@
     		  $scope.user = user;
 		});
     	
+    	$scope.showPackageCalc = function()
+    	{
+    		$("#packageCalcModal").modal("toggle");
+    	};
+    	
     	$scope.getCompany = function()
     	{
     		$http.get(servicesUrl + 'getCompany')

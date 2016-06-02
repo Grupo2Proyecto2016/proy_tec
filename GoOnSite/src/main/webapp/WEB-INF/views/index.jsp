@@ -57,7 +57,7 @@
                 
 					<!--PUBLICAS -->
                     <li><a href="#home"><i class="fa fa-home"></i> Inicio</a></li>
-                    <li><a href="#packagingCalc"><i class="fa fa-calculator"></i> Calcular Encomienda</a></li>
+                    <li><a ng-click="showPackageCalc()"><i class="fa fa-calculator"></i> Calcular Encomienda</a></li>
                     <li><a href="#travels"><i class="fa fa-bus"></i> Pasajes</a></li>
                     
                     <!--ADMINISTRADOR-->
@@ -179,6 +179,90 @@
 	      </div>
 	      <div class="modal-body">
  	        <h4>Estamos realizando mantenimiento en el sitio. Intenta de nuevo en unos instantes.</h4>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<div class="modal fade" id="packageCalcModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	  <div class="modal-dialog" role="document" style="width: 700;">
+	    <div class="modal-content">
+	      <div class="modal-header calc">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h3 class="modal-title" id="myModalLabel">Cálculo de encomienda</h3>
+	      </div>
+	      <div class="modal-body">
+ 	        <form class="form-signin" name="calcForm" role="form" ng-submit="signIn()" style="overflow: overlay;">
+				<div class="form-group">
+				    <div class="col-sm-6">
+					    <label class="control-label col-sm-3" for="origen">Origen:</label>
+					    <div class="col-sm-9">			
+							<select name="origen" class="form-control"
+								ng-model="lineForm.origen"
+								ng-options="terminal.id_parada as terminal.descripcion for terminal in terminals"
+								ng-change="updateTerminalOrigen()"
+								required>
+								<option value="">Seleccione una sucursal</option>
+							</select>							    	
+				    	</div>
+			    	</div>
+			    	<div class="col-sm-6">
+						<label class="control-label col-sm-7" for="packageWeight">Peso:</label>
+						<div class="col-sm-5">
+							<input type="number" title="Solo se aceptan números" class="form-control" name="packageWeight" ng-model="lineForm.numero">
+					    </div>
+					</div>
+		    	</div>				
+		    	<div class="form-group">
+			    	<div class="col-sm-6">
+				    	<label class="control-label col-sm-3" for="destino">Destino:</label>
+					    <div class="col-sm-9">
+					    	<select name="destino" class="form-control"
+								ng-model="lineForm.destino"
+								ng-options="terminal.id_parada as terminal.descripcion for terminal in terminals"
+								ng-change="updateTerminalDestino()"
+								required>
+								<option value="">Seleccione una sucursal</option>
+							</select>	
+				    	</div>
+			    	</div>
+					<div class="col-sm-6">
+						<label class="control-label col-sm-7" for="packageHeigth">Alto (cm):</label>
+						<div class="col-sm-5">
+							<input type="number" class="form-control" name="packageHeigth" ng-model="lineForm.tiempo_estimado" required>
+					    </div>				
+					</div>		    
+				</div>
+				<div class="form-group">
+					<div class="col-sm-6">
+						<label class="control-label col-sm-7" for="packageBaseLenght">Largo de base (cm):</label>
+						<div class="col-sm-5">
+							<input type="number" class="form-control" name="packageBaseLenght" ng-model="lineForm.tiempo_estimado" required>
+					    </div>				
+					</div>
+					<div class="col-sm-6">						    
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-6">
+						<label class="control-label col-sm-7" for="packageBaseWidth">Ancho de base (cm):</label>
+						<div class="col-sm-5">
+							<input type="number" class="form-control" name="packageBaseWidth" ng-model="lineForm.tiempo_estimado" required>
+					    </div>				
+					</div>
+					<div class="col-sm-6">						    
+					</div>
+				</div>
+				<div id="loginAlert" class="alert alert-danger col-sm-6" style="display:none">
+				  <strong>Error! </strong>{{calc_error}}
+				</div>
+				
+				<div class="form-group"> 
+		    		<div class="col-sm-12">
+		      			<button style="float: right" type="submit" class="btn btn-info">Calcular</button>
+		    		</div>
+			    </div>
+			</form>
 	      </div>
 	    </div>
 	  </div>

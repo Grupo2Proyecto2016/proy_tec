@@ -72,6 +72,12 @@ div.modal-header.danger
 	color: white;
 }
 
+div.modal-header.calc
+{
+	background: gray;
+	color: white;
+}
+
 .modal-body label
 {
 	padding-top: 8px!important;
