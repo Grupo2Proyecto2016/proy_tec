@@ -43,6 +43,15 @@
 						    	<input type="text" class="form-control" name="direccion" ng-model="branchForm.direccion" required>
 					    	</div>
 				    	</div>
+				    	<div class="form-group">
+							<label class="control-label col-sm-4" for="addTerminal">Agregar terminal:</label>
+							<div class="col-sm-6">
+								<div class="checkbox">
+									<label> <input type="checkbox" name="addTerminal" ng-model="branchForm.addTerminal">
+									</label>
+								</div>
+							</div>
+						</div>
 				  		<div class="form-group">
 						    <label class="control-label col-sm-4" for="telefono">Teléfono:</label>
 						    <div class="col-sm-6">

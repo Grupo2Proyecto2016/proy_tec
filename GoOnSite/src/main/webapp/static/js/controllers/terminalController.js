@@ -77,7 +77,8 @@ goOnApp.controller('terminalController', function($scope, $http, uiGridConstants
         columnDefs:
     	[
           { name:'Nombre', field: 'descripcion' },
-          { name:'Dirección', field: 'direccion' }
+          { name:'Dirección', field: 'direccion' },
+          { name:'Es sucursal', cellTemplate: '<div class="text-center ngCellText">{{row.entity.sucursal != null | SiNo}}</div>' }
         ]
      };
     

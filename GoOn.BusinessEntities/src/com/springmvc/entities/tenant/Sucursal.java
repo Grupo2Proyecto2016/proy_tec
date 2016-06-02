@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -28,6 +29,16 @@ public class Sucursal {
 	@JoinColumn (name="id_parada")
 	@JsonBackReference
 	private Parada terminal;
+
+	@Transient
+	public boolean addTerminal;
+	@Transient
+	boolean hasTerminal;
+	
+	
+	public boolean isHasTerminal() {
+		return terminal != null;
+	}
 	
 	public Parada getTerminal() {
 		return terminal;

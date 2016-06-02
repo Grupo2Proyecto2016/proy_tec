@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import com.springmvc.entities.tenant.Parada;
 import com.springmvc.entities.tenant.Sucursal;
 import com.springmvc.logic.implementations.BranchesLogic;
+import com.springmvc.logic.implementations.LinesLogic;
 import com.springmvc.logic.implementations.VehiculosLogic;
 import com.springmvc.requestWrappers.CustomResponseWrapper;
 
@@ -25,7 +26,22 @@ public class BranchesRestController {
 	@RequestMapping(value = "/createBranch", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
     public ResponseEntity<Void> CreateBranch(@RequestBody Sucursal sucursal, @PathVariable String tenantid)
     {
-		BranchesLogic bl = new BranchesLogic(tenantid);	    	
+		BranchesLogic bl = new BranchesLogic(tenantid);	 
+		if(sucursal.addTerminal)
+		{
+			Parada terminal = new Parada();
+			terminal.setDireccion(sucursal.getDireccion());
+			terminal.setDescripcion(sucursal.getNombre());
+			terminal.setEs_peaje(false);
+			terminal.setEs_terminal(true);
+			terminal.setLatitud(sucursal.getLatitud());
+			terminal.setLongitud(sucursal.getLongitud());
+			terminal.setReajuste(0);
+			LinesLogic ll = new LinesLogic(tenantid);
+			ll.createTerminal(terminal);
+			sucursal.setTerminal(terminal);
+		}
+		
 		bl.createBranch(sucursal);		
 		return new ResponseEntity<Void>(HttpStatus.CREATED);		
     }
