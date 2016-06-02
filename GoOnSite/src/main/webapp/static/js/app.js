@@ -120,11 +120,17 @@
             }
             else if(response.status == 500)
             {
-            	$("#errorModal").modal("toggle");
+            	if(!$('#errorModal').hasClass('in'))
+            	{
+            		$("#errorModal").modal("toggle");
+            	}
             }
             else if(response.status == -1)
             {
-            	$("#connectErrorModal").modal("toggle");
+            	if(!$('#connectErrorModal').hasClass('in'))
+            	{
+            		$("#connectErrorModal").modal("toggle");
+            	}
             }
             else if(response.status == 403)
             {
