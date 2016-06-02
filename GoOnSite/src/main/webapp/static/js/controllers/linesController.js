@@ -329,7 +329,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     
     $scope.deleteMarker = function(indice)
     {
-    	if ((indice == 0) || (indice == $scope.markers.length -1))
+    	if ($scope.markers[indice].es_terminal)
     	{
     		return;
     	}
