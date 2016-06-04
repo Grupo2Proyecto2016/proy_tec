@@ -54,7 +54,7 @@ public class ParadaRepository
 	public Parada findByID(long id_parada)
 	{
 		Parada parada = null;
-		Query q = entityManager.createQuery("FROM parada WHERE id_parada = :idp");
+		Query q = entityManager.createQuery("FROM Parada WHERE id_parada = :idp");
 		q.setParameter("idp", id_parada);
 		try
 		{

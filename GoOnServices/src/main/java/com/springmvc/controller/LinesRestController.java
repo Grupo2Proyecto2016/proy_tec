@@ -38,7 +38,7 @@ public class LinesRestController{
 		linea.setTiempo_estimado(0);
 		linea.setViaja_parado(linesWrapper.getViaja_parado());		
 		
-		linea.setParadas(linesWrapper.getParadas());
+		//linea.setParadas(linesWrapper.getParadas());
 		
 		tl.insertLine(linea);	
 		
