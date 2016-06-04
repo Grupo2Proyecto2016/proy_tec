@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/iniciarSesion"
+            android:checkable="false"
+            android:title="Iniciar Sesión"
+            android:icon="@drawable/accountkey"
+            >
+        </item>
+
+        <item
+            android:id="@+id/registrarse"
+            android:checkable="false"
+            android:title="Regístrate!"
+            android:icon="@drawable/accountplus"
+            >
+        </item>
+
+        <item
+            android:id="@+id/comentarios"
+            android:checkable="false"
+            android:title="Tu Opiníon"
+            android:icon="@drawable/ic_sms_black_24dp"
+            >
+        </item>
+
+        <item
+            android:id="@+id/nosotros"
+            android:checkable="false"
+            android:title="Nosotros"
+            android:icon="@drawable/icon"
+            >
+        </item>
+
+    </group>
+</menu>
