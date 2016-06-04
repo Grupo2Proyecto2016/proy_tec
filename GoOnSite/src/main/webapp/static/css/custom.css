@@ -74,7 +74,7 @@ div.modal-header.danger
 
 div.modal-header.calc
 {
-	background: gray;
+	background: dimgrey;
 	color: white;
 }
 
@@ -83,7 +83,7 @@ div.modal-header.calc
 	padding-top: 8px!important;
 }
 
-#loginModal input, #passwordModal input
+#loginModal input, #passwordModal input, #packageCalcModal input, #packageCalcModal select
 {
 	margin-bottom: 20px;
 }
