@@ -187,9 +187,11 @@
 	<div class="modal fade" id="packageCalcModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 	  <div class="modal-dialog" role="document" style="width: 700;">
 	    <div class="modal-content">
-	      <div class="modal-header calc">
+	      <div class="modal-header calc text-center">
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	        <h3 class="modal-title" id="myModalLabel">Cálculo de encomienda</h3>
+	        <h3 class="modal-title" id="myModalLabel">
+	        	<i class="fa fa-calculator" style="float: left;"></i>Cálculo de encomienda
+        	</h3>
 	      </div>
 	      <div class="modal-body">
  	        <form class="form-signin" name="calcForm" role="form" ng-submit="signIn()" style="overflow: overlay;">
@@ -209,7 +211,7 @@
 			    	<div class="col-sm-6">
 						<label class="control-label col-sm-7" for="packageWeight">Peso:</label>
 						<div class="col-sm-5">
-							<input type="number" title="Solo se aceptan números" class="form-control" name="packageWeight" ng-model="lineForm.numero">
+							<input type="number" min="0.1" step="0.1" title="Solo se aceptan números" class="form-control" name="packageWeight" ng-model="lineForm.numero">
 					    </div>
 					</div>
 		    	</div>				
@@ -229,7 +231,7 @@
 					<div class="col-sm-6">
 						<label class="control-label col-sm-7" for="packageHeigth">Alto (cm):</label>
 						<div class="col-sm-5">
-							<input type="number" class="form-control" name="packageHeigth" ng-model="lineForm.tiempo_estimado" required>
+							<input type="number" min="10" step="10" class="form-control" name="packageHeigth" ng-model="lineForm.tiempo_estimado" required>
 					    </div>				
 					</div>		    
 				</div>
@@ -237,29 +239,26 @@
 					<div class="col-sm-6">
 						<label class="control-label col-sm-7" for="packageBaseLenght">Largo de base (cm):</label>
 						<div class="col-sm-5">
-							<input type="number" class="form-control" name="packageBaseLenght" ng-model="lineForm.tiempo_estimado" required>
+							<input type="number" min="10" step="10" class="form-control" name="packageBaseLenght" ng-model="lineForm.tiempo_estimado" required>
 					    </div>				
 					</div>
-					<div class="col-sm-6">						    
-					</div>
-				</div>
-				<div class="form-group">
 					<div class="col-sm-6">
 						<label class="control-label col-sm-7" for="packageBaseWidth">Ancho de base (cm):</label>
 						<div class="col-sm-5">
-							<input type="number" class="form-control" name="packageBaseWidth" ng-model="lineForm.tiempo_estimado" required>
+							<input type="number" min="10" step="10" class="form-control" name="packageBaseWidth" ng-model="lineForm.tiempo_estimado" required>
 					    </div>				
 					</div>
-					<div class="col-sm-6">						    
-					</div>
 				</div>
-				<div id="loginAlert" class="alert alert-danger col-sm-6" style="display:none">
+				<div id="loginAlert" class="alert alert-danger text-center col-sm-12" style="display:none">
 				  <strong>Error! </strong>{{calc_error}}
 				</div>
 				
 				<div class="form-group"> 
-		    		<div class="col-sm-12">
-		      			<button style="float: right" type="submit" class="btn btn-info">Calcular</button>
+		    		<div class="col-sm-6">
+		    			<h4 style="margin-left: 15px;">Precio: {{packagePrice}}</h4>
+		    		</div>
+		    		<div class="col-sm-6">
+		      			<button style="float: right; margin-top: 10px;" type="submit" class="btn btn-info">Calcular</button>
 		    		</div>
 			    </div>
 			</form>
