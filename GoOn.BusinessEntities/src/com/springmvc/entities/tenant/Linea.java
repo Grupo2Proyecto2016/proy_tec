@@ -2,11 +2,14 @@ package com.springmvc.entities.tenant;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Linea {
@@ -14,8 +17,15 @@ public class Linea {
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long id_linea;
 	private int numero;
-	private String origen; //deberian ser paradaS?
-	private String destino;
+	
+	@ManyToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "id_parada_origen")
+	private Parada origen; 
+	
+	@ManyToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "id_parada_destino")
+	private Parada destino;
+	
 	private Double costo_fijo;
 	private int tiempo_estimado; //en minutos
 	private Boolean viaja_parado;
@@ -39,19 +49,19 @@ public class Linea {
 		this.numero = numero;
 	}
 
-	public String getOrigen() {
+	public Parada getOrigen() {
 		return origen;
 	}
 
-	public void setOrigen(String origen) {
+	public void setOrigen(Parada origen) {
 		this.origen = origen;
 	}
 
-	public String getDestino() {
+	public Parada getDestino() {
 		return destino;
 	}
 
-	public void setDestino(String destino) {
+	public void setDestino(Parada destino) {
 		this.destino = destino;
 	}
 

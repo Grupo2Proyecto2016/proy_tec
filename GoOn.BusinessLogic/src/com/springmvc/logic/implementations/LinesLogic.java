@@ -3,6 +3,7 @@ package com.springmvc.logic.implementations;
 import java.util.List;
 
 import com.springmvc.dataaccess.context.TenantDAContext;
+import com.springmvc.entities.tenant.Linea;
 import com.springmvc.entities.tenant.Parada;
 import com.springmvc.entities.tenant.Sucursal;
 import com.springmvc.logic.interfaces.ILinesLogic;
@@ -26,5 +27,20 @@ public class LinesLogic implements ILinesLogic
 	public List<Parada> GetTerminals() 
 	{
 		return TenantContext.ParadaRepository.GetTerminals();	
+	}
+	
+	public void insertLine(Linea linea)
+	{
+		TenantContext.LineaRepository.InsertLine(linea);
+	}
+	
+	public Linea findByID(long id_linea)
+	{
+		return TenantContext.LineaRepository.findByID(id_linea);
+	}
+
+	public Parada findParadaByID(long id_parada) 
+	{
+		return TenantContext.ParadaRepository.findByID(id_parada);
 	}
 }

@@ -18,6 +18,11 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     	google.maps.event.trigger($scope.map, 'resize');	//refresh map
     };
     
+    $scope.hideForm = function()
+    {
+    	$("#divLineForm").addClass('hidden');		
+    };
+    
     $scope.getTerminals = function()
     {
     	$http.get(servicesUrl + 'getTerminals').success(function(data, status, headers, config) 
@@ -32,9 +37,40 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     {
     	if(!$scope.form.$invalid)
 		{
-    		//$scope.markers
     		$scope.lineForm.paradas = $scope.markers;
+    		for (var i = 0; i < $scope.lineForm.paradas.length; i++)
+    		{
+    			$scope.lineForm.paradas[i].latitud = $scope.lineForm.paradas[i].position.lat(); 
+    			$scope.lineForm.paradas[i].longitud = $scope.lineForm.paradas[i].position.lng();
+    		}
+    		
+    		$http.post(servicesUrl +'createLine', JSON.stringify($scope.lineForm))
+			.success(function()
+			{				
+				$scope.hideForm();
+		    	$scope.lineForm = {};
+		    	$scope.getTerminals();
+		    	$.unblockUI();
+				$scope.showSuccessAlert("Linea creada.");							
+			})
+			.error(function()
+			{
+				$.unblockUI();
+				$scope.error_message = 'Ha ocurrido un error al crear la sucursal. Intente de nuevo en unos instantes.'; 
+				$("#errorModal").modal("toggle");
+			});  
 		}
+    };
+    
+    $scope.closeSuccessAlert = function()
+    {
+    	$("#successAlert").hide();
+    };
+    
+    $scope.showSuccessAlert = function(message)
+    {
+    	$('#successMessage').text(message);
+		$("#successAlert").show();
     };
     
     $scope.getTerminalById = function(id)

@@ -6,6 +6,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+
+import com.springmvc.entities.tenant.Linea;
 import com.springmvc.entities.tenant.Parada;
 
 public class ParadaRepository 
@@ -47,6 +49,22 @@ public class ParadaRepository
 			t.rollback();
 			throw ex;
 		}
+	}
+	
+	public Parada findByID(long id_parada)
+	{
+		Parada parada = null;
+		Query q = entityManager.createQuery("FROM parada WHERE id_parada = :idp");
+		q.setParameter("idp", id_parada);
+		try
+		{
+			parada = (Parada)q.getSingleResult();
+		}
+		catch(NoResultException ex)
+		{
+			return null;
+		}
+		return parada;
 	}
 
 }
