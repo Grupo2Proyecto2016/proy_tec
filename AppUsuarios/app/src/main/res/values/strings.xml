@@ -1,0 +1,56 @@
+<resources>
+    <string name="app_name">facultad</string>
+    <string name="WSServer">http://10.0.3.2:8080/GoOnServices/</string>
+    <string name="action_settings">Configuración</string>
+    <string name="action_viajes">Mis Viajes</string>
+    <string name="action_gps">Gps</string>
+    <string name="action_bus">Bus</string>
+    <string name="action_sucursales">Sucursales</string>
+    <string name="action_opcion1">Opcion 1</string>
+    <string name="action_opcion2">Opcion 2</string>
+    <string name="rockBla">rockB</string>
+    <string name="error_timeout">Tiempo de espera agotado, Intente nuevamente</string>
+    <string name="title_activity_login">Login</string>
+    <string name="scan">Leer QR</string>
+    <string name="action_newpasaje">Pasaje</string>
+    <string name="item1nosotros">Sobre Nosotros</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_user">Usuario</string>
+    <string name="prompt_password">Contraseña</string>
+    <string name="action_sign_in">Ingresar</string>
+    <string name="action_sign_in_short">Login</string>
+    <string name="error_network_timeout">Error en la conexión</string>
+    <string name="error_invalid_user">Usuario/Contraseña inválidos</string>
+    <string name="error_invalid_email">Formato Email inválido</string>
+    <string name="error_invalid_confirmacion">La contraseña no coincide con su confirmación</string>
+    <string name="error_incorrect_password">Contraseña incorrecta</string>
+    <string name="error_field_required">Campo obligatorio</string>
+    <string name="primera">Primera"</string>
+    <string name="segunda">Segunda."</string>
+    <string name="permission_rationale">"Permisos del contacto son necesarios para email noseque."</string>
+    <string name="grilla_asiento">"Asiento"</string>
+    <string name="grilla_usuario">"Usuario"</string>
+    <string name="grilla_origen">"Origen"</string>
+    <string name="grilla_destino">"Destino"</string>
+    <string name="registro">"Regístrate!"</string>
+    <string name="mensajeRegistro">"Registro de usuarios"</string>
+    <string name="nombreRegistro">"Nombre"</string>
+    <string name="apellidoRegistro">"Apellido"</string>
+    <string name="fecNacRegistro">"Fecha de Nacimiento"</string>
+    <string name="correoRegistro">"Correo</string>
+    <string name="direccionRegistro">"Dirección"</string>
+    <string name="telefonoRegistro">"Teléfono"</string>
+    <string name="usuarioRegistro">"Usuario"</string>
+    <string name="contraseñaRegistro">"Contraseña"</string>
+    <string name="confirmacionRegistro">"Confirme su contraseña"</string>
+    <string name="okRegistro">"Enviar"</string>
+    <string name="creadoConExito">"ha sido creado con éxito"</string>
+    <string name="creadoSinExito">"Error al crear el"</string>
+    <string name="fechaIda">"Fecha del viaje"</string>
+    <string name="destinoBusqueda">"Destino"</string>
+    <string name="origenBusqueda">"Origen"</string>
+    <string name="mensajeBusqueda">"Busque su pasaje"</string>
+    <string name="error_user_not_disponible">"Usuario no diponible"</string>
+
+</resources>
