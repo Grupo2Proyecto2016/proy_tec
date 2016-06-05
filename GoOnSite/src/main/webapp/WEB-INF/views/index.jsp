@@ -194,58 +194,50 @@
         	</h3>
 	      </div>
 	      <div class="modal-body">
- 	        <form class="form-signin" name="calcForm" role="form" ng-submit="signIn()" style="overflow: overlay;">
+ 	        <form class="form-signin" name="calcForm" role="form" ng-submit="calcPackage()" style="overflow: overlay;">
 				<div class="form-group">
 				    <div class="col-sm-6">
 					    <label class="control-label col-sm-3" for="origen">Origen:</label>
 					    <div class="col-sm-9">			
-							<select name="origen" class="form-control"
-								ng-model="lineForm.origen"
-								ng-options="terminal.id_parada as terminal.descripcion for terminal in terminals"
-								ng-change="updateTerminalOrigen()"
-								required>
+							<select name="origen" class="form-control"	ng-model="calcForm.origen" ng-options="terminal as terminal.descripcion for terminal in terminals" required>
 								<option value="">Seleccione una sucursal</option>
 							</select>							    	
 				    	</div>
 			    	</div>
 			    	<div class="col-sm-6">
-						<label class="control-label col-sm-7" for="packageWeight">Peso:</label>
+						<label class="control-label col-sm-7" for="packageHeigth">Alto (cm):</label>
 						<div class="col-sm-5">
-							<input type="number" min="0.1" step="0.1" title="Solo se aceptan números" class="form-control" name="packageWeight" ng-model="lineForm.numero">
-					    </div>
-					</div>
+							<input type="number" min="10" step="10" class="form-control" name="packageHeigth" ng-model="calcForm.alto">
+					    </div>				
+					</div>	
 		    	</div>				
 		    	<div class="form-group">
 			    	<div class="col-sm-6">
 				    	<label class="control-label col-sm-3" for="destino">Destino:</label>
 					    <div class="col-sm-9">
-					    	<select name="destino" class="form-control"
-								ng-model="lineForm.destino"
-								ng-options="terminal.id_parada as terminal.descripcion for terminal in terminals"
-								ng-change="updateTerminalDestino()"
-								required>
+					    	<select name="destino" class="form-control" ng-model="calcForm.destino" ng-options="terminal as terminal.descripcion for terminal in terminals" required>
 								<option value="">Seleccione una sucursal</option>
 							</select>	
 				    	</div>
 			    	</div>
 					<div class="col-sm-6">
-						<label class="control-label col-sm-7" for="packageHeigth">Alto (cm):</label>
-						<div class="col-sm-5">
-							<input type="number" min="10" step="10" class="form-control" name="packageHeigth" ng-model="lineForm.tiempo_estimado" required>
-					    </div>				
-					</div>		    
-				</div>
-				<div class="form-group">
-					<div class="col-sm-6">
 						<label class="control-label col-sm-7" for="packageBaseLenght">Largo de base (cm):</label>
 						<div class="col-sm-5">
-							<input type="number" min="10" step="10" class="form-control" name="packageBaseLenght" ng-model="lineForm.tiempo_estimado" required>
+							<input type="number" min="10" step="10" class="form-control" name="packageBaseLenght" ng-model="calcForm.largo">
 					    </div>				
+					</div>	    
+				</div>		
+				<div class="form-group">
+					<div class="col-sm-6">
+						<label class="control-label col-sm-3" for="packageWeight">Peso:</label>
+						<div class="col-sm-9">
+							<input type="number" min="0.1" step="0.1" title="Solo se aceptan números" class="form-control" name="packageWeight" ng-model="calcForm.peso">
+					    </div>
 					</div>
 					<div class="col-sm-6">
 						<label class="control-label col-sm-7" for="packageBaseWidth">Ancho de base (cm):</label>
 						<div class="col-sm-5">
-							<input type="number" min="10" step="10" class="form-control" name="packageBaseWidth" ng-model="lineForm.tiempo_estimado" required>
+							<input type="number" min="10" step="10" class="form-control" name="packageBaseWidth" ng-model="calcForm.ancho">
 					    </div>				
 					</div>
 				</div>

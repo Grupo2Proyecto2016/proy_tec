@@ -179,13 +179,52 @@
     	$scope.user = null;
     	$scope.company = null;
     	$scope.loginForm = null;
+    	$scope.terminals = null;
+    	$scope.calcForm = null;
+    	
+    	var gService = new google.maps.DistanceMatrixService();
     	
     	$rootScope.$watch('user', function(user) {
     		  $scope.user = user;
 		});
     	
+    	$scope.getTerminals = function()
+        {
+        	$http.get(servicesUrl + 'getTerminals').success(function(data, status, headers, config) 
+        	{
+            	$scope.terminals = data;        	
+        	});
+        };    
+        
+        $scope.calcPackage = function()
+        {
+        	var origin = new google.maps.LatLng($scope.calcForm.origen.latitud, $scope.calcForm.origen.longitud);
+        	var destination = new google.maps.LatLng($scope.calcForm.destino.latitud, $scope.calcForm.destino.longitud);
+        	var result = gService.getDistanceMatrix({
+        	    origins: [origin],
+        	    destinations: [destination],
+        	    travelMode: google.maps.TravelMode.DRIVING,
+        	    unitSystem: google.maps.UnitSystem.METRIC,
+        	    avoidHighways: false,
+        	    avoidTolls: false
+        		},
+        		function(response, status) 
+        		{
+        			$scope.calcForm.distance = response.rows[0].elements[0]['distance']['value'] / 1000;
+        			var volume = $scope.calcForm.alto * $scope.calcForm.ancho * $scope.calcForm.largo / 1000000; 
+                	$http.post(servicesUrl + 'calcPackage', JSON.stringify({ distance: $scope.calcForm.distance, weigth: $scope.calcForm.peso, volume: volume  }))
+                		.then(function(result){
+                			$scope.packagePrice = result.data;
+            		});
+        		}
+        	);
+        };
+
+        $scope.getTerminals();
+        
     	$scope.showPackageCalc = function()
     	{
+    		$scope.packagePrice = null;
     		$("#packageCalcModal").modal("toggle");
     	};
     	

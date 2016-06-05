@@ -81,6 +81,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	                .antMatchers("/*/getCompany").permitAll()
 	                .antMatchers("/*/getUserInfo").permitAll()
 	                .antMatchers("/*/getBranches").permitAll()
+	                .antMatchers("/*/getTerminals").permitAll()
+	                .antMatchers("/*/calcPackage").permitAll()
 	                .antMatchers("/*/tenantExist/**").permitAll()
 	                .anyRequest().authenticated();
 
