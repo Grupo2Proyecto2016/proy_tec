@@ -19,7 +19,6 @@ import com.springmvc.logic.implementations.ParametersLogic;
 import com.springmvc.requestWrappers.CalcWrapper;
 import com.springmvc.requestWrappers.LinesWrapper;
 
-import groovy.transform.ToString;
 
 @RestController
 @RequestMapping(value = "/{tenantid}")
