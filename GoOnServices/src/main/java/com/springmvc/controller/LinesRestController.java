@@ -25,7 +25,7 @@ public class LinesRestController{
 		LinesLogic tl = new LinesLogic(tenantid);
 		
 		
-		Linea linea = new Linea();
+		Linea linea = new Linea();		
 		
 		Parada parada_origen = tl.findParadaByID(linesWrapper.getParadas().get(0).getId_parada()); 
 		linea.setOrigen(parada_origen);
@@ -36,9 +36,20 @@ public class LinesRestController{
 		linea.setNumero(linesWrapper.getNumero());
 		linea.setCosto_fijo(linesWrapper.getCosto_fijo());
 		linea.setTiempo_estimado(0);
-		linea.setViaja_parado(linesWrapper.getViaja_parado());		
+		linea.setViaja_parado(linesWrapper.getViaja_parado());	
 		
-		//linea.setParadas(linesWrapper.getParadas());
+		for (int i = 0; i < linesWrapper.getParadas().size()-1; i++) 
+		{
+			Parada auxParada = new Parada();
+			auxParada.setDescripcion(linesWrapper.getParadas().get(i).getDescripcion());
+			auxParada.setDireccion(linesWrapper.getParadas().get(i).getDireccion());
+			auxParada.setEs_peaje(linesWrapper.getParadas().get(i).getEs_peaje());
+			auxParada.setEs_terminal(linesWrapper.getParadas().get(i).getEs_terminal());
+			auxParada.setLatitud(linesWrapper.getParadas().get(i).getLatitud());
+			auxParada.setLongitud(linesWrapper.getParadas().get(i).getLongitud());
+			auxParada.setReajuste(linesWrapper.getParadas().get(i).getReajuste());
+			linea.getParadas().add(auxParada);
+		}		
 		
 		tl.insertLine(linea);	
 		

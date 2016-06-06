@@ -1,5 +1,6 @@
 package com.springmvc.entities.tenant;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -30,8 +31,8 @@ public class Linea {
 	private int tiempo_estimado; //en minutos
 	private Boolean viaja_parado;
 	
-	@ManyToMany(targetEntity=Parada.class)	
-	private List<Parada> paradas;
+	@ManyToMany(targetEntity=Parada.class, cascade = {CascadeType.ALL})	
+	private List<Parada> paradas = new ArrayList<Parada>();
 
 	public long getId_linea() {
 		return id_linea;

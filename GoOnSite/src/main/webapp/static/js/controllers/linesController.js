@@ -320,7 +320,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
   	    es_origen: false,  	    
   	    descripcion: '',
   	    reajuste: 0,
-  	    id_parada:0
+  	    id_parada:null
   	  });
   	  
   	  if($scope.markers.length ==0)
