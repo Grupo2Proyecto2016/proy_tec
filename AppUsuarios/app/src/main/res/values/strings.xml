@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">facultad</string>
+    <string name="app_name">mate</string>
     <string name="WSServer">http://10.0.3.2:8080/GoOnServices/</string>
     <string name="action_settings">Configuración</string>
     <string name="action_viajes">Mis Viajes</string>
@@ -14,6 +14,7 @@
     <string name="scan">Leer QR</string>
     <string name="action_newpasaje">Pasaje</string>
     <string name="item1nosotros">Sobre Nosotros</string>
+    <string name="item1sucursales">Nuestras Sucursales</string>
 
     <!-- Strings related to login -->
     <string name="prompt_user">Usuario</string>
@@ -52,5 +53,6 @@
     <string name="origenBusqueda">"Origen"</string>
     <string name="mensajeBusqueda">"Busque su pasaje"</string>
     <string name="error_user_not_disponible">"Usuario no diponible"</string>
+    <string name="title_activity_sucursales">Sucursales</string>
 
 </resources>

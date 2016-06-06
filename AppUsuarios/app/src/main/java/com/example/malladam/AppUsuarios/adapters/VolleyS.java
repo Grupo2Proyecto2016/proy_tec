@@ -10,10 +10,12 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -56,18 +58,16 @@ public class VolleyS {
         addToQueue(request);
     }
 
-    public void llamarWSstring(int metodo, String url, Response.Listener<String> responseListener,Response.ErrorListener errorListener) {
-        StringRequest strReq = new StringRequest(metodo, url, responseListener, errorListener)
-        {
+    public void llamarWSarray(int metodo, String urlCreateUser, JSONArray jsonBody, Response.Listener<JSONArray> response, Response.ErrorListener errorListener) throws TimeoutException, ExecutionException, InterruptedException {
+        JsonArrayRequest request = new JsonArrayRequest(metodo,urlCreateUser,jsonBody, response, errorListener) {
             @Override
-            protected Response<String> parseNetworkResponse(NetworkResponse response) {
-                int mStatusCode = response.statusCode;
-                Log.d("llamarWSstringPARSE", response.toString());
-                return super.parseNetworkResponse(response);
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
             }
         };
-        // Adding request to request queue
-        addToQueue(strReq);
+        addToQueue(request);
     }
 
 

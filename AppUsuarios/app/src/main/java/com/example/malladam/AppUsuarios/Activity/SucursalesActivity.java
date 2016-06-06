@@ -3,44 +3,79 @@ package com.example.malladam.AppUsuarios.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.design.widget.NavigationView;
+import com.example.malladam.AppUsuarios.adapters.PopupAdapter;
+import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-
-import com.android.IntentIntegrator;
-import com.example.malladam.AppUsuarios.DataBaseManager;
-import com.example.malladam.AppUsuarios.R;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.example.malladam.AppUsuarios.DataBaseManager;
+import com.example.malladam.AppUsuarios.R;
 
-public class NosotrosActivity extends AppCompatActivity {
+import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
-    TextView mDescripcion;
-    DataBaseManager dbManager;
+import com.example.malladam.AppUsuarios.adapters.VolleyS;
+import com.example.malladam.AppUsuarios.models.Sucursal;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
+
+public class SucursalesActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
+
+    Intent intent;
+    private GoogleMap mMap;
+    private VolleyS volley;
+    private String urlgetSucursales;
+    List<Sucursal> sucursales = new ArrayList<Sucursal>();
     private NavigationView navigationView;
     private DrawerLayout mDrawerLayout;
-    Intent intent;
     private ActionBarDrawerToggle mDrawerToggle;
+    private DataBaseManager dbManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nosotros);
-
-        mDescripcion = (TextView) findViewById(R.id.detalles1nosotros);
+        setContentView(R.layout.activity_sucursales);
 
         dbManager = new DataBaseManager(this);
 
-        mDescripcion.setText("Somos la primer empresa de transporte colectivo de pasajeros del País, fundada el 20 de octubre de 1930, gracias a la visión, coraje e ingenio de un grupo de transportistas que decidieron unirse y formar una empresa sobre ruedas.\n" +
-                "\n" +
-                "    Hace 85 años nuestros ómnibus atravesaban médanos y bosques, abriendo caminos hacia balnearios y zonas rurales, donde sólo unos pocos habitantes residían -en ese momento- en forma permanente. En un principio la Compañía atendía un espacio geográfico con centro en la ciudad de Pando en un radio de 60 kilómetros.");
+        ///////WS/////
+        urlgetSucursales = getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)+"/getBranches";
+        volley = volley.getInstance(this);
+        //////WS/////////////
+
+        try {
+            WSgetSucursales();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
 
 
-        ///////////ACTIONBAR+NAVIGATION////////////////
+///////////ACTIONBAR+NAVIGATION////////////////
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         if (navigationView != null) {
             View headerNavigation = navigationView.getHeaderView(0);
@@ -63,13 +98,13 @@ public class NosotrosActivity extends AppCompatActivity {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name, R.string.app_name) {
 
-
+            /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
-
+            /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
@@ -82,7 +117,64 @@ public class NosotrosActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         ///////////ACTIONBAR+NAVIGATION////////////////
+    }
 
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        for (final Sucursal item : sucursales) {
+            LatLng suc = new LatLng(item.getLatitud(), item.getLongitud());
+            mMap.addMarker(new MarkerOptions()
+                    .position(suc)
+                    .title(item.getNombre())
+                    .snippet(item.getDireccion()+":"+item.getTelefono()+":"+item.getMail()));
+            mMap.setInfoWindowAdapter(new PopupAdapter(getLayoutInflater()));
+        }
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(sucursales.get(0).getLatitud(),sucursales.get(0).getLongitud()), 10.0f));
+        mMap.setOnInfoWindowClickListener(this);
+    }
+
+    private void WSgetSucursales() throws JSONException, TimeoutException, ExecutionException {
+        try {
+            volley.llamarWSarray(Request.Method.GET,urlgetSucursales, null,new Response.Listener<JSONArray>(){
+                @Override
+                public void onResponse(JSONArray response) {
+                    try {
+                        for (int i = 0; i < response.length(); i++) {
+                            Sucursal sucursal = new Sucursal();
+                            JSONObject jsonObject = (JSONObject) response.get(i);
+
+                            sucursal.setAddTerminal(jsonObject.getBoolean("addTerminal"));
+                            sucursal.setHasTerminal(jsonObject.getBoolean("hasTerminal"));
+                            sucursal.setDireccion(jsonObject.getString("direccion"));
+                            sucursal.setId_sucursal(jsonObject.getInt("id_sucursal"));
+                            sucursal.setLatitud(jsonObject.getDouble("latitud"));
+                            sucursal.setLongitud(jsonObject.getDouble("longitud"));
+                            sucursal.setMail(jsonObject.getString("mail"));
+                            sucursal.setTelefono(jsonObject.getInt("telefono"));
+                            sucursal.setNombre(jsonObject.getString("nombre"));
+
+                            sucursales.add(sucursal);
+
+                        }
+
+                    SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+                    mapFragment.getMapAsync(SucursalesActivity.this);
+                } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    Log.d("el ERROR ",volleyError.toString());
+                }
+            });
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     ///////////ACTIONBAR+NAVIGATION////////////////
@@ -133,7 +225,6 @@ public class NosotrosActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_nosotros, menu);
         return true;
     }
 
@@ -151,18 +242,15 @@ public class NosotrosActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
-        }else if (id == R.id.action_sucursales) {
-            intent = new Intent(getApplicationContext(), SucursalesActivity.class);
-            startActivity(intent);
-            return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
     ///////////ACTIONBAR+NAVIGATION////////////////
 
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        //Toast.makeText(this, marker.getTitle(), Toast.LENGTH_LONG).show();
+    }
 }
