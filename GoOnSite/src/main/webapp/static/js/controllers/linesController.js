@@ -413,6 +413,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     	}
     	min = min/60;
     	$scope.txt_minutos = Math.round(min * 100) / 100;
+    	$scope.lineForm.tiempo_estimado = $scope.txt_minutos;
     }
     
 });

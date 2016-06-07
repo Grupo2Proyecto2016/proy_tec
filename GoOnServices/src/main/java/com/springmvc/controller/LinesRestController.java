@@ -35,7 +35,7 @@ public class LinesRestController{
 		
 		linea.setNumero(linesWrapper.getNumero());
 		linea.setCosto_fijo(linesWrapper.getCosto_fijo());
-		linea.setTiempo_estimado(0);
+		linea.setTiempo_estimado(linesWrapper.getTiempo_estimado());
 		linea.setViaja_parado(linesWrapper.getViaja_parado());	
 		
 		for (int i = 0; i < linesWrapper.getParadas().size()-1; i++) 
