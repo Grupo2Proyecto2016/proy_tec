@@ -15,7 +15,8 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     $scope.showForm = function()
     {
     	$scope.lineForm = {};
-    	$("#divLineForm").removeClass('hidden');    	
+    	$("#divLineForm").removeClass('hidden');  
+    	$scope.hideSuccess();
     	google.maps.event.trigger($scope.map, 'resize');	//refresh map
     };
     
@@ -42,20 +43,26 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
         columnDefs:
     	[
           { name:'Numero', field: 'numero' },
-          { name:'Origen', field: 'numero' },
-          { name:'Destino', field: 'numero'},
-          { name:'Tiempo Estimado', field: 'tiempo_estimado' },
-          { name: 'Pasajeros Parados', field: 'viaja_parado' },
+          { name:'Origen', field: 'origen.descripcion' },
+          { name:'Destino', field: 'destino.descripcion'},
+          { name:'Tiempo Estimado (min)', field: 'tiempo_estimado' },
+          { name: 'Pasajeros Parados', cellTemplate: '<div class="text-center ngCellText">{{row.entity.viaja_parado | SiNo}}</div>' },
           
           { name: 'Acciones',
         	enableFiltering: false,
         	enableSorting: false,
-            /*cellTemplate:'<button style="width: 50%" class="btn-xs btn-primary" ng-click="grid.appScope.getBusDetails(row)">Detalles</button>'+
-            			 '<button style="width: 50%" class="btn-xs btn-danger" ng-click="grid.appScope.showDeleteDialog(row)">Eliminar</button>'*/ 
+            cellTemplate:'<p align="center"><button style="" class="btn-xs btn-danger" ng-click="grid.appScope.showDeleteDialog(row)">Eliminar</button></p>'
+            	/*'<button style="width: 50%" class="btn-xs btn-primary" ng-click="grid.appScope.getBusDetails(row)">Detalles</button>'+*/
             			  
     	  }
         ]
      };
+    
+    $scope.showDeleteDialog = function(row)
+    {
+    	$scope.lineToDelete = row.entity.id_linea;
+    	$("#deleteModal").modal('show');
+    };
     
     $scope.getLines();
     
@@ -85,6 +92,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
 			{				
 				$scope.hideForm();
 		    	$scope.lineForm = {};
+		    	$scope.getLineas();
 		    	$scope.getTerminals();
 		    	$.unblockUI();
 				$scope.showSuccessAlert("Linea creada.");							
@@ -96,6 +104,35 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
 				$("#errorModal").modal("toggle");
 			});  
 		}
+    };
+    
+    $scope.deleteLine = function()
+	{
+		$.blockUI();
+		$http.post(servicesUrl +'deleteLine', JSON.stringify($scope.lineToDelete))
+		.then(function(response) 
+			{
+				$.unblockUI();		
+	        	if(response.status == 200)
+	        	{	       
+	        		if (!response.data.success)
+	    			{
+	    				$scope.error_message = response.data.msg;
+	    		    	$("#errorModal").modal("toggle");
+	    			}
+	        		else
+	        		{
+	        			$scope.getLines();	
+		        		$scope.showSuccessAlert("La linea ha sido borrada.");	
+	        		}	        		
+	        	}
+	        	$scope.hideDeleteDialog();
+    		});				
+	};
+	
+	$scope.hideDeleteDialog = function(row)
+    {
+    	$("#deleteModal").modal('hide');
     };
     
     $scope.closeSuccessAlert = function()

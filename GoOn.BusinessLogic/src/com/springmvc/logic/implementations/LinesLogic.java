@@ -48,4 +48,14 @@ public class LinesLogic implements ILinesLogic
 	{
 		return TenantContext.LineaRepository.getLineas();
 	}
+
+	public boolean TieneViajes(long id_linea) 
+	{
+		return TenantContext.LineaRepository.TieneViajes(id_linea);
+	}
+
+	public void deleteLinea(long id_linea) 
+	{
+		TenantContext.LineaRepository.deleteLinea(id_linea);		
+	}
 }

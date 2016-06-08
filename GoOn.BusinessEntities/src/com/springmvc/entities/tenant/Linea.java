@@ -30,6 +30,7 @@ public class Linea {
 	private Double costo_fijo;
 	private int tiempo_estimado; //en minutos
 	private Boolean viaja_parado;
+	private Boolean habilitado;
 	
 	@ManyToMany(targetEntity=Parada.class, cascade = {CascadeType.ALL})	
 	private List<Parada> paradas = new ArrayList<Parada>();
@@ -96,5 +97,13 @@ public class Linea {
 
 	public void setParadas(List<Parada> paradas) {
 		this.paradas = paradas;
+	}
+
+	public Boolean getHabilitado() {
+		return habilitado;
+	}
+
+	public void setHabilitado(Boolean habilitado) {
+		this.habilitado = habilitado;
 	}
 }
