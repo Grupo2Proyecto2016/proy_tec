@@ -97,6 +97,11 @@
     		controller  : 'terminalController'
     	})
     	
+    	.when('/manageTravels', {
+    		templateUrl : tenantUrlPart + 'pages/manageTravels.html',
+    		controller  : 'manageTravelsController'
+    	})
+    	
 		.otherwise({
 			redirectTo: '/'
     	});
@@ -181,8 +186,11 @@
     	$scope.loginForm = null;
     	$scope.terminals = null;
     	$scope.calcForm = null;
+    	var gService = null;
     	
-    	var gService = new google.maps.DistanceMatrixService();
+    	$(window).on("load", function(){
+    		gService = new google.maps.DistanceMatrixService();
+		});
     	
     	$rootScope.$watch('user', function(user) {
     		  $scope.user = user;

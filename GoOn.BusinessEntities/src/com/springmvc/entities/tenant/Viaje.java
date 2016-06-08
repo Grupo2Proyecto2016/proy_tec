@@ -20,14 +20,17 @@ public class Viaje {
 	
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long id_viaje;
-	private Date fecha;
 	private Date inicio;
 	private Date fin;
 	private Boolean es_directo;
-	private String desde;
-	private String hasta;
+	private Boolean vuelta;
+	
 	@ManyToOne(fetch=FetchType.LAZY)
 	private Linea linea;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	private Usuario conductor;
+
 	@ManyToOne(fetch=FetchType.LAZY)
 	private Vehiculo vehiculo;
 	
@@ -40,12 +43,6 @@ public class Viaje {
 	}
 	public void setId_viaje(long id_viaje) {
 		this.id_viaje = id_viaje;
-	}
-	public Date getFecha() {
-		return fecha;
-	}
-	public void setFecha(Date fecha) {
-		this.fecha = fecha;
 	}
 	public Date getInicio() {
 		return inicio;
@@ -65,17 +62,17 @@ public class Viaje {
 	public void setEs_directo(Boolean es_directo) {
 		this.es_directo = es_directo;
 	}
-	public String getDesde() {
-		return desde;
+	public Boolean getVuelta() {
+		return vuelta;
 	}
-	public void setDesde(String desde) {
-		this.desde = desde;
+	public void setVuelta(Boolean vuelta) {
+		this.vuelta = vuelta;
 	}
-	public String getHasta() {
-		return hasta;
+	public Usuario getConductor() {
+		return conductor;
 	}
-	public void setHasta(String hasta) {
-		this.hasta = hasta;
+	public void setConductor(Usuario conductor) {
+		this.conductor = conductor;
 	}
 	public Linea getLinea() {
 		return linea;

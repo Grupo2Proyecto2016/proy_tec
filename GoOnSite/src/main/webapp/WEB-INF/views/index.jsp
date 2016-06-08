@@ -39,6 +39,7 @@
       <script src="<c:url value='/static/js/controllers/parametersController.js' />"></script>
       <script src="<c:url value='/static/js/controllers/linesController.js' />"></script>
       <script src="<c:url value='/static/js/controllers/terminalController.js' />"></script>
+      <script src="<c:url value='/static/js/controllers/manageTravelsController.js' />"></script>
     </head>
     <body style="visibility: hidden">
 

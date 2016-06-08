@@ -58,7 +58,7 @@ public class UserRepository
 	public Usuario FindByRole(UserRol rol) 
 	{
 		Usuario user = null;
-		Query q = entityManager.createQuery("FROM Usuario WHERE rol_id_rol = :rol");
+		Query q = entityManager.createQuery("FROM Usuario WHERE rol_id_rol = :rol AND enabled = TRUE");
 		q.setParameter("rol", rol.getValue());
 		try
 		{
@@ -146,5 +146,21 @@ public class UserRepository
 			throw ex;
 		}
 		
+	}
+
+	public List<com.springmvc.entities.tenant.Usuario> GetEmployeesByRol(UserRol rol)
+	{
+		List<Usuario> result = new ArrayList<>();
+		Query q = entityManager.createQuery("FROM Usuario WHERE es_empleado = TRUE AND rol_id_rol = :rol AND enabled = TRUE");
+		q.setParameter("rol", rol.getValue());
+		try
+		{
+			result = q.getResultList();
+		}
+		catch(NoResultException ex)
+		{
+			return null;
+		}
+		return result;
 	}
 }
