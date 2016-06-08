@@ -43,4 +43,9 @@ public class LinesLogic implements ILinesLogic
 	{
 		return TenantContext.ParadaRepository.findByID(id_parada);
 	}
+
+	public List<Linea> getLineas() 
+	{
+		return TenantContext.LineaRepository.getLineas();
+	}
 }

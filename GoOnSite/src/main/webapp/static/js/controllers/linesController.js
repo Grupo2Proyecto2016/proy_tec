@@ -10,6 +10,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     $scope.lineForm = {};
     $scope.stops = {};
     $scope.terminals = null;
+    $scope.lines = null;
     
     $scope.showForm = function()
     {
@@ -23,6 +24,41 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     	$("#divLineForm").addClass('hidden');		
     };
     
+    $scope.getLines = function()
+    {
+    	$http.get(servicesUrl + 'getLines').success(function(data, status, headers, config)
+    	{
+    		$scope.lines = data;
+    		$scope.linesGrid.data = $scope.lines;
+    	});
+    };
+    
+    $scope.linesGrid = 
+    {
+		paginationPageSizes: [15, 30, 45],
+	    paginationPageSize: 15,
+		enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
+		enableFiltering: true,
+        columnDefs:
+    	[
+          { name:'Numero', field: 'numero' },
+          { name:'Origen', field: 'numero' },
+          { name:'Destino', field: 'numero'},
+          { name:'Tiempo Estimado', field: 'tiempo_estimado' },
+          { name: 'Pasajeros Parados', field: 'viaja_parado' },
+          
+          { name: 'Acciones',
+        	enableFiltering: false,
+        	enableSorting: false,
+            /*cellTemplate:'<button style="width: 50%" class="btn-xs btn-primary" ng-click="grid.appScope.getBusDetails(row)">Detalles</button>'+
+            			 '<button style="width: 50%" class="btn-xs btn-danger" ng-click="grid.appScope.showDeleteDialog(row)">Eliminar</button>'*/ 
+            			  
+    	  }
+        ]
+     };
+    
+    $scope.getLines();
+    
     $scope.getTerminals = function()
     {
     	$http.get(servicesUrl + 'getTerminals').success(function(data, status, headers, config) 
@@ -31,7 +67,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     	});
     };    
     
-    $scope.getTerminals();
+    $scope.getTerminals();    
     
     $scope.createLine = function()
     {

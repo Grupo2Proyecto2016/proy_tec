@@ -177,6 +177,14 @@
 	</div>
 </div>
 
+<div class="row" style="margin-top: 50px;">
+	<div class="col-xs-1"></div>
+	<div class="col-xs-10">
+		<div ui-grid="linesGrid" ui-grid-pagination class="genericGridHeader"></div>
+	</div>
+	<div class="col-xs-1"></div>
+</div>
+
 <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">

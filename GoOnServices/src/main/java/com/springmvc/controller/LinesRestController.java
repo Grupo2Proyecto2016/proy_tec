@@ -1,5 +1,7 @@
 package com.springmvc.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -17,6 +19,14 @@ import com.springmvc.requestWrappers.LinesWrapper;
 @RestController
 @RequestMapping(value = "/{tenantid}")
 public class LinesRestController{
+	
+	@Secured({"ROLE_ADMIN"})
+	@RequestMapping(value = "/getLines", method = RequestMethod.GET)
+    public ResponseEntity<List<Linea>> getLines(@PathVariable String tenantid)
+    {
+		List<Linea> lineas = new LinesLogic(tenantid).getLineas();
+		return new ResponseEntity<List<Linea>>(lineas, HttpStatus.OK);
+    }
 	
 	@Secured({"ROLE_ADMIN"})
 	@RequestMapping(value = "/createLine", method = RequestMethod.POST, consumes="application/json", produces = "application/json")

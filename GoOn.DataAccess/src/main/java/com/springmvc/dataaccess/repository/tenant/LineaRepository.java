@@ -1,5 +1,7 @@
 package com.springmvc.dataaccess.repository.tenant;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
@@ -48,6 +50,14 @@ public class LineaRepository {
 			return null;
 		}
 		return linea;
+	}
+
+	public List<Linea> getLineas() 
+	{
+		List<Linea> lineas = null;
+		Query q = entityManager.createQuery("FROM Linea");
+		lineas = (List<Linea>)q.getResultList();
+		return lineas;		
 	}
 
 }
