@@ -85,7 +85,7 @@
 					    	</div>
 					    	<div class="col-sm-6">
 								<label class="control-label col-sm-3" for="costo_fijo">Hora de salida:</label>
-								<div style="padding-left: 14px;" class="col-sm-9 input-group bootstrap-timepicker timepicker">
+								<div style="padding-left: 15px; padding-right: 15px;" class="col-sm-9 input-group bootstrap-timepicker timepicker">
             						<input id="timepicker" ng-model="time" type="text" class="form-control input-small">
             						<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
            						</div>				    
