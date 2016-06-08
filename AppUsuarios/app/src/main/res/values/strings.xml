@@ -6,6 +6,7 @@
     <string name="action_gps">Gps</string>
     <string name="action_bus">Bus</string>
     <string name="action_sucursales">Sucursales</string>
+    <string name="action_info">Info</string>
     <string name="action_opcion1">Opcion 1</string>
     <string name="action_opcion2">Opcion 2</string>
     <string name="rockBla">rockB</string>
@@ -54,5 +55,8 @@
     <string name="mensajeBusqueda">"Busque su pasaje"</string>
     <string name="error_user_not_disponible">"Usuario no diponible"</string>
     <string name="title_activity_sucursales">Sucursales</string>
+    <string name="razonSocial">"Razón Social"</string>
+    <string name="rut">"RUT"</string>
+    <string name="pais">"Pais"</string>
 
 </resources>

@@ -49,7 +49,7 @@ public class PopupAdapter implements InfoWindowAdapter {
             }
             if(i==2){
                 TextView email=(TextView)popup.findViewById(R.id.email);
-                email.setText("   "+todos);
+                email.setText("    "+todos);
             }
 
             todos = todos.substring(pos+1,todos.length());

@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,11 +19,23 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.example.malladam.AppUsuarios.DataBaseManager;
 import com.example.malladam.AppUsuarios.R;
+import com.example.malladam.AppUsuarios.adapters.VolleyS;
+import com.example.malladam.AppUsuarios.models.Empresa;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 public class BusquedaActivity extends AppCompatActivity {
 
@@ -39,6 +52,9 @@ public class BusquedaActivity extends AppCompatActivity {
     private EditText mDestino;
     private EditText mOrigen;
     private Button mButtonBuscar;
+    private String urlgetCompany;
+    private VolleyS volley;
+    private Empresa empresa;
 
 
     @Override
@@ -51,6 +67,20 @@ public class BusquedaActivity extends AppCompatActivity {
         mDestino = (EditText) findViewById(R.id.destinoBusqueda);
         mButtonBuscar = (Button) findViewById(R.id.buscarButton);
 
+        //////////EMPRESA CUSTOM///////////
+        empresa = empresa.getInstance();
+        urlgetCompany = getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)+"/getCompany";
+        volley = volley.getInstance(this);
+        try {
+            WSgetCompany();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        //////////EMPRESA CUSTOM///////////
 
         dbManager = new DataBaseManager(this);
 
@@ -107,8 +137,9 @@ public class BusquedaActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
+        getSupportActionBar().setTitle(empresa.getNombre());
         mDrawerLayout.addDrawerListener(mDrawerToggle);
-        ///////////ACTIONBAR+NAVIGATION////////////////
+        ///////////ACTIONBAR+NAVIGATION////////////
     }
 
     ///////////ACTIONBAR+NAVIGATION////////////////
@@ -212,4 +243,34 @@ public class BusquedaActivity extends AppCompatActivity {
         return null;
     }
     ///////////DATEPICKER////////////////
+
+    private void WSgetCompany() throws JSONException, TimeoutException, ExecutionException {
+        try {
+            volley.llamarWS(Request.Method.GET,urlgetCompany, null,new Response.Listener<JSONObject>(){
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        empresa.setNombre(response.getString("nombre"));
+                        empresa.setRut(response.getDouble("rut"));
+                        empresa.setTelefono(response.getDouble("telefono"));
+                        empresa.setDireccion(response.getString("direccion"));
+                        empresa.setLogo(response.getString("logo"));
+                        JSONObject pais = response.getJSONObject("pais");
+                        empresa.setPais(pais.getString("nombre"));
+                        empresa.setRazonSocial(response.getString("razonSocial"));
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    Toast.makeText(BusquedaActivity.this, volleyError.toString(), Toast.LENGTH_LONG).show();
+                }
+            });
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }

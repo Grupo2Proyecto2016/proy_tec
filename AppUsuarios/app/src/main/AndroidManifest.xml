@@ -25,8 +25,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".models.Asientos"
-            android:label="@string/app_name">
+            android:name=".models.Asientos">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -45,7 +44,6 @@
         </activity>
         <activity
             android:name=".ManejadorInicio"
-            android:label="@string/app_name"
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
