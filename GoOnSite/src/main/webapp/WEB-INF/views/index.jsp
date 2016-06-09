@@ -196,7 +196,7 @@
         	</h3>
 	      </div>
 	      <div class="modal-body">
- 	        <form class="form-signin" name="calcForm" role="form" ng-submit="calcPackage()" style="overflow: overlay;">
+ 	        <form class="form-horizontal" name="calcForm" role="form" ng-submit="calcPackage()"">
 				<div class="form-group">
 				    <div class="col-sm-6">
 					    <label class="control-label col-sm-3" for="origen">Origen:</label>

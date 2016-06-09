@@ -1,14 +1,18 @@
 goOnApp.controller('manageTravelsController', function($scope, $http, uiGridConstants, i18nService)									 
 {
 	$scope.message = 'Gestiona viajes para las lineas asignando vehículos y choferes';
-    $scope.travelForm = null;
+    $scope.travelForm = {};
 	$scope.drivers = null;
     $scope.lines = null;
     $scope.buses = null;
     
 	
-	$scope.error_message = '';
-    $scope.custom_response = null;    
+	$scope.isDayMissing = function()
+	{
+		return !travelForm.monday && !travelForm.tuesday && !travelForm.wednesday && !travelForm.thursday && !travelForm.friday && !travelForm.saturday && !travelForm.sunday;
+	};
+    
+	$scope.custom_response = null;    
     $scope.txt_minutos = "";
     $scope.txt_km = "";
     i18nService.setCurrentLang('es');

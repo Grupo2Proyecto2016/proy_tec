@@ -73,18 +73,6 @@
 		    		</div>
 		  		</div>
 		  		<div class="form-group">
-			    	<label class="control-label col-sm-4" for="cantAnimales">Lugares Animales:</label>
-			    	<div class="col-sm-6">
-			    		<input type="number" class="form-control" name="cantAnimales" ng-model="busForm.cantAnimales" min="0" value="2" required>
-		    		</div>
-		  		</div>
-		  		<div class="form-group">
-			    	<label class="control-label col-sm-4" for="cantBultos">Lugares Equipaje:</label>
-			    	<div class="col-sm-6">
-			    		<input type="number" class="form-control" name="cantBultos" ng-model="busForm.cantBultos" min="0" value="0" max="150" required>
-		    		</div>
-		  		</div>
-		  		<div class="form-group">
 			    	<label class="control-label col-sm-4" for="cantEncomiendas">Lugares Encomienda:</label>
 			    	<div class="col-sm-6">
 			    		<input type="number" class="form-control" name="cantEncomiendas" ng-model="busForm.cantEncomiendas" min="0" value="0" required>
@@ -153,7 +141,7 @@
 			<div class="modal-body">
 				<form class="form-horizontal">
 					<div class="form-group">
-						<label class="control-label col-sm-4" for="name">Tiene Baño:</label>
+						<span class="control-label col-sm-4" for="name">Tiene Baño:</span>
 						<div ng-show="elBus.tieneBano == true" class="col-sm-8">
 							<p>Si</p>
 						</div>
@@ -162,25 +150,13 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="control-label col-sm-4" for="surname">Asientos Accesibles:</label>
+						<span class="control-label col-sm-4" for="surname">Asientos Accesibles:</span>
 						<div class="col-sm-8">
 							<p>{{elBus.cantAccesibles}}</p>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="control-label col-sm-4" for="birth">Lugar para Animales:</label>
-						<div class="col-sm-8">
-							<p>{{elBus.cantAnimales}}</p>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="mail">Lugares Equipaje:</label>
-						<div class="col-sm-8">
-							<p>{{elBus.cantBultos}}</p>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="address">Lugares Encomienda:</label>
+						<span class="control-label col-sm-4" for="address">Lugares Encomienda:</span>
 						<div class="col-sm-8">
 							<p>{{elBus.cantEncomiendas}}</p>
 						</div>

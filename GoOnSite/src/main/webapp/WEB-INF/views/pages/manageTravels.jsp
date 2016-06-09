@@ -41,7 +41,7 @@
 						    <div class="col-sm-6">
 							    <label class="control-label col-sm-3" for="origen">
 							    	<a ng-show="travelForm.line != null" id="lineDetailsLink" class="trigger"><i class="fa fa-info-circle"></i></a>
-							    	Linea:
+							    	Línea:
 							    </label>
 							    <div class="col-sm-9">			
 									<select name="origen" class="form-control"
@@ -125,7 +125,7 @@
 								    </div>
 								</div>						
 							</div>
-							<div class="col-sm-6">
+							<div class="col-sm-6" style="padding: 0;">
 								<div class="col-sm-12">
 									<label class="control-label col-sm-3" for="travelForm.dayFrom">Desde el día:</label>
 									<div class="col-sm-9">
@@ -140,6 +140,12 @@
 								</div>		
 							</div>
 						</div>
+						<div class="form-group has-error" 
+							ng-show="!travelForm.monday && !travelForm.tuesday && !travelForm.wednesday && !travelForm.thursday && !travelForm.friday && !travelForm.saturday && !travelForm.sunday">
+							<div role="alert" class="col-sm-6 text-center">
+								<span class="help-block">Debe seleccionar al menos un día de la semana.</span>
+						    </div>
+					  	</div>
 						<div class="form-group"> 
 				    		<div class="col-sm-12">
 				      			<button style="float: right" type="submit" class="btn btn-info">Crear</button>
@@ -169,50 +175,92 @@
  
  <div id="lineDetailHeader" class="head hide">Detalles de línea</div>
  <div id="lineDetailContent" class="content hide">
-     <div class="form-group">
-         <input type="text" class="form-control" placeholder="Type something…">
-     </div>
-     <button type="submit" class="btn btn-default btn-block">
-         Submit
-     </button>
+     <div style="width: 245px;">
+	    <div class="form-group row">
+			<label class="control-label col-sm-3" for="name">Origen:</label>
+			<div class="col-sm-9">
+				<p>{{travelForm.line.origen.direccion}}</p>
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="control-label col-sm-3" for="name">Destino:</label>
+			<div class="col-sm-9">
+				<p>{{travelForm.line.destino.direccion}}</p>
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="control-label col-sm-3" for="mail">Duración:</label>
+			<div class="col-sm-9" style="word-wrap: break-word;">
+				<p>{{travelForm.line.tiempo_estimado}} minutos</p>
+			</div>
+		</div>
+ 	</div>
  </div>
  
  <div id="busDetailHeader" class="head hide">Detalles del vehículo</div>
  <div id="busDetailContent" class="content hide">
-     <div class="form-group">
-         <input type="text" class="form-control" placeholder="Type something…">
-     </div>
-     <button type="submit" class="btn btn-default btn-block">
-         Submit
-     </button>
+ 	<div style="width: 180px;">
+	    <div class="form-group row">
+			<label class="control-label col-sm-9" for="name">Número:</label>
+			<div class="col-sm-3">
+				<p>{{travelForm.bus.id_vehiculo}}</p>
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="control-label col-sm-9" for="name">Asientos:</label>
+			<div class="col-sm-3">
+				<p>{{travelForm.bus.cantAsientos}}</p>
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="control-label col-sm-9" for="mail">Pasajeros parados:</label>
+			<div class="col-sm-3" style="word-wrap: break-word;">
+				<p>{{travelForm.bus.cantParados}}</p>
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="control-label col-sm-9" for="address">Asientos accesibles:</label>
+			<div class="col-sm-3">
+				<p>{{travelForm.bus.cantAccesibles}}</p>
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="control-label col-sm-9" for="address">Espacio de encomiendas:</label>
+			<div class="col-sm-3">
+				<p>{{travelForm.bus.cantEncomiendas}}</p>
+			</div>
+		</div>
+ 	</div>
  </div>
  
  <div id="driverDetailHeader" class="head hide">Detalles del chofer</div>
  <div id="driverDetailContent" class="content hide">
- 	<div class="form-group row">
-		<label class="control-label col-sm-4" for="name">Nombre:</label>
-		<div class="col-sm-8">
-			<p>{{travelForm.driver.nombre}}</p>
+ 	<div style="width: 245px;">
+	 	<div class="form-group row">
+			<label class="control-label col-sm-4" for="name">Nombre:</label>
+			<div class="col-sm-8">
+				<p>{{travelForm.driver.nombre}}</p>
+			</div>
 		</div>
-	</div>
-	<div class="form-group row">
-		<label class="control-label col-sm-4" for="name">Apellido:</label>
-		<div class="col-sm-8">
-			<p>{{travelForm.driver.apellido}}</p>
+		<div class="form-group row">
+			<label class="control-label col-sm-4" for="name">Apellido:</label>
+			<div class="col-sm-8">
+				<p>{{travelForm.driver.apellido}}</p>
+			</div>
 		</div>
-	</div>
-	<div class="form-group row">
-		<label class="control-label col-sm-4" for="mail">Correo:</label>
-		<div class="col-sm-8" style="word-wrap: break-word;">
-			<p>{{travelForm.driver.email}}</p>
+		<div class="form-group row">
+			<label class="control-label col-sm-4" for="mail">Correo:</label>
+			<div class="col-sm-8" style="word-wrap: break-word;">
+				<p>{{travelForm.driver.email}}</p>
+			</div>
 		</div>
-	</div>
-	<div class="form-group row">
-		<label class="control-label col-sm-4" for="address">Dirección:</label>
-		<div class="col-sm-8">
-			<p>{{travelForm.driver.direccion}}</p>
+		<div class="form-group row">
+			<label class="control-label col-sm-4" for="address">Dirección:</label>
+			<div class="col-sm-8">
+				<p>{{travelForm.driver.direccion}}</p>
+			</div>
 		</div>
-	</div>
+ 	</div>
  </div>
  
  <script type="text/javascript">

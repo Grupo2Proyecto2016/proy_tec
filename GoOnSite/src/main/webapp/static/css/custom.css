@@ -3,6 +3,17 @@ div.userPanel.fix-panel
 	width: 100% !important;
 }
 
+span.control-label
+{
+	font-weight: bold;
+	padding-top: 0px !important;
+}
+
+div.popover-content label
+{
+	padding: 0 !important;
+}
+
 .img-center 
 {
     margin: 0 auto;
@@ -78,12 +89,12 @@ div.modal-header.calc
 	color: white;
 }
 
-.modal-body label
-{
-	padding-top: 8px!important;
-}
+/* .modal-body label */
+/* { */
+/* 	padding-top: 8px!important; */
+/* } */
 
-#loginModal input, #passwordModal input, #packageCalcModal input, #packageCalcModal select
+#loginModal input, #passwordModal input
 {
 	margin-bottom: 20px;
 }
