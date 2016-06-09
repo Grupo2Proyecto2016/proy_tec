@@ -19,8 +19,6 @@ goOnApp.controller('busController', function($scope, $http, uiGridConstants, i18
 	    $scope.busForm.cantParados = 0;
 	    $scope.busForm.tieneBano = false;
 	    $scope.busForm.cantAccesibles = 0;
-	    $scope.busForm.cantAnimales = 0;
-	    $scope.busForm.cantBultos = 0;
 	    $scope.busForm.cantEncomiendas = 0;
     }
     

@@ -27,10 +27,7 @@ public class Vehiculo {
 	private int cantAsientos;
 	private int cantParados;
 	private int cantAccesibles;
-	private int cantAnimales;
 	private int cantEncomiendas; //basados en bultos de 1 m cubico
-	private int cantBultos;
-	private int pisos;
 	
 	@Transient
 	private boolean puedeBorrarse; //Atributo que no es persistido es solo para utilizar en tiempo de ejecucion
@@ -93,29 +90,11 @@ public class Vehiculo {
 	public void setCantAccesibles(int cantAccesibles) {
 		this.cantAccesibles = cantAccesibles;
 	}
-	public int getCantAnimales() {
-		return cantAnimales;
-	}
-	public void setCantAnimales(int cantAnimales) {
-		this.cantAnimales = cantAnimales;
-	}
 	public int getCantEncomiendas() {
 		return cantEncomiendas;
 	}
 	public void setCantEncomiendas(int cantEncomiendas) {
 		this.cantEncomiendas = cantEncomiendas;
-	}
-	public int getCantBultos() {
-		return cantBultos;
-	}
-	public void setCantBultos(int cantBultos) {
-		this.cantBultos = cantBultos;
-	}
-	public int getPisos() {
-		return pisos;
-	}
-	public void setPisos(int pisos) {
-		this.pisos = pisos;
 	}
 	public String getMatricula() {
 		return matricula;

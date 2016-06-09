@@ -7,7 +7,7 @@
 	</div>
 
 	<div class="row">
-		<div class="col-sm-7 col-sm-offset-1">
+		<div class="col-lg-7 col-md-12 col-lg-offset-1">
 			<div class="row">
 				<div class="container userPanel fix-panel">
 					<div class="panel-group">
@@ -45,7 +45,7 @@
 			</div>
 		</div>
 
-		<div class="col-sm-3">
+		<div class="col-lg-4 col-md-12">
 			<div class="container userPanel fix-panel">
 				<div class="panel-group">
 					<div class="panel panel-primary">
