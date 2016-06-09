@@ -1,5 +1,5 @@
 // create the module and name it scotchApp
-    var goOnApp = angular.module('goOnApp', ['ngRoute', 'ngAnimate', 'ngMessages']);
+    var goOnApp = angular.module('goOnApp', ['ngRoute', 'ngAnimate', 'ngMessages', 'ui.grid', 'ui.grid.pagination']);
 
     // configure our routes
     goOnApp.config(function($routeProvider) {
@@ -117,6 +117,8 @@
     			;    			
     		}
     	};
+    	
+    	
     	
     	$scope.map = new google.maps.Map(document.getElementById('map'), 
 	    {
@@ -243,13 +245,14 @@
         };
     });
 
-    goOnApp.controller('companiesController', function($scope, $http) {
+    goOnApp.controller('companiesController', function($scope, $http, uiGridConstants) {
         $scope.message = 'A continuación se listan las empresas registradas en la plataforma';
         
         $http.get(AppName + 'getCompanies')
         	.success(function(data, status, headers, config) 
 			{
 	        	$scope.companies = data;
+	        	$scope.companyGrid.data = $scope.companies;
 		});
         
         $scope.getUserDetails = function(tenantName)
@@ -262,6 +265,31 @@
 		        	$("#adminDetailsModal").modal('toggle');
 		    });
         };
+        
+        $scope.companyGrid = 
+        {
+    		paginationPageSizes: [15, 30, 45],
+    	    paginationPageSize: 15,
+    		enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
+    		enableFiltering: true,
+            columnDefs:
+        	[
+              { name:'Nombre', field: 'nombre' },
+              { name:'Razón Social', field: 'razonSocial' },
+              { name:'Url', field: 'nombreTenant'},
+              { name:'Teléfono', field: 'telefono' },
+              { name:'País de origen', field: 'pais.nombre' },
+              { name:'Dirección', field: 'direccion' },
+                           
+              { name: 'Administrador',
+            	enableFiltering: false,
+            	enableSorting: false,
+                cellTemplate:'<p align="center"><button style="" class="btn-xs btn-danger" ng-click="grid.appScope.getUserDetails(nombreTenant)">Eliminar</button></p>'
+                	/*'<button style="width: 50%" class="btn-xs btn-primary" ng-click="grid.appScope.getBusDetails(row)">Detalles</button>'+*/
+                			  
+        	  }
+            ]
+         };
     });
 
     goOnApp.directive('tenantexists', function($http, $q) {
