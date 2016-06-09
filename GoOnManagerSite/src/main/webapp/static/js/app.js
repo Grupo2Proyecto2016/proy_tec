@@ -284,7 +284,7 @@
               { name: 'Administrador',
             	enableFiltering: false,
             	enableSorting: false,
-                cellTemplate:'<p align="center"><button style="" class="btn-xs btn-danger" ng-click="grid.appScope.getUserDetails(nombreTenant)">Eliminar</button></p>'
+                cellTemplate:'<p align="center"><button style="" class="btn-xs btn-danger" ng-click="grid.appScope.getUserDetails(nombreTenant)">Detalles</button></p>'
                 	/*'<button style="width: 50%" class="btn-xs btn-primary" ng-click="grid.appScope.getBusDetails(row)">Detalles</button>'+*/
                 			  
         	  }
