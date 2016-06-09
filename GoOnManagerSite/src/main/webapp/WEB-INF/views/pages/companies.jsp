@@ -3,7 +3,7 @@
 <div class="jumbotron text-center">
 	<h2>
 		Empresas registradas
-		</h1>
+	</h2>
 		<p>{{ message }}</p>
 </div>
 
