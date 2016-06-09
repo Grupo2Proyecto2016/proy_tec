@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.springmvc.entities.tenant.Linea;
 import com.springmvc.entities.tenant.Parada;
 import com.springmvc.logic.implementations.LinesLogic;
+import com.springmvc.logic.implementations.VehiculosLogic;
+import com.springmvc.requestWrappers.CustomResponseWrapper;
 import com.springmvc.requestWrappers.LinesWrapper;
 
 @RestController
@@ -47,7 +49,7 @@ public class LinesRestController{
 		linea.setCosto_fijo(linesWrapper.getCosto_fijo());
 		linea.setTiempo_estimado(linesWrapper.getTiempo_estimado());
 		linea.setViaja_parado(linesWrapper.getViaja_parado());	
-		
+		linea.setHabilitado(true);
 		for (int i = 0; i < linesWrapper.getParadas().size()-1; i++) 
 		{
 			Parada auxParada = new Parada();
@@ -65,4 +67,23 @@ public class LinesRestController{
 		
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
+	
+	@Secured({"ROLE_ADMIN"})
+	@RequestMapping(value = "/deleteLine", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
+	public ResponseEntity<CustomResponseWrapper> DeleteLine(@RequestBody long id_linea, @PathVariable String tenantid)
+	{
+		LinesLogic tl = new LinesLogic(tenantid);
+		CustomResponseWrapper respuesta = new CustomResponseWrapper();
+		if (tl.TieneViajes(id_linea))
+		{
+			respuesta.setMsg("No se puede eliminar vehiculo, tiene viajes asociados.");
+			respuesta.setSuccess(false);	
+		}	
+		else
+		{
+			tl.deleteLinea(id_linea);
+			respuesta.setSuccess(true);
+		}
+		return new ResponseEntity<CustomResponseWrapper>(respuesta, HttpStatus.OK);
+	}	
 }

@@ -3,46 +3,19 @@
 <div class="jumbotron text-center">
 	<h2>
 		Empresas registradas
-		</h1>
+	</h2>
 		<p>{{ message }}</p>
 </div>
 
-<div class="row">
+
+<div class="row" style="margin-top: 50px;">
 	<div class="col-xs-1"></div>
 	<div class="col-xs-10">
-		<div class="panel panel-default">
-			<div class="panel-heading"></div>
-			<table class="table">
-				<thead>
-					<tr>
-						<th>Nombre</th>
-						<th>Razón Social</th>
-						<th>Url</th>
-						<th>Teléfono</th>
-						<th>País de origen</th>
-						<th>Dirección</th>
-						<th>Administrador</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr ng-repeat="c in companies">
-						<td>{{c.nombre}}</td>
-						<td>{{c.razonSocial}}</td>
-						<td>{{c.nombreTenant}}</td>
-						<td>{{c.telefono}}</td>
-						<td>{{c.pais.nombre}}</td>
-						<td>{{c.direccion}}</td>
-						<td>
-							<button type="button" ng-click="getUserDetails(c.nombreTenant)"
-								class="btn btn-primary btn-sm">Detalles</button>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+		<div ui-grid="companyGrid" ui-grid-pagination class="genericGridHeader"></div>
 	</div>
 	<div class="col-xs-1"></div>
 </div>
+
 
 <div class="modal fade" id="adminDetailsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 	<div class="modal-dialog" role="document">
