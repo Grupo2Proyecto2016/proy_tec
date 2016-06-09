@@ -82,19 +82,46 @@
 								</div>						
 							</div>
 							<div class="col-sm-6">
-								<label class="control-label 	col-sm-3" for="costo_fijo">Valor Fijo (UYU):</label>
+								<label class="control-label col-sm-3" for="calculo">Tarifa:</label>
 								<div class="col-sm-9">
-									<input type="text" pattern="[0-9]+" title="Solo se aceptan números" class="form-control" name="costo_fijo" ng-model="lineForm.costo_fijo" required>
+							    	<select name="calculo" class="form-control"
+										ng-model="lineForm.calculo"										
+										ng-change="updateCalculo()"
+										required>
+										<option value="">Seleccione una tipo de tarifa</option>
+										<option value="1">Costo Fijo</option>
+										<option value="2">Costo Variable</option>
+									</select>	
+						    	</div>					    
+							</div>
+						</div>
+						<div class="form-group" id="tarifa_fijo" ng-show="lineForm.calculo==1">
+							<div class="col-sm-6">
+								<label class="control-label 	col-sm-3" for="costo_maximo">Valor Fijo (UYU):</label>
+								<div class="col-sm-9">
+									<input type="text" pattern="[0-9]+" title="Solo se aceptan números" class="form-control" name="costo_maximo" ng-model="lineForm.costo_maximo" required>
+							    </div>						    
+							</div> 
+						</div>
+						<div class="form-group" id="tarifa_variable"  ng-show="lineForm.calculo==2">
+							<div class="col-sm-6">
+								<label class="control-label 	col-sm-3" for="costo_minimo">Valor Minimo(UYU):</label>
+								<div class="col-sm-9">
+									<input type="text" pattern="[0-9]+" title="Solo se aceptan números" class="form-control" name="costo_minimo" ng-model="lineForm.costo_minimo">
+							    </div>						    
+							</div> 
+							<div class="col-sm-6">
+								<label class="control-label 	col-sm-3" for="costo_maximo">Valor Maximo(UYU):</label>
+								<div class="col-sm-9">
+									<input type="text" pattern="[0-9]+" title="Solo se aceptan números" class="form-control" name="costo_maximo" ng-model="lineForm.costo_maximo">
 							    </div>						    
 							</div>
 						</div>
-						<div class="form-group"> 
 			    		<div class="col-sm-12">
 			      			<button style="float: right" type="submit" class="btn btn-info">Crear</button>
 			    		</div>
-				    </div>
-		    	</div>
-		    	</div>
+				    </div>				  
+		    	</div>		    	
 			</form>			
 		</div>
 		<div class="col-xs-1"></div>

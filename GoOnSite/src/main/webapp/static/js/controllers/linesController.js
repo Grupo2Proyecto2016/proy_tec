@@ -92,7 +92,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
 			{				
 				$scope.hideForm();
 		    	$scope.lineForm = {};
-		    	$scope.getLineas();
+		    	$scope.getLines();
 		    	$scope.getTerminals();
 		    	$.unblockUI();
 				$scope.showSuccessAlert("Linea creada.");							
@@ -485,7 +485,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     		min = min + legs[i].duration.value;    		
     	}
     	min = min/60;
-    	$scope.txt_minutos = Math.round(min * 100) / 100;
+    	$scope.txt_minutos = Math.round(min);
     	$scope.lineForm.tiempo_estimado = $scope.txt_minutos;
     }
     

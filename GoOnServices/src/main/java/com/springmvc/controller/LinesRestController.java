@@ -46,21 +46,31 @@ public class LinesRestController{
 		linea.setDestino(parada_destino);
 		
 		linea.setNumero(linesWrapper.getNumero());
-		linea.setCosto_fijo(linesWrapper.getCosto_fijo());
+		linea.setCosto_minimo(linesWrapper.getCosto_minimo());
+		linea.setCosto_maximo(linesWrapper.getCosto_maximo());
 		linea.setTiempo_estimado(linesWrapper.getTiempo_estimado());
 		linea.setViaja_parado(linesWrapper.getViaja_parado());	
 		linea.setHabilitado(true);
 		for (int i = 0; i < linesWrapper.getParadas().size()-1; i++) 
 		{
-			Parada auxParada = new Parada();
-			auxParada.setDescripcion(linesWrapper.getParadas().get(i).getDescripcion());
-			auxParada.setDireccion(linesWrapper.getParadas().get(i).getDireccion());
-			auxParada.setEs_peaje(linesWrapper.getParadas().get(i).getEs_peaje());
-			auxParada.setEs_terminal(linesWrapper.getParadas().get(i).getEs_terminal());
-			auxParada.setLatitud(linesWrapper.getParadas().get(i).getLatitud());
-			auxParada.setLongitud(linesWrapper.getParadas().get(i).getLongitud());
-			auxParada.setReajuste(linesWrapper.getParadas().get(i).getReajuste());
-			linea.getParadas().add(auxParada);
+			if (linesWrapper.getParadas().get(i).getId_parada() > 0)
+			{
+				Parada auxParada = tl.findParadaByID(linesWrapper.getParadas().get(i).getId_parada());
+				linea.getParadas().add(auxParada);
+			}
+			else
+			{
+				Parada auxParada = new Parada();
+				auxParada.setId_parada(linesWrapper.getParadas().get(i).getId_parada());
+				auxParada.setDescripcion(linesWrapper.getParadas().get(i).getDescripcion());
+				auxParada.setDireccion(linesWrapper.getParadas().get(i).getDireccion());
+				auxParada.setEs_peaje(linesWrapper.getParadas().get(i).getEs_peaje());
+				auxParada.setEs_terminal(linesWrapper.getParadas().get(i).getEs_terminal());
+				auxParada.setLatitud(linesWrapper.getParadas().get(i).getLatitud());
+				auxParada.setLongitud(linesWrapper.getParadas().get(i).getLongitud());
+				auxParada.setReajuste(linesWrapper.getParadas().get(i).getReajuste());
+				linea.getParadas().add(auxParada);
+			}
 		}		
 		
 		tl.insertLine(linea);	
