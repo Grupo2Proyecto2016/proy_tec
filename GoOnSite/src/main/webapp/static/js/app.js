@@ -114,27 +114,28 @@
             if (response.status == 401)
             {
             	$rootScope.user = null;
+            	$location.path('home');
             	if($('#loginModal').hasClass('in'))
             	{
             		//do nothing
             	}
             	else
             	{
-    				$("#loginModal").modal("toggle");
+    				$("#loginModal").modal("show");
             	}
             }
             else if(response.status == 500)
             {
             	if(!$('#errorModal').hasClass('in'))
             	{
-            		$("#errorModal").modal("toggle");
+            		$("#errorModal").modal("show");
             	}
             }
             else if(response.status == -1)
             {
             	if(!$('#connectErrorModal').hasClass('in'))
             	{
-            		$("#connectErrorModal").modal("toggle");
+            		$("#connectErrorModal").modal("show");
             	}
             }
             else if(response.status == 403)

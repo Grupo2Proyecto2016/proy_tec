@@ -44,6 +44,7 @@ public class CompanyRestController
     	return new ResponseEntity<Void>(HttpStatus.OK);
     }
 	
+	@Secured({"ROLE_ADMIN"})
 	@RequestMapping(value = "/getParams", method = RequestMethod.GET)
     public ResponseEntity<List<Parametro>> GetParameters(@PathVariable String tenantid)
     {

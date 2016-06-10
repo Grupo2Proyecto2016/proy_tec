@@ -1,6 +1,8 @@
 package com.springmvc.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -26,6 +28,17 @@ public class MainController {
 	@Value("${AppServer}")
 	private String AppServer;
 	
+	List<String> allowedPages;
+	
+	public MainController()
+	{
+		allowedPages = new ArrayList();
+		allowedPages.add("home");
+		allowedPages.add("outbranches");
+		allowedPages.add("travels");
+		allowedPages.add("register");
+	}
+	
 	@RequestMapping(value = "/{tenantid}", method = RequestMethod.GET)
 	public String getEntryPageTenant(@RequestHeader HttpHeaders headers, @PathVariable String tenantid) 
 	{
@@ -49,8 +62,11 @@ public class MainController {
 		{
 			response.setHeader("Authorization", newToken);
 		}
+		if(newToken == null && !allowedPages.contains(page))//not signed
+		{
+			throw new HttpUnauthorizedException();
+		}
 		return "pages/" + page;
-		
 	}
 	
 	boolean TenantExist(String tenantid)
