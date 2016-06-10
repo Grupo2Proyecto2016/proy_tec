@@ -86,7 +86,7 @@
 					    	<div class="col-sm-6">
 								<label class="control-label col-sm-3" for="costo_fijo">Hora de salida:</label>
 								<div style="padding-left: 15px; padding-right: 15px;" class="col-sm-9 input-group bootstrap-timepicker timepicker">
-            						<input id="timepicker" ng-model="time" type="text" class="form-control input-small">
+            						<input id="timepicker" ng-model="time" type="text" class="form-control input-small" required>
             						<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
            						</div>				    
 							</div>    
@@ -129,21 +129,26 @@
 								<div class="col-sm-12">
 									<label class="control-label col-sm-3" for="travelForm.dayFrom">Desde el día:</label>
 									<div class="col-sm-9">
-										<input type="date" class="form-control" name="travelForm.dayFrom" ng-model="travelForm.dayFrom" required>
+										<input type="date" class="form-control" min="{{minDate | date:'yyyy-MM-dd'}}" max="{{travelForm.dayTo | date:'yyyy-MM-dd'}}" name="travelForm.dayFrom" ng-model="travelForm.dayFrom" required>
 								    </div>
 								</div>
 								<div class="col-sm-12">
 									<label class="control-label col-sm-3" for="dayTo">Hasta el día:</label>
 									<div class="col-sm-9">
-										<input type="date" class="form-control" name="dayTo" ng-model="travelForm.dayTo" required>
+										<input type="date" class="form-control" name="dayTo" min="{{travelForm.dayFrom | date:'yyyy-MM-dd'}}" max="{{maxDate | date:'yyyy-MM-dd'}}" ng-model="travelForm.dayTo" required>
 								    </div>				
 								</div>		
 							</div>
 						</div>
-						<div class="form-group has-error" 
-							ng-show="!travelForm.monday && !travelForm.tuesday && !travelForm.wednesday && !travelForm.thursday && !travelForm.friday && !travelForm.saturday && !travelForm.sunday">
+						<div class="form-group has-error">
 							<div role="alert" class="col-sm-6 text-center">
-								<span class="help-block">Debe seleccionar al menos un día de la semana.</span>
+								<span class="help-block" 
+									ng-show="!travelForm.monday && !travelForm.tuesday && !travelForm.wednesday && !travelForm.thursday && !travelForm.friday && !travelForm.saturday && !travelForm.sunday">
+									Debe seleccionar al menos un día de la semana.
+								</span>
+						    </div>
+						    <div role="alert" class="col-sm-6 text-center">
+								<span class="help-block">Solo se permite agregar viajes para 30 días a partir del día de mañana.</span>
 						    </div>
 					  	</div>
 						<div class="form-group"> 

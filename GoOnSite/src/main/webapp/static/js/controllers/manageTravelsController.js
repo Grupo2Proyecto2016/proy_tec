@@ -5,7 +5,10 @@ goOnApp.controller('manageTravelsController', function($scope, $http, uiGridCons
 	$scope.drivers = null;
     $scope.lines = null;
     $scope.buses = null;
-    
+    $scope.maxDate = new Date();
+	$scope.minDate = new Date();
+	$scope.minDate.setDate($scope.minDate.getDate() + 1);
+	$scope.maxDate.setDate($scope.maxDate.getDate() + 30);
 	
 	$scope.isDayMissing = function()
 	{

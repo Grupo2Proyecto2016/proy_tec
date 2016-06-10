@@ -23,7 +23,6 @@ public class Viaje {
 	private Date inicio;
 	private Date fin;
 	private Boolean es_directo;
-	private Boolean vuelta;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	private Linea linea;
@@ -61,12 +60,6 @@ public class Viaje {
 	}
 	public void setEs_directo(Boolean es_directo) {
 		this.es_directo = es_directo;
-	}
-	public Boolean getVuelta() {
-		return vuelta;
-	}
-	public void setVuelta(Boolean vuelta) {
-		this.vuelta = vuelta;
 	}
 	public Usuario getConductor() {
 		return conductor;
