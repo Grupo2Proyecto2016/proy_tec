@@ -51,6 +51,12 @@
     		controller  : 'busController'
     	})
     	
+    	// route for the talleres page
+    	.when('/taller', {
+    		templateUrl : tenantUrlPart + 'pages/talleres.html',
+    		controller  : 'tallerController'
+    	})
+    	
     	// route for the user dashboard page
     	.when('/userPanel', {
     		templateUrl : tenantUrlPart + 'pages/userPanel.html',

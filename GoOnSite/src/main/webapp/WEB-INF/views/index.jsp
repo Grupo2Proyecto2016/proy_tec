@@ -28,6 +28,7 @@
       
 	  <!--BUS CONTROLLER -->
       <script src="<c:url value='/static/js/controllers/busController.js' />"></script>
+      <script src="<c:url value='/static/js/controllers/tallerController.js' />"></script>
       <script src="<c:url value='/static/js/controllers/travelController.js' />"></script>
       <script src="<c:url value='/static/js/controllers/contactController.js' />"></script>
       <script src="<c:url value='/static/js/controllers/employeesController.js' />"></script>
@@ -73,7 +74,8 @@
 							<li ng-show="user != null && user.rol_id_rol == 1"><a href="#parameters"><i class="fa fa-bars"></i> Parámetros</a></li>
 							<li ng-show="user != null && user.rol_id_rol == 1"><a href="#branches"><i class="fa fa-building"></i> Sucursales</a></li>
 		                    <li ng-show="user != null && user.rol_id_rol == 1"><a href="#employees"><i class="fa fa-users"></i> Personal</a></li>
-		                    <li ng-show="user != null && user.rol_id_rol == 1"><a href="#bus"><i class="fa fa-wrench"></i> Vehículos</a></li>
+		                    <li ng-show="user != null && user.rol_id_rol == 1"><a href="#bus"><i class="fa fa-bus"></i> Vehículos</a></li>
+		                    <li ng-show="user != null && user.rol_id_rol == 1"><a href="#taller"><i class="fa fa-wrench"></i> Talleres</a></li>
 		                    <li ng-show="user != null && user.rol_id_rol == 1"><a href="#terminals"><i class="fa fa-flag-o"></i> Terminales</a></li>
 		                    <li ng-show="user != null && user.rol_id_rol == 1"><a href="#lines"><i class="fa fa-map-o"></i> Lineas</a></li>
 	                    	<li ng-show="user != null && user.rol_id_rol == 1"><a href="#manageTravels"><i class="fa fa-calendar-check-o"></i> Viajes</a></li>
