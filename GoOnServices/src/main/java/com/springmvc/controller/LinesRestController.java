@@ -87,6 +87,49 @@ public class LinesRestController{
 		
 		tl.insertLine(linea);	
 		
+		/*Insercion de vuelta*/
+		if (linesWrapper.getGeneraVuelta())
+		{
+			Linea vuelta = new Linea();	
+			
+			Parada parada_origen_vuelta = tl.findParadaByID(linesWrapper.getParadas().get(linesWrapper.getParadas().size()-1).getId_parada());			 
+			Parada parada_destino_vuelta = tl.findParadaByID(linesWrapper.getParadas().get(0).getId_parada());
+			
+			vuelta.setDestino(parada_destino_vuelta);
+			vuelta.setOrigen(parada_origen_vuelta);
+			
+			vuelta.setNumero(linesWrapper.getNumero());
+			vuelta.setCosto_minimo(linesWrapper.getCosto_minimo());
+			vuelta.setCosto_maximo(linesWrapper.getCosto_maximo());
+			
+			vuelta.setTiempo_estimado(linesWrapper.getTiempo_estimado_vuelta());
+			vuelta.setViaja_parado(linesWrapper.getViaja_parado());	
+			vuelta.setHabilitado(true);
+			
+			for (int i = 0; i < linesWrapper.getParadasV().size()-1; i++) 
+			{
+				if (linesWrapper.getParadasV().get(i).getId_parada() > 0)
+				{
+					Parada auxParada = tl.findParadaByID(linesWrapper.getParadasV().get(i).getId_parada());
+					vuelta.getParadas().add(auxParada);
+				}
+				else
+				{
+					Parada auxParada = new Parada();
+					auxParada.setId_parada(linesWrapper.getParadas().get(i).getId_parada());
+					auxParada.setDescripcion(linesWrapper.getParadas().get(i).getDescripcion());
+					auxParada.setDireccion(linesWrapper.getParadas().get(i).getDireccion());
+					auxParada.setEs_peaje(linesWrapper.getParadas().get(i).getEs_peaje());
+					auxParada.setEs_terminal(linesWrapper.getParadas().get(i).getEs_terminal());
+					auxParada.setLatitud(linesWrapper.getParadas().get(i).getLatitud());
+					auxParada.setLongitud(linesWrapper.getParadas().get(i).getLongitud());
+					auxParada.setReajuste(linesWrapper.getParadas().get(i).getReajuste());
+					vuelta.getParadas().add(auxParada);
+				}
+			}
+			tl.insertLine(vuelta);	
+		}
+		
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
 	
