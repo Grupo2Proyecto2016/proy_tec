@@ -8,6 +8,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import com.springmvc.entities.tenant.Linea;
+import com.springmvc.entities.tenant.Viaje;
 
 public class LineaRepository {
 	
@@ -95,5 +96,4 @@ public class LineaRepository {
 			throw ex;
 		}
 	}
-
 }

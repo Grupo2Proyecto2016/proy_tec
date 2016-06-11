@@ -26,7 +26,7 @@
 	<div class="row">
 		<div class="col-xs-1"></div>
 		<div class="col-xs-10">			
-			<form class="form-horizontal" role="form" name="form" ng-submit="createLine()">
+			<form class="form-horizontal" role="form" name="form" ng-submit="createTravels()">
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<div> 
@@ -86,7 +86,7 @@
 					    	<div class="col-sm-6">
 								<label class="control-label col-sm-3" for="costo_fijo">Hora de salida:</label>
 								<div style="padding-left: 15px; padding-right: 15px;" class="col-sm-9 input-group bootstrap-timepicker timepicker">
-            						<input id="timepicker" ng-model="time" type="text" class="form-control input-small" required>
+            						<input id="timepicker" ng-model="travelForm.time" type="text" class="form-control input-small" required>
             						<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
            						</div>				    
 							</div>    

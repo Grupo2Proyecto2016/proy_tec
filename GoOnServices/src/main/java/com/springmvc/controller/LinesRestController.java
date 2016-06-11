@@ -1,6 +1,15 @@
 package com.springmvc.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Dictionary;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TimeZone;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +22,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.springmvc.entities.tenant.Linea;
 import com.springmvc.entities.tenant.Parada;
+import com.springmvc.entities.tenant.Viaje;
+import com.springmvc.enums.DayOfWeek;
 import com.springmvc.logic.implementations.LinesLogic;
 import com.springmvc.logic.implementations.VehiculosLogic;
 import com.springmvc.requestWrappers.CustomResponseWrapper;
 import com.springmvc.requestWrappers.LinesWrapper;
+import com.springmvc.requestWrappers.TravelFormWrapper;
 
 @RestController
 @RequestMapping(value = "/{tenantid}")
@@ -96,4 +108,43 @@ public class LinesRestController{
 		}
 		return new ResponseEntity<CustomResponseWrapper>(respuesta, HttpStatus.OK);
 	}	
+	
+	@Secured({"ROLE_ADMIN"})
+	@RequestMapping(value = "/createTravel", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
+	public ResponseEntity<?> createTravel(@RequestBody TravelFormWrapper travel, @PathVariable String tenantid)
+	{
+		travel.dayFrom.setTimeZone(TimeZone.getDefault());
+		travel.dayTo.setTimeZone(TimeZone.getDefault());
+		
+		LinesLogic tl = new LinesLogic(tenantid);
+		Viaje travelToPersist = new Viaje();
+		travelToPersist.setConductor(travel.driver);
+		travelToPersist.setLinea(travel.line);
+		travelToPersist.setVehiculo(travel.bus);
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
+	    Date time = null;
+	    try {
+	    	time = sdf.parse(travel.time);
+	    } catch (ParseException e) {
+	        e.printStackTrace();
+	    }
+	    
+//	    travel.dayFrom.set((GregorianCalendar.HOUR_OF_DAY), date.getHours());
+//	    int b = 2;
+//	    int a = travel.dayFrom.get((GregorianCalendar.HOUR_OF_DAY));
+	    
+		Map<DayOfWeek, Boolean> days = new  HashMap<DayOfWeek, Boolean>();
+		days.put(DayOfWeek.Monday, travel.monday);
+		days.put(DayOfWeek.Tuesday, travel.tuesday);
+		days.put(DayOfWeek.Wednesday, travel.wednesday);
+		days.put(DayOfWeek.Thursday, travel.thursday);
+		days.put(DayOfWeek.Friday, travel.friday);
+		days.put(DayOfWeek.Saturday, travel.saturday);
+		days.put(DayOfWeek.Sunday, travel.sunday);
+		
+		tl.CreateTravels(travelToPersist, days, travel.dayFrom, travel.dayTo, time);
+		
+		return new ResponseEntity(HttpStatus.OK);
+	}
 }

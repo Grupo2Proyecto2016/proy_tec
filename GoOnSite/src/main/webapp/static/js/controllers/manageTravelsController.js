@@ -12,7 +12,14 @@ goOnApp.controller('manageTravelsController', function($scope, $http, uiGridCons
 	
 	$scope.isDayMissing = function()
 	{
-		return !travelForm.monday && !travelForm.tuesday && !travelForm.wednesday && !travelForm.thursday && !travelForm.friday && !travelForm.saturday && !travelForm.sunday;
+		return !$scope.travelForm.monday 
+			&& !$scope.travelForm.tuesday 
+			&& !$scope.travelForm.wednesday 
+			&& !$scope.travelForm.thursday 
+			&& !$scope.travelForm.friday 
+			&& !$scope.travelForm.saturday 
+			&& !$scope.travelForm.sunday
+		;
 	};
     
 	$scope.custom_response = null;    
@@ -58,28 +65,21 @@ goOnApp.controller('manageTravelsController', function($scope, $http, uiGridCons
     
     $scope.createTravels = function()
     {
-    	if(!$scope.form.$invalid)
+    	if(!$scope.form.$invalid && !$scope.isDayMissing())
 		{
-    		$scope.lineForm.paradas = $scope.markers;
-    		for (var i = 0; i < $scope.lineForm.paradas.length; i++)
-    		{
-    			$scope.lineForm.paradas[i].latitud = $scope.lineForm.paradas[i].position.lat(); 
-    			$scope.lineForm.paradas[i].longitud = $scope.lineForm.paradas[i].position.lng();
-    		}
-    		
-    		$http.post(servicesUrl +'createLine', JSON.stringify($scope.lineForm))
+    		$.blockUI();
+    		$http.post(servicesUrl +'createTravel', JSON.stringify($scope.travelForm))
 			.success(function()
 			{				
-				$scope.hideForm();
-		    	$scope.lineForm = {};
-		    	$scope.getTerminals();
+				//$scope.hideForm();
+		    	//$scope.travelForm = {};
 		    	$.unblockUI();
-				$scope.showSuccessAlert("Linea creada.");							
+				$scope.showSuccessAlert("Los viajes han sido creados");							
 			})
 			.error(function()
 			{
 				$.unblockUI();
-				$scope.error_message = 'Ha ocurrido un error al crear la sucursal. Intente de nuevo en unos instantes.'; 
+				$scope.error_message = 'Ha ocurrido un error al crear los viajes. Intente de nuevo en unos instantes.'; 
 				$("#errorModal").modal("toggle");
 			});  
 		}
