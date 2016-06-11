@@ -21,7 +21,7 @@
 	  <link rel="stylesheet" href="<c:url value='/static/css/ui-grid.min.css' />" />
       <script src="<c:url value='/static/js/ui-grid/ui-grid.min.js' />"></script>
       <script src="<c:url value='/static/js/app.js' />"></script>
-	  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXLMRyM-qhBcFx4Lvv6XxACYvWYY8ey-U&libraries=places" async defer></script>
+	  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXLMRyM-qhBcFx4Lvv6XxACYvWYY8ey-U&libraries=places&v=3.24" async defer></script>
 	  
 	
             

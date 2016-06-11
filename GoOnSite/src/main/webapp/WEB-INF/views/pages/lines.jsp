@@ -216,7 +216,7 @@
 	</div>
 	<div class="row" ng-show="lineForm.generaVuelta">
 		<div class="col-xs-1"></div>	
-		<div class="col-xs-5">
+		<div id="colmap" class="col-xs-5">
 			<div class="panel panel-default">				
 				<div class="panel-heading">
 					<div> 

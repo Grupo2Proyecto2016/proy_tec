@@ -1,4 +1,4 @@
-goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i18nService)									 
+goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i18nService, $timeout)									 
 {
 	$scope.message = 'Genera nuevas lineas de manera cómoda.';
     $scope.error_message = '';
@@ -64,14 +64,18 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
 	};
     
     $scope.showForm = function()
-    {
+    {	    	
     	$scope.lineForm = {};
     	$scope.lineForm.generaVuelta = true;
     	$scope.inicializoMarkers();
     	$scope.inicializoMarkersV();    	
     	$("#divLineForm").removeClass('hidden');
-    	google.maps.event.trigger($scope.map, 'resize');	//refresh map
-    	google.maps.event.trigger($scope.mapV, 'resize');	//refresh map
+    	$timeout(function () {            
+    		google.maps.event.trigger($scope.map, 'resize');	//refresh map            
+        }, 500);
+    	$timeout(function () {            
+            google.maps.event.trigger($scope.mapV, 'resize');	//refresh map            
+        }, 500);
     };
     
     $scope.hideForm = function()
@@ -687,5 +691,5 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     		$scope.lineForm.tiempo_estimado = $scope.txt_minutos;
     	}    	
     }
-    
+       
 });
