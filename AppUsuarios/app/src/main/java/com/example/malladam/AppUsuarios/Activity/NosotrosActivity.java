@@ -1,20 +1,38 @@
 package com.example.malladam.AppUsuarios.Activity;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import com.android.IntentIntegrator;
 import com.example.malladam.AppUsuarios.DataBaseManager;
 import com.example.malladam.AppUsuarios.R;
+import com.example.malladam.AppUsuarios.models.Empresa;
+
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 public class NosotrosActivity extends AppCompatActivity {
@@ -25,6 +43,7 @@ public class NosotrosActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     Intent intent;
     private ActionBarDrawerToggle mDrawerToggle;
+    private Empresa empresa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,12 +51,10 @@ public class NosotrosActivity extends AppCompatActivity {
         setContentView(R.layout.activity_nosotros);
 
         mDescripcion = (TextView) findViewById(R.id.detalles1nosotros);
-
+        empresa = empresa.getInstance();
         dbManager = new DataBaseManager(this);
 
-        mDescripcion.setText("Somos la primer empresa de transporte colectivo de pasajeros del País, fundada el 20 de octubre de 1930, gracias a la visión, coraje e ingenio de un grupo de transportistas que decidieron unirse y formar una empresa sobre ruedas.\n" +
-                "\n" +
-                "    Hace 85 años nuestros ómnibus atravesaban médanos y bosques, abriendo caminos hacia balnearios y zonas rurales, donde sólo unos pocos habitantes residían -en ese momento- en forma permanente. En un principio la Compañía atendía un espacio geográfico con centro en la ciudad de Pando en un radio de 60 kilómetros.");
+        mDescripcion.setText(empresa.getMensaje());
 
 
         ///////////ACTIONBAR+NAVIGATION////////////////
@@ -80,6 +97,7 @@ public class NosotrosActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
+        getSupportActionBar().setTitle(empresa.getNombre());
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         ///////////ACTIONBAR+NAVIGATION////////////////
 
@@ -159,10 +177,66 @@ public class NosotrosActivity extends AppCompatActivity {
             intent = new Intent(getApplicationContext(), SucursalesActivity.class);
             startActivity(intent);
             return true;
+        }else if (id == R.id.action_info) {
+            showPopup(NosotrosActivity.this);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
     ///////////ACTIONBAR+NAVIGATION////////////////
+
+    private void showPopup(final Activity context) {
+        // Inflate the popup_layout.xml
+        LinearLayout viewGroup = (LinearLayout) context.findViewById(R.id.popup);
+        LayoutInflater layoutInflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = layoutInflater.inflate(R.layout.popup_layout, viewGroup);
+
+        // Creating the PopupWindow
+        final PopupWindow popup = new PopupWindow(layout, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+
+        TextView nombre = (TextView) layout.findViewById(R.id.popupNombre);
+        TextView razonSocial = (TextView) layout.findViewById(R.id.popupRazonSocial);
+        TextView direccion = (TextView) layout.findViewById(R.id.popupDireccion);
+        TextView rut = (TextView) layout.findViewById(R.id.popupRut);
+        TextView telefono = (TextView) layout.findViewById(R.id.popupTelefono);
+        TextView pais = (TextView) layout.findViewById(R.id.popupPais);
+        ImageView logo = (ImageView) layout.findViewById(R.id.popupLogo);
+
+        rut.setText(Double.toString(empresa.getRut()));
+        nombre.setText(empresa.getNombre());
+        razonSocial.setText(empresa.getRazonSocial());
+        direccion.setText(empresa.getDireccion());
+        telefono.setText(Double.toString(empresa.getTelefono()));
+        pais.setText(empresa.getPais());
+
+        String encodedDataString = empresa.getLogoS();
+
+        encodedDataString = encodedDataString.replace("data:image/png;base64,","");
+
+        byte[] imageAsBytes = Base64.decode(encodedDataString.getBytes(), 0);
+        logo.setImageBitmap(BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length));
+
+        // Clear the default translucent background
+        popup.setBackgroundDrawable(new BitmapDrawable());
+
+        // Displaying the popup at the specified location, + offsets.
+        popup.showAtLocation(layout, Gravity.CENTER, 0, 0);
+
+        // Getting a reference to Close button, and close the popup when clicked.
+        Button close = (Button) layout.findViewById(R.id.close);
+        close.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                popup.dismiss();
+            }
+        });
+    }
+    private Bitmap base64ToBitmap(String b64) {
+        byte[] imageAsBytes = Base64.decode(b64.getBytes(), Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
+    }
 
 }
