@@ -69,8 +69,10 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     	$scope.lineForm.generaVuelta = true;
     	$scope.inicializoMarkers();
     	$scope.inicializoMarkersV();    	
-    	$("#divLineForm").removeClass('hidden');    	    	
-    	google.maps.event.trigger($scope.map, 'resize');	//refresh map    	
+    	$("#divLineForm").removeClass('hidden');
+    	$timeout(function () {            
+    		google.maps.event.trigger($scope.map, 'resize');	//refresh map            
+        }, 500);
     	$timeout(function () {            
             google.maps.event.trigger($scope.mapV, 'resize');	//refresh map            
         }, 500);
