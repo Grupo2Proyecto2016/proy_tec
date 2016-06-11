@@ -43,4 +43,19 @@ public class LinesLogic implements ILinesLogic
 	{
 		return TenantContext.ParadaRepository.findByID(id_parada);
 	}
+
+	public List<Linea> getLineas() 
+	{
+		return TenantContext.LineaRepository.getLineas();
+	}
+
+	public boolean TieneViajes(long id_linea) 
+	{
+		return TenantContext.LineaRepository.TieneViajes(id_linea);
+	}
+
+	public void deleteLinea(long id_linea) 
+	{
+		TenantContext.LineaRepository.deleteLinea(id_linea);		
+	}
 }

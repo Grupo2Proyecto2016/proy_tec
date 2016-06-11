@@ -10,11 +10,13 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     $scope.lineForm = {};
     $scope.stops = {};
     $scope.terminals = null;
+    $scope.lines = null;
     
     $scope.showForm = function()
     {
     	$scope.lineForm = {};
-    	$("#divLineForm").removeClass('hidden');    	
+    	$("#divLineForm").removeClass('hidden');  
+    	$scope.hideSuccess();
     	google.maps.event.trigger($scope.map, 'resize');	//refresh map
     };
     
@@ -22,6 +24,47 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     {
     	$("#divLineForm").addClass('hidden');		
     };
+    
+    $scope.getLines = function()
+    {
+    	$http.get(servicesUrl + 'getLines').success(function(data, status, headers, config)
+    	{
+    		$scope.lines = data;
+    		$scope.linesGrid.data = $scope.lines;
+    	});
+    };
+    
+    $scope.linesGrid = 
+    {
+		paginationPageSizes: [15, 30, 45],
+	    paginationPageSize: 15,
+		enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
+		enableFiltering: true,
+        columnDefs:
+    	[
+          { name:'Numero', field: 'numero' },
+          { name:'Origen', field: 'origen.descripcion' },
+          { name:'Destino', field: 'destino.descripcion'},
+          { name:'Tiempo Estimado (min)', field: 'tiempo_estimado' },
+          { name: 'Pasajeros Parados', cellTemplate: '<div class="text-center ngCellText">{{row.entity.viaja_parado | SiNo}}</div>' },
+          
+          { name: 'Acciones',
+        	enableFiltering: false,
+        	enableSorting: false,
+            cellTemplate:'<p align="center"><button style="" class="btn-xs btn-danger" ng-click="grid.appScope.showDeleteDialog(row)">Eliminar</button></p>'
+            	/*'<button style="width: 50%" class="btn-xs btn-primary" ng-click="grid.appScope.getBusDetails(row)">Detalles</button>'+*/
+            			  
+    	  }
+        ]
+     };
+    
+    $scope.showDeleteDialog = function(row)
+    {
+    	$scope.lineToDelete = row.entity.id_linea;
+    	$("#deleteModal").modal('show');
+    };
+    
+    $scope.getLines();
     
     $scope.getTerminals = function()
     {
@@ -31,7 +74,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     	});
     };    
     
-    $scope.getTerminals();
+    $scope.getTerminals();    
     
     $scope.createLine = function()
     {
@@ -49,6 +92,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
 			{				
 				$scope.hideForm();
 		    	$scope.lineForm = {};
+		    	$scope.getLines();
 		    	$scope.getTerminals();
 		    	$.unblockUI();
 				$scope.showSuccessAlert("Linea creada.");							
@@ -60,6 +104,35 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
 				$("#errorModal").modal("toggle");
 			});  
 		}
+    };
+    
+    $scope.deleteLine = function()
+	{
+		$.blockUI();
+		$http.post(servicesUrl +'deleteLine', JSON.stringify($scope.lineToDelete))
+		.then(function(response) 
+			{
+				$.unblockUI();		
+	        	if(response.status == 200)
+	        	{	       
+	        		if (!response.data.success)
+	    			{
+	    				$scope.error_message = response.data.msg;
+	    		    	$("#errorModal").modal("toggle");
+	    			}
+	        		else
+	        		{
+	        			$scope.getLines();	
+		        		$scope.showSuccessAlert("La linea ha sido borrada.");	
+	        		}	        		
+	        	}
+	        	$scope.hideDeleteDialog();
+    		});				
+	};
+	
+	$scope.hideDeleteDialog = function(row)
+    {
+    	$("#deleteModal").modal('hide');
     };
     
     $scope.closeSuccessAlert = function()
@@ -412,7 +485,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     		min = min + legs[i].duration.value;    		
     	}
     	min = min/60;
-    	$scope.txt_minutos = Math.round(min * 100) / 100;
+    	$scope.txt_minutos = Math.round(min);
     	$scope.lineForm.tiempo_estimado = $scope.txt_minutos;
     }
     

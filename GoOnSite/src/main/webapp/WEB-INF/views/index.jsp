@@ -40,12 +40,14 @@
       <script src="<c:url value='/static/js/controllers/parametersController.js' />"></script>
       <script src="<c:url value='/static/js/controllers/linesController.js' />"></script>
       <script src="<c:url value='/static/js/controllers/terminalController.js' />"></script>
+      <script src="<c:url value='/static/js/controllers/manageTravelsController.js' />"></script>
     </head>
     <body style="visibility: hidden">
 
         <!-- HEADER AND NAVBAR -->
         <header>
             <nav class="navbar navbar-default">
+            <img class="img-responsive" src="static/images/google_play_icon.png" alt="" style="width: 150px; float: right; padding: 5px; margin-left: 55px;">
             <div class="container">
                 <div class="navbar-header">
                     <a class="navbar-brand pull-left">
@@ -196,7 +198,7 @@
         	</h3>
 	      </div>
 	      <div class="modal-body">
- 	        <form class="form-signin" name="calcForm" role="form" ng-submit="calcPackage()" style="overflow: overlay;">
+ 	        <form class="form-horizontal" name="calcForm" role="form" ng-submit="calcPackage()"">
 				<div class="form-group">
 				    <div class="col-sm-6">
 					    <label class="control-label col-sm-3" for="origen">Origen:</label>

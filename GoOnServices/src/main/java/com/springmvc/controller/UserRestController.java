@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,10 +36,19 @@ public class UserRestController
 	@Autowired
     private UserContext context;
 	
+	@Secured({"ROLE_ADMIN"})
 	@RequestMapping(value = "/getUsers", method = RequestMethod.GET)
     public ResponseEntity<List<Usuario>>  getUsers(@PathVariable String tenantid, HttpServletRequest request)
     {
     	List<Usuario> users = new UsersLogic(tenantid).GetEmployees();
+    	return new ResponseEntity<List<Usuario>>(users, HttpStatus.OK);
+    }
+	
+	@Secured({"ROLE_ADMIN"})
+	@RequestMapping(value = "/getDrivers", method = RequestMethod.GET)
+    public ResponseEntity<List<Usuario>>  getDrivers(@PathVariable String tenantid, HttpServletRequest request)
+    {
+    	List<Usuario> users = new UsersLogic(tenantid).GetEmployeesByRole(UserRol.Driver);
     	return new ResponseEntity<List<Usuario>>(users, HttpStatus.OK);
     }
 	
@@ -56,6 +66,7 @@ public class UserRestController
     	}
     }
 	
+	@Secured({"ROLE_ADMIN"})
 	@RequestMapping(value = "/createUser", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
     public ResponseEntity<Void> CreateUser(@RequestBody UserWrapper user, @PathVariable String tenantid) throws UserAlreadyExistsException
     {
@@ -122,6 +133,7 @@ public class UserRestController
     	return new ResponseEntity<Void>(HttpStatus.OK);
     }
 	
+	@Secured({"ROLE_ADMIN"})
 	@RequestMapping(value = "/updateEmployee", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
     public ResponseEntity<Void> UpdateEmployee(@RequestBody UserWrapper user, @PathVariable String tenantid)
     {
@@ -173,6 +185,7 @@ public class UserRestController
 		}
     }
 	
+	@Secured({"ROLE_ADMIN"})
 	@RequestMapping(value = "/deleteUser", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
     public ResponseEntity<Void> DeleteUser(@RequestBody UserWrapper username, @PathVariable String tenantid)
     {

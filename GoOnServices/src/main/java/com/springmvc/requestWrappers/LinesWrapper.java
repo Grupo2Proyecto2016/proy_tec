@@ -10,7 +10,8 @@ public class LinesWrapper
 	public int numero;
 	public String origen; 
 	public String destino;
-	public Double costo_fijo;
+	public Double costo_maximo;
+	public Double costo_minimo;
 	public int tiempo_estimado; 
 	public Boolean viaja_parado;
 	
@@ -48,11 +49,11 @@ public class LinesWrapper
 	public void setDestino(String destino) {
 		this.destino = destino;
 	}
-	public Double getCosto_fijo() {
-		return costo_fijo;
+	public Double getCosto_maximo() {
+		return costo_maximo;
 	}
-	public void setCosto_fijo(Double costo_fijo) {
-		this.costo_fijo = costo_fijo;
+	public void setCosto_maximo(Double costo_maximo) {
+		this.costo_maximo = costo_maximo;
 	}
 	public int getTiempo_estimado() {
 		return tiempo_estimado;
@@ -65,5 +66,11 @@ public class LinesWrapper
 	}
 	public void setViaja_parado(Boolean viaja_parado) {
 		this.viaja_parado = viaja_parado;
+	}
+	public Double getCosto_minimo() {
+		return costo_minimo;
+	}
+	public void setCosto_minimo(Double costo_minimo) {
+		this.costo_minimo = costo_minimo;
 	}
 }

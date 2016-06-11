@@ -103,6 +103,11 @@
     		controller  : 'terminalController'
     	})
     	
+    	.when('/manageTravels', {
+    		templateUrl : tenantUrlPart + 'pages/manageTravels.html',
+    		controller  : 'manageTravelsController'
+    	})
+    	
 		.otherwise({
 			redirectTo: '/'
     	});
@@ -115,27 +120,28 @@
             if (response.status == 401)
             {
             	$rootScope.user = null;
+            	$location.path('home');
             	if($('#loginModal').hasClass('in'))
             	{
             		//do nothing
             	}
             	else
             	{
-    				$("#loginModal").modal("toggle");
+    				$("#loginModal").modal("show");
             	}
             }
             else if(response.status == 500)
             {
             	if(!$('#errorModal').hasClass('in'))
             	{
-            		$("#errorModal").modal("toggle");
+            		$("#errorModal").modal("show");
             	}
             }
             else if(response.status == -1)
             {
             	if(!$('#connectErrorModal').hasClass('in'))
             	{
-            		$("#connectErrorModal").modal("toggle");
+            		$("#connectErrorModal").modal("show");
             	}
             }
             else if(response.status == 403)
@@ -187,8 +193,11 @@
     	$scope.loginForm = null;
     	$scope.terminals = null;
     	$scope.calcForm = null;
+    	var gService = null;
     	
-    	var gService = new google.maps.DistanceMatrixService();
+    	$(window).on("load", function(){
+    		gService = new google.maps.DistanceMatrixService();
+		});
     	
     	$rootScope.$watch('user', function(user) {
     		  $scope.user = user;

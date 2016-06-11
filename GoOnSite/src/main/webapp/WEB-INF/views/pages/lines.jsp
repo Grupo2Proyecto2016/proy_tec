@@ -82,19 +82,46 @@
 								</div>						
 							</div>
 							<div class="col-sm-6">
-								<label class="control-label 	col-sm-3" for="costo_fijo">Valor Fijo (UYU):</label>
+								<label class="control-label col-sm-3" for="calculo">Tarifa:</label>
 								<div class="col-sm-9">
-									<input type="text" pattern="[0-9]+" title="Solo se aceptan números" class="form-control" name="costo_fijo" ng-model="lineForm.costo_fijo" required>
+							    	<select name="calculo" class="form-control"
+										ng-model="lineForm.calculo"										
+										ng-change="updateCalculo()"
+										required>
+										<option value="">Seleccione una tipo de tarifa</option>
+										<option value="1">Costo Fijo</option>
+										<option value="2">Costo Variable</option>
+									</select>	
+						    	</div>					    
+							</div>
+						</div>
+						<div class="form-group" id="tarifa_fijo" ng-show="lineForm.calculo==1">
+							<div class="col-sm-6">
+								<label class="control-label 	col-sm-3" for="costo_maximo">Valor Fijo (UYU):</label>
+								<div class="col-sm-9">
+									<input type="text" pattern="[0-9]+" title="Solo se aceptan números" class="form-control" name="costo_maximo" ng-model="lineForm.costo_maximo" required>
+							    </div>						    
+							</div> 
+						</div>
+						<div class="form-group" id="tarifa_variable"  ng-show="lineForm.calculo==2">
+							<div class="col-sm-6">
+								<label class="control-label 	col-sm-3" for="costo_minimo">Valor Minimo(UYU):</label>
+								<div class="col-sm-9">
+									<input type="text" pattern="[0-9]+" title="Solo se aceptan números" class="form-control" name="costo_minimo" ng-model="lineForm.costo_minimo">
+							    </div>						    
+							</div> 
+							<div class="col-sm-6">
+								<label class="control-label 	col-sm-3" for="costo_maximo">Valor Maximo(UYU):</label>
+								<div class="col-sm-9">
+									<input type="text" pattern="[0-9]+" title="Solo se aceptan números" class="form-control" name="costo_maximo" ng-model="lineForm.costo_maximo">
 							    </div>						    
 							</div>
 						</div>
-						<div class="form-group"> 
 			    		<div class="col-sm-12">
 			      			<button style="float: right" type="submit" class="btn btn-info">Crear</button>
 			    		</div>
-				    </div>
-		    	</div>
-		    	</div>
+				    </div>				  
+		    	</div>		    	
 			</form>			
 		</div>
 		<div class="col-xs-1"></div>
@@ -175,6 +202,32 @@
 		</div>
 		<div class="col-xs-1"></div>		
 	</div>
+</div>
+
+<div class="row" style="margin-top: 50px;">
+	<div class="col-xs-1"></div>
+	<div class="col-xs-10">
+		<div ui-grid="linesGrid" ui-grid-pagination class="genericGridHeader"></div>
+	</div>
+	<div class="col-xs-1"></div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header warning">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3 class="modal-title">Solicitud de confirmación</h4>
+      </div>
+      <div class="modal-body">
+        <p>¿Está seguro que desea eliminar esta linea?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" ng-click="deleteLine()">Aceptar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
 </div>
 
 <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

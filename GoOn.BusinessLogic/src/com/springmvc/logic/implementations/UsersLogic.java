@@ -118,4 +118,9 @@ public class UsersLogic implements IUsersLogic {
 	{
 		TenantContext.UserRepository.UpdateUserPassword(signedUser, newPassword);
 	}
+
+	public List<com.springmvc.entities.tenant.Usuario> GetEmployeesByRole(UserRol rol) 
+	{
+		return TenantContext.UserRepository.GetEmployeesByRol(rol);
+	}
 }

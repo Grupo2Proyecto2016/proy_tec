@@ -27,9 +27,11 @@ public class Linea {
     @JoinColumn(name = "id_parada_destino")
 	private Parada destino;
 	
-	private Double costo_fijo;
+	private Double costo_maximo;
+	private Double costo_minimo;
 	private int tiempo_estimado; //en minutos
 	private Boolean viaja_parado;
+	private Boolean habilitado;
 	
 	@ManyToMany(targetEntity=Parada.class, cascade = {CascadeType.ALL})	
 	private List<Parada> paradas = new ArrayList<Parada>();
@@ -66,12 +68,12 @@ public class Linea {
 		this.destino = destino;
 	}
 
-	public Double getCosto_fijo() {
-		return costo_fijo;
+	public Double getCosto_maximo() {
+		return costo_maximo;
 	}
 
-	public void setCosto_fijo(Double costo_fijo) {
-		this.costo_fijo = costo_fijo;
+	public void setCosto_maximo(Double costo_maximo) {
+		this.costo_maximo = costo_maximo;
 	}
 
 	public int getTiempo_estimado() {
@@ -96,5 +98,21 @@ public class Linea {
 
 	public void setParadas(List<Parada> paradas) {
 		this.paradas = paradas;
+	}
+
+	public Boolean getHabilitado() {
+		return habilitado;
+	}
+
+	public void setHabilitado(Boolean habilitado) {
+		this.habilitado = habilitado;
+	}
+
+	public Double getCosto_minimo() {
+		return costo_minimo;
+	}
+
+	public void setCosto_minimo(Double costo_minimo) {
+		this.costo_minimo = costo_minimo;
 	}
 }
