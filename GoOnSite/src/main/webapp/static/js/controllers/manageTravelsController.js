@@ -95,4 +95,83 @@ goOnApp.controller('manageTravelsController', function($scope, $http, uiGridCons
     	$('#successMessage').text(message);
 		$("#successAlert").show();
     }; 
+    
+    $scope.getTravels = function()
+    {
+    	$http.get(servicesUrl + 'getTravels').success(function(data, status, headers, config)
+    	{
+    		$scope.travels = data;
+    		angular.forEach($scope.travels, function(row){
+    			row.getDriverName = function()
+    			{
+    				return row.conductor.nombre + " " + row.conductor.apellido;
+    			};
+			});
+    		$scope.travelsGrid.data = $scope.travels;
+    	});
+    };
+    
+    $scope.travelsGrid = 
+    {
+		paginationPageSizes: [15, 30, 45],
+	    paginationPageSize: 15,
+		enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
+		enableFiltering: true,
+        columnDefs:
+    	[
+          { name:'Linea', field: 'linea.numero' },
+          { name:'Origen', field: 'linea.origen.descripcion' },
+          { name:'Destino', field: 'linea.destino.descripcion'},
+          { name:'Salida', cellTemplate: '<div class="text-center ngCellText">{{ row.entity.inicio | date:"dd/MM/yyyy @ h:mma"}}</div>' },
+          { name:'Tiempo Estimado (min)', field: 'linea.tiempo_estimado' },
+          { 
+        	  name: 'Pasajeros Parados', 
+        	  cellTemplate: '<div class="text-center ngCellText">{{row.entity.linea.viaja_parado | SiNo}}</div>'
+          },
+          { name:'Nº Coche', field: 'vehiculo.id_vehiculo' },
+          { name:'Conductor', field: 'getDriverName()' },
+          
+          { name: 'Acciones',
+        	enableFiltering: false,
+        	enableSorting: false,
+            cellTemplate:'<p align="center"><button style="" class="btn-xs btn-danger" ng-click="grid.appScope.showDeleteDialog(row)">Eliminar</button></p>'
+    	  }
+        ]
+     };
+    
+    $scope.getTravels();
+    
+    $scope.showDeleteDialog = function(row)
+    {
+    	$scope.travelToDelete = row.entity.id_viaje;
+    	$("#deleteModal").modal('show');
+    };
+    $scope.hideDeleteDialog = function(row)
+    {
+    	$("#deleteModal").modal('hide');
+    };
+    $scope.deleteTravel = function()
+	{
+		$.blockUI();
+		$http.post(servicesUrl +'deleteTravel', JSON.stringify($scope.travelToDelete))
+		.then(function(response) 
+			{
+				$.unblockUI();		
+	        	if(response.status == 200)
+	        	{	       
+	        		if (!response.data.success)
+	    			{
+	    				$scope.error_message = response.data.msg;
+	    		    	$("#errorModal").modal("toggle");
+	    			}
+	        		else
+	        		{
+	        			$scope.getTravels();
+		        		$scope.showSuccessAlert("El viaje ha sido borrada.");	
+	        		}	        		
+	        	}
+	        	$scope.hideDeleteDialog();
+    		});				
+	};
+	
 });

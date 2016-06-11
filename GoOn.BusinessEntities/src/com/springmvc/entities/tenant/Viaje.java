@@ -24,16 +24,16 @@ public class Viaje {
 	private Date fin;
 	private Boolean es_directo;
 	
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	private Linea linea;
 	
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	private Usuario conductor;
 
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	private Vehiculo vehiculo;
 	
-	@OneToMany(cascade = CascadeType.ALL , fetch = FetchType.LAZY)   
+	@OneToMany(cascade = CascadeType.ALL , fetch = FetchType.EAGER)   
 	@JoinColumn(name = "id_viaje")
     private List<Encomienda> encomiendas;
 	

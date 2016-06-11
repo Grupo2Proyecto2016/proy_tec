@@ -50,7 +50,6 @@
 										required>
 										<option value="">Seleccione una línea</option>
 									</select>							    	
-									
 						    	</div>
 					    	</div>
 					    	<div class="col-sm-6">
@@ -164,6 +163,14 @@
 	</div>
 </div>
 
+<div class="row" style="margin-top: 50px;">
+	<div class="col-xs-1"></div>
+	<div class="col-xs-10">
+		<div ui-grid="travelsGrid" ui-grid-pagination class="genericGridHeader"></div>
+	</div>
+	<div class="col-xs-1"></div>
+</div>
+
 <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -267,6 +274,24 @@
 		</div>
  	</div>
  </div>
+ 
+ <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header warning">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3 class="modal-title">Solicitud de confirmación</h4>
+      </div>
+      <div class="modal-body">
+        <p>¿Está seguro que desea eliminar esta viaje?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" ng-click="deleteTravel()">Aceptar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
  
  <script type="text/javascript">
      $('#timepicker').timepicker();

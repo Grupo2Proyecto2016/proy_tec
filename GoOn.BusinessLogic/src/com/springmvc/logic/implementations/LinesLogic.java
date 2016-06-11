@@ -93,4 +93,20 @@ public class LinesLogic implements ILinesLogic
 			dayInPeriod = !dayTo.before(dayFrom);
 		}
 	}
+
+	public List<Viaje> GetTravels() 
+	{
+		return TenantContext.ViajeRepository.GetTravels();
+	}
+
+	public void deleteTravel(long travelId) 
+	{
+		TenantContext.ViajeRepository.DeleteTravel(travelId);
+	}
+
+	public boolean IsTravelInUse(long travelId) 
+	{
+		return TenantContext.ViajeRepository.HasPackages(travelId)
+			|| TenantContext.ViajeRepository.HasTickets(travelId);
+	}
 }
