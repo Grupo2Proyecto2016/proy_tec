@@ -98,4 +98,15 @@ public class LinesLogic implements ILinesLogic
 	{
 		return TenantContext.ViajeRepository.GetTravels();
 	}
+
+	public void deleteTravel(long travelId) 
+	{
+		TenantContext.ViajeRepository.DeleteTravel(travelId);
+	}
+
+	public boolean IsTravelInUse(long travelId) 
+	{
+		return TenantContext.ViajeRepository.HasPackages(travelId)
+			|| TenantContext.ViajeRepository.HasTickets(travelId);
+	}
 }

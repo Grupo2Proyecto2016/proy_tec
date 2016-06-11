@@ -201,16 +201,16 @@ public class LinesRestController{
 	{
 		LinesLogic tl = new LinesLogic(tenantid);
 		CustomResponseWrapper respuesta = new CustomResponseWrapper();
-//		if (tl.IsTravelInUse(travelId))
-//		{
-//			respuesta.setMsg("No se puede eliminar vehiculo, tiene viajes asociados.");
-//			respuesta.setSuccess(false);	
-//		}	
-//		else
-//		{
-//			tl.deleteLinea(id_linea);
-//			respuesta.setSuccess(true);
-//		}
+		if (tl.IsTravelInUse(travelId))
+		{
+			respuesta.setMsg("No se puede eliminar el viaje, ya tiene gestionados viajes y/o encomiendas.");
+			respuesta.setSuccess(false);	
+		}	
+		else
+		{
+			tl.deleteTravel(travelId);
+			respuesta.setSuccess(true);
+		}
 		return new ResponseEntity<CustomResponseWrapper>(respuesta, HttpStatus.OK);
 	}	
 }

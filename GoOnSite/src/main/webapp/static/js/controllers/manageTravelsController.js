@@ -146,7 +146,10 @@ goOnApp.controller('manageTravelsController', function($scope, $http, uiGridCons
     	$scope.travelToDelete = row.entity.id_viaje;
     	$("#deleteModal").modal('show');
     };
-    
+    $scope.hideDeleteDialog = function(row)
+    {
+    	$("#deleteModal").modal('hide');
+    };
     $scope.deleteTravel = function()
 	{
 		$.blockUI();
@@ -163,7 +166,7 @@ goOnApp.controller('manageTravelsController', function($scope, $http, uiGridCons
 	    			}
 	        		else
 	        		{
-	        			$scope.getLines();	
+	        			$scope.getTravels();
 		        		$scope.showSuccessAlert("El viaje ha sido borrada.");	
 	        		}	        		
 	        	}
