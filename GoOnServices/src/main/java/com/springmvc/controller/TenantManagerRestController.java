@@ -95,7 +95,6 @@ public class TenantManagerRestController {
     	return new ResponseEntity<Usuario>(user, HttpStatus.OK);
     }
     
-    @Secured({"ROLE_ADMIN"})
     @RequestMapping(value = "countries", method = RequestMethod.GET)
     public List<?> GetCountries()
     {

@@ -1,5 +1,6 @@
 package com.example.malladam.AppUsuarios.Activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.design.widget.NavigationView;
@@ -7,6 +8,7 @@ import com.example.malladam.AppUsuarios.adapters.PopupAdapter;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -23,6 +25,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.example.malladam.AppUsuarios.adapters.VolleyS;
+import com.example.malladam.AppUsuarios.models.Empresa;
 import com.example.malladam.AppUsuarios.models.Sucursal;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -51,6 +54,8 @@ public class SucursalesActivity extends AppCompatActivity implements OnMapReadyC
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private DataBaseManager dbManager;
+    private Empresa empresa;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +63,7 @@ public class SucursalesActivity extends AppCompatActivity implements OnMapReadyC
         setContentView(R.layout.activity_sucursales);
 
         dbManager = new DataBaseManager(this);
-
+        empresa = empresa.getInstance();
         ///////WS/////
         urlgetSucursales = getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)+"/getBranches";
         volley = volley.getInstance(this);
@@ -115,6 +120,7 @@ public class SucursalesActivity extends AppCompatActivity implements OnMapReadyC
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
+        getSupportActionBar().setTitle(empresa.getNombre());
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         ///////////ACTIONBAR+NAVIGATION////////////////
     }
@@ -159,9 +165,21 @@ public class SucursalesActivity extends AppCompatActivity implements OnMapReadyC
                             sucursales.add(sucursal);
 
                         }
+                    if(!sucursales.isEmpty()){
+                        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+                        mapFragment.getMapAsync(SucursalesActivity.this);
+                    }else{
+                        new AlertDialog.Builder(SucursalesActivity.this)
+                                .setTitle("Ops!")
+                                .setMessage("No pudimos mostrar nuestras sucursales")
+                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
 
-                    SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-                    mapFragment.getMapAsync(SucursalesActivity.this);
                 } catch (JSONException e) {
                         e.printStackTrace();
                     }
