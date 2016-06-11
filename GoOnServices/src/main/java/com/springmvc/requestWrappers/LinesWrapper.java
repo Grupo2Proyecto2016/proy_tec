@@ -13,9 +13,12 @@ public class LinesWrapper
 	public Double costo_maximo;
 	public Double costo_minimo;
 	public int tiempo_estimado; 
+	public int tiempo_estimado_vuelta;
 	public Boolean viaja_parado;
-	
+	public Boolean generaVuelta;
+		
 	private List<Parada> paradas;
+	private List<Parada> paradasV;
 	
 	
 	public List<Parada> getParadas() {
@@ -72,5 +75,23 @@ public class LinesWrapper
 	}
 	public void setCosto_minimo(Double costo_minimo) {
 		this.costo_minimo = costo_minimo;
+	}
+	public List<Parada> getParadasV() {
+		return paradasV;
+	}
+	public void setParadasV(List<Parada> paradasV) {
+		this.paradasV = paradasV;
+	}
+	public Boolean getGeneraVuelta() {
+		return generaVuelta;
+	}
+	public void setGeneraVuelta(Boolean generaVuelta) {
+		this.generaVuelta = generaVuelta;
+	}
+	public int getTiempo_estimado_vuelta() {
+		return tiempo_estimado_vuelta;
+	}
+	public void setTiempo_estimado_vuelta(int tiempo_estimado_vuelta) {
+		this.tiempo_estimado_vuelta = tiempo_estimado_vuelta;
 	}
 }

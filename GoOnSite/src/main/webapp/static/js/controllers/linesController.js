@@ -5,19 +5,73 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     $scope.custom_response = null;    
     $scope.txt_minutos = "";
     $scope.txt_km = "";
+    $scope.txt_minutosV = ""; /*Todas las variables y funciones que tengan V al final, impactan sobre el viaje de vuelta*/
+    $scope.txt_kmV = "";
     i18nService.setCurrentLang('es');
     
     $scope.lineForm = {};
     $scope.stops = {};
     $scope.terminals = null;
     $scope.lines = null;
+    $scope.markers = [];    
+    $scope.markersV = [];
+    $scope.stopDelay = 0;
+    
+    $scope.inicializoMarkers = function()
+    {
+    	for (var i = 0; i < $scope.markers.length; i++) 
+    	{
+    		$scope.markers[i].setMap(null);    		
+    	}
+    	$scope.markers = [];
+    	$scope.markers.lenght = 0;
+    }
+    
+    $scope.inicializoMarkersV = function()
+    {
+    	for (var i = 0; i < $scope.markersV.length; i++) 
+    	{
+    		$scope.markersV[i].setMap(null);    		
+    	}
+    	$scope.markersV = [];
+    	$scope.markersV.lenght = 0;
+    }
+    
+    $scope.getParameters = function(){
+		$http.get(servicesUrl + 'getParams')
+		.then(function(response) {
+			if(response.status == 200)
+			{
+				angular.forEach(response.data, function(param, key) {
+					  switch(param.id)
+					  {
+					  	/*case 1: $scope.priceByKg = param;
+					  		break;
+					  	case 2: $scope.priceByVolume = param;
+					  		break;
+					  	case 3: $scope.priceByTravelKm = param;
+					  		break;
+					  	case 4: $scope.priceByPackageKm = param;
+					  		break;
+					  	case 5: $scope.maxReservationDelay = param;					  	
+					  		break;*/
+					  	case 6: $scope.stopDelay = param;
+					  		break;
+					  }
+				});
+			}
+		});
+	};
     
     $scope.showForm = function()
     {
     	$scope.lineForm = {};
-    	$("#divLineForm").removeClass('hidden');  
-    	$scope.hideSuccess();
+    	$scope.lineForm.generaVuelta = true;
+    	$scope.inicializoMarkers();
+    	$scope.inicializoMarkersV();    	
+    	$("#divLineForm").removeClass('hidden');
     	google.maps.event.trigger($scope.map, 'resize');	//refresh map
+    	google.maps.event.trigger($scope.mapV, 'resize');	//refresh map
     };
     
     $scope.hideForm = function()
@@ -32,7 +86,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     		$scope.lines = data;
     		$scope.linesGrid.data = $scope.lines;
     	});
-    };
+    };   
     
     $scope.linesGrid = 
     {
@@ -64,7 +118,6 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     	$("#deleteModal").modal('show');
     };
     
-    $scope.getLines();
     
     $scope.getTerminals = function()
     {
@@ -74,6 +127,8 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     	});
     };    
     
+    $scope.getLines();
+    $scope.getParameters();
     $scope.getTerminals();    
     
     $scope.createLine = function()
@@ -87,11 +142,23 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     			$scope.lineForm.paradas[i].longitud = $scope.lineForm.paradas[i].position.lng();
     		}
     		
+    		$scope.lineForm.paradasV = $scope.markersV;
+    		for (var i = 0; i < $scope.lineForm.paradasV.length; i++)
+    		{
+    			$scope.lineForm.paradasV[i].latitud = $scope.lineForm.paradasV[i].position.lat(); 
+    			$scope.lineForm.paradasV[i].longitud = $scope.lineForm.paradasV[i].position.lng();
+    		}
+    		
     		$http.post(servicesUrl +'createLine', JSON.stringify($scope.lineForm))
 			.success(function()
 			{				
 				$scope.hideForm();
-		    	$scope.lineForm = {};
+		    	$scope.lineForm = {};	
+		    	$scope.lineForm.generaVuelta = true;
+		    	$scope.inicializoMarkers();
+		    	$scope.inicializoMarkersV(); 
+		        $scope.stops = {};	
+		        $scope.getParameters();
 		    	$scope.getLines();
 		    	$scope.getTerminals();
 		    	$.unblockUI();
@@ -160,10 +227,8 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     
     $scope.updateTerminalDestino = function ()   
     {
-    	var term = $scope.getTerminalById($scope.lineForm.destino);
-    	
-    	var myLatlng = new google.maps.LatLng(term.latitud, term.longitud);
-    	
+    	var term = $scope.getTerminalById($scope.lineForm.destino);    	
+    	var myLatlng = new google.maps.LatLng(term.latitud, term.longitud);    	
     	var esprimero = false;
     	
     	var marker = new google.maps.Marker(
@@ -177,8 +242,6 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
 	  	    reajuste: 0, 
 	  	    id_parada:$scope.lineForm.destino
 	  	});
-    	
-    	
     	
     	if($scope.markers.length == 0)
     	{
@@ -202,16 +265,48 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
 		var g = myLatlng.lng();
 		$scope.geocodePosition(marker);
 		$scope.map.panTo(myLatlng);
+		
+		//Viaje de vuelta
+		esprimero = false;
+		
+		var marker = new google.maps.Marker(
+    	{
+    		position: myLatlng,
+	  	    map: $scope.mapV,
+	  	    es_terminal: true,
+	  	    es_peaje: false,
+	  	    es_origen: true,
+	  	    descripcion: '',
+	  	    reajuste: 0,
+	  	    id_parada:$scope.lineForm.origen
+	  	});
+		
+		if($scope.markersV.length == 0)
+    	{
+    		$scope.markersV.splice(1, 0, marker);
+    		esprimero = true;
+    	}
+		
+		if(($scope.markersV[0].es_terminal) && ($scope.markersV[0].es_origen))
+    	{  
+    		if (esprimero === false){$scope.markersV[0].setMap(null)};
+    		$scope.markersV[0] = marker;    		
+    	}
+    	else
+    	{
+    		$scope.markersV.splice(0, 0, marker);    		
+    	}
     	
-    	//$scope.$digest();
+    	var l = myLatlng.lat();
+		var g = myLatlng.lng();
+		$scope.geocodePosition(marker);
+		$scope.mapV.panTo(myLatlng);
     }
     
     $scope.updateTerminalOrigen = function ()   
     {
-    	var term = $scope.getTerminalById($scope.lineForm.origen);
-    	
-    	var myLatlng = new google.maps.LatLng(term.latitud, term.longitud);
-    	
+    	var term = $scope.getTerminalById($scope.lineForm.origen);    	
+    	var myLatlng = new google.maps.LatLng(term.latitud, term.longitud);    	
     	var esprimero = false;
     	
     	var marker = new google.maps.Marker(
@@ -246,8 +341,46 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
 		var g = myLatlng.lng();
 		$scope.geocodePosition(marker);
 		$scope.map.panTo(myLatlng);
+		
+		
+		//ViajeVuelta
+		esprimero = true;
+		
+		var marker = new google.maps.Marker(
+    	{
+    		position: myLatlng,
+	  	    map: $scope.mapV,
+	  	    es_terminal: true,
+	  	    es_peaje: false,
+	  	    es_origen: false,
+	  	    descripcion: '',
+	  	    reajuste: 0, 
+	  	    id_parada:$scope.lineForm.destino
+	  	});
     	
-    	//$scope.$digest();
+    	if($scope.markersV.length == 0)
+    	{
+    		$scope.markersV.splice(1, 0, marker);
+    		esprimero = true;
+    	}
+    	
+    	var tope = $scope.markersV.length;
+    	
+    	if (($scope.markersV[tope-1].es_terminal) && ($scope.markersV[tope-1].es_origen === false))
+    	{
+    		if (esprimero === false){$scope.markersV[tope-1].setMap(null)};
+    		$scope.markersV[tope-1] = marker;    
+    	}
+    	else
+    	{
+    		$scope.markersV.push(marker);
+    	}
+    	
+    	var l = myLatlng.lat();
+		var g = myLatlng.lng();
+		$scope.geocodePosition(marker);
+		$scope.mapV.panTo(myLatlng);
+		
     };
     
     /*Mapa*/
@@ -259,15 +392,22 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
       center: {lat: -34.894418, lng: -56.165775}
     });
     
+    $scope.mapV = new google.maps.Map(document.getElementById('mapV'), 
+    {
+      zoom: 12,
+      center: {lat: -34.894418, lng: -56.165775}
+    });
+    
     
     //Create a renderer for directions and bind it to the map.    
     var directionsDisplay = new google.maps.DirectionsRenderer({map: $scope.map});
+    var directionsDisplayV = new google.maps.DirectionsRenderer({map: $scope.mapV});
     //directionsDisplay.setMap($scope.map);
     
     //Instantiate an info window to hold step text.
     var stepDisplay = new google.maps.InfoWindow;
     
-    $scope.calculateAndDisplayRoute = function(directionsDisplay, directionsService, markerArray, stepDisplay, map)
+    $scope.calculateAndDisplayRoute = function(directionsDisplay, directionsService, markerArray, stepDisplay, map, vuelta)
     {
     	//elimina los markers anteriores
     	for (var i = 0; i < markerArray.length; i++) 
@@ -296,14 +436,14 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     	    {
     	    	//document.getElementById('warnings-panel').innerHTML = '<b>' + response.routes[0].warnings + '</b>';
     	    	directionsDisplay.setDirections(response);
-    	    	$scope.actualizoKm(response.routes[0].legs);
-    	    	$scope.actualizoMinutos(response.routes[0].legs);
+    	    	$scope.actualizoKm(response.routes[0].legs, vuelta);
+    	    	$scope.actualizoMinutos(response.routes[0].legs, vuelta);
     	    	$scope.$digest();
     	      	//$scope.showSteps(response, markerArray, stepDisplay, map);
     	    } 
     	    else 
     	    {
-    	      window.alert('Directions request failed due to ' + status);
+    	      window.alert('Falló el request de direcciones: ' + status);
     	    }
     	  });
     };
@@ -355,7 +495,12 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     
     $scope.createRoute = function()
     {
-    	$scope.calculateAndDisplayRoute(directionsDisplay, directionsService, $scope.markers, stepDisplay, $scope.map);
+    	$scope.calculateAndDisplayRoute(directionsDisplay, directionsService, $scope.markers, stepDisplay, $scope.map, false);
+    }
+    
+    $scope.createRouteV = function()
+    {
+    	$scope.calculateAndDisplayRoute(directionsDisplayV, directionsService, $scope.markersV, stepDisplay, $scope.mapV, true);
     }
     
     // Create the search box and link it to the UI element.
@@ -363,13 +508,20 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     var searchBox = new google.maps.places.SearchBox(input);
     $scope.map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
     
+    var inputV = document.getElementById('pac-inputV');
+    var searchBoxV = new google.maps.places.SearchBox(inputV);
+    $scope.mapV.controls[google.maps.ControlPosition.TOP_LEFT].push(inputV);
+    
     //Bias the SearchBox results towards current map's viewport.
     $scope.map.addListener('bounds_changed', function() 
     {
       searchBox.setBounds($scope.map.getBounds());
     });
     
-    $scope.markers = [];
+    $scope.mapV.addListener('bounds_changed', function() 
+    {
+      searchBoxV.setBounds($scope.mapV.getBounds());
+    });
     
     $scope.map.addListener('click', function(e) 
     {
@@ -379,15 +531,21 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
           marker.setMap(null);
         });
         $scope.markers = [];*/        
-    	$scope.placeMarkerAndPanTo(e.latLng, $scope.map);    	
+    	$scope.placeMarkerAndPanTo(e.latLng, $scope.map, false);    	
     	$scope.$digest();
 	});
     
-    $scope.placeMarkerAndPanTo = function (latLng, map) 
+    $scope.mapV.addListener('click', function(e) 
+    {
+    	$scope.placeMarkerAndPanTo(e.latLng, $scope.mapV, true);    	
+    	$scope.$digest();
+	});
+    
+    $scope.placeMarkerAndPanTo = function (latLng, map, vuelta) 
     {
   	  var marker = new google.maps.Marker({
   	    position: latLng,
-  	    map: $scope.map,
+  	    map: map, //map: $scope.map,
   	    es_terminal: false,
   	    es_peaje: false,
   	    es_origen: false,  	    
@@ -396,77 +554,103 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
   	    id_parada:null
   	  });
   	  
-  	  if($scope.markers.length ==0)
+  	  if (vuelta)
   	  {
-  		$scope.markers.push(marker);  
+  		  if($scope.markersV.length ==0)
+    	  {
+  			$scope.markersV.push(marker);
+  			      		  
+    	  }
+    	  else
+    	  {
+    		  $scope.markersV.splice($scope.markersV.length-1, 0, marker);  
+    	  }
   	  }
   	  else
   	  {
-  		$scope.markers.splice($scope.markers.length-1, 0, marker);  
-  	  }  	  
+  		  if($scope.markers.length ==0)
+    	  {
+  			  $scope.markers.push(marker);  
+    	  }
+    	  else
+    	  {
+    		  $scope.markers.splice($scope.markers.length-1, 0, marker);  
+    	  }
+  	  }	 
+  	    	    	  
   	  var l = latLng.lat();
   	  var g = latLng.lng();
-  	 // $scope.actualizoMarker(l, g);
   	  $scope.geocodePosition(marker);
-  	  $scope.map.panTo(latLng);
-  	  //
-  	/* var elevationService = new google.maps.ElevationService();
-  	  var requestElevation = 
-  	  {
-  		'locations': [marker.getPosition()]
-  	  };  	  
-   	 elevationService.getElevationForLocations(requestElevation, function(results, status) 
-   	 {
-  	    if (status == google.maps.ElevationStatus.OK) {
-  	      if (results[0]) 
-  	      {
-  	        if (parseFloat(results[0].elevation) < 1)
-  	        {
-  	        	//Es Agua
-  	        	marker.setMap(null);
-  	        	$scope.markers = [];
-  	        	$scope.error_message = 'Punto del mapa incorrecto, esta en el agua!';
-  	        	$scope.branchForm.latitud = null;
-  	        	$scope.branchForm.longitud = null;
-  	        	$scope.$digest();
-				$("#errorModal").modal("toggle");
-  	        }  	    	  
-  	      }
-  	    }
-  	  });*/
+  	  map.panTo(latLng);
+  	  
    	}//fin de placemarker
     
-    $scope.deleteMarker = function(indice)
+    $scope.deleteMarker = function(indice, vuelta)
     {
-    	if ($scope.markers[indice].es_terminal)
+    	if (vuelta)
     	{
-    		return;
+    		if ($scope.markersV[indice].es_terminal)
+        	{
+        		return;
+        	}
+        	$scope.markersV[indice].map = null;
+        	$scope.markersV.splice(indice, 1);    	
+        	$scope.createRouteV();
     	}
-    	$scope.markers[indice].map = null;
-    	$scope.markers.splice(indice, 1);    	
-    	$scope.createRoute();
+    	else
+    	{
+    		if ($scope.markers[indice].es_terminal)
+        	{
+        		return;
+        	}
+        	$scope.markers[indice].map = null;
+        	$scope.markers.splice(indice, 1);    	
+        	$scope.createRoute();
+    	}    	
     }
     
-    $scope.changeIndex = function(old_index, new_index)
+    $scope.changeIndex = function(old_index, new_index, vuelta)
     {
-    	var tope = $scope.markers.length;
     	
-    	if ((new_index == 0) || (new_index == tope-1) || (old_index == 0) || (old_index == tope-1))
+    	if (vuelta)
     	{
-    		return;
+    		var tope = $scope.markersV.length;
+			
+			if ((new_index == 0) || (new_index == tope-1) || (old_index == 0) || (old_index == tope-1))
+			{
+				return;
+			}
+			
+			if ((new_index < 0) || (new_index >= tope))
+			{
+				return;
+			}
+			var auxMarker = $scope.markersV[old_index];
+			$scope.markersV[old_index] = $scope.markersV[new_index];
+			$scope.markersV[new_index] = auxMarker;
+			$scope.createRouteV();	
     	}
-    	
-    	if ((new_index < 0) || (new_index >= tope))
+    	else
     	{
-    		return;
+			var tope = $scope.markers.length;
+			
+			if ((new_index == 0) || (new_index == tope-1) || (old_index == 0) || (old_index == tope-1))
+			{
+				return;
+			}
+			
+			if ((new_index < 0) || (new_index >= tope))
+			{
+				return;
+			}
+			var auxMarker = $scope.markers[old_index];
+			$scope.markers[old_index] = $scope.markers[new_index];
+			$scope.markers[new_index] = auxMarker;
+			$scope.createRoute();
     	}
-    	var auxMarker = $scope.markers[old_index];
-    	$scope.markers[old_index] = $scope.markers[new_index];
-    	$scope.markers[new_index] = auxMarker;
-    	$scope.createRoute();
     }
     
-    $scope.actualizoKm = function (legs)
+    $scope.actualizoKm = function (legs, vuelta)
     {
     	var km = 0; 
     	for (var i = 0; i < legs.length; i++) 
@@ -474,19 +658,34 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     		km = km + legs[i].distance.value;
     	}
     	km = km/1000
-    	$scope.txt_km = Math.round(km * 100) / 100;
+    	if (vuelta)
+    	{
+    		$scope.txt_kmV = Math.round(km * 100) / 100;    		
+    	}
+    	else
+    	{
+    		$scope.txt_km = Math.round(km * 100) / 100;
+    	}
     }
     
-    $scope.actualizoMinutos = function (legs)
+    $scope.actualizoMinutos = function (legs, vuelta)
     {
     	var min = 0; 
     	for (var i = 0; i < legs.length; i++) 
     	{
-    		min = min + legs[i].duration.value;    		
+    		min = min + legs[i].duration.value + ($scope.stopDelay.valor * 60); //duracion de las paradas mas parametro de demora (esta en minutos la config)    		
     	}
     	min = min/60;
-    	$scope.txt_minutos = Math.round(min);
-    	$scope.lineForm.tiempo_estimado = $scope.txt_minutos;
+    	if (vuelta)
+    	{
+    		$scope.txt_minutosV = Math.round(min);
+    		$scope.lineForm.tiempo_estimado_vuelta = $scope.txt_minutosV;
+    	}
+    	else
+    	{
+    		$scope.txt_minutos = Math.round(min);
+    		$scope.lineForm.tiempo_estimado = $scope.txt_minutos;
+    	}    	
     }
     
 });

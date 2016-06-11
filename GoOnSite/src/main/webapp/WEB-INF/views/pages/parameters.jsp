@@ -50,6 +50,12 @@
 						<input type="number" min="1" step="1" name="maxReservationDelay" class="form-control" ng-model="maxReservationDelay.valor" required>
 					</div>
 				</div>
+				<div class="form-group">
+					<label class="control-label col-sm-6" for="stopDelay">Demora promedio por parada (min):</label>
+					<div class="col-sm-6">
+						<input type="number" min="1" step="1" name="stopDelay" class="form-control" ng-model="stopDelay.valor" required>
+					</div>
+				</div>
 				<div class="form-group"> 
 				    <div class="col-sm-offset-6 col-sm-6">
 				      <button style="float: right" type="submit" class="btn btn-info">Actualizar</button>
