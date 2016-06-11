@@ -93,4 +93,9 @@ public class LinesLogic implements ILinesLogic
 			dayInPeriod = !dayTo.before(dayFrom);
 		}
 	}
+
+	public List<Viaje> GetTravels() 
+	{
+		return TenantContext.ViajeRepository.GetTravels();
+	}
 }

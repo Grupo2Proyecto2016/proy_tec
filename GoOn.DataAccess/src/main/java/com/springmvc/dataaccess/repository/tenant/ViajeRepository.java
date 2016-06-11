@@ -1,10 +1,13 @@
 package com.springmvc.dataaccess.repository.tenant;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 
+import com.springmvc.entities.tenant.Linea;
 import com.springmvc.entities.tenant.Viaje;
 
 public class ViajeRepository {
@@ -32,5 +35,13 @@ public class ViajeRepository {
 			t.rollback();
 			throw ex;
 		}
+	}
+
+	public List<Viaje> GetTravels() 
+	{
+		List<Viaje> travels = null;
+		Query q = entityManager.createQuery("FROM Viaje");
+		travels = (List<Viaje>)q.getResultList();
+		return travels;	
 	}
 }

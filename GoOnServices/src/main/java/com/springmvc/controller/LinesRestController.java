@@ -130,10 +130,6 @@ public class LinesRestController{
 	        e.printStackTrace();
 	    }
 	    
-//	    travel.dayFrom.set((GregorianCalendar.HOUR_OF_DAY), date.getHours());
-//	    int b = 2;
-//	    int a = travel.dayFrom.get((GregorianCalendar.HOUR_OF_DAY));
-	    
 		Map<DayOfWeek, Boolean> days = new  HashMap<DayOfWeek, Boolean>();
 		days.put(DayOfWeek.Monday, travel.monday);
 		days.put(DayOfWeek.Tuesday, travel.tuesday);
@@ -147,4 +143,31 @@ public class LinesRestController{
 		
 		return new ResponseEntity(HttpStatus.OK);
 	}
+	
+	@Secured({"ROLE_ADMIN"})
+	@RequestMapping(value = "/getTravels", method = RequestMethod.GET)
+	public ResponseEntity<List<Viaje>> getTravels(@PathVariable String tenantid)
+	{
+		List<Viaje> travels = new LinesLogic(tenantid).GetTravels();
+		return new ResponseEntity<List<Viaje>>(travels, HttpStatus.OK);
+	}
+	
+	@Secured({"ROLE_ADMIN"})
+	@RequestMapping(value = "/deleteTravel", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
+	public ResponseEntity<CustomResponseWrapper> deleteTravel(@RequestBody long travelId, @PathVariable String tenantid)
+	{
+		LinesLogic tl = new LinesLogic(tenantid);
+		CustomResponseWrapper respuesta = new CustomResponseWrapper();
+//		if (tl.IsTravelInUse(travelId))
+//		{
+//			respuesta.setMsg("No se puede eliminar vehiculo, tiene viajes asociados.");
+//			respuesta.setSuccess(false);	
+//		}	
+//		else
+//		{
+//			tl.deleteLinea(id_linea);
+//			respuesta.setSuccess(true);
+//		}
+		return new ResponseEntity<CustomResponseWrapper>(respuesta, HttpStatus.OK);
+	}	
 }
