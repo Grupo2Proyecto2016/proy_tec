@@ -97,6 +97,16 @@
 						</div>
 						<div class="form-group" id="tarifa_fijo" ng-show="lineForm.calculo==1">
 							<div class="col-sm-6">
+								<label class="control-label col-sm-3" for="generaVuelta">Generar Viaje de vuelta:</label>
+								<div class="col-sm-9">
+								  <div class="checkbox">
+								    <label>
+								      <input type="checkbox" name="generaVuelta" ng-model="lineForm.generaVuelta">
+								    </label>
+								  </div>
+								</div>		
+							</div> 
+							<div class="col-sm-6">
 								<label class="control-label 	col-sm-3" for="costo_maximo">Valor Fijo (UYU):</label>
 								<div class="col-sm-9">
 									<input type="text" pattern="[0-9]+" title="Solo se aceptan números" class="form-control" name="costo_maximo" ng-model="lineForm.costo_maximo" required>
@@ -105,10 +115,25 @@
 						</div>
 						<div class="form-group" id="tarifa_variable"  ng-show="lineForm.calculo==2">
 							<div class="col-sm-6">
+								<label class="control-label col-sm-3" for="generaVuelta">Generar Viaje de vuelta:</label>
+								<div class="col-sm-9">
+								  <div class="checkbox">
+								    <label>
+								      <input type="checkbox" name="generaVuelta" ng-model="lineForm.generaVuelta">
+								    </label>
+								  </div>
+								</div>								    
+							</div> 
+							<div class="col-sm-6">
 								<label class="control-label 	col-sm-3" for="costo_minimo">Valor Minimo(UYU):</label>
 								<div class="col-sm-9">
 									<input type="text" pattern="[0-9]+" title="Solo se aceptan números" class="form-control" name="costo_minimo" ng-model="lineForm.costo_minimo">
 							    </div>						    
+							</div>
+						</div>
+						<div class="form-group" id="tarifa_variable"  ng-show="lineForm.calculo==2">
+							<div class="col-sm-6">
+												    
 							</div> 
 							<div class="col-sm-6">
 								<label class="control-label 	col-sm-3" for="costo_maximo">Valor Maximo(UYU):</label>
@@ -117,7 +142,7 @@
 							    </div>						    
 							</div>
 						</div>
-						<div class="form-group">
+						<div class="form-group" ng-show="lineForm.calculo==null">
 							<div class="col-sm-6">
 					    		<label class="control-label col-sm-3" for="generaVuelta">Generar Viaje de vuelta:</label>
 								<div class="col-sm-9">
