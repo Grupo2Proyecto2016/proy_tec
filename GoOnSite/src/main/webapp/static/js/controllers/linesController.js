@@ -15,6 +15,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     $scope.lines = null;
     $scope.markers = [];    
     $scope.markersV = [];
+    $scope.stopDelay = 0;
     
     $scope.inicializoMarkers = function()
     {
@@ -35,6 +36,32 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     	$scope.markersV = [];
     	$scope.markersV.lenght = 0;
     }
+    
+    $scope.getParameters = function(){
+		$http.get(servicesUrl + 'getParams')
+		.then(function(response) {
+			if(response.status == 200)
+			{
+				angular.forEach(response.data, function(param, key) {
+					  switch(param.id)
+					  {
+					  	/*case 1: $scope.priceByKg = param;
+					  		break;
+					  	case 2: $scope.priceByVolume = param;
+					  		break;
+					  	case 3: $scope.priceByTravelKm = param;
+					  		break;
+					  	case 4: $scope.priceByPackageKm = param;
+					  		break;
+					  	case 5: $scope.maxReservationDelay = param;					  	
+					  		break;*/
+					  	case 6: $scope.stopDelay = param;
+					  		break;
+					  }
+				});
+			}
+		});
+	};
     
     $scope.showForm = function()
     {
@@ -91,7 +118,6 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     	$("#deleteModal").modal('show');
     };
     
-    $scope.getLines();
     
     $scope.getTerminals = function()
     {
@@ -101,6 +127,8 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     	});
     };    
     
+    $scope.getLines();
+    $scope.getParameters();
     $scope.getTerminals();    
     
     $scope.createLine = function()
@@ -129,7 +157,8 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
 		    	$scope.lineForm.generaVuelta = true;
 		    	$scope.inicializoMarkers();
 		    	$scope.inicializoMarkersV(); 
-		        $scope.stops = {};		        
+		        $scope.stops = {};	
+		        $scope.getParameters();
 		    	$scope.getLines();
 		    	$scope.getTerminals();
 		    	$.unblockUI();
@@ -644,7 +673,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     	var min = 0; 
     	for (var i = 0; i < legs.length; i++) 
     	{
-    		min = min + legs[i].duration.value;    		
+    		min = min + legs[i].duration.value + ($scope.stopDelay.valor * 60); //duracion de las paradas mas parametro de demora (esta en minutos la config)    		
     	}
     	min = min/60;
     	if (vuelta)
