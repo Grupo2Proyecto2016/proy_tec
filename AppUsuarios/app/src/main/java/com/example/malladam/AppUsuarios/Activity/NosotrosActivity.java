@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.design.widget.NavigationView;
@@ -20,6 +22,7 @@ import com.example.malladam.AppUsuarios.models.Empresa;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,6 +30,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -198,6 +202,7 @@ public class NosotrosActivity extends AppCompatActivity {
         TextView rut = (TextView) layout.findViewById(R.id.popupRut);
         TextView telefono = (TextView) layout.findViewById(R.id.popupTelefono);
         TextView pais = (TextView) layout.findViewById(R.id.popupPais);
+        ImageView logo = (ImageView) layout.findViewById(R.id.popupLogo);
 
         rut.setText(Double.toString(empresa.getRut()));
         nombre.setText(empresa.getNombre());
@@ -206,6 +211,12 @@ public class NosotrosActivity extends AppCompatActivity {
         telefono.setText(Double.toString(empresa.getTelefono()));
         pais.setText(empresa.getPais());
 
+        String encodedDataString = empresa.getLogoS();
+
+        encodedDataString = encodedDataString.replace("data:image/png;base64,","");
+
+        byte[] imageAsBytes = Base64.decode(encodedDataString.getBytes(), 0);
+        logo.setImageBitmap(BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length));
 
         // Clear the default translucent background
         popup.setBackgroundDrawable(new BitmapDrawable());
@@ -222,6 +233,10 @@ public class NosotrosActivity extends AppCompatActivity {
                 popup.dismiss();
             }
         });
+    }
+    private Bitmap base64ToBitmap(String b64) {
+        byte[] imageAsBytes = Base64.decode(b64.getBytes(), Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
     }
 
 }

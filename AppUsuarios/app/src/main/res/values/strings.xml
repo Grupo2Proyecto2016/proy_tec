@@ -11,6 +11,7 @@
     <string name="action_opcion2">Opcion 2</string>
     <string name="rockBla">rockB</string>
     <string name="error_timeout">Tiempo de espera agotado, Intente nuevamente</string>
+    <string name="error_conexion">Error el la conexión, Intente nuevamente</string>
     <string name="title_activity_login">Login</string>
     <string name="scan">Leer QR</string>
     <string name="action_newpasaje">Pasaje</string>
@@ -18,8 +19,6 @@
     <string name="item1sucursales">Nuestras Sucursales</string>
 
     <!-- Strings related to login -->
-    <string name="prompt_user">Usuario</string>
-    <string name="prompt_password">Contraseña</string>
     <string name="action_sign_in">Ingresar</string>
     <string name="action_sign_in_short">Login</string>
     <string name="error_network_timeout">Error en la conexión</string>
