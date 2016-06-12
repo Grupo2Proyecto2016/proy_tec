@@ -7,6 +7,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     $scope.txt_km = "";
     $scope.txt_minutosV = ""; /*Todas las variables y funciones que tengan V al final, impactan sobre el viaje de vuelta*/
     $scope.txt_kmV = "";
+    $scope.valor_sugerido = "";
     i18nService.setCurrentLang('es');
     
     $scope.lineForm = {};

@@ -239,6 +239,14 @@ div.row
 	 z-index: 1020; 
 }
 
+.sugerido{
+	padding:0!important;
+	margin-bottom:0!important;
+	background-color: #dff0d8!important;
+  	border-color: #d6e9c6!important;
+  	color: #468847!important;
+}
+
 
  
 /* .ng-leave            */

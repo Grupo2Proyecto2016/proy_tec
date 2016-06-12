@@ -113,6 +113,21 @@
 							    </div>						    
 							</div> 
 						</div>
+						<div class="form-group" id="tarifa_fijo" ng-show="lineForm.calculo==1">
+							<div class="col-sm-6">
+								<div class="col-sm-9">
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="control-label col-sm-3">
+								</div>
+								<div class="col-sm-9">
+									<div class="alert alert-success sugerido hidden">
+										<strong>&nbsp;&nbsp;Valor Sugerido: </strong> $ {{valor_sugerido}} 
+									</div>
+								</div>
+							</div>
+						</div>					
 						<div class="form-group" id="tarifa_variable"  ng-show="lineForm.calculo==2">
 							<div class="col-sm-6">
 								<label class="control-label col-sm-3" for="generaVuelta">Generar Viaje de vuelta:</label>
@@ -192,7 +207,9 @@
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="hideForm()">
 						<span aria-hidden="true">×</span>
 						</button> 
-						<h5 class="modal-title">Lista Paradas</h5>
+						<h5 class="modal-title">Lista Paradas
+							<button type="button" class="btn btn-default btn-xs" id="btnReajusta" ng-click="reajusta()"><i class="fa fa-retweet fa-lg"></i>Calcular Reajustes</button>
+						</h5>
 					</div>				
 				</div>
 				<div class="panel-body" style="height: 55%;overflow: auto;">	
@@ -213,13 +230,21 @@
 	   						<td>
 	   							<span style="float:left;">{{$index + 1}} - {{m.descripcion}}</span>	   								   							
 	   						</td>
-	   						<td>
-	  	 						<div class="col-xs-10">  						
-  									<input type="text" class="form-control" name="origen" ng-model="m.reajuste" required>
+	   						<td width="40%">   						
+	  	 						<div class="col-xs-10" ng-show="!m.es_terminal">	  	 						
+	  	 						
+	  	 							<div class="input-group"> 
+	  	 								<span class="input-group-addon"> 
+	  	 									<input type="checkbox" name="reajusta" ng-model="m.reajusta"> 
+	  	 								</span> 
+	  	 									<input type="text" class="form-control" name="origen" ng-model="m.reajuste" ng-disabled="!m.reajusta" required> 
+	  	 							</div>  	
+	  	 							<!--  <input type="checkbox" name="reajusta" ng-model="m.reajusta">					
+  									<input type="text" class="form-control" name="origen" ng-model="m.reajuste" required>-->
 								</div>	  							 							
 	   						</td>
 	   						<td>
-	   							<span style="float:right">
+	   							<span style="float:right"  ng-show="!m.es_terminal">
 	   								<a><i class="fa fa-chevron-circle-down fa-lg" ng-click="changeIndex($index, $index+1, false)">&nbsp;</i></a>
 	   								<a><i class="fa fa-chevron-circle-up fa-lg" ng-click="changeIndex($index, $index-1, false)">&nbsp;</i></a>
 	   								<a><i class="fa fa-trash fa-lg" ng-click="deleteMarker($index, false)">&nbsp;</i></a>
