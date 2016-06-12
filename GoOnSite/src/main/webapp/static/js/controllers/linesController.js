@@ -17,6 +17,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     $scope.markers = [];    
     $scope.markersV = [];
     $scope.stopDelay = 0;
+    $scope.priceByTravelKm = 0;
     
     $scope.inicializoMarkers = function()
     {
@@ -49,13 +50,13 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
 					  	/*case 1: $scope.priceByKg = param;
 					  		break;
 					  	case 2: $scope.priceByVolume = param;
-					  		break;
-					  	case 3: $scope.priceByTravelKm = param;
-					  		break;
+					  		break;					  	
 					  	case 4: $scope.priceByPackageKm = param;
 					  		break;
 					  	case 5: $scope.maxReservationDelay = param;					  	
 					  		break;*/
+					  	case 3: $scope.priceByTravelKm = param;
+				  			break;
 					  	case 6: $scope.stopDelay = param;
 					  		break;
 					  }
@@ -82,6 +83,11 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     $scope.hideForm = function()
     {
     	$("#divLineForm").addClass('hidden');		
+    };
+    
+    $scope.showFijoSugerido = function()
+    {
+    	$("#fijoSugerido").removeClass('hidden');	
     };
     
     $scope.getLines = function()
@@ -134,7 +140,73 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     
     $scope.getLines();
     $scope.getParameters();
-    $scope.getTerminals();    
+    $scope.getTerminals();
+    
+    $scope.reajustaValores = function()
+    {
+    	//checkeos de integridad de los datos
+    	var tot_km = 0;
+    	
+    	for (var i = 0; i < $scope.markers.length; i++)
+    	{
+    		tot_km = tot_km + $scope.markers[i].km;
+    	}
+    	
+    	tot_km = tot_km / 1000; //viene en metros
+    	var km_repartir = tot_km;
+    	var pesos_repartir = $scope.lineForm.costo_maximo - $scope.lineForm.costo_minimo;
+    	var distancia = 0;
+    	for (var i = 0; i < $scope.markers.length; i++)
+    	{    		
+    		if ($scope.markers[i].reajusta)
+    		{
+    			if (distancia == 0)
+    			{
+    				distancia = $scope.markers[i].km / 1000;
+    			}
+    			$scope.markers[i].reajuste = Math.round((pesos_repartir / km_repartir) * (distancia + ($scope.markers[i].km / 1000)));
+    			//km_repartir = km_repartir  - ($scope.markers[i].km / 1000);
+    			distancia = 0;
+    		}
+    		else
+    		{
+    			distancia = distancia + ($scope.markers[i].km / 1000)
+    		}
+    	}    	
+    };
+    
+    $scope.reajustaValoresV = function()
+    {
+    	//checkeos de integridad de los datos
+    	var tot_km = 0;
+    	
+    	for (var i = 0; i < $scope.markersV.length; i++)
+    	{
+    		tot_km = tot_km + $scope.markersV[i].km;
+    	}
+    	
+    	tot_km = tot_km / 1000; //viene en metros
+    	var km_repartir = tot_km;
+    	var pesos_repartir = $scope.lineForm.costo_maximo - $scope.lineForm.costo_minimo;
+    	var distancia = 0;
+    	for (var i = 0; i < $scope.markersV.length; i++)
+    	{    		
+    		if ($scope.markersV[i].reajusta)
+    		{
+    			if (distancia == 0)
+    			{
+    				distancia = $scope.markersV[i].km / 1000;
+    			}
+    			$scope.markersV[i].reajuste = Math.round((pesos_repartir / km_repartir) * (distancia + ($scope.markersV[i].km / 1000)));
+    			//km_repartir = km_repartir  - ($scope.markers[i].km / 1000);
+    			distancia = 0;
+    		}
+    		else
+    		{
+    			distancia = distancia + ($scope.markersV[i].km / 1000)
+    		}
+    	}    	
+    };
     
     $scope.createLine = function()
     {
@@ -244,7 +316,9 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
 	  	    es_peaje: false,
 	  	    es_origen: false,
 	  	    descripcion: '',
-	  	    reajuste: 0, 
+	  	    reajusta: false,
+	  	    reajuste: 0,
+	  	    km: 0,
 	  	    id_parada:$scope.lineForm.destino
 	  	});
     	
@@ -282,7 +356,9 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
 	  	    es_peaje: false,
 	  	    es_origen: true,
 	  	    descripcion: '',
+	  	    reajusta: false,
 	  	    reajuste: 0,
+	  	    km: 0,
 	  	    id_parada:$scope.lineForm.origen
 	  	});
 		
@@ -322,7 +398,9 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
 	  	    es_peaje: false,
 	  	    es_origen: true,
 	  	    descripcion: '',
+	  	    reajusta: false,
 	  	    reajuste: 0,
+	  	    km: 0,
 	  	    id_parada:$scope.lineForm.origen
 	  	});
     	
@@ -359,7 +437,9 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
 	  	    es_peaje: false,
 	  	    es_origen: false,
 	  	    descripcion: '',
-	  	    reajuste: 0, 
+	  	    reajusta: false,
+	  	    reajuste: 0,
+	  	    km: 0,
 	  	    id_parada:$scope.lineForm.destino
 	  	});
     	
@@ -555,7 +635,9 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
   	    es_peaje: false,
   	    es_origen: false,  	    
   	    descripcion: '',
+  	    reajusta: false,
   	    reajuste: 0,
+  	    km: 0,
   	    id_parada:null
   	  });
   	  
@@ -661,6 +743,14 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     	for (var i = 0; i < legs.length; i++) 
     	{
     		km = km + legs[i].distance.value;
+    		if (vuelta)
+        	{    			
+    			$scope.$markersV[i+1].km = legs[i].distance.value;
+        	}
+    		else
+    		{
+    			$scope.markers[i+1].km = legs[i].distance.value;	
+    		}
     	}
     	km = km/1000
     	if (vuelta)
@@ -670,6 +760,8 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     	else
     	{
     		$scope.txt_km = Math.round(km * 100) / 100;
+    		$scope.valor_sugerido = Math.round($scope.priceByTravelKm.valor * km);
+    		$scope.showFijoSugerido();
     	}
     }
     
