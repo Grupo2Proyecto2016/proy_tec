@@ -7,6 +7,7 @@ goOnApp.controller('parametersController', function($scope, $http, $filter, uiGr
 	$scope.priceByTravelKm = null;
 	$scope.priceByPackageKm = null;
 	$scope.maxReservationDelay = null;
+	$scope.stopDelay = null;
 	
 	$scope.getParameters = function(){
 		$http.get(servicesUrl + 'getParams')
@@ -24,7 +25,9 @@ goOnApp.controller('parametersController', function($scope, $http, $filter, uiGr
 					  		break;
 					  	case 4: $scope.priceByPackageKm = param;
 					  		break;
-					  	case 5: $scope.maxReservationDelay = param;
+					  	case 5: $scope.maxReservationDelay = param;					  	
+					  		break;
+					  	case 6: $scope.stopDelay = param;
 					  		break;
 					  }
 				});
@@ -43,6 +46,7 @@ goOnApp.controller('parametersController', function($scope, $http, $filter, uiGr
 		params.push($scope.priceByTravelKm);
 		params.push($scope.priceByPackageKm);
 		params.push($scope.maxReservationDelay);
+		params.push($scope.stopDelay);
 		
 		$http.post(servicesUrl + 'updateParameters', JSON.stringify(params))
 		.then(function(response) {

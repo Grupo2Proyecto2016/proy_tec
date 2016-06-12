@@ -12,7 +12,14 @@ goOnApp.controller('manageTravelsController', function($scope, $http, uiGridCons
 	
 	$scope.isDayMissing = function()
 	{
-		return !travelForm.monday && !travelForm.tuesday && !travelForm.wednesday && !travelForm.thursday && !travelForm.friday && !travelForm.saturday && !travelForm.sunday;
+		return !$scope.travelForm.monday 
+			&& !$scope.travelForm.tuesday 
+			&& !$scope.travelForm.wednesday 
+			&& !$scope.travelForm.thursday 
+			&& !$scope.travelForm.friday 
+			&& !$scope.travelForm.saturday 
+			&& !$scope.travelForm.sunday
+		;
 	};
     
 	$scope.custom_response = null;    
@@ -58,28 +65,21 @@ goOnApp.controller('manageTravelsController', function($scope, $http, uiGridCons
     
     $scope.createTravels = function()
     {
-    	if(!$scope.form.$invalid)
+    	if(!$scope.form.$invalid && !$scope.isDayMissing())
 		{
-    		$scope.lineForm.paradas = $scope.markers;
-    		for (var i = 0; i < $scope.lineForm.paradas.length; i++)
-    		{
-    			$scope.lineForm.paradas[i].latitud = $scope.lineForm.paradas[i].position.lat(); 
-    			$scope.lineForm.paradas[i].longitud = $scope.lineForm.paradas[i].position.lng();
-    		}
-    		
-    		$http.post(servicesUrl +'createLine', JSON.stringify($scope.lineForm))
+    		$.blockUI();
+    		$http.post(servicesUrl +'createTravel', JSON.stringify($scope.travelForm))
 			.success(function()
 			{				
-				$scope.hideForm();
-		    	$scope.lineForm = {};
-		    	$scope.getTerminals();
+				//$scope.hideForm();
+		    	//$scope.travelForm = {};
 		    	$.unblockUI();
-				$scope.showSuccessAlert("Linea creada.");							
+				$scope.showSuccessAlert("Los viajes han sido creados");							
 			})
 			.error(function()
 			{
 				$.unblockUI();
-				$scope.error_message = 'Ha ocurrido un error al crear la sucursal. Intente de nuevo en unos instantes.'; 
+				$scope.error_message = 'Ha ocurrido un error al crear los viajes. Intente de nuevo en unos instantes.'; 
 				$("#errorModal").modal("toggle");
 			});  
 		}
@@ -95,4 +95,83 @@ goOnApp.controller('manageTravelsController', function($scope, $http, uiGridCons
     	$('#successMessage').text(message);
 		$("#successAlert").show();
     }; 
+    
+    $scope.getTravels = function()
+    {
+    	$http.get(servicesUrl + 'getTravels').success(function(data, status, headers, config)
+    	{
+    		$scope.travels = data;
+    		angular.forEach($scope.travels, function(row){
+    			row.getDriverName = function()
+    			{
+    				return row.conductor.nombre + " " + row.conductor.apellido;
+    			};
+			});
+    		$scope.travelsGrid.data = $scope.travels;
+    	});
+    };
+    
+    $scope.travelsGrid = 
+    {
+		paginationPageSizes: [15, 30, 45],
+	    paginationPageSize: 15,
+		enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
+		enableFiltering: true,
+        columnDefs:
+    	[
+          { name:'Linea', field: 'linea.numero' },
+          { name:'Origen', field: 'linea.origen.descripcion' },
+          { name:'Destino', field: 'linea.destino.descripcion'},
+          { name:'Salida', cellTemplate: '<div class="text-center ngCellText">{{ row.entity.inicio | date:"dd/MM/yyyy @ h:mma"}}</div>' },
+          { name:'Tiempo Estimado (min)', field: 'linea.tiempo_estimado' },
+          { 
+        	  name: 'Pasajeros Parados', 
+        	  cellTemplate: '<div class="text-center ngCellText">{{row.entity.linea.viaja_parado | SiNo}}</div>'
+          },
+          { name:'Nº Coche', field: 'vehiculo.id_vehiculo' },
+          { name:'Conductor', field: 'getDriverName()' },
+          
+          { name: 'Acciones',
+        	enableFiltering: false,
+        	enableSorting: false,
+            cellTemplate:'<p align="center"><button style="" class="btn-xs btn-danger" ng-click="grid.appScope.showDeleteDialog(row)">Eliminar</button></p>'
+    	  }
+        ]
+     };
+    
+    $scope.getTravels();
+    
+    $scope.showDeleteDialog = function(row)
+    {
+    	$scope.travelToDelete = row.entity.id_viaje;
+    	$("#deleteModal").modal('show');
+    };
+    $scope.hideDeleteDialog = function(row)
+    {
+    	$("#deleteModal").modal('hide');
+    };
+    $scope.deleteTravel = function()
+	{
+		$.blockUI();
+		$http.post(servicesUrl +'deleteTravel', JSON.stringify($scope.travelToDelete))
+		.then(function(response) 
+			{
+				$.unblockUI();		
+	        	if(response.status == 200)
+	        	{	       
+	        		if (!response.data.success)
+	    			{
+	    				$scope.error_message = response.data.msg;
+	    		    	$("#errorModal").modal("toggle");
+	    			}
+	        		else
+	        		{
+	        			$scope.getTravels();
+		        		$scope.showSuccessAlert("El viaje ha sido borrada.");	
+	        		}	        		
+	        	}
+	        	$scope.hideDeleteDialog();
+    		});				
+	};
+	
 });

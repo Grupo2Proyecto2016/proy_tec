@@ -7,7 +7,8 @@ public enum Parameter
 	PriceByVolume(2),
 	PriceByTravelKm(3),
 	PriceByPackageKm(4),
-	MaxReservationDelay(5);
+	MaxReservationDelay(5),
+	StopDelay(6);
 	
 	private int value; 
 	

@@ -18,11 +18,23 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.example.malladam.AppUsuarios.DataBaseManager;
 import com.example.malladam.AppUsuarios.R;
+import com.example.malladam.AppUsuarios.adapters.VolleyS;
+import com.example.malladam.AppUsuarios.models.Empresa;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 public class BusquedaActivity extends AppCompatActivity {
 
@@ -39,6 +51,9 @@ public class BusquedaActivity extends AppCompatActivity {
     private EditText mDestino;
     private EditText mOrigen;
     private Button mButtonBuscar;
+    private String urlgetCompany;
+    private VolleyS volley;
+    private Empresa empresa;
 
 
     @Override
@@ -50,7 +65,6 @@ public class BusquedaActivity extends AppCompatActivity {
         mOrigen = (EditText) findViewById(R.id.origenBusqueda);
         mDestino = (EditText) findViewById(R.id.destinoBusqueda);
         mButtonBuscar = (Button) findViewById(R.id.buscarButton);
-
 
         dbManager = new DataBaseManager(this);
 
@@ -107,8 +121,9 @@ public class BusquedaActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
+        getSupportActionBar().setTitle(empresa.getNombre());
         mDrawerLayout.addDrawerListener(mDrawerToggle);
-        ///////////ACTIONBAR+NAVIGATION////////////////
+        ///////////ACTIONBAR+NAVIGATION////////////
     }
 
     ///////////ACTIONBAR+NAVIGATION////////////////
@@ -212,4 +227,6 @@ public class BusquedaActivity extends AppCompatActivity {
         return null;
     }
     ///////////DATEPICKER////////////////
+
+
 }

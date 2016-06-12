@@ -76,7 +76,7 @@
 								<div class="col-sm-9">
 								  <div class="checkbox">
 								    <label>
-								      <input type="checkbox" name="viaja_parado" ng-model="busForm.viaja_parado">
+								      <input type="checkbox" name="viaja_parado" ng-model="lineForm.viaja_parado">
 								    </label>
 								  </div>
 								</div>						
@@ -97,24 +97,76 @@
 						</div>
 						<div class="form-group" id="tarifa_fijo" ng-show="lineForm.calculo==1">
 							<div class="col-sm-6">
+								<label class="control-label col-sm-3" for="generaVuelta">Generar Viaje de vuelta:</label>
+								<div class="col-sm-9">
+								  <div class="checkbox">
+								    <label>
+								      <input type="checkbox" name="generaVuelta" ng-model="lineForm.generaVuelta">
+								    </label>
+								  </div>
+								</div>		
+							</div> 
+							<div class="col-sm-6">
 								<label class="control-label 	col-sm-3" for="costo_maximo">Valor Fijo (UYU):</label>
 								<div class="col-sm-9">
 									<input type="text" pattern="[0-9]+" title="Solo se aceptan números" class="form-control" name="costo_maximo" ng-model="lineForm.costo_maximo" required>
 							    </div>						    
 							</div> 
 						</div>
+						<div class="form-group" id="tarifa_fijo" ng-show="lineForm.calculo==1">
+							<div class="col-sm-6">
+								<div class="col-sm-9">
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="control-label col-sm-3">
+								</div>
+								<div class="col-sm-9">
+									<div class="alert alert-success sugerido hidden">
+										<strong>&nbsp;&nbsp;Valor Sugerido: </strong> $ {{valor_sugerido}} 
+									</div>
+								</div>
+							</div>
+						</div>					
 						<div class="form-group" id="tarifa_variable"  ng-show="lineForm.calculo==2">
+							<div class="col-sm-6">
+								<label class="control-label col-sm-3" for="generaVuelta">Generar Viaje de vuelta:</label>
+								<div class="col-sm-9">
+								  <div class="checkbox">
+								    <label>
+								      <input type="checkbox" name="generaVuelta" ng-model="lineForm.generaVuelta">
+								    </label>
+								  </div>
+								</div>								    
+							</div> 
 							<div class="col-sm-6">
 								<label class="control-label 	col-sm-3" for="costo_minimo">Valor Minimo(UYU):</label>
 								<div class="col-sm-9">
 									<input type="text" pattern="[0-9]+" title="Solo se aceptan números" class="form-control" name="costo_minimo" ng-model="lineForm.costo_minimo">
 							    </div>						    
+							</div>
+						</div>
+						<div class="form-group" id="tarifa_variable"  ng-show="lineForm.calculo==2">
+							<div class="col-sm-6">
+												    
 							</div> 
 							<div class="col-sm-6">
 								<label class="control-label 	col-sm-3" for="costo_maximo">Valor Maximo(UYU):</label>
 								<div class="col-sm-9">
 									<input type="text" pattern="[0-9]+" title="Solo se aceptan números" class="form-control" name="costo_maximo" ng-model="lineForm.costo_maximo">
 							    </div>						    
+							</div>
+						</div>
+						<div class="form-group" ng-show="lineForm.calculo==null">
+							<div class="col-sm-6">
+					    		<label class="control-label col-sm-3" for="generaVuelta">Generar Viaje de vuelta:</label>
+								<div class="col-sm-9">
+								  <div class="checkbox">
+								    <label>
+								      <input type="checkbox" name="generaVuelta" ng-model="lineForm.generaVuelta">
+								    </label>
+								  </div>
+								</div>						
 							</div>
 						</div>
 			    		<div class="col-sm-12">
@@ -155,7 +207,9 @@
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="hideForm()">
 						<span aria-hidden="true">×</span>
 						</button> 
-						<h5 class="modal-title">Lista Paradas</h5>
+						<h5 class="modal-title">Lista Paradas
+							<button type="button" class="btn btn-default btn-xs" id="btnReajusta" ng-click="reajusta()"><i class="fa fa-retweet fa-lg"></i>Calcular Reajustes</button>
+						</h5>
 					</div>				
 				</div>
 				<div class="panel-body" style="height: 55%;overflow: auto;">	
@@ -176,16 +230,24 @@
 	   						<td>
 	   							<span style="float:left;">{{$index + 1}} - {{m.descripcion}}</span>	   								   							
 	   						</td>
-	   						<td>
-	  	 						<div class="col-xs-10">  						
-  									<input type="text" class="form-control" name="origen" ng-model="m.reajuste" required>
+	   						<td width="40%">   						
+	  	 						<div class="col-xs-10" ng-show="!m.es_terminal">	  	 						
+	  	 						
+	  	 							<div class="input-group"> 
+	  	 								<span class="input-group-addon"> 
+	  	 									<input type="checkbox" name="reajusta" ng-model="m.reajusta"> 
+	  	 								</span> 
+	  	 									<input type="text" class="form-control" name="origen" ng-model="m.reajuste" ng-disabled="!m.reajusta" required> 
+	  	 							</div>  	
+	  	 							<!--  <input type="checkbox" name="reajusta" ng-model="m.reajusta">					
+  									<input type="text" class="form-control" name="origen" ng-model="m.reajuste" required>-->
 								</div>	  							 							
 	   						</td>
 	   						<td>
-	   							<span style="float:right">
-	   								<a><i class="fa fa-chevron-circle-down fa-lg" ng-click="changeIndex($index, $index+1)">&nbsp;</i></a>
-	   								<a><i class="fa fa-chevron-circle-up fa-lg" ng-click="changeIndex($index, $index-1)">&nbsp;</i></a>
-	   								<a><i class="fa fa-trash fa-lg" ng-click="deleteMarker($index)">&nbsp;</i></a>
+	   							<span style="float:right"  ng-show="!m.es_terminal">
+	   								<a><i class="fa fa-chevron-circle-down fa-lg" ng-click="changeIndex($index, $index+1, false)">&nbsp;</i></a>
+	   								<a><i class="fa fa-chevron-circle-up fa-lg" ng-click="changeIndex($index, $index-1, false)">&nbsp;</i></a>
+	   								<a><i class="fa fa-trash fa-lg" ng-click="deleteMarker($index, false)">&nbsp;</i></a>
 	   							</span>
 	   						</td>
 	   					</tr>
@@ -196,6 +258,82 @@
 				<div class="panel-heading">
 					<div>
 						<h4 class="modal-title">Estimados: &nbsp;<i class="fa fa-clock-o fa-lg">&nbsp;</i>{{txt_minutos}} min.&nbsp;<i class="fa fa-arrows-h fa-lg">&nbsp;</i>{{txt_km}} km.</h4>
+					</div>
+				</div>
+			</div> 
+		</div>
+		<div class="col-xs-1"></div>		
+	</div>
+	<div class="row" ng-show="lineForm.generaVuelta">
+		<div class="col-xs-1"></div>	
+		<div id="colmap" class="col-xs-5">
+			<div class="panel panel-default">				
+				<div class="panel-heading">
+					<div> 
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="hideForm()">
+						<span aria-hidden="true">×</span>
+						</button> 
+						<h5 class="modal-title">Mapa
+							<button type="button" class="btn btn-default btn-xs" id="btnRutaV" ng-click="createRouteV()"><i class="fa fa-road fa-lg"></i>Trazar Ruta</button>							
+						</h5>						
+					</div>				
+				</div>
+				<div class="panel-body">
+					<input id="pac-inputV" class="controls" type="text" placeholder="Search Box">
+					<div id="mapV" style="height: 50%">
+					
+ 					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-5">
+			<div class="panel panel-default">				
+				<div class="panel-heading">
+					<div> 
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="hideForm()">
+						<span aria-hidden="true">×</span>
+						</button> 
+						<h5 class="modal-title">Lista Paradas</h5>
+					</div>				
+				</div>
+				<div class="panel-body" style="height: 55%;overflow: auto;">	
+					<table class="table table-striped">
+						<colgroup>
+					       <col span="1">
+					       <col span="1" style="width: 130px;">
+					       <col span="1" style="width: 95px;">
+					    </colgroup>
+						<thead>
+							<tr>
+								<th>Dirección</th>
+								<th>Reajuste&nbsp;(UYU)</th>
+								<th>Acciones</th>
+							</tr>
+						</thead>
+	   					<tr ng-repeat="m in markersV track by $index">	   					
+	   						<td>
+	   							<span style="float:left;">{{$index + 1}} - {{m.descripcion}}</span>	   								   							
+	   						</td>
+	   						<td>
+	  	 						<div class="col-xs-10">  						
+  									<input type="text" class="form-control" name="origen" ng-model="m.reajuste" required>
+								</div>	  							 							
+	   						</td>
+	   						<td>
+	   							<span style="float:right">
+	   								<a><i class="fa fa-chevron-circle-down fa-lg" ng-click="changeIndex($index, $index+1, true)">&nbsp;</i></a>
+	   								<a><i class="fa fa-chevron-circle-up fa-lg" ng-click="changeIndex($index, $index-1, true)">&nbsp;</i></a>
+	   								<a><i class="fa fa-trash fa-lg" ng-click="deleteMarker($index, true)">&nbsp;</i></a>
+	   							</span>
+	   						</td>
+	   					</tr>
+	   				</table>				
+				</div>
+			</div>
+			<div class="panel panel-default">				
+				<div class="panel-heading">
+					<div>
+						<h4 class="modal-title">Estimados: &nbsp;<i class="fa fa-clock-o fa-lg">&nbsp;</i>{{txt_minutosV}} min.&nbsp;<i class="fa fa-arrows-h fa-lg">&nbsp;</i>{{txt_kmV}} km.</h4>
 					</div>
 				</div>
 			</div> 

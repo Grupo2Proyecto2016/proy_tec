@@ -69,5 +69,12 @@ public class ParametersLogic implements IParametersLogic
 		maxReservationDelay.setNombre("MaxReservationDelay");
 		maxReservationDelay.setValor(1);
 		InsertParameter(maxReservationDelay);
+		
+		Parametro stopDelay = new Parametro();
+		stopDelay.setId(Parameter.StopDelay.getValue());
+		stopDelay.setNombre("StopDelay");
+		stopDelay.setValor(1);
+		InsertParameter(stopDelay);
+		
 	}
 }
