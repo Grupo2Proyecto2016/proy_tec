@@ -7,6 +7,7 @@
       <!-- CSS -->
       <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
       <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css" />
+      <link rel="stylesheet" href="<c:url value='/static/css/ui-grid.min.css' />" />
       <link rel="stylesheet" href="<c:url value='/static/css/custom.css' />" />
       
       <!-- SCRIPTS -->
@@ -14,15 +15,15 @@
       <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
       <script src="<c:url value='/static/js/jquery/jquery.blockUI.js' />"></script>
       <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+      
       <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
 	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-route.js"></script>
 	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.js"></script>
 	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.js"></script>
-	  <link rel="stylesheet" href="<c:url value='/static/css/ui-grid.min.css' />" />
-      <script src="<c:url value='/static/js/ui-grid/ui-grid.min.js' />"></script>
+	  
       <script src="<c:url value='/static/js/app.js' />"></script>
 	  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXLMRyM-qhBcFx4Lvv6XxACYvWYY8ey-U&libraries=places&v=3.24" async defer></script>
-	  
+	  <script src="<c:url value='/static/js/ui-grid/ui-grid.min.js' />"></script>
 	
             
     </head>
