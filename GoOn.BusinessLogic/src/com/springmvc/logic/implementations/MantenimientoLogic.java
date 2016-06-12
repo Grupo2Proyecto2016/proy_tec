@@ -5,8 +5,7 @@ import java.util.List;
 
 import com.springmvc.dataaccess.context.TenantDAContext;
 import com.springmvc.entities.tenant.Mantenimiento;
-import com.springmvc.entities.tenant.Vehiculo;
-import com.springmvc.entities.tenant.Taller;
+import com.springmvc.entities.tenant.Usuario;
 import com.springmvc.logic.interfaces.IMantenimientoLogic;
 
 public class MantenimientoLogic implements IMantenimientoLogic {
@@ -18,14 +17,24 @@ public class MantenimientoLogic implements IMantenimientoLogic {
 		TenantContext = new TenantDAContext(tenant, false);
 	}
 	
-	public void insertVehiculo(Vehiculo vehiculo){
+	public void findVehiculo(long id_vehiculo){
 		
-		TenantContext.VehiculoRepository.InsertBus(vehiculo);
+		TenantContext.VehiculoRepository.FindByID(id_vehiculo);
 	}
 	
-	public void insertTaller(Taller taller) {
+	public void findTaller(long id_taller) {
 		
-		TenantContext.TallerRepository.InsertTaller(taller);
+		TenantContext.TallerRepository.FindByID(id_taller);
+	}
+	
+	public void insertMantenimiento(Mantenimiento mantenimiento) {
+		
+		Usuario user_crea = new Usuario();
+		user_crea = TenantContext.UserRepository.FindByUsername("pepe");
+		
+		mantenimiento.setUser_crea(user_crea);
+		TenantContext.MantenimientoRepository.InsertMantenimiento(mantenimiento);
+		
 	}
 	
 	public List<Mantenimiento> GetMantenimientos() {

@@ -57,6 +57,12 @@
     		controller  : 'tallerController'
     	})
     	
+    	// route for the mantenimientos page
+    	.when('/mantenimiento', {
+    		templateUrl : tenantUrlPart + 'pages/mantenimiento.html',
+    		controller  : 'mantenimientoController'
+    	})
+    	
     	// route for the user dashboard page
     	.when('/userPanel', {
     		templateUrl : tenantUrlPart + 'pages/userPanel.html',
