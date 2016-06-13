@@ -87,8 +87,8 @@ public class StartActivity extends AppCompatActivity {
                         empresa.setColorBack(response.getString("colorBack"));
                         empresa.setColorText(response.getString("colorText"));
                         empresa.setColorHeader(response.getString("colorHeader"));
+                        empresa.setColorTextHeader(response.getString("colorTextHeader"));
 
-                        name.setTextColor(Color.parseColor(empresa.getColorHeader()));
                         Intent intent = new Intent(StartActivity.this, BusquedaActivity.class);
                         StartActivity.this.startActivity(intent);
 

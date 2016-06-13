@@ -18,6 +18,7 @@ public class Empresa {
     private String colorHeader;
     private String colorText;
     private String colorBack;
+    private String colorTextHeader;
 
     private Empresa() {
     }
@@ -131,5 +132,13 @@ public class Empresa {
 
     public void setColorBack(String colorBack) {
         this.colorBack = colorBack;
+    }
+
+    public String getColorTextHeader() {
+        return colorTextHeader;
+    }
+
+    public void setColorTextHeader(String colorTextHeader) {
+        this.colorTextHeader = colorTextHeader;
     }
 }

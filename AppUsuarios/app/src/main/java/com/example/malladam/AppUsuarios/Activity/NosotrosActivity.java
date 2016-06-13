@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.design.widget.NavigationView;
@@ -55,6 +56,7 @@ public class NosotrosActivity extends AppCompatActivity {
         dbManager = new DataBaseManager(this);
 
         mDescripcion.setText(empresa.getMensaje());
+        mDescripcion.setTextColor(Color.parseColor(empresa.getColorText()));
 
 
         ///////////ACTIONBAR+NAVIGATION////////////////

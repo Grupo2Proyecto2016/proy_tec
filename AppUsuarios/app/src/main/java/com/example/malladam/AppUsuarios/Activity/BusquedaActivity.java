@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.support.design.widget.NavigationView;
@@ -100,11 +101,14 @@ public class BusquedaActivity extends AppCompatActivity {
             } else {
                 navigationView.inflateMenu(R.menu.drawer_login);
             }
+            navigationView.setItemTextColor(ColorStateList.valueOf(Color.parseColor(empresa.getColorText())));
         }
 
         setupNavigationDrawerContent(navigationView);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setBackgroundColor(Color.parseColor(empresa.getColorHeader()));
+        toolbar.setTitleTextColor(Color.parseColor(empresa.getColorTextHeader()));
         setSupportActionBar(toolbar);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);

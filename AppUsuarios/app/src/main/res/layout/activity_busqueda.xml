@@ -163,8 +163,8 @@
         android:layout_gravity="start"
         app:headerLayout="@layout/navigation_header"
         android:background="@color/backMenu"
-        app:itemIconTint="@color/texto"
-        app:itemTextColor="@color/texto"
+        app:itemTextColor="@color/wallet_bright_foreground_holo_dark"
+        app:itemIconTint="@color/wallet_bright_foreground_holo_dark"
         >
     </android.support.design.widget.NavigationView>
 </android.support.v4.widget.DrawerLayout>

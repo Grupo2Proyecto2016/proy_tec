@@ -39,6 +39,8 @@ public class Empresa {
 	public String colorBack;
 	@Transient
 	public String colorText;
+	@Transient
+	public String colorTextHeader;
 
 	@Transient
 	public String logo;
@@ -150,6 +152,14 @@ public class Empresa {
 
 	public void setColorBack(String colorBack) {
 		this.colorBack = colorBack;
+	}
+	
+	public String getColorTextHeader() {
+		return colorTextHeader;
+	}
+
+	public void setColorTextHeader(String colorTextHeader) {
+		this.colorTextHeader = colorTextHeader;
 	}
 
     public Empresa() {}
