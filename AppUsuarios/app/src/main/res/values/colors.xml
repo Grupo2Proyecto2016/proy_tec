@@ -11,7 +11,6 @@
     <color name="fondoActivity">#030D1C</color>
     <color name="fondoActivityTrans">#404248</color>
     <color name="detalles">#A47BFD</color>
-    <color name="texto">#FFFFFF</color>
     <color name="fondoList">#262A34</color>
 
 </resources>

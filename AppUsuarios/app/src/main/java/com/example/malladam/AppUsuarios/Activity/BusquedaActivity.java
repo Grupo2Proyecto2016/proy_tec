@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -65,6 +66,11 @@ public class BusquedaActivity extends AppCompatActivity {
         mOrigen = (EditText) findViewById(R.id.origenBusqueda);
         mDestino = (EditText) findViewById(R.id.destinoBusqueda);
         mButtonBuscar = (Button) findViewById(R.id.buscarButton);
+        empresa = empresa.getInstance();
+        mOrigen.setTextColor(Color.parseColor(empresa.getColorText()));
+        mDestino.setTextColor(Color.parseColor(empresa.getColorText()));
+        mFechaIda.setTextColor(Color.parseColor(empresa.getColorText()));
+        mButtonBuscar.setTextColor(Color.parseColor(empresa.getColorText()));
 
         dbManager = new DataBaseManager(this);
 

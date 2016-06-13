@@ -81,6 +81,53 @@ public class AuthenticationRestController {
     	{
     		company.logo = new String(company.getLogocontent());
     	}
+
+    	switch (company.getCss()) {
+		case "cerulean":
+			break;
+		case "cosmo":
+			
+			break;
+		case "cyborg":
+			
+			break;
+		case "darkly":
+			
+			break;
+		case "flatly":
+			
+			break;
+		case "journal":
+			
+			break;
+		case "lumen":
+			
+			break;
+		case "paper":
+			
+			break;
+		case "readable":
+			
+			break;
+		case "simplex":
+
+			break;
+		case "slate":
+			
+			break;
+		case "superhero":
+			company.setColorBack("#2B3E50");
+			company.setColorText("#EBEBEB");
+			company.setColorHeader("#4E5D6C");
+			break;
+		case "yeti":
+			
+			break;
+
+		default:
+			break;
+		}
+    	
     	return new ResponseEntity<Empresa>(company, HttpStatus.OK);
     }
     

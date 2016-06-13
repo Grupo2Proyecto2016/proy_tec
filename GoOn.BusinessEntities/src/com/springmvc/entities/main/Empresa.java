@@ -33,6 +33,12 @@ public class Empresa {
 	private String css;
 	@JsonIgnore
 	private byte[] logocontent;
+	@Transient
+	public String colorHeader;
+	@Transient
+	public String colorBack;
+	@Transient
+	public String colorText;
 
 	@Transient
 	public String logo;
@@ -120,6 +126,30 @@ public class Empresa {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+	
+	public String getColorHeader() {
+		return colorHeader;
+	}
+
+	public void setColorHeader(String colorHeader) {
+		this.colorHeader = colorHeader;
+	}
+	
+	public String getColorText() {
+		return colorText;
+	}
+
+	public void setColorText(String colorText) {
+		this.colorText = colorText;
+	}
+	
+	public String getColorBack() {
+		return colorBack;
+	}
+
+	public void setColorBack(String colorBack) {
+		this.colorBack = colorBack;
 	}
 
     public Empresa() {}
