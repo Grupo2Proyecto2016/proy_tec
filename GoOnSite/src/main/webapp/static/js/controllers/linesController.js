@@ -16,8 +16,13 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     $scope.lines = null;
     $scope.markers = [];    
     $scope.markersV = [];
+    $scope.reajustes = [];
+    $scope.reajustesV = [];
     $scope.stopDelay = 0;
     $scope.priceByTravelKm = 0;
+    
+    $scope.rutaTrazada = false;
+    $scope.rutaTrazadaV = false;
     
     $scope.inicializoMarkers = function()
     {
@@ -145,6 +150,36 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     $scope.reajustaValores = function()
     {
     	//checkeos de integridad de los datos
+    	if ($scope.rutaTrazada == false)
+    	{
+    		$scope.error_message = 'Debe trazar la ruta antes de calcular los reajustes'; 
+			$("#errorModal").modal("toggle");
+			return;
+    	}
+    	
+    	if (($scope.lineForm.costo_minimo <= 0) || ($scope.lineForm.costo_minimo === undefined))
+    	{
+    		$scope.error_message = 'Debe especificar costo mínimo del viaje para realizar el cálculo'; 
+			$("#errorModal").modal("toggle");
+			return;
+    	}
+    	
+    	if (($scope.lineForm.costo_maximo <= 0) || ($scope.lineForm.costo_maximo === undefined))    	
+    	{          
+    		$scope.error_message = 'Debe especificar costo máximo del viaje para realizar el cálculo'; 
+			$("#errorModal").modal("toggle");
+			return;
+    	}    	
+    	
+    	if (($scope.lineForm.costo_maximo) < ($scope.lineForm.costo_minimo))    	
+    	{          
+    		$scope.error_message = 'El costo mínimo no puede superar el costo máximo'; 
+			$("#errorModal").modal("toggle");
+			return;
+    	}
+    	
+    	$scope.reajustes = []; //guarda los reajustes para saber si se modificaron sin reajustar
+    	
     	var tot_km = 0;
     	
     	for (var i = 0; i < $scope.markers.length; i++)
@@ -166,18 +201,48 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     			}
     			$scope.markers[i].reajuste = Math.round((pesos_repartir / km_repartir) * (distancia + ($scope.markers[i].km / 1000)));
     			//km_repartir = km_repartir  - ($scope.markers[i].km / 1000);
-    			distancia = 0;
+    			distancia = 0;    			
     		}
     		else
     		{
     			distancia = distancia + ($scope.markers[i].km / 1000)
     		}
+    		$scope.reajustes.push($scope.markers[i].reajuste);
     	}    	
     };
     
     $scope.reajustaValoresV = function()
     {
     	//checkeos de integridad de los datos
+    	if ($scope.rutaTrazadaV == false)
+    	{
+    		$scope.error_message = 'Debe trazar la ruta antes de calcular los reajustes'; 
+			$("#errorModal").modal("toggle");
+    	}
+    	
+    	if (($scope.lineForm.costo_minimo <= 0) || ($scope.lineForm.costo_minimo === undefined))
+    	{
+    		$scope.error_message = 'Debe especificar costo mínimo del viaje para realizar el cálculo'; 
+			$("#errorModal").modal("toggle");
+			return;
+    	}
+    	
+    	if (($scope.lineForm.costo_maximo <= 0) || ($scope.lineForm.costo_maximo === undefined))    	
+    	{          
+    		$scope.error_message = 'Debe especificar costo máximo del viaje para realizar el cálculo'; 
+			$("#errorModal").modal("toggle");
+			return;
+    	}  
+    	
+    	if (($scope.lineForm.costo_maximo) < ($scope.lineForm.costo_minimo))    	
+    	{          
+    		$scope.error_message = 'El costo mínimo no puede superar el costo máximo'; 
+			$("#errorModal").modal("toggle");
+			return;
+    	}
+    	
+    	$scope.reajustesV = []; //guarda los reajustes para saber si se modificaron sin reajustar
+    	
     	var tot_km = 0;
     	
     	for (var i = 0; i < $scope.markersV.length; i++)
@@ -205,13 +270,58 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     		{
     			distancia = distancia + ($scope.markersV[i].km / 1000)
     		}
+    		$scope.reajustesV.push($scope.markersV[i].reajuste);
     	}    	
     };
     
     $scope.createLine = function()
-    {
-    	if(!$scope.form.$invalid)
+    {    	
+    	//chequeo de reajustes
+    	var preguntaReajuste = false;
+		if ($scope.lineForm.calculo == 2) //costo variable
 		{
+			for (var i = 0; i < $scope.markers.length; i++)
+			{
+				if ($scope.reajustes[i] != $scope.markers[i].reajuste)
+				{
+					preguntaReajuste = true;
+				}
+			}    			
+			
+			for (var i = 0; i < $scope.markersV.length; i++)
+			{
+				if ($scope.reajustesV[i] != $scope.markersV[i].reajuste)
+				{
+					preguntaReajuste = true;
+				}
+			}
+		}		    	
+		if (preguntaReajuste)
+		{
+			$scope.showReajuste();	
+		}
+		else
+		{
+			$scope.persistLine();
+		}
+		
+    };
+    
+    $scope.showReajuste = function(row)
+    {    	
+    	$("#reajusteModal").modal('show');
+    };
+    
+    $scope.hideReajuste = function(row)
+    {
+    	$("#reajusteModal").modal("hide");
+    }
+    
+    $scope.persistLine = function()
+    {
+    	$scope.hideReajuste();
+    	if(!$scope.form.$invalid)
+		{	
     		$scope.lineForm.paradas = $scope.markers;
     		for (var i = 0; i < $scope.lineForm.paradas.length; i++)
     		{
@@ -248,7 +358,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
 				$("#errorModal").modal("toggle");
 			});  
 		}
-    };
+    }
     
     $scope.deleteLine = function()
 	{
@@ -581,11 +691,13 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     $scope.createRoute = function()
     {
     	$scope.calculateAndDisplayRoute(directionsDisplay, directionsService, $scope.markers, stepDisplay, $scope.map, false);
+    	$scope.rutaTrazada = true;
     }
     
     $scope.createRouteV = function()
     {
     	$scope.calculateAndDisplayRoute(directionsDisplayV, directionsService, $scope.markersV, stepDisplay, $scope.mapV, true);
+    	$scope.rutaTrazadaV = true;
     }
     
     // Create the search box and link it to the UI element.
@@ -616,13 +728,15 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
           marker.setMap(null);
         });
         $scope.markers = [];*/        
-    	$scope.placeMarkerAndPanTo(e.latLng, $scope.map, false);    	
+    	$scope.placeMarkerAndPanTo(e.latLng, $scope.map, false);
+    	$scope.rutaTrazada = false;    	
     	$scope.$digest();
 	});
     
     $scope.mapV.addListener('click', function(e) 
     {
-    	$scope.placeMarkerAndPanTo(e.latLng, $scope.mapV, true);    	
+    	$scope.placeMarkerAndPanTo(e.latLng, $scope.mapV, true);   
+    	$scope.rutaTrazadaV = false;
     	$scope.$digest();
 	});
     
@@ -745,7 +859,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     		km = km + legs[i].distance.value;
     		if (vuelta)
         	{    			
-    			$scope.$markersV[i+1].km = legs[i].distance.value;
+    			$scope.markersV[i+1].km = legs[i].distance.value;
         	}
     		else
     		{

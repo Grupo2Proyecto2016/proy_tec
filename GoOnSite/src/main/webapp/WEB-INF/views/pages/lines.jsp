@@ -109,7 +109,7 @@
 							<div class="col-sm-6">
 								<label class="control-label col-sm-3" for="costo_maximo">Valor Fijo (UYU):</label>
 								<div class="col-sm-9">
-									<input type="text" pattern="[0-9]+" ng-disabled="lineForm.calculo!=1" title="Solo se aceptan números" class="form-control" name="costo_maximo" ng-model="lineForm.costo_maximo" required>
+									<input type="number" pattern="[0-9]+" ng-disabled="lineForm.calculo!=1" title="Solo se aceptan números" class="form-control" name="costo_maximo" ng-model="lineForm.costo_maximo" required>
 							    </div>						    
 							</div> 
 						</div>
@@ -142,7 +142,7 @@
 							<div class="col-sm-6">
 								<label class="control-label 	col-sm-3" for="costo_minimo">Valor Minimo(UYU):</label>
 								<div class="col-sm-9">
-									<input type="text" pattern="[0-9]+" title="Solo se aceptan números" class="form-control" name="costo_minimo" ng-model="lineForm.costo_minimo">
+									<input type="number" pattern="[0-9]+" title="Solo se aceptan números" class="form-control" name="costo_minimo" ng-model="lineForm.costo_minimo">
 							    </div>						    
 							</div>
 						</div>
@@ -153,7 +153,7 @@
 							<div class="col-sm-6">
 								<label class="control-label 	col-sm-3" for="costo_maximo">Valor Maximo(UYU):</label>
 								<div class="col-sm-9">
-									<input type="text" pattern="[0-9]+" ng-disabled="lineForm.calculo!=2" title="Solo se aceptan números" class="form-control" name="costo_maximo" ng-model="lineForm.costo_maximo">
+									<input type="number" pattern="[0-9]+" ng-disabled="lineForm.calculo!=2" title="Solo se aceptan números" class="form-control" name="costo_maximo" ng-model="lineForm.costo_maximo">
 							    </div>						    
 							</div>
 						</div>
@@ -208,7 +208,7 @@
 						<span aria-hidden="true">×</span>
 						</button> 
 						<h5 class="modal-title">Lista Paradas
-							<button type="button" class="btn btn-default btn-xs" id="btnReajusta" ng-click="reajustaValores()"><i class="fa fa-retweet fa-lg"></i>Calcular Reajustes</button>
+							<button type="button" class="btn btn-default btn-xs" id="btnReajusta" ng-click="reajustaValores()" ng-show="lineForm.calculo==2"><i class="fa fa-retweet fa-lg"></i>Calcular Reajustes</button>
 						</h5>
 					</div>				
 				</div>
@@ -294,7 +294,7 @@
 						<span aria-hidden="true">×</span>
 						</button> 
 						<h5 class="modal-title">Lista Paradas
-							<button type="button" class="btn btn-default btn-xs" id="btnReajustaV" ng-click="reajustaValoresV()"><i class="fa fa-retweet fa-lg"></i>Calcular Reajustes</button>
+							<button type="button" class="btn btn-default btn-xs" id="btnReajustaV" ng-click="reajustaValoresV()" ng-show="lineForm.calculo==2"><i class="fa fa-retweet fa-lg"></i>Calcular Reajustes</button>
 						</h5>
 					</div>				
 				</div>
@@ -373,6 +373,24 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
         <button type="button" class="btn btn-danger" ng-click="deleteLine()">Aceptar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="reajusteModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header warning">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3 class="modal-title">Solicitud de confirmación</h4>
+      </div>
+      <div class="modal-body">
+        <p>Hay valores de reajuste sin recalcular ¿Desea continuar?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" ng-click="persistLine()">Aceptar</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
