@@ -12,6 +12,6 @@ public interface IMantenimientoLogic {
 	
 	public void insertMantenimiento(Mantenimiento mantenimiento);
 	
-	public List<Mantenimiento> GetMantenimientos();
+	public List<Mantenimiento> getMantenimientos();
 	
 }

@@ -37,7 +37,7 @@ public class MantenimientoLogic implements IMantenimientoLogic {
 		
 	}
 	
-	public List<Mantenimiento> GetMantenimientos() {
+	public List<Mantenimiento> getMantenimientos() {
 		
 		return TenantContext.MantenimientoRepository.getMantenimientos();
 	}

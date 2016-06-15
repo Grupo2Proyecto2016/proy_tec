@@ -59,7 +59,7 @@
     	
     	// route for the mantenimientos page
     	.when('/mantenimiento', {
-    		templateUrl : tenantUrlPart + 'pages/mantenimiento.html',
+    		templateUrl : tenantUrlPart + 'pages/mantenimientos.html',
     		controller  : 'mantenimientoController'
     	})
     	

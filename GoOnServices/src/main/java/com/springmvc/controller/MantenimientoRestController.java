@@ -21,10 +21,10 @@ public class MantenimientoRestController {
     private IMantenimientoLogic mantenimientoLogic;
 
     @Secured({"ROLE_ADMIN"})
-	@RequestMapping(value = "/getMantenimiento", method = RequestMethod.GET)
+	@RequestMapping(value = "/getMantenimientos", method = RequestMethod.GET)
     public ResponseEntity<List<Mantenimiento>>  getMantenimiento(@PathVariable String tenantid)
     {
-    	List<Mantenimiento> mantenimientos = new MantenimientoLogic(tenantid).GetMantenimientos();
+    	List<Mantenimiento> mantenimientos = new MantenimientoLogic(tenantid).getMantenimientos();
     	return new ResponseEntity<List<Mantenimiento>>(mantenimientos, HttpStatus.OK);
     }
 	
