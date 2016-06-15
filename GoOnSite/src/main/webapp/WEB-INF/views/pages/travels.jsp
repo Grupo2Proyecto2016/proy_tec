@@ -15,7 +15,67 @@
 	<div class="col-xs-1"></div>
 </div>
 
-<div class="row" style="margin-top: 50px;">
+<div id="divTravelForm">
+	<div class="row">
+		<div class="col-xs-2"></div>
+		<div class="col-xs-8">			
+			<form class="form-horizontal" role="form" name="form">
+				<div class="panel panel-default">
+					<div class="panel-body">											
+						<div class="form-group">
+						    <div class="col-sm-6">
+							    <h5 class="control-label col-sm-6">
+							    	¿Dónde quieres ir?
+							    </h5>
+							    <div class="col-sm-6">			
+									<a style="margin-top: 12px;" class="btn btn-primary" ng-click="showDestinationMap()">
+										<i class="fa fa-map-marker fa-lg " style="margin-right: 5px;"></i> Indicar destino
+									</a>					    	
+						    	</div>
+					    	</div>
+						    <div class="col-sm-6">
+							    <h5 class="control-label col-sm-6">
+							    	¿Dónde subes?
+							    </h5>
+							    <div class="col-sm-6">			
+									<a style="margin-top: 12px;" class="btn btn-primary" ng-click="showOriginMap()">
+										<i class="fa fa-map-marker fa-lg " style="margin-right: 5px;"></i> Indicar origen
+									</a>					    	
+						    	</div>
+					    	</div>
+				    	</div>
+				    	<div class="form-group">
+						    <div class="col-sm-6">
+							    <label class="control-label col-sm-6" for="traveldate">
+							    	Día del viaje:
+							    </label>
+							    <div class="col-sm-6">
+									<input type="date" class="form-control" min="{{minDate | date:'yyyy-MM-dd'}}" max="{{maxDate | date:'yyyy-MM-dd'}}" name="traveldate" ng-model="travelSearch.date" required>
+							    </div>
+					    	</div>
+					    	<div class="col-sm-6">
+							    <label class="control-label col-sm-6" for="ticketsCount">
+							    	Cantidad de asientos:
+							    </label>
+							    <div class="col-sm-6">
+									<input type="number" class="form-control" min="0" max="10" name="ticketsCount" ng-model="travelSearch.ticketsCount">
+							    </div>
+					    	</div>
+				    	</div>
+						<div class="form-group"> 
+				    		<div class="col-sm-12">
+				      			<button style="float: right" type="submit" class="btn btn-info">Buscar</button>
+				    		</div>
+				    	</div>
+		    		</div>
+		    	</div>
+			</form>			
+		</div>
+		<div class="col-xs-1"></div>
+	</div>
+</div>
+
+<div class="row hidden" style="margin-top: 50px;">
 	<div class="col-xs-1"></div>
 	<div class="col-xs-10">
 		<div ui-grid="travelsGrid" ui-grid-pagination class="genericGridHeader"></div>
@@ -145,6 +205,46 @@
   </div><!-- /.modal-dialog -->
 </div>
  
+ <div class="modal fade" id="destinationModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content" style="width: 650px;height: 570px;">
+      <div class="modal-header" style="background-color: cornflowerblue;">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3 class="text-center modal-title">Indicar destino</h4>
+      </div>
+      <div class="modal-body">
+      	<div class="alert alert-success">
+	        <p>Marca o busca una dirección del mapa como destino.</p>
+	        <p>Los marcadores son solo de referencia e indican las paradas disponibles.</p>
+		</div>
+		<input id="destination-pac-input" class="controls" type="text" placeholder="Search Box">
+		<div id="destinationMap" style="height: 50%">
+		</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="originModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content" style="width: 650px;height: 570px;">
+      <div class="modal-header" style="background-color: cornflowerblue;">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3 class="text-center modal-title">Indicar el origen</h4>
+      </div>
+      <div class="modal-body">
+      	<div class="alert alert-success">
+        	<p>Marca o busca una dirección del mapa donde quieres iniciar tu viaje.</p>
+			<p>Los marcadores son solo de referencia e indican las paradas disponibles.</p>
+		</div>
+		<input id="origin-pac-input" class="controls" type="text" placeholder="Search Box">
+		<div id="originMap" style="height: 50%">
+		</div>
+      </div>
+    </div>
+  </div>
+</div>
+	
  <script type="text/javascript">
      
 //      $('#lineDetailsLink').popover({
