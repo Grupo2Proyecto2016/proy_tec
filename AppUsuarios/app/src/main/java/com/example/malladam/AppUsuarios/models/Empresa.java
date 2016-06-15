@@ -15,6 +15,10 @@ public class Empresa {
     private String razonSocial;
     private String mensaje = "Somos la primer empresa de transporte colectivo de pasajeros del País, fundada el 20 de octubre de 1930, gracias a la visión, coraje e ingenio de un grupo de transportistas que decidieron unirse y formar una empresa sobre ruedas.\n" +"\n" +"    Hace 85 años nuestros ómnibus atravesaban médanos y bosques, abriendo caminos hacia balnearios y zonas rurales, donde sólo unos pocos habitantes residían -en ese momento- en forma permanente. En un principio la Compañía atendía un espacio geográfico con centro en la ciudad de Pando en un radio de 60 kilómetros.";
     private static Empresa mEmpresa = null;
+    private String colorHeader;
+    private String colorText;
+    private String colorBack;
+    private String colorTextHeader;
 
     private Empresa() {
     }
@@ -104,5 +108,37 @@ public class Empresa {
 
     public void setLogoS(String logoS) {
         this.logoS = logoS;
+    }
+
+    public String getColorHeader() {
+        return colorHeader;
+    }
+
+    public void setColorHeader(String colorHeader) {
+        this.colorHeader = colorHeader;
+    }
+
+    public String getColorText() {
+        return colorText;
+    }
+
+    public void setColorText(String colorText) {
+        this.colorText = colorText;
+    }
+
+    public String getColorBack() {
+        return colorBack;
+    }
+
+    public void setColorBack(String colorBack) {
+        this.colorBack = colorBack;
+    }
+
+    public String getColorTextHeader() {
+        return colorTextHeader;
+    }
+
+    public void setColorTextHeader(String colorTextHeader) {
+        this.colorTextHeader = colorTextHeader;
     }
 }

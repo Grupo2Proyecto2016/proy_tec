@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 import com.springmvc.entities.main.Contacto;
 
@@ -36,6 +37,9 @@ public class Viaje {
 	@OneToMany(cascade = CascadeType.ALL , fetch = FetchType.EAGER)   
 	@JoinColumn(name = "id_viaje")
     private List<Encomienda> encomiendas;
+	
+	@Transient
+	public int asientosLibres;
 	
 	public long getId_viaje() {
 		return id_viaje;

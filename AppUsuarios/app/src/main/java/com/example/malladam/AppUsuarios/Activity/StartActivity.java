@@ -1,11 +1,18 @@
 package com.example.malladam.AppUsuarios.Activity;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -27,16 +34,22 @@ public class StartActivity extends AppCompatActivity {
     private String urlgetCompany;
     private VolleyS volley;
     private Empresa empresa;
+    private View mProgressView;
+    private TextView name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
+        mProgressView = findViewById(R.id.start_progress);
         imagen = (ImageView) findViewById(R.id.start_image);
+        name = (TextView) findViewById(R.id.start_name);
 
         Bitmap icon = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.icon);
         imagen.setImageBitmap(icon);
+
+        showProgress(true);
 
 
         //////////EMPRESA CUSTOM///////////
@@ -71,6 +84,10 @@ public class StartActivity extends AppCompatActivity {
                         empresa.setPais(pais.getString("nombre"));
                         empresa.setRazonSocial(response.getString("razonSocial"));
                         empresa.setLogoS(response.getString("logo"));
+                        empresa.setColorBack(response.getString("colorBack"));
+                        empresa.setColorText(response.getString("colorText"));
+                        empresa.setColorHeader(response.getString("colorHeader"));
+                        empresa.setColorTextHeader(response.getString("colorTextHeader"));
 
                         Intent intent = new Intent(StartActivity.this, BusquedaActivity.class);
                         StartActivity.this.startActivity(intent);
@@ -82,11 +99,31 @@ public class StartActivity extends AppCompatActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
+                    showProgress(false);
                     Toast.makeText(StartActivity.this, getResources().getString(R.string.error_conexion) , Toast.LENGTH_LONG).show();
                 }
             });
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
         }
     }
 

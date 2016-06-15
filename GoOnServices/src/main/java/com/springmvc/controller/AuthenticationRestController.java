@@ -81,6 +81,91 @@ public class AuthenticationRestController {
     	{
     		company.logo = new String(company.getLogocontent());
     	}
+
+    	switch (company.getCss()) {
+		case "cerulean":
+			company.setColorTextHeader("#FFFFFF");
+			company.setColorBack("#FFFFFF");
+			company.setColorText("#555555");
+			company.setColorHeader("#41ACE9");
+			break;
+		case "cosmo":
+			company.setColorTextHeader("#FFFFFF");
+			company.setColorBack("#FFFFFF");
+			company.setColorText("#333333");
+			company.setColorHeader("#222222");
+			break;
+		case "cyborg":
+			company.setColorTextHeader("#778888");
+			company.setColorBack("#060606");
+			company.setColorText("#778888");
+			company.setColorHeader("#060606");
+			break;
+		case "darkly":
+			company.setColorTextHeader("#FFFFFF");
+			company.setColorBack("#222222");
+			company.setColorText("#FFFFFF");
+			company.setColorHeader("#375A7F");
+			break;
+		case "flatly":
+			company.setColorTextHeader("#");
+			company.setColorBack("#FFFFFF");
+			company.setColorText("#2C3E55");
+			company.setColorHeader("#2C3E50");
+			break;
+		case "journal":
+			company.setColorTextHeader("#");
+			company.setColorBack("#FFFFFF");
+			company.setColorText("#777777");
+			company.setColorHeader("#EEEEEE");
+			break;
+		case "lumen":
+			company.setColorTextHeader("#FFFFFF");
+			company.setColorBack("#FFFFFF");
+			company.setColorText("#555555");
+			company.setColorHeader("#F8F8F8");
+			break;
+		case "paper":
+			company.setColorTextHeader("#666666");
+			company.setColorBack("#FFFFFF");
+			company.setColorText("#666666");
+			company.setColorHeader("#F9F9F9");
+			break;
+		case "readable":
+			company.setColorTextHeader("#4582EC");
+			company.setColorBack("#FFFFFF");
+			company.setColorText("#4582EC");
+			company.setColorHeader("#FFFFFF");
+			break;
+		case "simplex":
+			company.setColorTextHeader("#777777");
+			company.setColorBack("#FCFCFC");
+			company.setColorText("#777777");
+			company.setColorHeader("#FFFFFF");
+			break;
+		case "slate":
+			company.setColorTextHeader("#C8C8C8");
+			company.setColorBack("#272B30");
+			company.setColorText("#C8C8C8");
+			company.setColorHeader("#3B4045");
+			break;
+		case "superhero":
+			company.setColorTextHeader("#EBEBEB");
+			company.setColorBack("#2B3E50");
+			company.setColorText("#EBEBEB");
+			company.setColorHeader("#4E5D6C");
+			break;
+		case "yeti":
+			company.setColorTextHeader("#FFFFFF");
+			company.setColorBack("#FFFFFF");
+			company.setColorText("#524B4B");
+			company.setColorHeader("#333333");
+			break;
+
+		default:
+			break;
+		}
+    	
     	return new ResponseEntity<Empresa>(company, HttpStatus.OK);
     }
     

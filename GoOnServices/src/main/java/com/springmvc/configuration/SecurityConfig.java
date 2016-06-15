@@ -84,6 +84,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	                .antMatchers("/*/getTerminals").permitAll()
 	                .antMatchers("/*/calcPackage").permitAll()
 	                .antMatchers("/*/tenantExist/**").permitAll()
+	                .antMatchers("/*/getStations/**").permitAll()
+	                .antMatchers("/*/searchTravels/**").permitAll()
 	                .anyRequest().authenticated();
 
 	        // Custom JWT based security filter

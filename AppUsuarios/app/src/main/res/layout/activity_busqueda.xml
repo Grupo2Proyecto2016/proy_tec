@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:id="@+id/drawerLayout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/fondoActivity"
     tools:context=".Activity.BusquedaActivity">
 
     <LinearLayout
@@ -26,7 +25,6 @@
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay">
             </android.support.v7.widget.Toolbar>
-
         </android.support.design.widget.AppBarLayout>
 
 
@@ -59,7 +57,6 @@
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
-                    android:textColorHint="@color/texto"
                     android:layout_height="wrap_content">
                     <AutoCompleteTextView
                         android:layout_width="match_parent"
@@ -71,14 +68,12 @@
                         android:inputType="textPersonName"
                         android:focusable="false"
                         android:maxLines="1"
-                        android:singleLine="true"
-                        android:textColor="@color/texto"/>
+                        android:singleLine="true"/>
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColorHint="@color/texto">
+                    android:layout_height="wrap_content">
                     <AutoCompleteTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -90,8 +85,7 @@
                         android:inputType="textPersonName"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:autoText="false"
-                        android:textColor="@color/texto" />
+                        android:autoText="false" />
                 </android.support.design.widget.TextInputLayout>
 
                 <!--
@@ -133,7 +127,6 @@
                             android:layout_height="wrap_content"
                             android:background="@color/fondoActivityTrans"
                             android:layout_marginTop="25dp"
-                            android:textColorHint="@color/texto"
                             android:layout_below="@+id/linear_busqueda_form"
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true"
@@ -144,8 +137,7 @@
                                 android:layout_height="wrap_content"
                                 android:focusable="false"
                                 android:drawableLeft="@drawable/calendar"
-                                android:hint="@string/fechaIda"
-                                android:textColor="@color/texto" />
+                                android:hint="@string/fechaIda"/>
                             </android.support.design.widget.TextInputLayout>
 
                         <Button
@@ -156,7 +148,6 @@
                             android:layout_marginTop="58dp"
                             android:background="@color/detalles"
                             android:layout_gravity="center_horizontal"
-                            android:textColor="@color/texto"
                             android:layout_below="@+id/view"
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true" />
@@ -170,8 +161,8 @@
         android:layout_gravity="start"
         app:headerLayout="@layout/navigation_header"
         android:background="@color/backMenu"
-        app:itemIconTint="@color/texto"
-        app:itemTextColor="@color/texto"
+        app:itemTextColor="@color/wallet_bright_foreground_holo_dark"
+        app:itemIconTint="@color/wallet_bright_foreground_holo_dark"
         >
     </android.support.design.widget.NavigationView>
 </android.support.v4.widget.DrawerLayout>

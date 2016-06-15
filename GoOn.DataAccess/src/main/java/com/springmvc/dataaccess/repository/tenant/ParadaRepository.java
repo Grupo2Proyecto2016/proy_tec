@@ -67,4 +67,22 @@ public class ParadaRepository
 		return parada;
 	}
 
+	public List<Parada> FindAll() 
+	{
+		List<Parada> result = new ArrayList<>();
+		String queryString = "SELECT DISTINCT p FROM Linea l "
+				+ "INNER JOIN l.paradas p "
+				+ "WHERE l.habilitado = TRUE";
+		Query q = entityManager.createQuery(queryString);
+		try
+		{
+			result = q.getResultList();
+		}
+		catch(NoResultException ex)
+		{
+			return null;
+		}
+		return result;
+	}
+
 }

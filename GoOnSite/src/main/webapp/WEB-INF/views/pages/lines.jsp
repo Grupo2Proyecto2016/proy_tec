@@ -107,9 +107,9 @@
 								</div>		
 							</div> 
 							<div class="col-sm-6">
-								<label class="control-label 	col-sm-3" for="costo_maximo">Valor Fijo (UYU):</label>
+								<label class="control-label col-sm-3" for="costo_maximo">Valor Fijo (UYU):</label>
 								<div class="col-sm-9">
-									<input type="text" pattern="[0-9]+" title="Solo se aceptan números" class="form-control" name="costo_maximo" ng-model="lineForm.costo_maximo" required>
+									<input type="number" pattern="[0-9]+" ng-disabled="lineForm.calculo!=1" title="Solo se aceptan números" class="form-control" name="costo_maximo" ng-model="lineForm.costo_maximo" required>
 							    </div>						    
 							</div> 
 						</div>
@@ -122,7 +122,7 @@
 								<div class="control-label col-sm-3">
 								</div>
 								<div class="col-sm-9">
-									<div class="alert alert-success sugerido hidden">
+									<div class="alert alert-success sugerido hidden" id="fijoSugerido">
 										<strong>&nbsp;&nbsp;Valor Sugerido: </strong> $ {{valor_sugerido}} 
 									</div>
 								</div>
@@ -142,7 +142,7 @@
 							<div class="col-sm-6">
 								<label class="control-label 	col-sm-3" for="costo_minimo">Valor Minimo(UYU):</label>
 								<div class="col-sm-9">
-									<input type="text" pattern="[0-9]+" title="Solo se aceptan números" class="form-control" name="costo_minimo" ng-model="lineForm.costo_minimo">
+									<input type="number" pattern="[0-9]+" title="Solo se aceptan números" class="form-control" name="costo_minimo" ng-model="lineForm.costo_minimo">
 							    </div>						    
 							</div>
 						</div>
@@ -153,10 +153,25 @@
 							<div class="col-sm-6">
 								<label class="control-label 	col-sm-3" for="costo_maximo">Valor Maximo(UYU):</label>
 								<div class="col-sm-9">
-									<input type="text" pattern="[0-9]+" title="Solo se aceptan números" class="form-control" name="costo_maximo" ng-model="lineForm.costo_maximo">
+									<input type="number" pattern="[0-9]+" ng-disabled="lineForm.calculo!=2" title="Solo se aceptan números" class="form-control" name="costo_maximo" ng-model="lineForm.costo_maximo">
 							    </div>						    
 							</div>
 						</div>
+						<div class="form-group" id="tarifa_fijo" ng-show="lineForm.calculo==2">
+							<div class="col-sm-6">
+								<div class="col-sm-9">
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="control-label col-sm-3">
+								</div>
+								<div class="col-sm-9">
+									<div class="alert alert-success sugerido hidden" id="fijoSugeridoVariable">
+										<strong>&nbsp;&nbsp;Valor Sugerido: </strong> $ {{valor_sugerido}} 
+									</div>
+								</div>
+							</div>
+						</div>	
 						<div class="form-group" ng-show="lineForm.calculo==null">
 							<div class="col-sm-6">
 					    		<label class="control-label col-sm-3" for="generaVuelta">Generar Viaje de vuelta:</label>
@@ -208,7 +223,7 @@
 						<span aria-hidden="true">×</span>
 						</button> 
 						<h5 class="modal-title">Lista Paradas
-							<button type="button" class="btn btn-default btn-xs" id="btnReajusta" ng-click="reajusta()"><i class="fa fa-retweet fa-lg"></i>Calcular Reajustes</button>
+							<button type="button" class="btn btn-default btn-xs" id="btnReajusta" ng-click="reajustaValores()" ng-show="lineForm.calculo==2"><i class="fa fa-retweet fa-lg"></i>Calcular Reajustes</button>
 						</h5>
 					</div>				
 				</div>
@@ -228,16 +243,16 @@
 						</thead>
 	   					<tr ng-repeat="m in markers track by $index">	   					
 	   						<td>
-	   							<span style="float:left;">{{$index + 1}} - {{m.descripcion}}</span>	   								   							
+	   							<span style="float:left;">{{letras[$index]}} - {{m.descripcion}} - ({{m.km/1000}})</span>	   								   							
 	   						</td>
 	   						<td width="40%">   						
-	  	 						<div class="col-xs-10" ng-show="!m.es_terminal">	  	 						
+	  	 						<div class="col-xs-10" ng-show="!m.es_terminal && lineForm.calculo==2">	  	 						
 	  	 						
 	  	 							<div class="input-group"> 
 	  	 								<span class="input-group-addon"> 
-	  	 									<input type="checkbox" name="reajusta" ng-model="m.reajusta"> 
+	  	 									<input type="checkbox" name="reajusta" ng-model="m.reajusta" ng-click="m.reajuste=0"> 
 	  	 								</span> 
-	  	 									<input type="text" class="form-control" name="origen" ng-model="m.reajuste" ng-disabled="!m.reajusta" required> 
+	  	 									<input type="text" class="form-control" name="origen" ng-model="m.reajuste" ng-disabled="!m.reajusta" > 
 	  	 							</div>  	
 	  	 							<!--  <input type="checkbox" name="reajusta" ng-model="m.reajusta">					
   									<input type="text" class="form-control" name="origen" ng-model="m.reajuste" required>-->
@@ -293,7 +308,9 @@
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="hideForm()">
 						<span aria-hidden="true">×</span>
 						</button> 
-						<h5 class="modal-title">Lista Paradas</h5>
+						<h5 class="modal-title">Lista Paradas
+							<button type="button" class="btn btn-default btn-xs" id="btnReajustaV" ng-click="reajustaValoresV()" ng-show="lineForm.calculo==2"><i class="fa fa-retweet fa-lg"></i>Calcular Reajustes</button>
+						</h5>
 					</div>				
 				</div>
 				<div class="panel-body" style="height: 55%;overflow: auto;">	
@@ -312,15 +329,23 @@
 						</thead>
 	   					<tr ng-repeat="m in markersV track by $index">	   					
 	   						<td>
-	   							<span style="float:left;">{{$index + 1}} - {{m.descripcion}}</span>	   								   							
+	   							<span style="float:left;">{{letras[$index]}} - {{m.descripcion}} - ({{m.km/1000}})</span>	   								   							
 	   						</td>
-	   						<td>
-	  	 						<div class="col-xs-10">  						
-  									<input type="text" class="form-control" name="origen" ng-model="m.reajuste" required>
+	   						<td width="40%">   						
+	  	 						<div class="col-xs-10" ng-show="!m.es_terminal && lineForm.calculo==2">	  	 						
+	  	 						
+	  	 							<div class="input-group"> 
+	  	 								<span class="input-group-addon"> 
+	  	 									<input type="checkbox" name="reajusta" ng-model="m.reajusta" ng-click="m.reajuste=0"> 
+	  	 								</span> 
+	  	 									<input type="text" class="form-control" name="origen" ng-model="m.reajuste" ng-disabled="!m.reajusta" > 
+	  	 							</div>  	
+	  	 							<!--  <input type="checkbox" name="reajusta" ng-model="m.reajusta">					
+  									<input type="text" class="form-control" name="origen" ng-model="m.reajuste" required>-->
 								</div>	  							 							
 	   						</td>
 	   						<td>
-	   							<span style="float:right">
+	   							<span style="float:right"  ng-show="!m.es_terminal">
 	   								<a><i class="fa fa-chevron-circle-down fa-lg" ng-click="changeIndex($index, $index+1, true)">&nbsp;</i></a>
 	   								<a><i class="fa fa-chevron-circle-up fa-lg" ng-click="changeIndex($index, $index-1, true)">&nbsp;</i></a>
 	   								<a><i class="fa fa-trash fa-lg" ng-click="deleteMarker($index, true)">&nbsp;</i></a>
@@ -363,6 +388,24 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
         <button type="button" class="btn btn-danger" ng-click="deleteLine()">Aceptar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="reajusteModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header warning">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3 class="modal-title">Solicitud de confirmación</h4>
+      </div>
+      <div class="modal-body">
+        <p>Hay valores de reajuste sin recalcular ¿Desea continuar?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" ng-click="persistLine()">Aceptar</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->

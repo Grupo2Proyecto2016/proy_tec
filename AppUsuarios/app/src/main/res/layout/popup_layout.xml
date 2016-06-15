@@ -3,7 +3,7 @@
     android:layout_width="wrap_content"
     android:id="@+id/popup"
     android:layout_height="wrap_content"
-    android:background="@color/texto"
+    android:background="@color/wallet_bright_foreground_holo_dark"
     android:orientation="vertical" >
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

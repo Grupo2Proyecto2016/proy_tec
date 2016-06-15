@@ -33,7 +33,7 @@ public class MantenimientoRestController {
     public ResponseEntity<Void> CreateMantenimiento(@RequestBody Mantenimiento mantenimiento, @PathVariable String tenantid)
     {
     	MantenimientoLogic ml = new MantenimientoLogic(tenantid);		
-		ml.insertMantenimiento(mantenimiento);		
+		ml.createMantenimiento(mantenimiento);		
 		return new ResponseEntity<Void>(HttpStatus.CREATED);		
     }
 	

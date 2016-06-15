@@ -3,17 +3,21 @@ package com.example.malladam.AppUsuarios.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -29,6 +33,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.malladam.AppUsuarios.R;
 import com.example.malladam.AppUsuarios.adapters.VolleyS;
+import com.example.malladam.AppUsuarios.models.Empresa;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -72,6 +77,7 @@ public class RegisterActivity extends AppCompatActivity  {
     private JSONObject jsonBody;
     private Boolean userDisponible = false;
     Handler mHandler;
+    private Empresa empresa;
 
     private static final int DATE_DIALOG_ID = 1;
 
@@ -83,6 +89,7 @@ public class RegisterActivity extends AppCompatActivity  {
 
         String expressionEmail = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
         pattern = Pattern.compile(expressionEmail, Pattern.CASE_INSENSITIVE);
+        empresa = empresa.getInstance();
 
         mNombreView = (EditText) findViewById(R.id.nombreRegistro);
         mApellidoView = (EditText) findViewById(R.id.apellidoRegistro);
@@ -94,6 +101,15 @@ public class RegisterActivity extends AppCompatActivity  {
         mTelefonoView = (EditText) findViewById(R.id.telefonoRegistro);
         mRegistroButton = (Button) findViewById(R.id.buttonRegistro);
         mFechaNacView = (EditText) findViewById(R.id.fecNacRegistro);
+        mNombreView.setTextColor(Color.parseColor(empresa.getColorText()));
+        mApellidoView.setTextColor(Color.parseColor(empresa.getColorText()));
+        mCorreoView.setTextColor(Color.parseColor(empresa.getColorText()));
+        mDireccionView.setTextColor(Color.parseColor(empresa.getColorText()));
+        mUsuarioView.setTextColor(Color.parseColor(empresa.getColorText()));
+        mContraseñaView.setTextColor(Color.parseColor(empresa.getColorText()));
+        mConfirmacionView.setTextColor(Color.parseColor(empresa.getColorText()));
+        mTelefonoView.setTextColor(Color.parseColor(empresa.getColorText()));
+        mFechaNacView.setTextColor(Color.parseColor(empresa.getColorText()));
 
         mHandler = new Handler();
 
@@ -102,6 +118,18 @@ public class RegisterActivity extends AppCompatActivity  {
         urlUserExist = getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)+"/userExists";
         volley = volley.getInstance(this);
         //////WS/////////////
+
+        LinearLayout mealLayout = (LinearLayout) findViewById(R.id.linear_register);
+        mealLayout.setBackgroundColor(Color.parseColor(empresa.getColorBack()));
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setBackgroundColor(Color.parseColor(empresa.getColorHeader()));
+        toolbar.setTitleTextColor(Color.parseColor(empresa.getColorTextHeader()));
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(empresa.getNombre());
+
 
         View.OnClickListener listenerDate = new View.OnClickListener() {
 
@@ -355,5 +383,22 @@ public class RegisterActivity extends AppCompatActivity  {
     // Adding request to request queue
     volley.addToQueue(strReq);
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                startActivityAfterCleanup(BusquedaActivity.class);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void startActivityAfterCleanup(Class<?> cls) {
+        Intent intent = new Intent(getApplicationContext(), cls);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 }
