@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.support.design.widget.NavigationView;
@@ -20,23 +19,12 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.example.malladam.AppUsuarios.DataBaseManager;
 import com.example.malladam.AppUsuarios.R;
 import com.example.malladam.AppUsuarios.adapters.VolleyS;
 import com.example.malladam.AppUsuarios.models.Empresa;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.Calendar;
 import java.util.Date;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
 
 public class BusquedaActivity extends AppCompatActivity {
 
@@ -71,7 +59,9 @@ public class BusquedaActivity extends AppCompatActivity {
         mOrigen.setTextColor(Color.parseColor(empresa.getColorText()));
         mDestino.setTextColor(Color.parseColor(empresa.getColorText()));
         mFechaIda.setTextColor(Color.parseColor(empresa.getColorText()));
-        mButtonBuscar.setTextColor(Color.parseColor(empresa.getColorText()));
+
+        DrawerLayout mealLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        mealLayout.setBackgroundColor(Color.parseColor(empresa.getColorBack()));
 
         dbManager = new DataBaseManager(this);
 
@@ -101,7 +91,6 @@ public class BusquedaActivity extends AppCompatActivity {
             } else {
                 navigationView.inflateMenu(R.menu.drawer_login);
             }
-            navigationView.setItemTextColor(ColorStateList.valueOf(Color.parseColor(empresa.getColorText())));
         }
 
         setupNavigationDrawerContent(navigationView);

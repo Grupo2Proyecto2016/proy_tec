@@ -3,6 +3,7 @@ package com.example.malladam.AppUsuarios.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.support.design.widget.NavigationView;
 import com.example.malladam.AppUsuarios.adapters.PopupAdapter;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -50,8 +52,6 @@ public class SucursalesActivity extends AppCompatActivity implements OnMapReadyC
     private VolleyS volley;
     private String urlgetSucursales;
     List<Sucursal> sucursales = new ArrayList<Sucursal>();
-    private NavigationView navigationView;
-    private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private DataBaseManager dbManager;
     private Empresa empresa;
@@ -69,6 +69,9 @@ public class SucursalesActivity extends AppCompatActivity implements OnMapReadyC
         volley = volley.getInstance(this);
         //////WS/////////////
 
+        LinearLayout mealLayout = (LinearLayout) findViewById(R.id.linear_sucursales);
+        mealLayout.setBackgroundColor(Color.parseColor(empresa.getColorBack()));
+
         try {
             WSgetSucursales();
         } catch (JSONException e) {
@@ -80,51 +83,18 @@ public class SucursalesActivity extends AppCompatActivity implements OnMapReadyC
         }
 
 
-///////////ACTIONBAR+NAVIGATION////////////////
-        navigationView = (NavigationView) findViewById(R.id.navigation_view);
-        if (navigationView != null) {
-            View headerNavigation = navigationView.getHeaderView(0);
-            TextView headerNombre = (TextView) headerNavigation.findViewById(R.id.nombreLogin);
-            headerNombre.setText(dbManager.getUserLogueado());
-
-            navigationView.getMenu().clear(); //clear old inflated items.
-            if (dbManager.getUserLogueado() == null) {
-                navigationView.inflateMenu(R.menu.drawer_logout);
-            } else {
-                navigationView.inflateMenu(R.menu.drawer_login);
-            }
-        }
-
-        setupNavigationDrawerContent(navigationView);
+///////////ACTIONBAR////////////////
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setBackgroundColor(Color.parseColor(empresa.getColorHeader()));
+        toolbar.setTitleTextColor(Color.parseColor(empresa.getColorTextHeader()));
         setSupportActionBar(toolbar);
-
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name, R.string.app_name) {
-
-            /** Called when a drawer has settled in a completely closed state. */
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-
-            /** Called when a drawer has settled in a completely open state. */
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-        };
 
         // Set the drawer toggle as the DrawerListener
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setTitle(empresa.getNombre());
-        mDrawerLayout.addDrawerListener(mDrawerToggle);
-        ///////////ACTIONBAR+NAVIGATION////////////////
+        ///////////ACTIONBAR////////////////
     }
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -195,80 +165,40 @@ public class SucursalesActivity extends AppCompatActivity implements OnMapReadyC
         }
     }
 
-    ///////////ACTIONBAR+NAVIGATION////////////////
+    ///////////ACTIONBAR////////////////
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         return super.onPrepareOptionsMenu(menu);
     }
 
-    private void setupNavigationDrawerContent(NavigationView navigationView) {
-        navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        switch (menuItem.getItemId()) {
-                            case R.id.cerrarSesion:
-                                menuItem.setChecked(true);
-                                dbManager.eliminarLogin();
-                                intent = new Intent(getApplicationContext(), BusquedaActivity.class);
-                                startActivity(intent);
-                                finish();
-                                return true;
-
-                            case R.id.iniciarSesion:
-                                menuItem.setChecked(true);
-                                intent = new Intent(getApplicationContext(), LoginActivity.class);
-                                startActivity(intent);
-                                finish();
-                                return true;
-
-                            case R.id.registrarse:
-                                menuItem.setChecked(true);
-                                intent = new Intent(getApplicationContext(), RegisterActivity.class);
-                                startActivity(intent);
-                                finish();
-                                return true;
-
-                            case R.id.nosotros:
-                                menuItem.setChecked(true);
-                                intent = new Intent(getApplicationContext(), NosotrosActivity.class);
-                                startActivity(intent);
-                                finish();
-                                return true;
-                        }
-                        return true;
-                    }
-                });
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return true;
     }
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        mDrawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                startActivityAfterCleanup(NosotrosActivity.class);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
-    ///////////ACTIONBAR+NAVIGATION////////////////
+
+    private void startActivityAfterCleanup(Class<?> cls) {
+        Intent intent = new Intent(getApplicationContext(), cls);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        //Toast.makeText(this, marker.getTitle(), Toast.LENGTH_LONG).show();
+
     }
+    ///////////ACTIONBAR////////////////
+
 }
