@@ -157,6 +157,21 @@
 							    </div>						    
 							</div>
 						</div>
+						<div class="form-group" id="tarifa_fijo" ng-show="lineForm.calculo==2">
+							<div class="col-sm-6">
+								<div class="col-sm-9">
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="control-label col-sm-3">
+								</div>
+								<div class="col-sm-9">
+									<div class="alert alert-success sugerido hidden" id="fijoSugeridoVariable">
+										<strong>&nbsp;&nbsp;Valor Sugerido: </strong> $ {{valor_sugerido}} 
+									</div>
+								</div>
+							</div>
+						</div>	
 						<div class="form-group" ng-show="lineForm.calculo==null">
 							<div class="col-sm-6">
 					    		<label class="control-label col-sm-3" for="generaVuelta">Generar Viaje de vuelta:</label>
@@ -228,7 +243,7 @@
 						</thead>
 	   					<tr ng-repeat="m in markers track by $index">	   					
 	   						<td>
-	   							<span style="float:left;">{{$index + 1}} - {{m.descripcion}} - ({{m.km/1000}})</span>	   								   							
+	   							<span style="float:left;">{{letras[$index]}} - {{m.descripcion}} - ({{m.km/1000}})</span>	   								   							
 	   						</td>
 	   						<td width="40%">   						
 	  	 						<div class="col-xs-10" ng-show="!m.es_terminal && lineForm.calculo==2">	  	 						
@@ -314,7 +329,7 @@
 						</thead>
 	   					<tr ng-repeat="m in markersV track by $index">	   					
 	   						<td>
-	   							<span style="float:left;">{{$index + 1}} - {{m.descripcion}} - ({{m.km/1000}})</span>	   								   							
+	   							<span style="float:left;">{{letras[$index]}} - {{m.descripcion}} - ({{m.km/1000}})</span>	   								   							
 	   						</td>
 	   						<td width="40%">   						
 	  	 						<div class="col-xs-10" ng-show="!m.es_terminal && lineForm.calculo==2">	  	 						

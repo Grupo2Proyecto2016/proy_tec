@@ -18,6 +18,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     $scope.markersV = [];
     $scope.reajustes = [];
     $scope.reajustesV = [];
+    $scope.letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $scope.stopDelay = 0;
     $scope.priceByTravelKm = 0;
     
@@ -93,6 +94,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     $scope.showFijoSugerido = function()
     {
     	$("#fijoSugerido").removeClass('hidden');	
+    	$("#fijoSugeridoVariable").removeClass('hidden');	
     };
     
     $scope.getLines = function()
@@ -320,6 +322,20 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     $scope.persistLine = function()
     {
     	$scope.hideReajuste();
+    	if ($scope.rutaTrazada == false)
+    	{
+    		$scope.error_message = 'Debe trazar la ruta correspondiente al viaje.'; 
+			$("#errorModal").modal("toggle");
+			return;
+    	}
+    	
+    	if (($scope.rutaTrazadaV == false) && ($scope.lineForm.generaVuelta == true))
+    	{
+    		$scope.error_message = 'Debe trazar la ruta correspondiente al viaje de vuelta.'; 
+			$("#errorModal").modal("toggle");
+			return;
+    	}
+    	
     	if(!$scope.form.$invalid)
 		{	
     		$scope.lineForm.paradas = $scope.markers;
@@ -422,6 +438,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     	{
     		position: myLatlng,
 	  	    map: $scope.map,
+	  	    animation: google.maps.Animation.DROP, //just for fun
 	  	    es_terminal: true,
 	  	    es_peaje: false,
 	  	    es_origen: false,
@@ -462,6 +479,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     	{
     		position: myLatlng,
 	  	    map: $scope.mapV,
+	  	    animation: google.maps.Animation.DROP, //just for fun
 	  	    es_terminal: true,
 	  	    es_peaje: false,
 	  	    es_origen: true,
@@ -504,6 +522,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     	{
     		position: myLatlng,
 	  	    map: $scope.map,
+	  	    animation: google.maps.Animation.DROP, //just for fun
 	  	    es_terminal: true,
 	  	    es_peaje: false,
 	  	    es_origen: true,
@@ -543,6 +562,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     	{
     		position: myLatlng,
 	  	    map: $scope.mapV,
+	  	    animation: google.maps.Animation.DROP, //just for fun
 	  	    es_terminal: true,
 	  	    es_peaje: false,
 	  	    es_origen: false,
@@ -745,6 +765,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
   	  var marker = new google.maps.Marker({
   	    position: latLng,
   	    map: map, //map: $scope.map,
+  	    animation: google.maps.Animation.DROP, //just for fun
   	    es_terminal: false,
   	    es_peaje: false,
   	    es_origen: false,  	    
