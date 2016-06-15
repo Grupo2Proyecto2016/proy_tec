@@ -1,15 +1,71 @@
-goOnApp.controller('travelController', function($scope, $http, uiGridConstants, i18nService) 
+goOnApp.controller('travelController', function($scope, $http, uiGridConstants, i18nService, $timeout) 
 {
     $scope.message = 'Desde aquí podrás buscar el viaje que deseas y efectuar la compra o reserve de pasajes.';
     
-    $scope.dateFrom = new Date();
-    $scope.dateTo = new Date();
-	$scope.dateFrom.setDate($scope.dateFrom.getDate() + 1);
-	$scope.dateTo.setDate($scope.dateTo.getDate() + 30);
+    $scope.minDate = new Date();
+    $scope.maxDate = new Date();
+	$scope.maxDate.setDate($scope.maxDate.getDate() + 30);
+	$scope.stations = {};
+	$scope.nearbyDestinations = {};
+    $scope.filteredOrigins = {};
+    $scope.travelSearch = {};
     
 	$scope.custom_response = null;    
     i18nService.setCurrentLang('es');
-        
+
+    //DESTINATION MAP
+    $scope.destinationMap = new google.maps.Map(document.getElementById('destinationMap'), 
+    {
+      zoom: 12,
+      center: {lat: -34.894418, lng: -56.165775}
+    });
+    var destinationInput = document.getElementById('destination-pac-input');
+    var destinationsearchBox = new google.maps.places.SearchBox(destinationInput);
+    $scope.destinationMap.controls[google.maps.ControlPosition.TOP_LEFT].push(destinationInput);
+    //
+    //ORIGIN MAP
+    $scope.originMap = new google.maps.Map(document.getElementById('originMap'), 
+    {
+      zoom: 12,
+      center: {lat: -34.894418, lng: -56.165775}
+    });
+    var originInput = document.getElementById('origin-pac-input');
+    var originSearchBox = new google.maps.places.SearchBox(originInput);
+    $scope.originMap.controls[google.maps.ControlPosition.TOP_LEFT].push(originInput);
+    //
+    
+    $scope.getStations = function()
+    {
+    	$http.get(servicesUrl + 'getStations')
+    		.then(function (result){
+    			if(result.status == 200)
+    			{
+    				$scope.stations = result.data;
+    				angular.forEach($scope.stations, function(station, key) {
+    					var marker = new google.maps.Marker({
+    						position: new google.maps.LatLng(station.latitud,station.longitud),
+    						map: $scope.destinationMap,
+    						title: station.descripcion
+    					});
+					  
+    				});
+				}
+		});
+    };
+    
+    $scope.getFilteredOrigins = function()
+    {
+    	$http.get(servicesUrl + 'getFilteredOrigins', JSON.Stringlify($scope.nearbyDestinations))
+    		.then(function (result){
+    			if(result.status == 200)
+    			{
+    				$scope.filteredOrigins = result.data;
+    				//aca hay que cargar todos los puntos en el mapa de origenes
+    			}
+    		}
+		);
+    };
+    
     $scope.closeSuccessAlert = function()
     {
     	$("#successAlert").hide();
@@ -21,19 +77,17 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 		$("#successAlert").show();
     }; 
     
-    $scope.getTravels = function()
+    $scope.searchTravels = function()
     {
-    	$http.get(servicesUrl + 'travels').success(function(data, status, headers, config)
-    	{
-    		$scope.travels = data;
-    		angular.forEach($scope.travels, function(row){
-    			row.getDriverName = function()
+    	$http.get(servicesUrl + 'searchtravels')
+    		.then(function(result) {
+    			if(result.status == 200)
     			{
-    				return row.conductor.nombre + " " + row.conductor.apellido;
-    			};
-			});
-    		$scope.travelsGrid.data = $scope.travels;
-    	});
+    				$scope.travels = data;
+    				$scope.travelsGrid.data = $scope.travels;    				
+    			}
+			}
+		);
     };
     
     $scope.travelsGrid = 
@@ -60,9 +114,23 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 //            cellTemplate:'<p align="center"><button style="" class="btn-xs btn-danger" ng-click="grid.appScope.showDeleteDialog(row)">Eliminar</button></p>'
 //    	  }
         ]
-     };
+    };
     
-    $scope.getTravels();
+    $scope.showDestinationMap = function()
+    {
+    	$("#destinationModal").modal('show');
+    	$timeout(function () {            
+    		google.maps.event.trigger($scope.destinationMap, 'resize');
+        }, 400);
+    };
+    
+    $scope.showOriginMap = function()
+    {
+    	$("#originModal").modal('show');
+    	$timeout(function () { 
+    		google.maps.event.trigger($scope.originMap, 'resize');
+    	}, 400);
+    };
     
     $scope.buyTicket = function()
 	{
@@ -77,7 +145,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 	    			{
 //	    				$scope.error_message = response.data.msg;
 //	    		    	$("#errorModal").modal("toggle");
-	        			$scope.showSuccessAlert("Los viajes han sido creados");	
+	        			$scope.showSuccessAlert("Los boletos han sido acreditados. Accede a tu panel para descargarlos.");	
 	    			}
 	        		else
 	        		{
@@ -97,4 +165,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     {
     	$("#buyModal").modal('hide');
     };
+    
+    
+    $scope.getStations();
 }); 	

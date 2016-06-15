@@ -109,4 +109,16 @@ public class LinesLogic implements ILinesLogic
 		return TenantContext.ViajeRepository.HasPackages(travelId)
 			|| TenantContext.ViajeRepository.HasTickets(travelId);
 	}
+
+	public List<Parada> GetParadas()
+	{
+		return TenantContext.ParadaRepository.FindAll();
+	}
+	
+	public List<Viaje> SearchTravels(Calendar dateFrom, Calendar dateTo, List<Integer> origins, List<Integer> destinations) 
+	{
+		
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
