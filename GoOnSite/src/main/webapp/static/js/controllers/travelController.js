@@ -47,7 +47,6 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     						map: $scope.destinationMap,
     						title: station.descripcion
     					});
-					  
     				});
 				}
 		});
@@ -55,7 +54,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     
     $scope.getFilteredOrigins = function()
     {
-    	$http.get(servicesUrl + 'getFilteredOrigins', JSON.Stringlify($scope.nearbyDestinations))
+    	$http.get(servicesUrl + 'getFilteredStations', JSON.Stringlify($scope.nearbyDestinations))
     		.then(function (result){
     			if(result.status == 200)
     			{
