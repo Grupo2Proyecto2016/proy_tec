@@ -10,8 +10,8 @@ public interface IMantenimientoLogic {
 	
 	public void findTaller(long id_taller);
 	
-	public void insertMantenimiento(Mantenimiento mantenimiento);
+	public void createMantenimiento(Mantenimiento mantenimiento);
 	
-	public List<Mantenimiento> GetMantenimientos();
+	public List<Mantenimiento> getMantenimientos();
 	
 }

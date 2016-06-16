@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:id="@+id/drawerLayout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/fondoActivity"
     tools:context=".Activity.BusquedaActivity">
 
     <LinearLayout
@@ -26,7 +25,6 @@
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay">
             </android.support.v7.widget.Toolbar>
-
         </android.support.design.widget.AppBarLayout>
 
 

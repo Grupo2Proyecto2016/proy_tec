@@ -10,7 +10,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
@@ -20,6 +24,7 @@ import com.android.IntentIntegrator;
 import com.example.malladam.AppUsuarios.DataBaseManager;
 import com.example.malladam.AppUsuarios.R;
 import com.example.malladam.AppUsuarios.models.Empresa;
+import com.example.malladam.AppUsuarios.utils.MenuTintUtils;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -40,10 +45,7 @@ public class NosotrosActivity extends AppCompatActivity {
 
     TextView mDescripcion;
     DataBaseManager dbManager;
-    private NavigationView navigationView;
-    private DrawerLayout mDrawerLayout;
     Intent intent;
-    private ActionBarDrawerToggle mDrawerToggle;
     private Empresa empresa;
 
     @Override
@@ -57,135 +59,57 @@ public class NosotrosActivity extends AppCompatActivity {
 
         mDescripcion.setText(empresa.getMensaje());
         mDescripcion.setTextColor(Color.parseColor(empresa.getColorText()));
+        LinearLayout mealLayout = (LinearLayout) findViewById(R.id.linear_nosotros);
+        mealLayout.setBackgroundColor(Color.parseColor(empresa.getColorBack()));
 
 
         ///////////ACTIONBAR+NAVIGATION////////////////
-        navigationView = (NavigationView) findViewById(R.id.navigation_view);
-        if (navigationView != null) {
-            View headerNavigation = navigationView.getHeaderView(0);
-            TextView headerNombre = (TextView) headerNavigation.findViewById(R.id.nombreLogin);
-            headerNombre.setText(dbManager.getUserLogueado());
-
-            navigationView.getMenu().clear(); //clear old inflated items.
-            if (dbManager.getUserLogueado() == null) {
-                navigationView.inflateMenu(R.menu.drawer_logout);
-            } else {
-                navigationView.inflateMenu(R.menu.drawer_login);
-            }
-        }
-
-        setupNavigationDrawerContent(navigationView);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setBackgroundColor(Color.parseColor(empresa.getColorHeader()));
+        toolbar.setTitleTextColor(Color.parseColor(empresa.getColorTextHeader()));
         setSupportActionBar(toolbar);
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name, R.string.app_name) {
-
-
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-
-
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-        };
-
-        // Set the drawer toggle as the DrawerListener
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setTitle(empresa.getNombre());
-        mDrawerLayout.addDrawerListener(mDrawerToggle);
-        ///////////ACTIONBAR+NAVIGATION////////////////
+        ///////////ACTIONBAR////////////////
 
     }
 
-    ///////////ACTIONBAR+NAVIGATION////////////////
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-    private void setupNavigationDrawerContent(NavigationView navigationView) {
-        navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        switch (menuItem.getItemId()) {
-                            case R.id.cerrarSesion:
-                                menuItem.setChecked(true);
-                                dbManager.eliminarLogin();
-                                intent = new Intent(getApplicationContext(), BusquedaActivity.class);
-                                startActivity(intent);
-                                finish();
-                                return true;
-
-                            case R.id.iniciarSesion:
-                                menuItem.setChecked(true);
-                                intent = new Intent(getApplicationContext(), LoginActivity.class);
-                                startActivity(intent);
-                                finish();
-                                return true;
-
-                            case R.id.registrarse:
-                                menuItem.setChecked(true);
-                                intent = new Intent(getApplicationContext(), RegisterActivity.class);
-                                startActivity(intent);
-                                finish();
-                                return true;
-
-                            case R.id.nosotros:
-                                menuItem.setChecked(true);
-                                intent = new Intent(getApplicationContext(), NosotrosActivity.class);
-                                startActivity(intent);
-                                finish();
-                                return true;
-                        }
-                        return true;
-                    }
-                });
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_nosotros, menu);
+        MenuTintUtils menuTintUtils = new MenuTintUtils();
+        menuTintUtils.tintAllIcons(menu,Color.parseColor(empresa.getColorTextHeader()));
+
         return true;
     }
 
     @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        mDrawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }else if (id == R.id.action_sucursales) {
-            intent = new Intent(getApplicationContext(), SucursalesActivity.class);
-            startActivity(intent);
-            return true;
-        }else if (id == R.id.action_info) {
-            showPopup(NosotrosActivity.this);
-            return true;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                startActivityAfterCleanup(BusquedaActivity.class);
+                return true;
+            case R.id.action_sucursales:
+                intent = new Intent(getApplicationContext(), SucursalesActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.action_info:
+                showPopup(NosotrosActivity.this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
+
+    private void startActivityAfterCleanup(Class<?> cls) {
+        Intent intent = new Intent(getApplicationContext(), cls);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
+
     ///////////ACTIONBAR+NAVIGATION////////////////
 
     private void showPopup(final Activity context) {
@@ -235,10 +159,6 @@ public class NosotrosActivity extends AppCompatActivity {
                 popup.dismiss();
             }
         });
-    }
-    private Bitmap base64ToBitmap(String b64) {
-        byte[] imageAsBytes = Base64.decode(b64.getBytes(), Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
     }
 
 }

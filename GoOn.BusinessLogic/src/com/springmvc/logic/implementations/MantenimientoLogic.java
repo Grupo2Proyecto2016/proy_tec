@@ -27,7 +27,7 @@ public class MantenimientoLogic implements IMantenimientoLogic {
 		TenantContext.TallerRepository.FindByID(id_taller);
 	}
 	
-	public void insertMantenimiento(Mantenimiento mantenimiento) {
+	public void createMantenimiento(Mantenimiento mantenimiento) {
 		
 		Usuario user_crea = new Usuario();
 		user_crea = TenantContext.UserRepository.FindByUsername("pepe");
@@ -37,7 +37,7 @@ public class MantenimientoLogic implements IMantenimientoLogic {
 		
 	}
 	
-	public List<Mantenimiento> GetMantenimientos() {
+	public List<Mantenimiento> getMantenimientos() {
 		
 		return TenantContext.MantenimientoRepository.getMantenimientos();
 	}

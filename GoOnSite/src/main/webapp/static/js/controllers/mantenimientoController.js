@@ -11,12 +11,12 @@ goOnApp.controller('mantenimientoController', function($scope, $http, uiGridCons
     
     $scope.initForm = function()
     {
-	    $scope.mantenimientoForm.costo = null;
-	    $scope.mantenimientoForm.estado = null;
+	    $scope.mantenimientoForm.costo = 0;
+	    $scope.mantenimientoForm.estado = 0;
 	    $scope.mantenimientoForm.fecha = null;
-	    $scope.mantenimientoForm.taller = null;
-	    $scope.mantenimientoForm.vehiculo = null;
-	    $scope.mantenimientoForm.user_crea = null;
+	    $scope.mantenimientoForm.taller = 0;
+	    $scope.mantenimientoForm.vehiculo = 0;
+	    $scope.mantenimientoForm.user_crea = 0;
     }
     
     $scope.initForm();
@@ -31,9 +31,9 @@ goOnApp.controller('mantenimientoController', function($scope, $http, uiGridCons
     
     $scope.getMantenimientos();
     
-    $scope.showMantenimientoForm = function()
+    $scope.showForm = function()
     {
-    	$("#divForm").removeClass('hidden');
+    	$("#divMantenimientoForm").removeClass('hidden');
     	$scope.hideSuccess();    	
     };
     
@@ -92,22 +92,23 @@ goOnApp.controller('mantenimientoController', function($scope, $http, uiGridCons
     	[
           { name:'Costo', field: 'costo' },
           { name:'Estado', field: 'estado' },
-          { name:'Fecha', field: 'fecha'},
+          { name:'fecha', field: 'fecha'},
           { name:'Taller', field: 'taller' },
-          { name:'Vehículo', field: 'vehiculo' },
-          { name:'Usuario encargado', field: 'user_crea' },
+          { name: 'Usuario', field: 'user_crea' },
+          { name:'Vehículo', field: 'vehiculo'},
+          
           
           { name: 'Acciones',
         	enableFiltering: false,
         	enableSorting: false,
-            cellTemplate:'<button style="width: 50%" class="btn-xs btn-primary" ng-click="grid.appScope.getMantenimientoDetails(row)">Detalles</button>'+
+            cellTemplate:'<button style="width: 50%" class="btn-xs btn-primary" ng-click="grid.appScope.getMantenimientosDetails(row)">Detalles</button>'+
             			 '<button style="width: 50%" class="btn-xs btn-danger" ng-click="grid.appScope.showDeleteDialog(row)">Eliminar</button>' 
             			  
     	  }
         ]
      };
 	
-	
+	/*
 	$scope.updateVehiculo = function ()   
     {
 		
@@ -116,7 +117,7 @@ goOnApp.controller('mantenimientoController', function($scope, $http, uiGridCons
 	$scope.updateTaller = function ()   
     {
 		
-    }
+    }*/
 		
     
 	$scope.showDeleteDialog = function(row)

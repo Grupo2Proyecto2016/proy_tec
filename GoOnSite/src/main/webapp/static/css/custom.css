@@ -239,7 +239,7 @@ div.row
 	 z-index: 1020; 
 }
 
-.sugerido{
+.sugerido, .sugeridoVariable{
 	padding:0!important;
 	margin-bottom:0!important;
 	background-color: #dff0d8!important;

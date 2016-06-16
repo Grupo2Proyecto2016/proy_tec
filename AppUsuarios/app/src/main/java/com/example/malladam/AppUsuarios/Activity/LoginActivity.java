@@ -4,9 +4,11 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 
@@ -18,15 +20,18 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +45,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.malladam.AppUsuarios.DataBaseManager;
 import com.example.malladam.AppUsuarios.R;
 import com.example.malladam.AppUsuarios.adapters.VolleyS;
+import com.example.malladam.AppUsuarios.models.Empresa;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -68,6 +74,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     String urlUserExist;
     Handler mHandler;
     Boolean userExist;
+    private Empresa empresa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,12 +84,24 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         userExist = false;
         intent = new Intent(this, MainActivity.class);
         dbManager = new DataBaseManager(this);
+        empresa = empresa.getInstance();
 
         urlUserExist = getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)+"/userExists";
         mUserView = (AutoCompleteTextView) findViewById(R.id.user);
+        mUserView.setTextColor(Color.parseColor(empresa.getColorText()));
 
         mHandler = new Handler();
         mPasswordView = (EditText) findViewById(R.id.password);
+        mPasswordView.setTextColor(Color.parseColor(empresa.getColorText()));
+
+        LinearLayout mealLayout = (LinearLayout) findViewById(R.id.linear_login);
+        mealLayout.setBackgroundColor(Color.parseColor(empresa.getColorBack()));
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setBackgroundColor(Color.parseColor(empresa.getColorHeader()));
+        toolbar.setTitleTextColor(Color.parseColor(empresa.getColorTextHeader()));
+        setSupportActionBar(toolbar);
+
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -134,6 +153,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         urlToken = getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)+"/auth";
         volley = volley.getInstance(this);
         /////////////WS/////////////
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(empresa.getNombre());
     }
 
 
@@ -321,7 +343,23 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         };
         // Adding request to request queue
         volley.addToQueue(strReq);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                startActivityAfterCleanup(BusquedaActivity.class);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void startActivityAfterCleanup(Class<?> cls) {
+        Intent intent = new Intent(getApplicationContext(), cls);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 }
 
