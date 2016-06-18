@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.springmvc.entities.tenant.Mantenimiento;
 import com.springmvc.entities.tenant.Usuario;
+import com.springmvc.logic.implementations.BranchesLogic;
 import com.springmvc.logic.implementations.MantenimientoLogic;
 import com.springmvc.logic.interfaces.IMantenimientoLogic;
+import com.springmvc.requestWrappers.CustomResponseWrapper;
 import com.springmvc.utils.UserContext;
 
 @RestController
@@ -55,5 +57,16 @@ public class MantenimientoRestController {
 		ml.createMantenimiento(mantenimiento);		
 		return new ResponseEntity<Void>(HttpStatus.CREATED);		
     }
+    
+    
+	@Secured({"ROLE_ADMIN"})
+	@RequestMapping(value = "/deleteMantenimiento", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
+	public ResponseEntity<CustomResponseWrapper> DeleteBranch(@RequestBody long id_mantenimiento, @PathVariable String tenantid)
+	{
+		MantenimientoLogic ml = new MantenimientoLogic(tenantid);
+		ml.deleteMantenimiento(id_mantenimiento);
+
+		return new ResponseEntity<CustomResponseWrapper>(HttpStatus.OK);
+	}	
 	
 }

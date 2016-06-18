@@ -14,4 +14,6 @@ public interface IMantenimientoLogic {
 	
 	public List<Mantenimiento> getMantenimientos();
 	
+	public void deleteMantenimiento(long id_mantenimiento);
+	
 }

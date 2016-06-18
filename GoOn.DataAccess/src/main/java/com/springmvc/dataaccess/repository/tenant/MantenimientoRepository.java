@@ -23,7 +23,7 @@ public class MantenimientoRepository {
 	public List<Mantenimiento> getMantenimientos() 
 	{
 		List<Mantenimiento> mantenimientos = null;
-		Query q = entityManager.createQuery("FROM Taller");
+		Query q = entityManager.createQuery("FROM Mantenimiento");
 		mantenimientos = (List<Mantenimiento>)q.getResultList();
 		return mantenimientos;	
 	}
@@ -62,5 +62,13 @@ public class MantenimientoRepository {
 		return mantenimiento;
 	}
 
+	public void deleteMantenimiento(long id_mantenimiento)
+	{
+		Query q = entityManager.createQuery("UPDATE Mantenimiento m SET m.estado = :estado WHERE m.id_mantenimiento = :idm");
+		q.setParameter("estado", 0);
+		q.setParameter("idm", id_mantenimiento);
+		q.executeUpdate();
+		
+	}
 	
 }

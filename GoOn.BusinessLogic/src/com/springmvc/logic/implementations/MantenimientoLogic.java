@@ -40,4 +40,9 @@ public class MantenimientoLogic implements IMantenimientoLogic {
 		
 		return TenantContext.MantenimientoRepository.getMantenimientos();
 	}
+	
+	public void deleteMantenimiento(long id_mantenimiento) 
+	{
+		TenantContext.MantenimientoRepository.deleteMantenimiento(id_mantenimiento);
+	}
 }

@@ -115,7 +115,7 @@ goOnApp.controller('tallerController', function($scope, $http, uiGridConstants, 
     	[
           { name:'Dirección', field: 'direccion' },
           { name:'Teléfono', field: 'telefono' },
-          { name:'Ciudad', field: 'cuidad'},
+          { name:'Ciudad', field: 'ciudad'},
           { name:'Departamento', field: 'departamento' },
           { name: 'Nombre', field: 'nombre' },
           

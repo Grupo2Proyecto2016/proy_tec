@@ -17,11 +17,11 @@ public class Mantenimiento {
 	private Date fecha;
 	private Double costo;
 	private int estado;
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	private Taller taller;
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	private Vehiculo vehiculo;
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	private Usuario user_crea;
 	
 	public long getId_mantenimiento() {

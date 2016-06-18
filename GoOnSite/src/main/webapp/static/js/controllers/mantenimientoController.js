@@ -27,6 +27,7 @@ goOnApp.controller('mantenimientoController', function($scope, $http, uiGridCons
     	{
         	$scope.mantenimientos = data;
         	$scope.mantenimientosGrid.data = $scope.mantenimientos;
+
     	});
     };
     
@@ -106,6 +107,33 @@ goOnApp.controller('mantenimientoController', function($scope, $http, uiGridCons
 		}
 	};
 	
+	
+	$scope.deleteMantenimiento = function()
+	{
+		$.blockUI();
+		$http.post(servicesUrl +'deleteMantenimiento', JSON.stringify($scope.mantenimientoToDelete))
+		.then(function(response) 
+			{
+				$.unblockUI();		
+	        	if(response.status == 200)
+	        	{	       
+	        		if (!response.data.success)
+	    			{
+	    				$scope.error_message = response.data.msg;
+	    		    	$("#errorModal").modal("toggle");
+	    			}
+	        		else
+	        		{
+	        			$scope.getMantenimientos();	
+		        		$scope.showSuccessAlert("Se ha completado el mantenimiento para el vehiculo seleccionado.");	
+	        		}	        		
+	        	}
+	        	$scope.hideDeleteDialog();
+    		});				
+	};
+
+	
+	
 	$scope.closeSuccessAlert = function()
     {
     	$("#successAlert").hide();
@@ -128,9 +156,10 @@ goOnApp.controller('mantenimientoController', function($scope, $http, uiGridCons
           { name:'Costo', field: 'costo' },
           { name:'Estado', field: 'estado' },
           { name:'fecha', field: 'fecha'},
-          { name:'Taller', field: 'taller' },
-          { name: 'Usuario', field: 'user_crea' },
-          { name:'Vehículo', field: 'vehiculo'},
+          { name:'Taller', field: 'taller.nombre' },
+          { name: 'Nombre Usuario', field: 'user_crea.nombre' },
+          { name: 'Apellido Usuario', field: 'user_crea.apellido' },
+          { name:'Nro Vehículo', field: 'vehiculo.id_vehiculo'},
           
           
           { name: 'Acciones',
@@ -143,31 +172,11 @@ goOnApp.controller('mantenimientoController', function($scope, $http, uiGridCons
         ]
      };
 	
-	
-	$scope.showUpdateVehiculo = function()
-	{
-		$("#updateVehiculoModal").modal('show');
-	};
-	$scope.hideUpdateTaller = function()
-	{
-		$("#updateTallerModal").modal('hide');
-	};
-	
-	
-//	$scope.updateVehiculo = function ()   
-//    {
-//		$scope.getVehiculoById($scope.mantenimientoForm.vehiculo);
-//    }
-//	
-//	$scope.updateTaller = function ()   
-//    {
-//		
-//    }
 		
     
 	$scope.showDeleteDialog = function(row)
     {
-    	$scope.mantenimientoToDelete = row.entity.id_vehiculo;
+    	$scope.mantenimientoToDelete = row.entity.id_mantenimiento;
     	$("#deleteModal").modal('show');
     };
     
