@@ -34,4 +34,11 @@ public class TicketController
 		List<Parada> stations = new LinesLogic(tenantid).GetParadas();
 		return new ResponseEntity<List<Parada>>(stations, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/getFilteredStations", method = RequestMethod.GET)
+	public ResponseEntity<List<Parada>> getFilteredStations(@RequestBody List<Parada> destinations, @PathVariable String tenantid)
+	{
+		List<Parada> stations = new LinesLogic(tenantid).GetStationsByDestinations(destinations);
+		return new ResponseEntity<List<Parada>>(stations, HttpStatus.OK);
+	}
 }

@@ -121,4 +121,10 @@ public class LinesLogic implements ILinesLogic
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public List<Parada> GetStationsByDestinations(List<Parada> destinations) 
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

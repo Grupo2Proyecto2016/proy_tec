@@ -8,7 +8,7 @@
       <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.css" />
       
       <!-- SCRIPTS -->
-	  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXLMRyM-qhBcFx4Lvv6XxACYvWYY8ey-U&libraries=places" async defer></script>
+	  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXLMRyM-qhBcFx4Lvv6XxACYvWYY8ey-U&libraries=places,geometry" async defer></script>
       <script src="<c:url value='/static/js/tokenLogic.js' />"></script>
       <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
       <script src="<c:url value='/static/js/jquery/jquery.blockUI.js' />"></script>

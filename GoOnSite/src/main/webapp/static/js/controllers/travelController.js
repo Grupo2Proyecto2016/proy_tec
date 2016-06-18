@@ -9,6 +9,8 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 	$scope.nearbyDestinations = {};
     $scope.filteredOrigins = {};
     $scope.travelSearch = {};
+    $scope.userMarkers = [];
+    $scope.destinoMarkers = [];
     
 	$scope.custom_response = null;    
     i18nService.setCurrentLang('es');
@@ -23,6 +25,63 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     var destinationsearchBox = new google.maps.places.SearchBox(destinationInput);
     $scope.destinationMap.controls[google.maps.ControlPosition.TOP_LEFT].push(destinationInput);
     //
+    
+    $scope.destinationMap.addListener('click', function(e) 
+    {
+    	//Borra los anteriores, en este caso es uno solo, pero eventualmente podrian ser mas
+    	
+        $scope.userMarkers.forEach(function(marker) 
+        {
+          marker.setMap(null);
+        });
+        
+        $scope.userMarkers = [];        
+    	$scope.placeMarkerAndPanTo(e.latLng, $scope.destinationMap);    	    	
+    	//$scope.$digest();
+	});
+    
+    $scope.placeMarkerAndPanTo = function (latLng, map) 
+    {
+  	  
+    var marker = new google.maps.Marker({
+  	    position: latLng,
+  	    map: map, //map: $scope.map,
+  	    draggable:true,
+  	    icon: "static/images/marker_sm.png",
+  	    animation: google.maps.Animation.DROP, //just for fun
+  	  });	  
+  	  $scope.userMarkers.push(marker); 	    	  
+  	  var l = latLng.lat();
+  	  var g = latLng.lng();
+  	  //$scope.geocodePosition(marker);
+  	  var radius = 1000;
+  	  circle = new google.maps.Circle(
+  			  {center:marker.getPosition(),
+  				  radius: radius, //1km
+  				  fillOpacity: 0.35,
+  				  fillColor: "#FF0000",
+  				  map: map}
+  			  );
+  	  
+  	var bounds = new google.maps.LatLngBounds();
+    for (var i=0; i< $scope.destinoMarkers.length; i++) 
+    {
+      if (google.maps.geometry.spherical.computeDistanceBetween($scope.destinoMarkers[i].getPosition(),marker.getPosition()) < radius) 
+      {
+        bounds.extend($scope.destinoMarkers[i].getPosition())
+       // $scope.destinoMarkers[i].setMap(map);
+        window.alert("entra");
+      } 
+      else 
+      {
+    	  //$scope.destinoMarkers[i].setMap(null);
+    	  window.alert("no");
+      }
+    }  	  
+  	  map.panTo(latLng); 	
+   	}//fin de placeMarkerAndPanTo
+       
+    
     //ORIGIN MAP
     $scope.originMap = new google.maps.Map(document.getElementById('originMap'), 
     {
@@ -33,6 +92,20 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     var originSearchBox = new google.maps.places.SearchBox(originInput);
     $scope.originMap.controls[google.maps.ControlPosition.TOP_LEFT].push(originInput);
     //
+    
+    $scope.originMap.addListener('click', function(e) 
+    {
+    	//Borra los anteriores, en este caso es uno solo, pero eventualmente podrian ser mas
+    	
+        $scope.userMarkers.forEach(function(marker) 
+        {
+          marker.setMap(null);
+        });
+        
+        $scope.userMarkers = [];        
+    	$scope.placeMarkerAndPanTo(e.latLng, $scope.originMap);    	    	
+    	//$scope.$digest();
+	});
     
     $scope.getStations = function()
     {
@@ -47,7 +120,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     						map: $scope.destinationMap,
     						title: station.descripcion
     					});
-					  
+    					$scope.destinoMarkers.push(marker);
     				});
 				}
 		});
@@ -55,7 +128,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     
     $scope.getFilteredOrigins = function()
     {
-    	$http.get(servicesUrl + 'getFilteredOrigins', JSON.Stringlify($scope.nearbyDestinations))
+    	$http.get(servicesUrl + 'getFilteredStations', JSON.Stringlify($scope.nearbyDestinations))
     		.then(function (result){
     			if(result.status == 200)
     			{
