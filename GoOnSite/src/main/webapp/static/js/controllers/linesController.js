@@ -341,15 +341,27 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     		$scope.lineForm.paradas = $scope.markers;
     		for (var i = 0; i < $scope.lineForm.paradas.length; i++)
     		{
-    			$scope.lineForm.paradas[i].latitud = $scope.lineForm.paradas[i].position.lat(); 
-    			$scope.lineForm.paradas[i].longitud = $scope.lineForm.paradas[i].position.lng();
+    			var newP = {};
+    			newP.latitud = $scope.lineForm.paradas[i].position.lat();
+    			newP.longitud= $scope.lineForm.paradas[i].position.lng();
+    			newP.reajuste= $scope.lineForm.paradas[i].reajuste;
+    			newP.id_parada = $scope.lineForm.paradas[i].id_parada;
+    			newP.descripcion = $scope.lineForm.paradas[i].descripcion;
+    			newP.direccion = $scope.lineForm.paradas[i].direccion;
+    			$scope.lineForm.paradas[i] = newP;
     		}
     		
     		$scope.lineForm.paradasV = $scope.markersV;
     		for (var i = 0; i < $scope.lineForm.paradasV.length; i++)
     		{
-    			$scope.lineForm.paradasV[i].latitud = $scope.lineForm.paradasV[i].position.lat(); 
-    			$scope.lineForm.paradasV[i].longitud = $scope.lineForm.paradasV[i].position.lng();
+    			var newP = {};
+    			newP.latitud = $scope.lineForm.paradasV[i].position.lat();
+    			newP.longitud= $scope.lineForm.paradasV[i].position.lng();
+    			newP.reajuste= $scope.lineForm.paradasV[i].reajuste;
+    			newP.id_parada = $scope.lineForm.paradasV[i].id_parada;
+    			newP.descripcion = $scope.lineForm.paradasV[i].descripcion;
+    			newP.direccion = $scope.lineForm.paradasV[i].direccion;
+    			$scope.lineForm.paradasV[i] = newP;
     		}
     		
     		$http.post(servicesUrl +'createLine', JSON.stringify($scope.lineForm))
