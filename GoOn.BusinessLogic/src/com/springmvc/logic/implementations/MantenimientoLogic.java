@@ -28,11 +28,10 @@ public class MantenimientoLogic implements IMantenimientoLogic {
 	}
 	
 	public void createMantenimiento(Mantenimiento mantenimiento) {
-		
-		Usuario user_crea = new Usuario();
-		user_crea = TenantContext.UserRepository.FindByUsername("pepe");
-		
-		mantenimiento.setUser_crea(user_crea);
+		// Cuando el vehículo entra al mantenimiento el estado es "1"
+		mantenimiento.setEstado(1);
+		mantenimiento.setCosto(null);
+		mantenimiento.setFecha(null);
 		TenantContext.MantenimientoRepository.InsertMantenimiento(mantenimiento);
 		
 	}

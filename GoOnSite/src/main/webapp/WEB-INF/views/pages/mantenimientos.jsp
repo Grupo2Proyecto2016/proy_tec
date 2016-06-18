@@ -27,10 +27,14 @@
 							    <div class="col-sm-9">			
 									<select name="vehiculo" class="form-control"
 										ng-model="mantenimientoForm.vehiculo"
+<<<<<<< HEAD
+										ng-options="bus as bus.id_vehiculo for bus in buses"
+=======
 										ng-options="bus.id_vehiculo as bus.matricula for bus in buses"
 										
+>>>>>>> origin/master
 										required>
-										<option value="">Seleccione un vehiculo</option>
+										<option value="">Seleccione un vehículo</option>
 									</select>							    	
 						    	</div>
 					    	</div>
@@ -39,10 +43,14 @@
 							    <div class="col-sm-9">
 							    	<select name="taller" class="form-control"
 										ng-model="mantenimientoForm.taller"
+<<<<<<< HEAD
+										ng-options="taller as taller.nombre for taller in talleres"
+=======
 										ng-options="taller.id_taller as taller.nombre for taller in taller"
 										
+>>>>>>> origin/master
 										required>
-										<option value="">Seleccione una taller</option>
+										<option value="">Seleccione un taller</option>
 									</select>	
 						    	</div>
 					    	</div>

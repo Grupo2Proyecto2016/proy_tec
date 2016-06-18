@@ -17,6 +17,7 @@ goOnApp.controller('mantenimientoController', function($scope, $http, uiGridCons
 	    $scope.mantenimientoForm.taller = 0;
 	    $scope.mantenimientoForm.vehiculo = 0;
 	    $scope.mantenimientoForm.user_crea = 0;
+	    $scope.user = null;
     }
     
     $scope.initForm();
@@ -29,12 +30,28 @@ goOnApp.controller('mantenimientoController', function($scope, $http, uiGridCons
     	});
     };
     
+    $scope.getBuses = function(){
+    	$http.get(servicesUrl + 'getBuses').success(function(data, status, headers, config) 
+    	{
+        	$scope.buses = data;
+    	});
+    };
+    
+    $scope.getTalleres = function(){
+    	$http.get(servicesUrl + 'getTalleres').success(function(data, status, headers, config) 
+    	{
+        	$scope.talleres = data;
+    	});
+    };
+    
     $scope.getMantenimientos();
     
     $scope.showForm = function()
     {
     	$("#divMantenimientoForm").removeClass('hidden');
-    	$scope.hideSuccess();    	
+    	$scope.hideSuccess(); 
+    	$scope.getBuses();
+    	$scope.getTalleres();
     };
     
     $scope.hideForm = function()
@@ -51,14 +68,32 @@ goOnApp.controller('mantenimientoController', function($scope, $http, uiGridCons
 	{		
 		if(!$scope.form.$invalid)
 		{
-			$.blockUI();			
+			$.blockUI();
+			
+			$http.get(servicesUrl + 'getUserInfo')
+			.then(function(response) 
+			{
+				if(response.status == 200)
+				{
+					$scope.user = response.data;
+				}
+				else
+				{
+					$scope.user = null;
+					removeJwtToken();
+				}
+				$scope.userInfoReady = true;
+			}
+			);
+			
+			$scope.mantenimientoForm.user_crea = $scope.user
 			$http.post(servicesUrl +'createMantenimiento', JSON.stringify($scope.mantenimientoForm))
 			.success(function()
 			{
 				$.unblockUI();
 				$scope.hideForm();
 				$scope.initForm();
-				$scope.showSuccessAlert("Vehiculo enviado al mantenimiento.");			
+				$scope.showSuccessAlert("Vehiculo enviado al mantenimiento.");	
 				$scope.getMantenimientos();				
 			})
 			.error(function()
