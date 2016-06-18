@@ -42,6 +42,7 @@
       <script src="<c:url value='/static/js/controllers/terminalController.js' />"></script>
       <script src="<c:url value='/static/js/controllers/manageTravelsController.js' />"></script>
       <script src="<c:url value='/static/js/controllers/mantenimientoController.js' />"></script>
+      <script src="<c:url value='/static/js/controllers/packageController.js' />"></script>
     </head>
     <body style="visibility: hidden">
 
@@ -61,7 +62,8 @@
                 
 					<!--PUBLICAS -->
                     <li><a href="#home"><i class="fa fa-home"></i> Inicio</a></li>
-                    <li><a ng-click="showPackageCalc()"><i class="fa fa-calculator"></i> Calcular Encomienda</a></li>
+                    <li><a ng-click="showPackageCalc()" ng-show="user == null || user.rol_id_rol != 2"><i class="fa fa-calculator"></i> Calcular Encomienda</a></li>
+                    <li><a href="#packages" ng-show="user != null && user.rol_id_rol == 2"><i class="fa fa-calculator"></i> Nueva Encomienda</a></li>
                     <li><a href="#travels"><i class="fa fa-bus"></i> Pasajes</a></li>
                     
                     <!--ADMINISTRADOR-->
@@ -202,12 +204,12 @@
 	      <div class="modal-body">
  	        <form class="form-horizontal" name="calcForm" role="form" ng-submit="calcPackage()"">
 				<div class="form-group">
-				    <div class="col-sm-6">
-					    <label class="control-label col-sm-3" for="origen">Origen:</label>
-					    <div class="col-sm-9">			
-							<select name="origen" class="form-control"	ng-model="calcForm.origen" ng-options="terminal as terminal.descripcion for terminal in terminals" required>
+			    	<div class="col-sm-6">
+				    	<label class="control-label col-sm-3" for="destino">Destino:</label>
+					    <div class="col-sm-9">
+					    	<select name="destino" class="form-control" ng-model="calcForm.destino" ng-change="updateOrigins()" ng-options="terminal as terminal.descripcion for terminal in destinationTerminals" required>
 								<option value="">Seleccione una sucursal</option>
-							</select>							    	
+							</select>	
 				    	</div>
 			    	</div>
 			    	<div class="col-sm-6">
@@ -218,12 +220,12 @@
 					</div>	
 		    	</div>				
 		    	<div class="form-group">
-			    	<div class="col-sm-6">
-				    	<label class="control-label col-sm-3" for="destino">Destino:</label>
-					    <div class="col-sm-9">
-					    	<select name="destino" class="form-control" ng-model="calcForm.destino" ng-options="terminal as terminal.descripcion for terminal in terminals" required>
+				    <div class="col-sm-6">
+					    <label class="control-label col-sm-3" for="origen">Origen:</label>
+					    <div class="col-sm-9">			
+							<select name="origen" class="form-control" ng-disabled="calcForm.destino == null || calcForm.destino == undefined" ng-model="calcForm.origen" ng-options="terminal as terminal.descripcion for terminal in originTerminals" required>
 								<option value="">Seleccione una sucursal</option>
-							</select>	
+							</select>							    	
 				    	</div>
 			    	</div>
 					<div class="col-sm-6">
@@ -235,7 +237,7 @@
 				</div>		
 				<div class="form-group">
 					<div class="col-sm-6">
-						<label class="control-label col-sm-3" for="packageWeight">Peso:</label>
+						<label class="control-label col-sm-3" for="packageWeight">Peso (kg):</label>
 						<div class="col-sm-9">
 							<input type="number" min="0.1" step="0.1" title="Solo se aceptan números" class="form-control" name="packageWeight" ng-model="calcForm.peso">
 					    </div>

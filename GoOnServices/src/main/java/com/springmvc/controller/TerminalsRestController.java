@@ -32,10 +32,34 @@ public class TerminalsRestController {
     }
 	
 	@RequestMapping(value = "/getTerminals", method = RequestMethod.GET)
-    public ResponseEntity<List<Parada>> GetBranches(@PathVariable String tenantid)
+    public ResponseEntity<List<Parada>> GetTerminals(@PathVariable String tenantid)
     {
 		LinesLogic tl = new LinesLogic(tenantid);
 		List<Parada> terminals = tl.GetTerminals();		
 		return new ResponseEntity<List<Parada>>(terminals, HttpStatus.OK);		
     }
+	
+	@RequestMapping(value = "/getBranchesTerminals", method = RequestMethod.GET)
+    public ResponseEntity<List<Parada>> GetPackageTerminals(@PathVariable String tenantid)
+    {
+		LinesLogic tl = new LinesLogic(tenantid);
+		List<Parada> terminals = tl.GetPackageTerminals();		
+		return new ResponseEntity<List<Parada>>(terminals, HttpStatus.OK);		
+    }
+	
+	@RequestMapping(value = "/getPackageOriginTerminals", method = RequestMethod.POST)
+    public ResponseEntity<List<Parada>> GetPackageOriginTerminals(@RequestBody Parada parada, @PathVariable String tenantid)
+    {
+		LinesLogic tl = new LinesLogic(tenantid);
+		List<Parada> terminals = tl.GetOriginsFromDestination(parada);
+		return new ResponseEntity<List<Parada>>(terminals, HttpStatus.OK);		
+    }
+	
+//	@RequestMapping(value = "/getPackageDestinationTerminals", method = RequestMethod.POST)
+//    public ResponseEntity<List<Parada>> GetPackageDestinationTerminals(@RequestBody Parada parada, @PathVariable String tenantid)
+//    {
+//		LinesLogic tl = new LinesLogic(tenantid);
+//		List<Parada> terminals = tl.GetDestinationsFromOrigin(parada);		
+//		return new ResponseEntity<List<Parada>>(terminals, HttpStatus.OK);		
+//    }
 }

@@ -114,12 +114,17 @@
     		controller  : 'manageTravelsController'
     	})
     	
+    	.when('/packages', {
+    		templateUrl : tenantUrlPart + 'pages/packages.html',
+    		controller  : 'packageController'
+    	})
+    	
 		.otherwise({
 			redirectTo: '/'
     	});
     });
 
-    goOnApp.service('authInterceptor', function($q, $location, $rootScope) {
+    goOnApp.service('authInterceptor', function($q, $location, $rootScope, $timeout) {
         var service = this;
         
         service.responseError = function(response) {
@@ -133,21 +138,27 @@
             	}
             	else
             	{
-    				$("#loginModal").modal("show");
+            		$timeout(function () {            
+            			$("#loginModal").modal("show");
+            		}, 500);
             	}
             }
             else if(response.status == 500)
             {
             	if(!$('#errorModal').hasClass('in'))
             	{
-            		$("#errorModal").modal("show");
+            		$timeout(function () { 
+            			$("#errorModal").modal("show");
+            		}, 500);
             	}
             }
             else if(response.status == -1)
             {
             	if(!$('#connectErrorModal').hasClass('in'))
             	{
-            		$("#connectErrorModal").modal("show");
+            		$timeout(function () {
+            			$("#connectErrorModal").modal("show");
+            		}, 500);
             	}
             }
             else if(response.status == 403)
@@ -197,7 +208,8 @@
     	$scope.user = null;
     	$scope.company = null;
     	$scope.loginForm = null;
-    	$scope.terminals = null;
+    	$scope.originTerminals = null;
+    	$scope.destinationTerminals = null;
     	$scope.calcForm = null;
     	var gService = null;
     	
@@ -209,13 +221,33 @@
     		  $scope.user = user;
 		});
     	
-    	$scope.getTerminals = function()
+    	$scope.getPackageTerminals = function()
         {
-        	$http.get(servicesUrl + 'getTerminals').success(function(data, status, headers, config) 
+        	$http.get(servicesUrl + 'getBranchesTerminals')
+        		.then(function(result) 
+	        	{
+	            	$scope.originTerminals = result.data;    
+	            	$scope.destinationTerminals = result.data;
+	        	}
+    		);
+        };  
+        
+        $scope.updateOrigins = function()
+        {
+        	if($scope.calcForm.destino !== undefined)
         	{
-            	$scope.terminals = data;        	
-        	});
-        };    
+        		$http.post(servicesUrl + 'getPackageOriginTerminals', JSON.stringify($scope.calcForm.destino))
+        			.then(function(result) 
+    				{
+        				$scope.originTerminals = result.data;
+    				}
+        		);
+        	}
+        	else
+        	{
+        		$scope.getPackageTerminals();
+        	}
+        };
         
         $scope.calcPackage = function()
         {
@@ -240,12 +272,11 @@
         		}
         	);
         };
-
-        $scope.getTerminals();
         
     	$scope.showPackageCalc = function()
     	{
     		$scope.packagePrice = null;
+    		$scope.getPackageTerminals();
     		$("#packageCalcModal").modal("toggle");
     	};
     	

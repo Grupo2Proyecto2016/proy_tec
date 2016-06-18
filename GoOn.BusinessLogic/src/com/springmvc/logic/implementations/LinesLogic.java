@@ -127,4 +127,19 @@ public class LinesLogic implements ILinesLogic
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public List<Parada> GetOriginsFromDestination(Parada parada) 
+	{
+		return TenantContext.ParadaRepository.findOriginTerminalsByDestination(parada.getId_parada());
+	}
+
+	public List<Parada> GetPackageTerminals() 
+	{
+		return TenantContext.ParadaRepository.GetPackageTerminals();
+	}
+
+//	public List<Parada> GetDestinationsFromOrigin(Parada parada) 
+//	{
+//		return TenantContext.LineaRepository.findDestinationTerminalsByOrigin(parada.getId_parada());
+//	}
 }

@@ -85,4 +85,36 @@ public class ParadaRepository
 		return result;
 	}
 
+	public List<Parada> GetPackageTerminals() 
+	{
+		List<Parada> result = new ArrayList<>();
+		Query q = entityManager.createQuery(
+			"SELECT DISTINCT s.terminal FROM Sucursal s "
+			+ "INNER JOIN s.terminal "
+			+ "WHERE s.terminal.es_terminal = TRUE AND s.terminal.id_parada IN (SELECT l.destino.id_parada FROM Linea l WHERE l.habilitado = TRUE)"
+		);
+		try
+		{
+			result = q.getResultList();
+		}
+		catch(NoResultException ex)
+		{
+			return null;
+		}
+		return result;
+	}
+	
+	public List<Parada> findOriginTerminalsByDestination(long id_parada) 
+	{
+		List<Parada> originTerminals = null;
+		Query q = entityManager.createQuery(
+			"SELECT DISTINCT l.origen FROM Linea l "
+			+ "WHERE l.habilitado = true "
+			+ "AND l.destino.id_parada = :idp "
+			+ "AND l.origen.id_parada IN (SELECT s.terminal.id_parada FROM Sucursal s)"
+		);
+		q.setParameter("idp", id_parada);
+		originTerminals = (List<Parada>)q.getResultList();
+		return originTerminals;	
+	}
 }
