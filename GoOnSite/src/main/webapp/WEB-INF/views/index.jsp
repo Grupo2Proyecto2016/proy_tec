@@ -78,7 +78,7 @@
 							<li ng-show="user != null && user.rol_id_rol == 1"><a href="#branches"><i class="fa fa-building"></i> Sucursales</a></li>
 		                    <li ng-show="user != null && user.rol_id_rol == 1"><a href="#employees"><i class="fa fa-users"></i> Personal</a></li>
 		                    <li ng-show="user != null && user.rol_id_rol == 1"><a href="#bus"><i class="fa fa-bus"></i> Vehículos</a></li>
-		                    <li ng-show="user != null && user.rol_id_rol == 1"><a href="#taller"><i class="fa fa-wrench"></i> Talleres</a></li>
+		                    <li ng-show="user != null && user.rol_id_rol == 1"><a href="#taller"><i class="fa fa-industry"></i> Talleres</a></li>
 		                    <li ng-show="user != null && user.rol_id_rol == 1"><a href="#mantenimiento"><i class="fa fa-wrench"></i> Mantenimientos</a></li>
 		                    <li ng-show="user != null && user.rol_id_rol == 1"><a href="#terminals"><i class="fa fa-flag-o"></i> Terminales</a></li>
 		                    <li ng-show="user != null && user.rol_id_rol == 1"><a href="#lines"><i class="fa fa-map-o"></i> Lineas</a></li>

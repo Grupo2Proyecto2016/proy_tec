@@ -27,10 +27,9 @@
 							    <div class="col-sm-9">			
 									<select name="vehiculo" class="form-control"
 										ng-model="mantenimientoForm.vehiculo"
-										ng-options="vehiculo.id_vehiculo as vehiculo.matricula for vehiculo in vehiculo"
-										ng-change="updateVehiculo()"
+										ng-options="bus as bus.id_vehiculo for bus in buses"
 										required>
-										<option value="">Seleccione un vehiculo</option>
+										<option value="">Seleccione un vehículo</option>
 									</select>							    	
 						    	</div>
 					    	</div>
@@ -39,10 +38,9 @@
 							    <div class="col-sm-9">
 							    	<select name="taller" class="form-control"
 										ng-model="mantenimientoForm.taller"
-										ng-options="taller.id_taller as taller.nombre for taller in taller"
-										ng-change="updateTaller()"
+										ng-options="taller as taller.nombre for taller in talleres"
 										required>
-										<option value="">Seleccione una taller</option>
+										<option value="">Seleccione un taller</option>
 									</select>	
 						    	</div>
 					    	</div>
