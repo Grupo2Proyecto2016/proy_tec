@@ -11,7 +11,7 @@
     <string name="action_opcion2">Opcion 2</string>
     <string name="rockBla">rockB</string>
     <string name="error_timeout">Tiempo de espera agotado, Intente nuevamente</string>
-    <string name="error_conexion">Error el la conexión, Intente nuevamente</string>
+    <string name="error_conexion">Error en la conexión, Intente nuevamente</string>
     <string name="title_activity_login">Login</string>
     <string name="scan">Leer QR</string>
     <string name="action_newpasaje">Pasaje</string>
@@ -57,5 +57,9 @@
     <string name="razonSocial">"Razón Social"</string>
     <string name="rut">"RUT"</string>
     <string name="pais">"Pais"</string>
+    <string name="cantAsientos">"Asientos"</string>
+    <string name="ok">"Ok"</string>
+    <string name="cancelar">"Cancelar"</string>
+
 
 </resources>

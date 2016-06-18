@@ -5,19 +5,25 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import com.example.malladam.AppUsuarios.DataBaseManager;
 import com.example.malladam.AppUsuarios.R;
@@ -26,7 +32,7 @@ import com.example.malladam.AppUsuarios.models.Empresa;
 import java.util.Calendar;
 import java.util.Date;
 
-public class BusquedaActivity extends AppCompatActivity {
+public class BusquedaActivity extends AppCompatActivity  implements NumberPicker.OnValueChangeListener{
 
     private DataBaseManager dbManager;
     private String currentDate;
@@ -38,12 +44,14 @@ public class BusquedaActivity extends AppCompatActivity {
     private static final int DATE_DIALOG_ID = 1;
     private int year,month,day;
     private EditText mFechaIda;
-    private EditText mDestino;
-    private EditText mOrigen;
+    private Button mDestino;
+    private Button mOrigen;
     private Button mButtonBuscar;
     private String urlgetCompany;
     private VolleyS volley;
     private Empresa empresa;
+    private TextView mCantAsientos;
+    static Dialog d ;
 
 
     @Override
@@ -52,13 +60,17 @@ public class BusquedaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_busqueda);
 
         mFechaIda = (EditText) findViewById(R.id.fechaIda);
-        mOrigen = (EditText) findViewById(R.id.origenBusqueda);
-        mDestino = (EditText) findViewById(R.id.destinoBusqueda);
+        mOrigen = (Button) findViewById(R.id.origenBusqueda);
+        mDestino = (Button) findViewById(R.id.destinoBusqueda);
         mButtonBuscar = (Button) findViewById(R.id.buscarButton);
+        mCantAsientos = (TextView) findViewById(R.id.cantidadAsientos);
         empresa = empresa.getInstance();
-        mOrigen.setTextColor(Color.parseColor(empresa.getColorText()));
-        mDestino.setTextColor(Color.parseColor(empresa.getColorText()));
+        mOrigen.setTextColor(Color.parseColor(empresa.getColorBack()));
+        mDestino.setTextColor(Color.parseColor(empresa.getColorBack()));
+        mOrigen.setBackgroundColor(Color.parseColor(empresa.getColorText()));
+        mDestino.setBackgroundColor(Color.parseColor(empresa.getColorText()));
         mFechaIda.setTextColor(Color.parseColor(empresa.getColorText()));
+        mCantAsientos.setTextColor(Color.parseColor(empresa.getColorText()));
 
         DrawerLayout mealLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         mealLayout.setBackgroundColor(Color.parseColor(empresa.getColorBack()));
@@ -123,6 +135,52 @@ public class BusquedaActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(empresa.getNombre());
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         ///////////ACTIONBAR+NAVIGATION////////////
+
+
+        //numberPcker//
+        mCantAsientos.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                show();
+            }
+        });
+    }
+    @Override
+    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+
+        Log.i("value is",""+newVal);
+
+    }
+
+    public void show()
+    {
+        final Dialog d = new Dialog(BusquedaActivity.this);
+        d.setTitle(getResources().getString(R.string.cantAsientos));
+        d.setContentView(R.layout.dialog_number_picker);
+        Button b1 = (Button) d.findViewById(R.id.button1);
+        Button b2 = (Button) d.findViewById(R.id.button2);
+        final NumberPicker np = (NumberPicker) d.findViewById(R.id.numberPicker1);
+        np.setMaxValue(50);
+        np.setMinValue(1);
+        np.setWrapSelectorWheel(false);
+        np.setOnValueChangedListener(this);
+        b1.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                mCantAsientos.setText(String.valueOf(np.getValue())); //set the value to textview
+                d.dismiss();
+            }
+        });
+        b2.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                d.dismiss(); // dismiss the dialog
+            }
+        });
+        d.show();
     }
 
     ///////////ACTIONBAR+NAVIGATION////////////////
