@@ -143,16 +143,26 @@ goOnApp.controller('mantenimientoController', function($scope, $http, uiGridCons
         ]
      };
 	
-	/*
-	$scope.updateVehiculo = function ()   
-    {
-		
-    }
 	
-	$scope.updateTaller = function ()   
-    {
-		
-    }*/
+	$scope.showUpdateVehiculo = function()
+	{
+		$("#updateVehiculoModal").modal('show');
+	};
+	$scope.hideUpdateTaller = function()
+	{
+		$("#updateTallerModal").modal('hide');
+	};
+	
+	
+//	$scope.updateVehiculo = function ()   
+//    {
+//		$scope.getVehiculoById($scope.mantenimientoForm.vehiculo);
+//    }
+//	
+//	$scope.updateTaller = function ()   
+//    {
+//		
+//    }
 		
     
 	$scope.showDeleteDialog = function(row)
