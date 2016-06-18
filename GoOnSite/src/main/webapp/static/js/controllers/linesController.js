@@ -338,18 +338,30 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     	
     	if(!$scope.form.$invalid)
 		{	
-    		$scope.lineForm.paradas = $scope.markers;
-    		for (var i = 0; i < $scope.lineForm.paradas.length; i++)
+    		$scope.lineForm.paradas = [];
+    		for (var i = 0; i < $scope.markers.length; i++)
     		{
-    			$scope.lineForm.paradas[i].latitud = $scope.lineForm.paradas[i].position.lat(); 
-    			$scope.lineForm.paradas[i].longitud = $scope.lineForm.paradas[i].position.lng();
+    			var newP = {};
+    			newP.latitud     = $scope.markers[i].position.lat();
+    			newP.longitud    = $scope.markers[i].position.lng();
+    			newP.reajuste    = $scope.markers[i].reajuste;
+    			newP.id_parada   = $scope.markers[i].id_parada;
+    			newP.descripcion = $scope.markers[i].descripcion;
+    			newP.direccion   = $scope.markers[i].direccion;
+    			$scope.lineForm.paradas.push(newP);
     		}
     		
-    		$scope.lineForm.paradasV = $scope.markersV;
-    		for (var i = 0; i < $scope.lineForm.paradasV.length; i++)
+    		$scope.lineForm.paradasV = [];
+    		for (var i = 0; i < $scope.markersV.length; i++)
     		{
-    			$scope.lineForm.paradasV[i].latitud = $scope.lineForm.paradasV[i].position.lat(); 
-    			$scope.lineForm.paradasV[i].longitud = $scope.lineForm.paradasV[i].position.lng();
+    			var newP = {};
+    			newP.latitud     = $scope.markersV[i].position.lat();
+    			newP.longitud    = $scope.markersV[i].position.lng();
+    			newP.reajuste    = $scope.markersV[i].reajuste;
+    			newP.id_parada   = $scope.markersV[i].id_parada;
+    			newP.descripcion = $scope.markersV[i].descripcion;
+    			newP.direccion   = $scope.markersV[i].direccion;
+    			$scope.lineForm.paradasV.push(newP);
     		}
     		
     		$http.post(servicesUrl +'createLine', JSON.stringify($scope.lineForm))
@@ -358,8 +370,8 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
 				$scope.hideForm();
 		    	$scope.lineForm = {};	
 		    	$scope.lineForm.generaVuelta = true;
-		    	$scope.inicializoMarkers();
-		    	$scope.inicializoMarkersV(); 
+		    	//$scope.inicializoMarkers();
+		    	//$scope.inicializoMarkersV(); 
 		        $scope.stops = {};	
 		        $scope.getParameters();
 		    	$scope.getLines();
@@ -446,7 +458,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
 	  	    reajusta: false,
 	  	    reajuste: 0,
 	  	    km: 0,
-	  	    id_parada:$scope.lineForm.destino
+	  	    id_parada:$scope.lineForm.destino 
 	  	});
     	
     	if($scope.markers.length == 0)

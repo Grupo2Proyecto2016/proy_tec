@@ -9,8 +9,10 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 	$scope.nearbyDestinations = {};
     $scope.filteredOrigins = {};
     $scope.travelSearch = {};
+    
     $scope.userMarkers = [];
     $scope.destinoMarkers = [];
+    $scope.circle = null;
     
 	$scope.custom_response = null;    
     i18nService.setCurrentLang('es');
@@ -55,28 +57,32 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
   	  var g = latLng.lng();
   	  //$scope.geocodePosition(marker);
   	  var radius = 1000;
-  	  circle = new google.maps.Circle(
+  	  if ($scope.circle !== null)
+	  {
+  		  $scope.circle.setMap(null);
+	  }
+  	  $scope.circle = new google.maps.Circle(
   			  {center:marker.getPosition(),
+  				  strokeColor: '#678DEA',
+  				  strokeOpacity: 0.35,
+  				  strokeWeight: 1,
   				  radius: radius, //1km
   				  fillOpacity: 0.35,
-  				  fillColor: "#FF0000",
+  				  fillColor: "#678DEA",
   				  map: map}
   			  );
   	  
   	var bounds = new google.maps.LatLngBounds();
     for (var i=0; i< $scope.destinoMarkers.length; i++) 
     {
-      if (google.maps.geometry.spherical.computeDistanceBetween($scope.destinoMarkers[i].getPosition(),marker.getPosition()) < radius) 
-      {
-        bounds.extend($scope.destinoMarkers[i].getPosition())
-       // $scope.destinoMarkers[i].setMap(map);
-        window.alert("entra");
-      } 
-      else 
-      {
-    	  //$scope.destinoMarkers[i].setMap(null);
-    	  window.alert("no");
-      }
+    	if (google.maps.geometry.spherical.computeDistanceBetween($scope.destinoMarkers[i].getPosition(),marker.getPosition()) < radius) 
+		{
+		    //bounds.extend($scope.destinoMarkers[i].getPosition())
+		} 
+		else 
+		{
+			//$scope.destinoMarkers[i].setMap(null);
+		}
     }  	  
   	  map.panTo(latLng); 	
    	}//fin de placeMarkerAndPanTo
@@ -118,8 +124,16 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     					var marker = new google.maps.Marker({
     						position: new google.maps.LatLng(station.latitud,station.longitud),
     						map: $scope.destinationMap,
-    						title: station.descripcion
+    						title: station.descripcion    						
     					});
+    					if (station.es_terminal == true)
+    					{
+    						marker.setIcon("static/images/marker_blue.png");
+    					}
+    					else
+    					{
+    						marker.setIcon("static/images/marker_green.png"); 
+    					}
     					$scope.destinoMarkers.push(marker);
     				});
 				}

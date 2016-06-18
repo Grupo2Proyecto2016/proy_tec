@@ -11,6 +11,8 @@ import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +38,7 @@ public class StartActivity extends AppCompatActivity {
     private Empresa empresa;
     private View mProgressView;
     private TextView name;
+    private ImageButton refresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,8 @@ public class StartActivity extends AppCompatActivity {
         mProgressView = findViewById(R.id.start_progress);
         imagen = (ImageView) findViewById(R.id.start_image);
         name = (TextView) findViewById(R.id.start_name);
+        refresh = (ImageButton) findViewById(R.id.start_refresh);
+        refresh.setVisibility(View.GONE);
 
         Bitmap icon = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.icon);
         imagen.setImageBitmap(icon);
@@ -66,6 +71,23 @@ public class StartActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         //////////EMPRESA CUSTOM///////////
+
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                refresh.setVisibility(View.GONE);
+                showProgress(true);
+                try {
+                    WSgetCompany();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (TimeoutException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
     }
 
@@ -101,12 +123,14 @@ public class StartActivity extends AppCompatActivity {
                 public void onErrorResponse(VolleyError volleyError) {
                     showProgress(false);
                     Toast.makeText(StartActivity.this, getResources().getString(R.string.error_conexion) , Toast.LENGTH_LONG).show();
+                    refresh.setVisibility(View.VISIBLE);
                 }
             });
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
+
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {

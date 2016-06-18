@@ -8,6 +8,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import com.springmvc.entities.tenant.Linea;
+import com.springmvc.entities.tenant.Parada;
 import com.springmvc.entities.tenant.Viaje;
 
 public class LineaRepository {
@@ -96,4 +97,13 @@ public class LineaRepository {
 			throw ex;
 		}
 	}
+
+//	public List<Parada> findDestinationTerminalsByOrigin(long id_parada) 
+//	{
+//		List<Parada> originTerminals = null;
+//		Query q = entityManager.createQuery("SELECT DISTINCT l.destino FROM Linea l where l.habilitado = true AND l.origen.id_parada = :idp");
+//		q.setParameter("idp", id_parada);
+//		originTerminals = (List<Parada>)q.getResultList();
+//		return originTerminals;	
+//	}
 }
