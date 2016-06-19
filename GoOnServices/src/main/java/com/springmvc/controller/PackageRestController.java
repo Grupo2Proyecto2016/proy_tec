@@ -31,20 +31,14 @@ public class PackageRestController{
 		float priceByKm = pl.FindById(Parameter.PriceByPackageKm.getValue()).getValor();
 		float priceByKg = pl.FindById(Parameter.PriceByKg.getValue()).getValor();
 		float priceByVolume = pl.FindById(Parameter.PriceByVolume.getValue()).getValor();
+		float priceBase = pl.FindById(Parameter.PackageBasePrice.getValue()).getValor();
 		
 		float volumePrice = calcWrapper.volume * priceByVolume;
 		float kgPrice = calcWrapper.weigth * priceByKg;
 		float distancePrice = calcWrapper.distance * priceByKm;
 		int finalPrice = 0;
 		
-		if(volumePrice > kgPrice)
-		{
-			finalPrice = (int) (distancePrice * volumePrice);
-		}
-		else
-		{
-			finalPrice = (int) (distancePrice * kgPrice);
-		}
+		finalPrice = (int)Math.max(priceBase, Math.max((distancePrice * volumePrice), (distancePrice * kgPrice)));
 
 		return new ResponseEntity<String>(Integer.toString(finalPrice), HttpStatus.CREATED);
 	}

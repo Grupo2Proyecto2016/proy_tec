@@ -76,5 +76,10 @@ public class ParametersLogic implements IParametersLogic
 		stopDelay.setValor(1);
 		InsertParameter(stopDelay);
 		
+		Parametro packageBasePrice = new Parametro();
+		packageBasePrice.setId(Parameter.PackageBasePrice.getValue());
+		packageBasePrice.setNombre("packageBasePrice");
+		packageBasePrice.setValor(20);
+		InsertParameter(packageBasePrice);
 	}
 }

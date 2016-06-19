@@ -77,7 +77,7 @@
 						
 						<div class="form-group"> 
 				    		<div class="col-sm-6">
-				    			<h4 style="margin-left: 15px;">Precio: {{packagePrice}}</h4>
+				    			<h4 style="margin-left: 15px; color: green;">Precio: $ {{packagePrice}}</h4>
 				    		</div>
 				    		<div class="col-sm-6">
 				      			<button style="float: right; margin-top: 10px;" type="submit" class="btn btn-info">Calcular</button>

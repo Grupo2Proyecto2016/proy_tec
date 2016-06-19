@@ -80,6 +80,7 @@
         $scope.companyForm.longitud = null;
         $scope.companyForm.user = null;
         $scope.companyForm.css = null;
+        $scope.companyForm.addTerminal = true;
         $scope.countries = null;
         
     	$http.get(AppName + 'countries').

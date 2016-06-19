@@ -27,6 +27,12 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="control-label col-sm-6" for="packageBasePrice">Precio mínimo de encomiendas ($U):</label>
+					<div class="col-sm-6">
+						<input type="number" min="1" step="1" name="packageBasePrice" class="form-control" ng-model="packageBasePrice.valor" required>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="control-label col-sm-6" for="priceByPackageKm">Precio por kilómetro de encomiendas ($U):</label>
 					<div class="col-sm-6">
 						<input type="number" min="0.1" step="0.1" name="priceByPackageKm" class="form-control" ng-model="priceByPackageKm.valor" required>
