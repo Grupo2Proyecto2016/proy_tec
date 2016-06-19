@@ -42,49 +42,61 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     	//$scope.$digest();
 	});
     
+    $scope.creaRadio = function(marker, map)
+    {
+    	var radius = 1000;
+  	  	if ($scope.circle !== null)
+  	  	{
+  	  		$scope.circle.setMap(null);
+  	  	}
+  	  	$scope.circle = new google.maps.Circle({  	  		
+  	  			center:marker.getPosition(),
+  				strokeColor: '#678DEA',
+  				strokeOpacity: 0.35,
+  				strokeWeight: 1,
+  				radius: radius, //1km
+  				fillOpacity: 0.35,
+  				fillColor: "#678DEA",
+  				map: map}
+  			  );
+  	  
+	  	var bounds = new google.maps.LatLngBounds();
+	    for (var i=0; i< $scope.destinoMarkers.length; i++) 
+	    {
+	    	if (google.maps.geometry.spherical.computeDistanceBetween($scope.destinoMarkers[i].getPosition(),marker.getPosition()) < radius) 
+			{
+			    //bounds.extend($scope.destinoMarkers[i].getPosition())
+			} 
+			else 
+			{
+				//$scope.destinoMarkers[i].setMap(null);
+			}
+	    }  	  
+	    map.panTo(marker.getPosition()); 	
+    }
+    
     $scope.placeMarkerAndPanTo = function (latLng, map) 
     {
   	  
-    var marker = new google.maps.Marker({
-  	    position: latLng,
-  	    map: map, //map: $scope.map,
-  	    draggable:true,
-  	    icon: "static/images/marker_sm.png",
-  	    animation: google.maps.Animation.DROP, //just for fun
-  	  });	  
-  	  $scope.userMarkers.push(marker); 	    	  
-  	  var l = latLng.lat();
-  	  var g = latLng.lng();
-  	  //$scope.geocodePosition(marker);
-  	  var radius = 1000;
-  	  if ($scope.circle !== null)
-	  {
-  		  $scope.circle.setMap(null);
-	  }
-  	  $scope.circle = new google.maps.Circle(
-  			  {center:marker.getPosition(),
-  				  strokeColor: '#678DEA',
-  				  strokeOpacity: 0.35,
-  				  strokeWeight: 1,
-  				  radius: radius, //1km
-  				  fillOpacity: 0.35,
-  				  fillColor: "#678DEA",
-  				  map: map}
-  			  );
-  	  
-  	var bounds = new google.maps.LatLngBounds();
-    for (var i=0; i< $scope.destinoMarkers.length; i++) 
-    {
-    	if (google.maps.geometry.spherical.computeDistanceBetween($scope.destinoMarkers[i].getPosition(),marker.getPosition()) < radius) 
-		{
-		    //bounds.extend($scope.destinoMarkers[i].getPosition())
-		} 
-		else 
-		{
-			//$scope.destinoMarkers[i].setMap(null);
-		}
-    }  	  
-  	  map.panTo(latLng); 	
+    	var marker = new google.maps.Marker({
+    		position: latLng,
+    		map: map, //map: $scope.map,
+    		draggable:true,
+    		icon: "static/images/marker_sm.png",
+    		animation: google.maps.Animation.DROP, //just for fun
+  	  	});	  
+    	
+    	marker.addListener('dragend',function(event) 
+    	{
+    		$scope.creaRadio(marker, map);
+    	});
+    	
+  	  	$scope.userMarkers.push(marker); 	
+  	  	$scope.creaRadio(marker, map);
+  	  	//var l = latLng.lat();
+  	  	//var g = latLng.lng();
+  	  	//$scope.geocodePosition(marker);
+  	  	
    	}//fin de placeMarkerAndPanTo
        
     

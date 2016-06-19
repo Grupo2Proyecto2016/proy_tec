@@ -220,6 +220,13 @@
 		<input id="destination-pac-input" class="controls" type="text" placeholder="Search Box">
 		<div id="destinationMap" style="height: 50%">
 		</div>
+		<div class="referencias">
+			<p>
+				<img src="static/images/marker_green.png"> Paradas disponibles
+				<img src="static/images/marker_blue.png"> Terminales disponibles
+				<img src="static/images/marker_sm.png">Tú ubicación
+			</p> 
+		</div>
       </div>
     </div>
   </div>
@@ -237,8 +244,15 @@
         	<p>Marca o busca una dirección del mapa donde quieres iniciar tu viaje.</p>
 			<p>Los marcadores son solo de referencia e indican las paradas disponibles.</p>
 		</div>
-		<input id="origin-pac-input" class="controls" type="text" placeholder="Search Box">
+		<input id="origin-pac-input" class="controls" type="text" placeholder="Buscar..">
 		<div id="originMap" style="height: 50%">
+		</div>
+		<div class="referencias">
+			<p>
+				<img src="static/images/marker_green.png"> Paradas disponibles
+				<img src="static/images/marker_blue.png"> Terminales disponibles
+				<img src="static/images/marker_sm.png">Tú ubicación
+			</p> 
 		</div>
       </div>
     </div>
