@@ -63,7 +63,7 @@ public class LinesRestController{
 		linea.setTiempo_estimado(linesWrapper.getTiempo_estimado());
 		linea.setViaja_parado(linesWrapper.getViaja_parado());	
 		linea.setHabilitado(true);
-		for (int i = 0; i < linesWrapper.getParadas().size()-1; i++) 
+		for (int i = 0; i < linesWrapper.getParadas().size(); i++) 
 		{
 			if (linesWrapper.getParadas().get(i).getId_parada() > 0)
 			{
@@ -106,7 +106,7 @@ public class LinesRestController{
 			vuelta.setViaja_parado(linesWrapper.getViaja_parado());	
 			vuelta.setHabilitado(true);
 			
-			for (int i = 0; i < linesWrapper.getParadasV().size()-1; i++) 
+			for (int i = 0; i < linesWrapper.getParadasV().size(); i++) 
 			{
 				if (linesWrapper.getParadasV().get(i).getId_parada() > 0)
 				{
