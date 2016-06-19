@@ -138,8 +138,8 @@ public class LinesLogic implements ILinesLogic
 		return TenantContext.ParadaRepository.GetPackageTerminals();
 	}
 
-//	public List<Parada> GetDestinationsFromOrigin(Parada parada) 
-//	{
-//		return TenantContext.LineaRepository.findDestinationTerminalsByOrigin(parada.getId_parada());
-//	}
+	public List<Parada> GetDestinationsFromOrigin(Parada parada) 
+	{
+		return TenantContext.ParadaRepository.findDestinationTerminalsByOrigin(parada.getId_parada());
+	}
 }

@@ -63,7 +63,7 @@
 					<!--PUBLICAS -->
                     <li><a href="#home"><i class="fa fa-home"></i> Inicio</a></li>
                     <li><a ng-click="showPackageCalc()" ng-show="user == null || user.rol_id_rol != 2"><i class="fa fa-calculator"></i> Calcular Encomienda</a></li>
-                    <li><a href="#packages" ng-show="user != null && user.rol_id_rol == 2"><i class="fa fa-calculator"></i> Nueva Encomienda</a></li>
+                    <li><a href="#packages" ng-show="user != null && user.rol_id_rol == 2"><i class="fa fa-cubes"></i> Encomiendas</a></li>
                     <li><a href="#travels"><i class="fa fa-bus"></i> Pasajes</a></li>
                     
                     <!--ADMINISTRADOR-->

@@ -2,7 +2,7 @@
 	<h3>Registro de Encomiendas</h3>
 	
 	<p>{{ message }}</p>
-	<p><button class="btn btn-sm btn-primary" ng-click="showForm()"><i class="fa fa-plus fa-md pull-left"></i>Nueva</button></p>
+	<p id="packageFormLink" ng-show="packageOrigin != null"><button class="btn btn-sm btn-primary" ng-click="showPackageForm()"><i class="fa fa-plus fa-md pull-left"></i>Nueva</button></p>
 </div>
 
 <div id="successAlert" class="row" style="display: none">
@@ -16,69 +16,75 @@
 	<div class="col-xs-1"></div>
 </div>
 
-<div id="divTravelForm">
+<div id="divPackageForm" class="hidden" ng-show="packageOrigin != null">
 	<div class="row">
 		<div class="col-xs-2"></div>
 		<div class="col-xs-8">
-			<form class="form-horizontal" name="calcForm" role="form" ng-submit="calcPackage()"">
-				<div class="form-group">
-			    	<div class="col-sm-6">
-				    	<label class="control-label col-sm-3" for="destino">Destino:</label>
-					    <div class="col-sm-9">
-					    	<select name="destino" class="form-control" ng-model="calcForm.destino" ng-change="updateOrigins()" ng-options="terminal as terminal.descripcion for terminal in destinationTerminals" required>
-								<option value="">Seleccione una sucursal</option>
-							</select>	
-				    	</div>
-			    	</div>
-			    	<div class="col-sm-6">
-						<label class="control-label col-sm-7" for="packageHeigth">Alto (cm):</label>
-						<div class="col-sm-5">
-							<input type="number" min="10" step="10" class="form-control" name="packageHeigth" ng-model="calcForm.alto">
-					    </div>				
-					</div>	
-		    	</div>				
-		    	<div class="form-group">
-				    <div class="col-sm-6">
-					    <label class="control-label col-sm-3" for="origen">Origen:</label>
-					    <div class="col-sm-9">			
-							<select name="origen" class="form-control" ng-disabled="calcForm.destino == null || calcForm.destino == undefined" ng-model="calcForm.origen" ng-options="terminal as terminal.descripcion for terminal in originTerminals" required>
-								<option value="">Seleccione una sucursal</option>
-							</select>							    	
-				    	</div>
-			    	</div>
-					<div class="col-sm-6">
-						<label class="control-label col-sm-7" for="packageBaseLenght">Largo de base (cm):</label>
-						<div class="col-sm-5">
-							<input type="number" min="10" step="10" class="form-control" name="packageBaseLenght" ng-model="calcForm.largo">
-					    </div>				
-					</div>	    
-				</div>		
-				<div class="form-group">
-					<div class="col-sm-6">
-						<label class="control-label col-sm-3" for="packageWeight">Peso (Kg):</label>
-						<div class="col-sm-9">
-							<input type="number" min="0.1" step="0.1" title="Solo se aceptan números" class="form-control" name="packageWeight" ng-model="calcForm.peso">
+			<form class="form-horizontal" name="packageForm" role="form" ng-submit="calcPackage()"">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<div> 
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="hidePackageForm()">
+							<span aria-hidden="true">×</span>
+							</button> 
+							<h5 class="modal-title">Datos de Encomienda</h5>
+						</div>
+					</div>
+					<div class="panel-body">
+						<div class="form-group">
+					    	<div class="col-sm-6">
+						    	<label class="control-label col-sm-3" for="destino">Destino:</label>
+							    <div class="col-sm-9">
+							    	<select name="destino" class="form-control" ng-model="packageForm.destino" ng-options="terminal as terminal.descripcion for terminal in destinationTerminals" required>
+										<option value="">Seleccione una sucursal</option>
+									</select>	
+						    	</div>
+					    	</div>
+					    	<div class="col-sm-6">
+								<label class="control-label col-sm-5" for="packageHeigth">Alto (cm):</label>
+								<div class="col-sm-7">
+									<input type="number" min="10" step="10" class="form-control" name="packageHeigth" ng-model="packageForm.alto">
+							    </div>				
+							</div>	
+				    	</div>				
+				    	<div class="form-group">
+						    <div class="col-sm-6">
+					    	</div>
+							<div class="col-sm-6">
+								<label class="control-label col-sm-5" for="packageBaseLenght">Largo de base (cm):</label>
+								<div class="col-sm-7">
+									<input type="number" min="10" step="10" class="form-control" name="packageBaseLenght" ng-model="packageForm.largo">
+							    </div>				
+							</div>	    
+						</div>		
+						<div class="form-group">
+							<div class="col-sm-6">
+								<label class="control-label col-sm-3" for="packageWeight">Peso (Kg):</label>
+								<div class="col-sm-9">
+									<input type="number" min="0.1" step="0.1" title="Solo se aceptan números" class="form-control" name="packageWeight" ng-model="packageForm.peso">
+							    </div>
+							</div>
+							<div class="col-sm-6">
+								<label class="control-label col-sm-5" for="packageBaseWidth">Ancho de base (cm):</label>
+								<div class="col-sm-7">
+									<input type="number" min="10" step="10" class="form-control" name="packageBaseWidth" ng-model="packageForm.ancho">
+							    </div>				
+							</div>
+						</div>
+						<div id="loginAlert" class="alert alert-danger text-center col-sm-12" style="display:none">
+						  <strong>Error! </strong>{{calc_error}}
+						</div>
+						
+						<div class="form-group"> 
+				    		<div class="col-sm-6">
+				    			<h4 style="margin-left: 15px;">Precio: {{packagePrice}}</h4>
+				    		</div>
+				    		<div class="col-sm-6">
+				      			<button style="float: right; margin-top: 10px;" type="submit" class="btn btn-info">Calcular</button>
+				    		</div>
 					    </div>
-					</div>
-					<div class="col-sm-6">
-						<label class="control-label col-sm-7" for="packageBaseWidth">Ancho de base (cm):</label>
-						<div class="col-sm-5">
-							<input type="number" min="10" step="10" class="form-control" name="packageBaseWidth" ng-model="calcForm.ancho">
-					    </div>				
-					</div>
-				</div>
-				<div id="loginAlert" class="alert alert-danger text-center col-sm-12" style="display:none">
-				  <strong>Error! </strong>{{calc_error}}
-				</div>
-				
-				<div class="form-group"> 
-		    		<div class="col-sm-6">
-		    			<h4 style="margin-left: 15px;">Precio: {{packagePrice}}</h4>
-		    		</div>
-		    		<div class="col-sm-6">
-		      			<button style="float: right; margin-top: 10px;" type="submit" class="btn btn-info">Calcular</button>
-		    		</div>
-			    </div>
+			    	</div>				  
+	    		</div>
 			</form>
 					
 <!-- 			<form class="form-horizontal" role="form" name="form"> -->

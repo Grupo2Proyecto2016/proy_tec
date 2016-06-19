@@ -1,7 +1,11 @@
 package com.springmvc.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -13,14 +17,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.springmvc.entities.tenant.Parada;
 import com.springmvc.entities.tenant.Sucursal;
+import com.springmvc.entities.tenant.Usuario;
 import com.springmvc.logic.implementations.BranchesLogic;
 import com.springmvc.logic.implementations.LinesLogic;
 import com.springmvc.logic.implementations.VehiculosLogic;
 import com.springmvc.requestWrappers.CustomResponseWrapper;
+import com.springmvc.utils.UserContext;
 
 @RestController
 @RequestMapping(value = "/{tenantid}")
 public class TerminalsRestController {
+	
+	@Autowired
+    private UserContext context;
 	
 	@Secured({"ROLE_ADMIN"})
 	@RequestMapping(value = "/createTerminal", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
@@ -55,6 +64,32 @@ public class TerminalsRestController {
 		return new ResponseEntity<List<Parada>>(terminals, HttpStatus.OK);		
     }
 	
+	@Secured({"ROLE_SALES"})
+	@RequestMapping(value = "/GetPackageDestinationsByLocalBranch", method = RequestMethod.GET)
+    public ResponseEntity<List<Parada>> GetPackageDestinationsByLocalBranch(@PathVariable String tenantid, HttpServletRequest request)
+    {
+		Usuario user = context.GetUser(request, tenantid);
+		Parada p = user.getSucursal().getTerminal();
+		if(p != null)
+		{
+			LinesLogic tl = new LinesLogic(tenantid);
+			List<Parada> terminals = tl.GetDestinationsFromOrigin(p);			
+			return new ResponseEntity<List<Parada>>(terminals, HttpStatus.OK);		
+		}
+		else
+		{
+			return new ResponseEntity<List<Parada>>(new ArrayList<>(), HttpStatus.OK);
+		}
+    }
+	
+	@Secured({"ROLE_SALES"})
+	@RequestMapping(value = "/getPackageOrigin", method = RequestMethod.GET)
+    public ResponseEntity<Parada> getPackageOrigin(@PathVariable String tenantid, HttpServletRequest request)
+    {
+		Usuario user = context.GetUser(request, tenantid);
+		Parada p = user.getSucursal().getTerminal();
+		return new ResponseEntity<Parada>(p, HttpStatus.OK);		
+    }
 //	@RequestMapping(value = "/getPackageDestinationTerminals", method = RequestMethod.POST)
 //    public ResponseEntity<List<Parada>> GetPackageDestinationTerminals(@RequestBody Parada parada, @PathVariable String tenantid)
 //    {

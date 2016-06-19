@@ -117,4 +117,18 @@ public class ParadaRepository
 		originTerminals = (List<Parada>)q.getResultList();
 		return originTerminals;	
 	}
+	
+	public List<Parada> findDestinationTerminalsByOrigin(long id_parada) 
+	{
+		List<Parada> destinationTerminals = null;
+		Query q = entityManager.createQuery(
+			"SELECT DISTINCT l.destino FROM Linea l "
+			+ "WHERE l.habilitado = true "
+			+ "AND l.origen.id_parada = :idp "
+			+ "AND l.destino.id_parada IN (SELECT s.terminal.id_parada FROM Sucursal s)"
+		);
+		q.setParameter("idp", id_parada);
+		destinationTerminals = (List<Parada>)q.getResultList();
+		return destinationTerminals;	
+	}
 }

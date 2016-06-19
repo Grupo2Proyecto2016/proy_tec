@@ -1,50 +1,92 @@
 goOnApp.controller('packageController', function($scope, $http, uiGridConstants, i18nService, $timeout) 
 {
     $scope.message = 'Desde este panel puedes dar de alta nuevas encomiendas y consulta las existentes';
-    
+    $scope.error_message = null;
     $scope.minDate = new Date();
     $scope.maxDate = new Date();
 	$scope.maxDate.setDate($scope.maxDate.getDate() + 30);
-	$scope.stations = {};
-	$scope.nearbyDestinations = {};
-    $scope.filteredOrigins = {};
+	
     $scope.travelSearch = {};
     $scope.userMarkers = [];
     $scope.destinoMarkers = [];
     
 	$scope.custom_response = null;    
     i18nService.setCurrentLang('es');
+    var gService = null;
 
-    $scope.getPackageTerminals = function()
+    $scope.showPackageForm = function()
+    {  	
+    	$scope.packageForm = {};   	
+    	gService = new google.maps.DistanceMatrixService();
+    	$("#divPackageForm").removeClass('hidden');
+    	$("#packageFormLink").addClass('hidden');
+    };
+    $scope.hidePackageForm = function()
+    {  	  	
+    	$("#divPackageForm").addClass('hidden');
+    	$("#packageFormLink").removeClass('hidden');
+    };
+    $scope.showErrorPopup = function(message)
     {
-    	$http.get(servicesUrl + 'getBranchesTerminals')
+    	$scope.error_message = message;
+    	$("#errorModal").modal("show");
+    };
+    $scope.hideErrorPopup = function()
+    {
+    	$("#errorModal").modal("hide");
+    	$scope.error_message = null;
+    };
+    
+    $scope.getPackageOrigin = function()
+    {
+    	$http.get(servicesUrl + 'getPackageOrigin')
     		.then(function(result) 
         	{
-            	$scope.originTerminals = result.data;    
-            	$scope.destinationTerminals = result.data;
+    			if(result.status == 200)
+    			{
+    				if(result.data == "")
+    				{
+    					$timeout(function () {            
+    						$scope.showErrorPopup("Esta sucursal no está habilitada para recibir encomiendas.");    
+    			        }, 500);
+    					$scope.packageOrigin = null;
+    				}
+    				else
+    				{
+    					$scope.packageOrigin = result.data;
+    					$scope.getPackageDestinations();
+    				}
+    			}
+        	}
+		);
+    };
+    
+    $scope.getPackageDestinations = function()
+    {
+    	$http.get(servicesUrl + 'GetPackageDestinationsByLocalBranch')
+    		.then(function(result) 
+        	{
+    			if(result.status == 200)
+    			{
+    				$scope.destinationTerminals = result.data;
+    				if(result.data.length == 0)
+    				{
+    					$scope.packageOrigin = null;
+    					$timeout(function() {   
+    						$scope.showErrorPopup("Actualmente no hay ningún destino de encomiendas disponible."); 
+    					}, 500);
+					}
+    			}
         	}
 		);
     };  
-    $scope.updateOrigins = function()
-    {
-    	if($scope.calcForm.destino !== undefined)
-    	{
-    		$http.post(servicesUrl + 'getPackageOriginTerminals', JSON.stringify($scope.calcForm.destino))
-    			.then(function(result) 
-				{
-    				$scope.originTerminals = result.data;
-				}
-    		);
-    	}
-    	else
-    	{
-    		$scope.getPackageTerminals();
-    	}
-    };
+   
+    $scope.getPackageOrigin();
+    
     $scope.calcPackage = function()
     {
-    	var origin = new google.maps.LatLng($scope.calcForm.origen.latitud, $scope.calcForm.origen.longitud);
-    	var destination = new google.maps.LatLng($scope.calcForm.destino.latitud, $scope.calcForm.destino.longitud);
+    	var origin = new google.maps.LatLng($scope.packageOrigin.latitud, $scope.packageOrigin.longitud);
+    	var destination = new google.maps.LatLng($scope.packageForm.destino.latitud, $scope.packageForm.destino.longitud);
     	var result = gService.getDistanceMatrix({
     	    origins: [origin],
     	    destinations: [destination],
@@ -55,9 +97,9 @@ goOnApp.controller('packageController', function($scope, $http, uiGridConstants,
     		},
     		function(response, status) 
     		{
-    			$scope.calcForm.distance = response.rows[0].elements[0]['distance']['value'] / 1000;
-    			var volume = $scope.calcForm.alto * $scope.calcForm.ancho * $scope.calcForm.largo / 1000000; 
-            	$http.post(servicesUrl + 'calcPackage', JSON.stringify({ distance: $scope.calcForm.distance, weigth: $scope.calcForm.peso, volume: volume  }))
+    			$scope.packageForm.distance = response.rows[0].elements[0]['distance']['value'] / 1000;
+    			var volume = $scope.packageForm.alto * $scope.packageForm.ancho * $scope.packageForm.largo / 1000000; 
+            	$http.post(servicesUrl + 'calcPackage', JSON.stringify({ distance: $scope.packageForm.distance, weigth: $scope.packageForm.peso, volume: volume  }))
             		.then(function(result){
             			$scope.packagePrice = result.data;
         		});
