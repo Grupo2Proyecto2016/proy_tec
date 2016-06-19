@@ -85,28 +85,40 @@ goOnApp.controller('packageController', function($scope, $http, uiGridConstants,
     
     $scope.calcPackage = function()
     {
-    	var origin = new google.maps.LatLng($scope.packageOrigin.latitud, $scope.packageOrigin.longitud);
-    	var destination = new google.maps.LatLng($scope.packageForm.destino.latitud, $scope.packageForm.destino.longitud);
-    	var result = gService.getDistanceMatrix({
-    	    origins: [origin],
-    	    destinations: [destination],
-    	    travelMode: google.maps.TravelMode.DRIVING,
-    	    unitSystem: google.maps.UnitSystem.METRIC,
-    	    avoidHighways: false,
-    	    avoidTolls: false
-    		},
-    		function(response, status) 
-    		{
-    			$scope.packageForm.distance = response.rows[0].elements[0]['distance']['value'] / 1000;
-    			var volume = $scope.packageForm.alto * $scope.packageForm.ancho * $scope.packageForm.largo / 1000000; 
-            	$http.post(servicesUrl + 'calcPackage', JSON.stringify({ distance: $scope.packageForm.distance, weigth: $scope.packageForm.peso, volume: volume  }))
-            		.then(function(result){
-            			$scope.packagePrice = result.data;
-        		});
-    		}
-    	);
+    	if($scope.packageForm.peso != null || $scope.volumeInputsFilled())
+    	{
+    		$scope.calc_error = null;
+	    	var origin = new google.maps.LatLng($scope.packageOrigin.latitud, $scope.packageOrigin.longitud);
+	    	var destination = new google.maps.LatLng($scope.packageForm.destino.latitud, $scope.packageForm.destino.longitud);
+	    	var result = gService.getDistanceMatrix({
+	    	    origins: [origin],
+	    	    destinations: [destination],
+	    	    travelMode: google.maps.TravelMode.DRIVING,
+	    	    unitSystem: google.maps.UnitSystem.METRIC,
+	    	    avoidHighways: false,
+	    	    avoidTolls: false
+	    		},
+	    		function(response, status) 
+	    		{
+	    			$scope.packageForm.distance = response.rows[0].elements[0]['distance']['value'] / 1000;
+	    			var volume = $scope.packageForm.alto * $scope.packageForm.ancho * $scope.packageForm.largo / 1000000; 
+	            	$http.post(servicesUrl + 'calcPackage', JSON.stringify({ distance: $scope.packageForm.distance, weigth: $scope.packageForm.peso, volume: volume  }))
+	            		.then(function(result){
+	            			$scope.packagePrice = result.data;
+	        		});
+	    		}
+	    	);
+    	}
+    	else
+    	{
+    		$scope.calc_error = "Debe completar los datos de peso o volumen para realizar el cálculo.";
+    	}
     };
-
+    $scope.volumeInputsFilled = function()
+    {
+    	return $scope.packageForm.alto != null && $scope.packageForm.largo != null && $scope.packageForm.ancho != null;
+    };
+    
     $scope.closeSuccessAlert = function()
     {
     	$("#successAlert").hide();

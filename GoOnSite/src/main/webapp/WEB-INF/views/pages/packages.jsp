@@ -43,7 +43,7 @@
 					    	<div class="col-sm-6">
 								<label class="control-label col-sm-5" for="packageHeigth">Alto (cm):</label>
 								<div class="col-sm-7">
-									<input type="number" min="10" step="10" class="form-control" name="packageHeigth" ng-model="packageForm.alto">
+									<input type="number" min="5" step="5" class="form-control" name="packageHeigth" ng-model="packageForm.alto">
 							    </div>				
 							</div>	
 				    	</div>				
@@ -53,7 +53,7 @@
 							<div class="col-sm-6">
 								<label class="control-label col-sm-5" for="packageBaseLenght">Largo de base (cm):</label>
 								<div class="col-sm-7">
-									<input type="number" min="10" step="10" class="form-control" name="packageBaseLenght" ng-model="packageForm.largo">
+									<input type="number" min="5" step="5" class="form-control" name="packageBaseLenght" ng-model="packageForm.largo">
 							    </div>				
 							</div>	    
 						</div>		
@@ -67,11 +67,11 @@
 							<div class="col-sm-6">
 								<label class="control-label col-sm-5" for="packageBaseWidth">Ancho de base (cm):</label>
 								<div class="col-sm-7">
-									<input type="number" min="10" step="10" class="form-control" name="packageBaseWidth" ng-model="packageForm.ancho">
+									<input type="number" min="5" step="5" class="form-control" name="packageBaseWidth" ng-model="packageForm.ancho">
 							    </div>				
 							</div>
 						</div>
-						<div id="loginAlert" class="alert alert-danger text-center col-sm-12" style="display:none">
+						<div ng-show="calc_error != null" class="alert alert-danger text-center col-sm-12">
 						  <strong>Error! </strong>{{calc_error}}
 						</div>
 						

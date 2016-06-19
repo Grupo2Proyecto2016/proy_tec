@@ -215,7 +215,7 @@
 			    	<div class="col-sm-6">
 						<label class="control-label col-sm-7" for="packageHeigth">Alto (cm):</label>
 						<div class="col-sm-5">
-							<input type="number" min="10" step="10" class="form-control" name="packageHeigth" ng-model="calcForm.alto">
+							<input type="number" min="5" step="5" class="form-control" name="packageHeigth" ng-model="calcForm.alto">
 					    </div>				
 					</div>	
 		    	</div>				
@@ -231,7 +231,7 @@
 					<div class="col-sm-6">
 						<label class="control-label col-sm-7" for="packageBaseLenght">Largo de base (cm):</label>
 						<div class="col-sm-5">
-							<input type="number" min="10" step="10" class="form-control" name="packageBaseLenght" ng-model="calcForm.largo">
+							<input type="number" min="5" step="5" class="form-control" name="packageBaseLenght" ng-model="calcForm.largo">
 					    </div>				
 					</div>	    
 				</div>		
@@ -245,17 +245,17 @@
 					<div class="col-sm-6">
 						<label class="control-label col-sm-7" for="packageBaseWidth">Ancho de base (cm):</label>
 						<div class="col-sm-5">
-							<input type="number" min="10" step="10" class="form-control" name="packageBaseWidth" ng-model="calcForm.ancho">
+							<input type="number" min="5" step="5" class="form-control" name="packageBaseWidth" ng-model="calcForm.ancho">
 					    </div>				
 					</div>
 				</div>
-				<div id="loginAlert" class="alert alert-danger text-center col-sm-12" style="display:none">
+				<div ng-show="calc_error != null" class="alert alert-danger text-center col-sm-12">
 				  <strong>Error! </strong>{{calc_error}}
 				</div>
 				
 				<div class="form-group"> 
 		    		<div class="col-sm-6">
-		    			<h4 style="margin-left: 15px;">Precio: {{packagePrice}}</h4>
+		    			<h4 style="margin-left: 15px;">Precio: ${{packagePrice}}</h4>
 		    		</div>
 		    		<div class="col-sm-6">
 		      			<button style="float: right; margin-top: 10px;" type="submit" class="btn btn-info">Calcular</button>
