@@ -64,9 +64,11 @@ public class MantenimientoRestController {
 	public ResponseEntity<CustomResponseWrapper> DeleteBranch(@RequestBody long id_mantenimiento, @PathVariable String tenantid)
 	{
 		MantenimientoLogic ml = new MantenimientoLogic(tenantid);
+		CustomResponseWrapper respuesta = new CustomResponseWrapper();
 		ml.deleteMantenimiento(id_mantenimiento);
+		respuesta.setSuccess(true);
 
-		return new ResponseEntity<CustomResponseWrapper>(HttpStatus.OK);
+		return new ResponseEntity<CustomResponseWrapper>(respuesta, HttpStatus.OK);
 	}	
 	
 }
