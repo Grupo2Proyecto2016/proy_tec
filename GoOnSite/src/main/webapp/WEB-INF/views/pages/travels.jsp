@@ -207,7 +207,7 @@
  
  <div class="modal fade" id="destinationModal" tabindex="-1" role="dialog">
   <div class="modal-dialog">
-    <div class="modal-content" style="width: 650px;height: 570px;">
+    <div class="modal-content" style="width: 650px;">
       <div class="modal-header" style="background-color: cornflowerblue;">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h3 class="text-center modal-title">Indicar destino</h4>
@@ -217,6 +217,9 @@
 	        <p>Marca o busca una dirección del mapa como destino.</p>
 	        <p>Los marcadores son solo de referencia e indican las paradas disponibles.</p>
 		</div>
+		<div class="alert alert-warning alertPasaje" id="warningRadio" style="display: none">
+			<strong>&nbsp;&nbsp;Aviso: </strong> No se encontraron paradas en un rango de 1km de su ubicación. 
+		</div>
 		<input id="destination-pac-input" class="controls" type="text" placeholder="Search Box">
 		<div id="destinationMap" style="height: 50%">
 		</div>
@@ -225,6 +228,7 @@
 				<img src="static/images/marker_green.png"> Paradas disponibles
 				<img src="static/images/marker_blue.png"> Terminales disponibles
 				<img src="static/images/marker_sm.png">Tú ubicación
+				&nbsp;&nbsp;<button class="btn btn-sm btn-primary" ng-click=""><i class="fa fa-check-square fa-lg pull-left"></i>Continuar</button>
 			</p> 
 		</div>
       </div>

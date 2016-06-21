@@ -13,6 +13,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     $scope.userMarkers = [];
     $scope.destinoMarkers = [];
     $scope.circle = null;
+    $scope.listaIDSeleccionados = [];
     
 	$scope.custom_response = null;    
     i18nService.setCurrentLang('es');
@@ -23,10 +24,37 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
       zoom: 12,
       center: {lat: -34.894418, lng: -56.165775}
     });
+    
     var destinationInput = document.getElementById('destination-pac-input');
     var destinationsearchBox = new google.maps.places.SearchBox(destinationInput);
+    
     $scope.destinationMap.controls[google.maps.ControlPosition.TOP_LEFT].push(destinationInput);
-    //
+    
+    var infowindow = new google.maps.InfoWindow;
+    
+    destinationsearchBox.addListener('places_changed', function() 
+    {
+    	
+    	$scope.userMarkers.forEach(function(marker) 
+        {
+          marker.setMap(null);
+        });
+    	
+    	var places = destinationsearchBox.getPlaces();
+
+        if (places.length == 0) 
+        {
+        	return;
+        }
+        
+        var bounds = new google.maps.LatLngBounds();
+        //hacer for each porque puede devolver mas de un lugar
+        places.forEach(function(place) 
+        {
+        	$scope.userMarkers = [];        
+        	$scope.placeMarkerAndPanTo(place.geometry.location, $scope.destinationMap);
+        });         	        
+    });
     
     $scope.destinationMap.addListener('click', function(e) 
     {
@@ -61,18 +89,30 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
   			  );
   	  
 	  	var bounds = new google.maps.LatLngBounds();
+	  	var cant_paradas = 0;
+	  	$scope.listaIDSeleccionados = [];
 	    for (var i=0; i< $scope.destinoMarkers.length; i++) 
 	    {
 	    	if (google.maps.geometry.spherical.computeDistanceBetween($scope.destinoMarkers[i].getPosition(),marker.getPosition()) < radius) 
 			{
 			    //bounds.extend($scope.destinoMarkers[i].getPosition())
+	    		$scope.listaIDSeleccionados.push($scope.destinoMarkers[i].id_parada);
+	    		cant_paradas ++;
 			} 
 			else 
 			{
 				//$scope.destinoMarkers[i].setMap(null);
 			}
-	    }  	  
-	    map.panTo(marker.getPosition()); 	
+	    }	    
+	    map.panTo(marker.getPosition());
+	    if(cant_paradas == 0)
+    	{
+	    	$scope.showWarning();
+    	}
+	    else
+    	{
+	    	$scope.closeWarning();
+    	}
     }
     
     $scope.placeMarkerAndPanTo = function (latLng, map) 
@@ -136,7 +176,8 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     					var marker = new google.maps.Marker({
     						position: new google.maps.LatLng(station.latitud,station.longitud),
     						map: $scope.destinationMap,
-    						title: station.descripcion    						
+    						title: station.descripcion,
+    						id_parada: station.id_parada
     					});
     					if (station.es_terminal == true)
     					{
@@ -146,6 +187,14 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     					{
     						marker.setIcon("static/images/marker_green.png"); 
     					}
+    					
+    					marker.addListener('click', function() 
+    					{
+    						infowindow.setContent('<p>' + station.descripcion + '</p><p><button class="btn btn-sm btn-primary" ng-click=""><i class="fa fa-check-square fa-lg pull-left"></i>Seleccionar</button></p>');   						
+    						
+    						infowindow.open($scope.destinationMap, marker);
+    					});
+    					
     					$scope.destinoMarkers.push(marker);
     				});
 				}
@@ -175,6 +224,16 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     	$('#successMessage').text(message);
 		$("#successAlert").show();
     }; 
+    
+    $scope.showWarning = function()
+    {
+    	$("#warningRadio").show();    	
+    };
+    
+    $scope.closeWarning = function()
+    {
+    	$("#warningRadio").hide();    	
+    };
     
     $scope.searchTravels = function()
     {

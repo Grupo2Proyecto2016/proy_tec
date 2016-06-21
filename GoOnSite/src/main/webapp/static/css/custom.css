@@ -247,6 +247,16 @@ div.row
   	color: #468847!important;
 }
 
+.alertPasaje{
+	padding:0!important;
+	color:#a94442!important;
+	margin-top:-15!important;
+	margin-bottom:5!important;
+	background-color: #f2dede!important;
+	border-color: #ebcccc!important;	
+}
+
+
 .referencias {
 	margin-top: 5px;
 }
