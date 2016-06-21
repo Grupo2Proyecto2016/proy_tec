@@ -1,5 +1,6 @@
 package com.springmvc.dataaccess.repository.tenant;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -64,10 +65,25 @@ public class MantenimientoRepository {
 
 	public void deleteMantenimiento(long id_mantenimiento)
 	{
-		Query q = entityManager.createQuery("UPDATE Mantenimiento m SET m.estado = :estado WHERE m.id_mantenimiento = :idm");
-		q.setParameter("estado", 0);
-		q.setParameter("idm", id_mantenimiento);
-		q.executeUpdate();
+		
+		Mantenimiento mant = FindByID(id_mantenimiento);
+		
+		EntityTransaction t = entityManager.getTransaction();
+		
+		try
+		{
+			t.begin();
+			mant.setEstado(0);
+			mant.setFecha(new Date());
+			t.commit();
+		}
+		catch(Exception ex)
+		{
+			t.rollback();
+			throw ex;
+		}
+		
+		
 		
 	}
 	

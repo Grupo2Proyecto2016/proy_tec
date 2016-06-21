@@ -155,18 +155,19 @@ goOnApp.controller('mantenimientoController', function($scope, $http, uiGridCons
     	[
           { name:'Costo', field: 'costo' },
           { name:'Estado', field: 'estado' },
-          { name:'fecha', field: 'fecha'},
+          {field: 'fecha', displayName: 'Fecha',type: 'date', cellFilter: 'date:\'dd-MM-yyyy H:mm\'' },
+          { name:'Nro Vehículo', field: 'vehiculo.id_vehiculo'},
           { name:'Taller', field: 'taller.nombre' },
           { name: 'Nombre Usuario', field: 'user_crea.nombre' },
           { name: 'Apellido Usuario', field: 'user_crea.apellido' },
-          { name:'Nro Vehículo', field: 'vehiculo.id_vehiculo'},
+          
           
           
           { name: 'Acciones',
         	enableFiltering: false,
         	enableSorting: false,
             cellTemplate:'<button style="width: 50%" class="btn-xs btn-primary" ng-click="grid.appScope.getMantenimientosDetails(row)">Detalles</button>'+
-            			 '<button style="width: 50%" class="btn-xs btn-danger" ng-click="grid.appScope.showDeleteDialog(row)">Eliminar</button>' 
+            			 '<button style="width: 50%" style="" class="btn-xs btn-danger" ng-click="grid.appScope.showDeleteDialog(row)">Salida</button>' 
             			  
     	  }
         ]

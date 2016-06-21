@@ -11,10 +11,10 @@ public class Taller {
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long id_taller;
 	private String nombre;
-	private long id_departamento;
-	private long id_ciudad;
-	private String Direccion;
-	private String Telefono;
+	private String direccion;
+	private double latitud;
+	private double longitud;
+	private String telefono;
 	
 	public long getId_taller() {
 		return id_taller;
@@ -28,28 +28,28 @@ public class Taller {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	public long getId_departamento() {
-		return id_departamento;
-	}
-	public void setId_departamento(long id_departamento) {
-		this.id_departamento = id_departamento;
-	}
-	public long getId_ciudad() {
-		return id_ciudad;
-	}
-	public void setId_ciudad(long id_ciudad) {
-		this.id_ciudad = id_ciudad;
-	}
 	public String getDireccion() {
-		return Direccion;
+		return direccion;
 	}
 	public void setDireccion(String direccion) {
-		Direccion = direccion;
+		this.direccion = direccion;
+	}
+	public double getLatitud() {
+		return latitud;
+	}
+	public void setLatitud(double latitud) {
+		this.latitud = latitud;
+	}
+	public double getLongitud() {
+		return longitud;
+	}
+	public void setLongitud(double longitud) {
+		this.longitud = longitud;
 	}
 	public String getTelefono() {
-		return Telefono;
+		return telefono;
 	}
 	public void setTelefono(String telefono) {
-		Telefono = telefono;
+		this.telefono = telefono;
 	}
 }

@@ -7,8 +7,8 @@
 
 <div id="divTallerForm" class="hidden">
 	<div class="row">
-		<div class="col-xs-3"></div>
-		<div class="col-xs-6">
+		<div class="col-xs-1"></div>
+		<div class="col-xs-5">
 			<form class="form-horizontal" role="form" name="form" ng-submit="createTaller()">
 				<div class="panel panel-default">				
 				<div class="panel-heading">
@@ -21,31 +21,19 @@
 				</div>
 				<div class="panel-body">
 				<div class="form-group">
-				    <label class="control-label col-sm-4" for="matricula">Dirección:</label>
+				    <label class="control-label col-sm-4" for="direccion">Dirección:</label>
 				    <div class="col-sm-6">
 				    	<input type="text" class="form-control" name="direccion" ng-model="tallerForm.direccion" required>
 			    	</div>
 			  	</div>
 			  	<div class="form-group">		  		
-				    <label class="control-label col-sm-4" for="marca">Teléfono:</label>
+				    <label class="control-label col-sm-4" for="telefono">Teléfono:</label>
 				    <div class="col-sm-6">
 				    	<input type="text" class="form-control" name="telefono" ng-model="tallerForm.telefono" required>
 			    	</div>
 			    </div>
-				<div class="form-group">				    
-			  	    <label class="control-label col-sm-4" for="modelo">Ciudad:</label>
-				    <div class="col-sm-6">
-				    	<input type="number" class="form-control" name="ciudad" ng-model="tallerForm.cuidad" required>
-			    	</div>
-			  	</div>
 			  	<div class="form-group">
-				    <label class="control-label col-sm-4" for="ano">Departamento:</label>
-				    <div class="col-sm-6">
-				    	<input type="number" class="form-control" name="departamento" ng-model="tallerForm.departamento" min="1990" max="2016" required>
-			    	</div>
-			  	</div>
-			  	<div class="form-group">
-				    <label class="control-label col-sm-4" for="cantAsientos">Nombre:</label>
+				    <label class="control-label col-sm-4" for="nombre">Nombre:</label>
 				    <div class="col-sm-6">
 				    	<input type="text" class="form-control" name="nombre" ng-model="tallerForm.nombre" required>
 			    	</div>
@@ -60,6 +48,24 @@
 			</form>
 			
 		</div>
+			<div class="col-xs-5">
+			<div class="panel panel-default">				
+				<div class="panel-heading">
+					<div> 
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="hideForm()">
+						<span aria-hidden="true">×</span>
+						</button> 
+						<h5 class="modal-title">Mapa</h5>
+					</div>				
+				</div>
+				<div class="panel-body">
+					<input id="pac-input" class="controls" type="text" placeholder="Search Box">
+					<div id="map" style="height: 50%">
+					
+ 					</div>
+				</div>
+			</div>
+		</div>	
 	</div>
 </div>
 
@@ -113,27 +119,15 @@
 			<div class="modal-body">
 				<form class="form-horizontal">
 					<div class="form-group">
-						<label class="control-label col-sm-4" for="name">Dirección:</label>
+						<label class="control-label col-sm-4" for="direccion">Dirección:</label>
 						<div class="col-sm-8">
 							<p>{{elTaller.direccion}}</p>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="control-label col-sm-4" for="surname">Teléfono:</label>
+						<label class="control-label col-sm-4" for="telefono">Teléfono:</label>
 						<div class="col-sm-8">
 							<p>{{elTaller.telefono}}</p>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="birth">Ciudad:</label>
-						<div class="col-sm-8">
-							<p>{{elTaller.cuidad}}</p>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="mail">Departamento:</label>
-						<div class="col-sm-8">
-							<p>{{elTaller.departamento}}</p>
 						</div>
 					</div>
 					<div class="form-group">
