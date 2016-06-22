@@ -228,7 +228,7 @@
 				<img src="static/images/marker_green.png"> Paradas disponibles
 				<img src="static/images/marker_blue.png"> Terminales disponibles
 				<img src="static/images/marker_sm.png">Tú ubicación
-				&nbsp;&nbsp;<button class="btn btn-sm btn-primary" ng-click=""><i class="fa fa-check-square fa-lg pull-left"></i>Continuar</button>
+				&nbsp;&nbsp;<button class="btn btn-sm btn-primary" ng-click="searchOrigins()" ng-disabled="listaIDSeleccionados.length<=0"><i class="fa fa-check-square fa-lg pull-left"></i>Continuar</button>
 			</p> 
 		</div>
       </div>

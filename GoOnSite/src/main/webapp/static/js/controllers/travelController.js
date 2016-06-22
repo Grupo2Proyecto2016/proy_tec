@@ -6,12 +6,14 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     $scope.maxDate = new Date();
 	$scope.maxDate.setDate($scope.maxDate.getDate() + 30);
 	$scope.stations = {};
+	$scope.originStations = {};
 	$scope.nearbyDestinations = {};
     $scope.filteredOrigins = {};
     $scope.travelSearch = {};
     
     $scope.userMarkers = [];
     $scope.destinoMarkers = [];
+    $scope.origenMarkers = [];
     $scope.circle = null;
     $scope.listaIDSeleccionados = [];
     
@@ -113,6 +115,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     	{
 	    	$scope.closeWarning();
     	}
+	    $scope.$digest();
     }
     
     $scope.placeMarkerAndPanTo = function (latLng, map) 
@@ -288,6 +291,52 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     	$timeout(function () { 
     		google.maps.event.trigger($scope.originMap, 'resize');
     	}, 400);
+    };
+    
+    $scope.searchOrigins = function()
+    {
+    	$("#destinationModal").modal('hide');
+    	$.blockUI();
+    	$http.post(servicesUrl +'getFilteredStations', JSON.stringify($scope.listaIDSeleccionados))
+    	.then(function(response)
+    			{
+		    		$.unblockUI();		
+		        	if(response.status == 200)
+		        	{
+		        		$scope.originStations = response.data;
+		        		angular.forEach($scope.originStations, function(station, key) 
+		        		{
+	    					var marker = new google.maps.Marker({
+	    						position: new google.maps.LatLng(station.latitud,station.longitud),
+	    						map: $scope.originMap,
+	    						title: station.descripcion,
+	    						id_parada: station.id_parada
+	    					});
+	    					if (station.es_terminal == true)
+	    					{
+	    						marker.setIcon("static/images/marker_blue.png");
+	    					}
+	    					else
+	    					{
+	    						marker.setIcon("static/images/marker_green.png"); 
+	    					}
+	    					
+	    					marker.addListener('click', function() 
+	    					{
+	    						infowindow.setContent('<p>' + station.descripcion + '</p><p><button class="btn btn-sm btn-primary" ng-click=""><i class="fa fa-check-square fa-lg pull-left"></i>Seleccionar</button></p>');   						
+	    						
+	    						infowindow.open($scope.originStations, marker);
+	    					});
+	    					
+	    					$scope.origenMarkers.push(marker);
+	    				});
+		        	}
+		        	else
+	        		{
+		        		
+	        		}
+    			}
+    	);
     };
     
     $scope.buyTicket = function()
