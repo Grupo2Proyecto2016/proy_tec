@@ -61,6 +61,30 @@ goOnApp.controller('packageController', function($scope, $http, uiGridConstants,
 		);
     };
     
+    $scope.getPackageTravels = function()
+    {
+    	if($scope.packageForm.destino !== undefined)
+    	{
+	    	$http.post(servicesUrl + 'getPackageTravels', JSON.stringify($scope.packageForm.destino))
+			.then(function(result) 
+	    	{
+				if(result.status == 200)
+				{
+					if(result.data.length == 0)
+					{
+						$timeout(function () {            
+							$scope.showErrorPopup("Actualmente no existen viajes disponebles para el traslado de la encomienda.");    
+				        }, 500);
+					}
+					else
+					{
+						$scope.travels = result.data;
+					}
+				}
+	    	});
+    	}
+    }
+    
     $scope.getPackageDestinations = function()
     {
     	$http.get(servicesUrl + 'GetPackageDestinationsByLocalBranch')

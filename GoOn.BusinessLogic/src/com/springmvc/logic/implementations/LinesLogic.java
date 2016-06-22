@@ -100,6 +100,15 @@ public class LinesLogic implements ILinesLogic
 		return TenantContext.ViajeRepository.GetTravels();
 	}
 
+	public List<Viaje> GetPackageTravels(Parada origin, Parada destination) 
+	{
+		Calendar tomorrow = Calendar.getInstance();
+		tomorrow.add(GregorianCalendar.DAY_OF_YEAR, 1);;
+		Calendar limit = Calendar.getInstance();
+		limit.add(GregorianCalendar.DAY_OF_YEAR, 15);
+		return TenantContext.ViajeRepository.GetPackageTravels(origin.getId_parada(), destination.getId_parada(), tomorrow, limit);
+	}
+	
 	public void deleteTravel(long travelId) 
 	{
 		TenantContext.ViajeRepository.DeleteTravel(travelId);

@@ -46,7 +46,7 @@
 							    <div class="col-sm-9">			
 									<select name="origen" class="form-control"
 										ng-model="travelForm.line"
-										ng-options="line as line.numero for line in lines"
+										ng-options="line as line.customDes for line in lines"
 										required>
 										<option value="">Seleccione una línea</option>
 									</select>							    	
