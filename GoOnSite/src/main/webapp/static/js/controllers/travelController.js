@@ -325,7 +325,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 	    					{
 	    						infowindow.setContent('<p>' + station.descripcion + '</p><p><button class="btn btn-sm btn-primary" ng-click=""><i class="fa fa-check-square fa-lg pull-left"></i>Seleccionar</button></p>');   						
 	    						
-	    						infowindow.open($scope.originStations, marker);
+	    						infowindow.open($scope.originMap, marker);
 	    					});
 	    					
 	    					$scope.origenMarkers.push(marker);
