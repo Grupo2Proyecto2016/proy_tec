@@ -1,6 +1,7 @@
 package com.springmvc.dataaccess.repository.tenant;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -119,5 +120,27 @@ public class ViajeRepository {
 			return false;
 		}
 		return (maxID > 0);
+	}
+
+	public List<Viaje> GetPackageTravels(long origin, long destination, Calendar tomorrow, Calendar limit) 
+	{
+		List<Viaje> travels = null;
+		Query q = entityManager.createQuery(
+				"FROM Viaje v "
+				//+"LEFT JOIN v.encomiendas e " 
+				+ "WHERE v.linea.habilitado = TRUE "
+				+ "AND v.linea.origen.id_parada = :origin "
+				+ "AND v.linea.destino.id_parada = :destination "
+				+ "AND v.inicio > :tomorrow "
+				+ "AND v.inicio < :limit "
+				//+ "GROUP BY v " 
+				+ "AND v.vehiculo.cantEncomiendas > 0 AND size(v.encomiendas) < v.vehiculo.cantEncomiendas"
+		);
+		q.setParameter("origin", origin);
+		q.setParameter("destination", destination);
+		q.setParameter("tomorrow", tomorrow.getTime());
+		q.setParameter("limit", limit.getTime());
+		travels = (List<Viaje>)q.getResultList();
+		return travels;	
 	}
 }

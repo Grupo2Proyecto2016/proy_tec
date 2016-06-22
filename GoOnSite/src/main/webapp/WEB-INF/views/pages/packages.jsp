@@ -35,7 +35,7 @@
 					    	<div class="col-sm-6">
 						    	<label class="control-label col-sm-3" for="destino">Destino:</label>
 							    <div class="col-sm-9">
-							    	<select name="destino" class="form-control" ng-model="packageForm.destino" ng-options="terminal as terminal.descripcion for terminal in destinationTerminals" required>
+							    	<select name="destino" class="form-control" ng-model="packageForm.destino" ng-change="getPackageTravels()" ng-options="terminal as terminal.descripcion for terminal in destinationTerminals" required>
 										<option value="">Seleccione una sucursal</option>
 									</select>	
 						    	</div>

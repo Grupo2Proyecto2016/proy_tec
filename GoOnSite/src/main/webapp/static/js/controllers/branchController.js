@@ -23,6 +23,7 @@ goOnApp.controller('branchController', function($scope, $http, uiGridConstants, 
     $scope.showForm = function()
     {
     	$scope.branchForm = {};
+    	$scope.branchForm.addTerminal = true;
     	$("#divBranchForm").removeClass('hidden');    	
     	google.maps.event.trigger(map, 'resize');//refresh map
     };

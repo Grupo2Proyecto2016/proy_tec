@@ -46,6 +46,9 @@ goOnApp.controller('manageTravelsController', function($scope, $http, uiGridCons
     {
     	$http.get(servicesUrl + 'getLines').success(function(data, status, headers, config){
     		$scope.lines = data;        	
+    		angular.forEach($scope.lines, function(l){
+    			l.customDes = l.numero + ": " + l.origen.descripcion + " -> " + l.destino.descripcion;
+    		});
 		});
     };
 
@@ -74,7 +77,8 @@ goOnApp.controller('manageTravelsController', function($scope, $http, uiGridCons
 				//$scope.hideForm();
 		    	//$scope.travelForm = {};
 		    	$.unblockUI();
-				$scope.showSuccessAlert("Los viajes han sido creados");							
+				$scope.showSuccessAlert("Los viajes han sido creados");		
+				$scope.getTravels();
 			})
 			.error(function()
 			{
