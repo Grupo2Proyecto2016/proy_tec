@@ -163,4 +163,21 @@ public class UserRepository
 		}
 		return result;
 	}
+
+	public com.springmvc.entities.tenant.Usuario GetClient(String username) 
+	{
+		Usuario user = null;
+		Query q = entityManager.createQuery("FROM Usuario WHERE usrname = :name AND enabled = TRUE AND rol_id_rol = :rol");
+		q.setParameter("name", username);
+		q.setParameter("rol", UserRol.Client.getValue());
+		try
+		{
+			user = (Usuario)q.getSingleResult();
+		}
+		catch(NoResultException ex)
+		{
+			return null;
+		}
+		return user;
+	}
 }

@@ -6,7 +6,13 @@ goOnApp.controller('packageController', function($scope, $http, uiGridConstants,
     $scope.maxDate = new Date();
 	$scope.maxDate.setDate($scope.maxDate.getDate() + 30);
 	
-    $scope.travelSearch = {};
+	$scope.packageForm = {};
+	$scope.packagePrice = null;
+	$scope.packageForm.rDoc = null;
+	$scope.packageForm.eDoc = null;
+	$scope.rOption = "1";
+	$scope.eOption = "1";
+	
     $scope.userMarkers = [];
     $scope.destinoMarkers = [];
     
@@ -16,6 +22,8 @@ goOnApp.controller('packageController', function($scope, $http, uiGridConstants,
 
     $scope.showPackageForm = function()
     {  	
+    	$scope.packagePrice = null;
+    	$scope.travelsGrid.data = [];
     	$scope.packageForm = {};   	
     	gService = new google.maps.DistanceMatrixService();
     	$("#divPackageForm").removeClass('hidden');
@@ -65,11 +73,13 @@ goOnApp.controller('packageController', function($scope, $http, uiGridConstants,
     {
     	if($scope.packageForm.destino !== undefined)
     	{
+    		$.blockUI();
 	    	$http.post(servicesUrl + 'getPackageTravels', JSON.stringify($scope.packageForm.destino))
 			.then(function(result) 
 	    	{
 				if(result.status == 200)
 				{
+					$scope.travels = result.data;
 					if(result.data.length == 0)
 					{
 						$timeout(function () {            
@@ -78,10 +88,15 @@ goOnApp.controller('packageController', function($scope, $http, uiGridConstants,
 					}
 					else
 					{
-						$scope.travels = result.data;
+						$scope.travelsGrid.data = $scope.travels;
 					}
 				}
+				$.unblockUI();
 	    	});
+    	}
+    	else
+    	{
+    		$scope.travels = [];
     	}
     }
     
@@ -166,16 +181,7 @@ goOnApp.controller('packageController', function($scope, $http, uiGridConstants,
           { name:'Destino', field: 'linea.destino.descripcion'},
           { name:'Salida', cellTemplate: '<div class="text-center ngCellText">{{ row.entity.inicio | date:"dd/MM/yyyy @ h:mma"}}</div>' },
           { name:'Tiempo Estimado (min)', field: 'linea.tiempo_estimado' },
-          { 
-        	  name: 'Pasajeros Parados', 
-        	  cellTemplate: '<div class="text-center ngCellText">{{row.entity.linea.viaja_parado | SiNo}}</div>'
-          },
           { name:'Nº Coche', field: 'vehiculo.id_vehiculo' },
-//          { name: 'Acciones',
-//        	enableFiltering: false,
-//        	enableSorting: false,
-//            cellTemplate:'<p align="center"><button style="" class="btn-xs btn-danger" ng-click="grid.appScope.showDeleteDialog(row)">Eliminar</button></p>'
-//    	  }
         ]
     };
 }); 	

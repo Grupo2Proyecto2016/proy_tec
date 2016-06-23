@@ -66,6 +66,21 @@ public class UserRestController
     	}
     }
 	
+	@Secured({"ROLE_SALES"})
+	@RequestMapping(value = "/clientExists", method = RequestMethod.GET)
+    public ResponseEntity<Void> clientExists(@PathVariable String tenantid, @RequestParam(value="username") String username) throws AuthenticationException 
+    {
+    	boolean userExists = new UsersLogic(tenantid).ClientExists(username);
+    	if(userExists)
+    	{
+    		return new ResponseEntity<Void>(HttpStatus.OK);   		
+    	}
+    	else
+    	{
+    		return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+    	}
+    }
+	
 	@Secured({"ROLE_ADMIN"})
 	@RequestMapping(value = "/createUser", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
     public ResponseEntity<Void> CreateUser(@RequestBody UserWrapper user, @PathVariable String tenantid) throws UserAlreadyExistsException

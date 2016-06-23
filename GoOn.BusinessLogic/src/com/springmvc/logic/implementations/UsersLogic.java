@@ -123,4 +123,10 @@ public class UsersLogic implements IUsersLogic {
 	{
 		return TenantContext.UserRepository.GetEmployeesByRol(rol);
 	}
+
+	public boolean ClientExists(String username) 
+	{
+		com.springmvc.entities.tenant.Usuario user = TenantContext.UserRepository.GetClient(username);
+    	return user != null;
+	}
 }

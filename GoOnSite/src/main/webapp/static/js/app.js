@@ -406,6 +406,40 @@
   	  };
   	});
     
+    goOnApp.directive('clientexists', function($http, $q) {
+    	  return {
+    	    require: 'ngModel',
+    	    link: function(scope, elm, attrs, ctrl)
+    	    {
+    	    	ctrl.$asyncValidators.clientexists = function(modelValue, viewValue) 
+    	    	{
+    	    		if (ctrl.$isEmpty(modelValue)) 
+    	    		{
+    	  	          // consider empty model valid
+    	  	          return $q.when();
+    	    		}
+    	    		
+    	    		var def = $q.defer();
+    	    		
+    		    	$http.get(servicesUrl + 'clientExists?username='+ modelValue)
+  	  		    	.then(function(response) 
+  	    			{
+  	  		    		if(response.status == 200)
+  		        		{
+  	  		    			return def.resolve();
+  		        		}
+  	  		    		else if (response.status == 404)
+  	  		    		{
+  	  		    			return def.reject();
+  	  		    		}
+  	    			});
+    		    	
+    		    	return def.promise;
+    	    	};
+    	    }
+    	  };
+	});
+    
     goOnApp.directive("fileread", [function () {
         return {
             scope: {

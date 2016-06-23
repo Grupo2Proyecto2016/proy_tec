@@ -21,10 +21,13 @@ public class Encomienda {
 	private Date Fecha;
 	private String nombre_destinatario;
 	private String ci_destinatario;	
+	
 	@ManyToOne(fetch=FetchType.LAZY)
 	private Usuario usr_envia;
+	
 	@ManyToOne(fetch=FetchType.LAZY)
 	private Usuario usr_recibe;
+	
 	@ManyToOne(fetch=FetchType.LAZY)
 	private Usuario usr_crea;
 	
