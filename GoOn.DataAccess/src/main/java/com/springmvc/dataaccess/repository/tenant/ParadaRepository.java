@@ -131,4 +131,10 @@ public class ParadaRepository
 		destinationTerminals = (List<Parada>)q.getResultList();
 		return destinationTerminals;	
 	}
+
+	public List<Parada> findStationsByDestinations(List<Integer> destinations) 
+	{
+	
+		return null;
+	}
 }

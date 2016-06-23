@@ -1,5 +1,6 @@
 package com.springmvc.logic.implementations;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -131,10 +132,50 @@ public class LinesLogic implements ILinesLogic
 		return null;
 	}
 
-	public List<Parada> GetStationsByDestinations(List<Parada> destinations) 
+	public List<Parada> GetStationsByDestinations(List<Integer> destinations) 
+	{		
+		
+		List<Linea> lineas = TenantContext.LineaRepository.getLineasbyIdDestinations(destinations); //devuelve una lista de lineas (distinct) que pasan por los puntos enviados
+		List<Parada> stations = new ArrayList<Parada>();
+		for(int i = 0; i < lineas.size(); i++) //recorre las lineas y si la parada pertenece, tira todas las anteriores
+		{
+			boolean pertenece = false;
+			for(int x = 0; x < destinations.size(); x++)
+			{
+				if(paradaPerteneceALinea(destinations.get(x).longValue(), lineas.get(i)))
+				{
+					List<Parada> paradas = lineas.get(i).getParadas();
+					boolean sigo = true;
+					for(int y = 0; y < paradas.size(); y++)
+					{						
+						if(paradas.get(y).getId_parada() != destinations.get(x).longValue())
+						{
+							if(sigo)
+							{
+								stations.add(paradas.get(y));
+							}
+						}
+						if(paradas.get(y).getId_parada() == destinations.get(x).longValue())
+						{
+							sigo = false;
+						}
+					}
+				}
+			}			
+		}
+		return stations;
+	}
+	
+	public boolean paradaPerteneceALinea(long idParada, Linea linea)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		for(int i = 0; i < linea.getParadas().size(); i++) //recorre las lineas y si la parada pertenece, tira todas las anteriores
+		{
+			if(linea.getParadas().get(i).getId_parada() == idParada)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public List<Parada> GetOriginsFromDestination(Parada parada) 

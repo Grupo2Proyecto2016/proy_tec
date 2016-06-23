@@ -1,5 +1,7 @@
 package com.springmvc.dataaccess.repository.tenant;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -52,7 +54,7 @@ public class LineaRepository {
 		}
 		return linea;
 	}
-
+	
 	public List<Linea> getLineas() 
 	{
 		List<Linea> lineas = null;
@@ -96,6 +98,36 @@ public class LineaRepository {
 			t.rollback();
 			throw ex;
 		}
+	}
+
+	public List<Linea> getLineasbyIdDestinations(List<Integer> destinations) 
+	{
+		List<Linea> lineas = new ArrayList<Linea>();
+		List<BigInteger> resultados = new ArrayList();
+		String auxin = "";
+		for (int i = 0; i < destinations.size(); i++) 
+		{
+			if (i == 0)
+			{
+				auxin = auxin + destinations.get(i);				
+			}
+			else
+			{
+				auxin = auxin + "," + destinations.get(i);
+			}
+		}
+		Query q = entityManager.createNativeQuery("SELECT DISTINCT l.id_linea FROM Linea l,  Parada p, linea_parada lp "
+											+ "where l.habilitado = true "
+											+ "and lp.linea_id_linea = l.id_linea "
+											+ "and lp.paradas_id_parada in ("+auxin+")");
+		resultados = q.getResultList();
+		for (int i = 0; i < resultados.size(); i++) 
+		{
+			
+			Linea axuLinea = findByID(resultados.get(i).longValue());
+			lineas.add(axuLinea);
+		}
+		return lineas;				
 	}
 
 //	public List<Parada> findDestinationTerminalsByOrigin(long id_parada) 
