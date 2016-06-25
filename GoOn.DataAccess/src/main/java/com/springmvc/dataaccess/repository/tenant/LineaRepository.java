@@ -129,6 +129,27 @@ public class LineaRepository {
 		return lineas;				
 	}
 
+	public boolean lineExists(long linenumber) 
+	{
+		Query q = entityManager.createQuery("select count(*) from Linea where id_linea = :idl");
+		q.setParameter("idl", linenumber);
+		long cantidad;
+		try
+		{
+			cantidad = (long) q.getSingleResult();
+		} 
+		catch(NoResultException ex) 
+		{
+			return false;
+		}
+		catch(NullPointerException ex) 
+		{
+			return false;
+		}
+		
+		return (cantidad >= 2);	
+	}
+
 //	public List<Parada> findDestinationTerminalsByOrigin(long id_parada) 
 //	{
 //		List<Parada> originTerminals = null;

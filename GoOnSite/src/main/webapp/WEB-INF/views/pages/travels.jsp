@@ -38,7 +38,7 @@
 							    	¿Dónde subes?
 							    </h5>
 							    <div class="col-sm-6">			
-									<a style="margin-top: 12px;" class="btn btn-primary" ng-click="showOriginMap()">
+									<a style="margin-top: 12px;" class="btn btn-primary" ng-click="showOriginMap()" ng-disabled="origenMarkers.length<=0">
 										<i class="fa fa-map-marker fa-lg " style="margin-right: 5px;"></i> Indicar origen
 									</a>					    	
 						    	</div>

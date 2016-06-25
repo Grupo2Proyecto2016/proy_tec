@@ -60,7 +60,7 @@
 				    		<div class="col-sm-6">
 								<label class="control-label col-sm-3" for="numero">Número:</label>
 								<div class="col-sm-9">
-									<input type="text" pattern="[0-9]+" title="Solo se aceptan números" class="form-control" name="numero" ng-model="lineForm.numero" required>
+									<input type="text" pattern="[0-9]+" title="Solo se aceptan números" class="form-control" name="numero" ng-model="lineForm.numero" required lineexists>
 							    </div>
 							</div>
 							<div class="col-sm-6">
@@ -68,8 +68,13 @@
 								<div class="col-sm-9">
 									<input type="text" pattern="[0-9]+" title="Solo se aceptan números" class="form-control" name="tiempo_estimado" ng-model="lineForm.tiempo_estimado" required>
 							    </div>				
-							</div>		    
+							</div>								    
 						</div>
+						<div class="form-group has-error">							
+								<div ng-messages="lineForm.numero.$error" role="alert" class="col-sm-9">
+									<span ng-message="lineexists" class="help-block">El numero de linea ya está en uso</span>
+					    		</div>				    		
+				  		</div>
 						<div class="form-group">
 							<div class="col-sm-6">
 					    		<label class="control-label col-sm-3" for="viaja_parado">Admite Parados:</label>
