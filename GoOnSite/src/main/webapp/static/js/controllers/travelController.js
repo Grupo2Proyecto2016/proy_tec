@@ -12,10 +12,14 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     $scope.travelSearch = {};
     
     $scope.userMarkers = [];
+    $scope.userMarkersOrigin = [];
     $scope.destinoMarkers = [];
     $scope.origenMarkers = [];
     $scope.circle = null;
+    $scope.circleOrigin = null;
     $scope.listaIDSeleccionados = [];
+    $scope.listaIDSeleccionadosOrigin = [];
+    
     
 	$scope.custom_response = null;    
     i18nService.setCurrentLang('es');
@@ -54,7 +58,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
         places.forEach(function(place) 
         {
         	$scope.userMarkers = [];        
-        	$scope.placeMarkerAndPanTo(place.geometry.location, $scope.destinationMap);
+        	$scope.placeMarkerAndPanTo(place.geometry.location, $scope.destinationMap, false);
         });         	        
     });
     
@@ -64,48 +68,90 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     	
         $scope.userMarkers.forEach(function(marker) 
         {
-          marker.setMap(null);
+        	marker.setMap(null);
         });
         
         $scope.userMarkers = [];        
-    	$scope.placeMarkerAndPanTo(e.latLng, $scope.destinationMap);    	    	
+    	$scope.placeMarkerAndPanTo(e.latLng, $scope.destinationMap, true);    	    	
     	//$scope.$digest();
 	});
     
-    $scope.creaRadio = function(marker, map)
+    $scope.creaRadio = function(marker, map, destino)
     {
     	var radius = 1000;
-  	  	if ($scope.circle !== null)
-  	  	{
-  	  		$scope.circle.setMap(null);
-  	  	}
-  	  	$scope.circle = new google.maps.Circle({  	  		
-  	  			center:marker.getPosition(),
-  				strokeColor: '#678DEA',
-  				strokeOpacity: 0.35,
-  				strokeWeight: 1,
-  				radius: radius, //1km
-  				fillOpacity: 0.35,
-  				fillColor: "#678DEA",
-  				map: map}
-  			  );
-  	  
+  	  	
+    	if(destino == true)
+    	{
+	    	if ($scope.circle !== null)
+	  	  	{
+	  	  		$scope.circle.setMap(null);
+	  	  	}
+	  	  	$scope.circle = new google.maps.Circle({  	  		
+	  	  			center:marker.getPosition(),
+	  				strokeColor: '#678DEA',
+	  				strokeOpacity: 0.35,
+	  				strokeWeight: 1,
+	  				radius: radius, //1km
+	  				fillOpacity: 0.35,
+	  				fillColor: "#678DEA",
+	  				map: map}
+	  			  );
+    	}
+    	else
+    	{
+    		if ($scope.circleOrigin !== null)
+	  	  	{
+	  	  		$scope.circleOrigin.setMap(null);
+	  	  	}
+	  	  	$scope.circleOrigin = new google.maps.Circle({  	  		
+	  	  			center:marker.getPosition(),
+	  				strokeColor: '#678DEA',
+	  				strokeOpacity: 0.35,
+	  				strokeWeight: 1,
+	  				radius: radius, //1km
+	  				fillOpacity: 0.35,
+	  				fillColor: "#678DEA",
+	  				map: map}
+	  			  );
+    	}
+    	
 	  	var bounds = new google.maps.LatLngBounds();
 	  	var cant_paradas = 0;
-	  	$scope.listaIDSeleccionados = [];
-	    for (var i=0; i< $scope.destinoMarkers.length; i++) 
-	    {
-	    	if (google.maps.geometry.spherical.computeDistanceBetween($scope.destinoMarkers[i].getPosition(),marker.getPosition()) < radius) 
-			{
-			    //bounds.extend($scope.destinoMarkers[i].getPosition())
-	    		$scope.listaIDSeleccionados.push($scope.destinoMarkers[i].id_parada);
-	    		cant_paradas ++;
-			} 
-			else 
-			{
-				//$scope.destinoMarkers[i].setMap(null);
-			}
-	    }	    
+	  	
+	  	if(destino == true)
+	  	{
+		  	$scope.listaIDSeleccionados = [];
+		    for (var i=0; i< $scope.destinoMarkers.length; i++) 
+		    {
+		    	if (google.maps.geometry.spherical.computeDistanceBetween($scope.destinoMarkers[i].getPosition(),marker.getPosition()) < radius) 
+				{
+				    //bounds.extend($scope.destinoMarkers[i].getPosition())
+		    		$scope.listaIDSeleccionados.push($scope.destinoMarkers[i].id_parada);
+		    		cant_paradas ++;
+				} 
+				else 
+				{
+					//$scope.destinoMarkers[i].setMap(null);
+				}
+		    }	    
+	  	}
+	  	else
+  		{
+	  		$scope.listaIDSeleccionadosOrigin = [];
+		    for (var i=0; i< $scope.origenMarkers.length; i++) 
+		    {
+		    	if (google.maps.geometry.spherical.computeDistanceBetween($scope.origenMarkers[i].getPosition(),marker.getPosition()) < radius) 
+				{
+				    //bounds.extend($scope.destinoMarkers[i].getPosition())
+		    		$scope.listaIDSeleccionadosOrigin.push($scope.origenMarkers[i].id_parada);
+		    		cant_paradas ++;
+				} 
+				else 
+				{
+					//$scope.destinoMarkers[i].setMap(null);
+				}
+		    }	
+  		}
 	    map.panTo(marker.getPosition());
 	    if(cant_paradas == 0)
     	{
@@ -118,7 +164,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 	    $scope.$digest();
     }
     
-    $scope.placeMarkerAndPanTo = function (latLng, map) 
+    $scope.placeMarkerAndPanTo = function (latLng, map, destino) 
     {
   	  
     	var marker = new google.maps.Marker({
@@ -131,11 +177,20 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     	
     	marker.addListener('dragend',function(event) 
     	{
-    		$scope.creaRadio(marker, map);
+    		$scope.creaRadio(marker, map, destino);
     	});
     	
-  	  	$scope.userMarkers.push(marker); 	
-  	  	$scope.creaRadio(marker, map);
+  	  	
+    	if(destino == true)
+    	{	    	
+    		$scope.userMarkers.push(marker); 	
+    	}
+    	else
+    	{
+    		$scope.userMarkersOrigin.push(marker);
+    	}
+    	
+    	$scope.creaRadio(marker, map, destino);
   	  	//var l = latLng.lat();
   	  	//var g = latLng.lng();
   	  	//$scope.geocodePosition(marker);
@@ -158,12 +213,12 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     {
     	//Borra los anteriores, en este caso es uno solo, pero eventualmente podrian ser mas
     	
-        $scope.userMarkers.forEach(function(marker) 
+        $scope.userMarkersOrigin.forEach(function(marker) 
         {
           marker.setMap(null);
         });
         
-        $scope.userMarkers = [];        
+        $scope.userMarkersOrigin = [];        
     	$scope.placeMarkerAndPanTo(e.latLng, $scope.originMap);    	    	
     	//$scope.$digest();
 	});
