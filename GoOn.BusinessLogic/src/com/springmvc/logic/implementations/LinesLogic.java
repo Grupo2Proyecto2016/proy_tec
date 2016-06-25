@@ -8,8 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.hadoop.mapred.gethistory_jsp;
-
 import com.springmvc.dataaccess.context.TenantDAContext;
 import com.springmvc.entities.tenant.Linea;
 import com.springmvc.entities.tenant.Parada;
@@ -212,5 +210,11 @@ public class LinesLogic implements ILinesLogic
 	public List<Parada> GetDestinationsFromOrigin(Parada parada) 
 	{
 		return TenantContext.ParadaRepository.findDestinationTerminalsByOrigin(parada.getId_parada());
+	}
+
+
+	public boolean lineExists(long linenumber) 
+	{
+		return TenantContext.LineaRepository.lineExists(linenumber);
 	}
 }
