@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -135,37 +136,26 @@ public class LinesLogic implements ILinesLogic
 	public List<Parada> GetStationsByDestinations(List<Integer> destinations) 
 	{		
 		
-		List<Linea> lineas = TenantContext.LineaRepository.getLineasbyIdDestinations(destinations); //devuelve una lista de lineas (distinct) que pasan por los puntos enviados
 		List<Parada> stations = new ArrayList<Parada>();
-		for(int i = 0; i < lineas.size(); i++) //recorre las lineas y si la parada pertenece, tira todas las anteriores
+		List<Parada> auxstations = new ArrayList<Parada>();
+		
+		for(int x = 0; x < destinations.size(); x++)
 		{
-			boolean pertenece = false;
-			for(int x = 0; x < destinations.size(); x++)
-			{
-				if(paradaPerteneceALinea(destinations.get(x).longValue(), lineas.get(i)))
-				{
-					List<Parada> paradas = lineas.get(i).getParadas();
-					boolean sigo = true;
-					for(int y = 0; y < paradas.size(); y++)
-					{						
-						if(paradas.get(y).getId_parada() != destinations.get(x).longValue())
-						{
-							if(sigo)
-							{
-								stations.add(paradas.get(y));
-							}
-						}
-						if(paradas.get(y).getId_parada() == destinations.get(x).longValue())
-						{
-							sigo = false;
-						}
-					}
-				}
-			}			
+			auxstations = TenantContext.ParadaRepository.findStationsByDestinations(destinations.get(x));
+			for(int y = 0; y < auxstations.size(); y++)
+			{				  
+				agregoParadaSiNoEsta(stations, auxstations.get(y));
+			}
+		}	
+		//sacar paradas del circulo - por si entran mas de una parada de la misma linea - dificil pero puede ser
+		for(int x = 0; x < destinations.size(); x++)
+		{
+			sacoParadaSiEsta(stations, destinations.get(x));
 		}
 		return stations;
 	}
 	
+	/*Estas dos funciones deberian estar en un "utiles"*/
 	public boolean paradaPerteneceALinea(long idParada, Linea linea)
 	{
 		for(int i = 0; i < linea.getParadas().size(); i++) //recorre las lineas y si la parada pertenece, tira todas las anteriores
@@ -176,6 +166,35 @@ public class LinesLogic implements ILinesLogic
 			}
 		}
 		return false;
+	}
+	
+	public void agregoParadaSiNoEsta(List<Parada> paradas, Parada parada)
+	{
+		boolean esta = false;
+		for(int i = 0; i < paradas.size(); i++)
+		{
+			if(parada.getId_parada() == paradas.get(i).getId_parada())
+			{
+				esta = true;
+			}	
+		}
+		if(esta == false)
+		{
+			paradas.add(parada);
+		}
+	}
+	
+	public void sacoParadaSiEsta(List<Parada> paradas, int id_parada)
+	{
+		//recorre con iterator porque es seguro hacer delete durante la iteracion
+		for (Iterator<Parada> iterator = paradas.iterator(); iterator.hasNext();) 
+		{
+		    Parada parada = iterator.next();
+		    if (parada.getId_parada() == id_parada) 
+		    {
+		        iterator.remove();
+		    }
+		}
 	}
 
 	public List<Parada> GetOriginsFromDestination(Parada parada) 
@@ -191,5 +210,11 @@ public class LinesLogic implements ILinesLogic
 	public List<Parada> GetDestinationsFromOrigin(Parada parada) 
 	{
 		return TenantContext.ParadaRepository.findDestinationTerminalsByOrigin(parada.getId_parada());
+	}
+
+
+	public boolean lineExists(long linenumber) 
+	{
+		return TenantContext.LineaRepository.lineExists(linenumber);
 	}
 }

@@ -1,5 +1,6 @@
 package com.springmvc.dataaccess.repository.tenant;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -132,9 +133,36 @@ public class ParadaRepository
 		return destinationTerminals;	
 	}
 
-	public List<Parada> findStationsByDestinations(List<Integer> destinations) 
+	public List<Parada> findStationsByDestinations(long id_parada) 
 	{
-	
-		return null;
+		List<Parada> stations = new ArrayList<>();
+		List<BigInteger> resultado = new ArrayList();
+		//vuelve a la nativa porque linea_parada no esta mappeada
+		Query q = entityManager.createNativeQuery("SELECT DISTINCT lp.paradas_id_parada "
+											+"FROM Linea l "
+											+"INNER JOIN linea_parada lp "
+											+"ON lp.linea_id_linea = l.id_linea "
+											+"INNER JOIN Parada p "
+											+"on p.id_parada = lp.paradas_id_parada "
+											+"WHERE l.habilitado = true "
+											+"AND l.id_linea IN "
+											+"( "
+											+"SELECT lp.linea_id_linea "
+											+"FROM linea_parada lp "
+											+"WHERE lp.paradas_id_parada = :idp "
+											+") "
+											+"AND (lp.paradas_id_parada <  :idp OR l.id_parada_destino = :idp) "
+											+"AND lp.paradas_id_parada <> l.id_parada_destino "
+											+"AND l.id_parada_origen <> :idp ");		
+	    q.setParameter("idp", id_parada);
+		resultado = q.getResultList();
+		for(int x = 0; x < resultado.size(); x++)
+		{
+			long auxid = resultado.get(x).longValue();
+			Parada auxParada = new Parada();
+			auxParada = findByID(auxid);
+			stations.add(auxParada);
+		}
+		return stations;
 	}
 }

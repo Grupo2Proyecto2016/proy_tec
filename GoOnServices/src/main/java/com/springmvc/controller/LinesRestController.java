@@ -14,10 +14,12 @@ import java.util.TimeZone;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springmvc.entities.tenant.Linea;
@@ -25,6 +27,7 @@ import com.springmvc.entities.tenant.Parada;
 import com.springmvc.entities.tenant.Viaje;
 import com.springmvc.enums.DayOfWeek;
 import com.springmvc.logic.implementations.LinesLogic;
+import com.springmvc.logic.implementations.UsersLogic;
 import com.springmvc.logic.implementations.VehiculosLogic;
 import com.springmvc.requestWrappers.CustomResponseWrapper;
 import com.springmvc.requestWrappers.LinesWrapper;
@@ -151,6 +154,21 @@ public class LinesRestController{
 		}
 		return new ResponseEntity<CustomResponseWrapper>(respuesta, HttpStatus.OK);
 	}	
+	
+	@RequestMapping(value = "/lineExists", method = RequestMethod.GET)
+    public ResponseEntity<Void> lineExists(@PathVariable String tenantid, @RequestParam(value="linenumber") long linenumber) throws AuthenticationException 
+    {
+		//deberia tirar true si hay 2 o mas lineas con ese numero
+    	boolean lineExists = new LinesLogic(tenantid).lineExists(linenumber);
+    	if(lineExists)
+    	{
+    		return new ResponseEntity<Void>(HttpStatus.OK);   		
+    	}
+    	else
+    	{
+    		return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+    	}
+    }
 	
 	@Secured({"ROLE_ADMIN"})
 	@RequestMapping(value = "/createTravel", method = RequestMethod.POST, consumes="application/json", produces = "application/json")

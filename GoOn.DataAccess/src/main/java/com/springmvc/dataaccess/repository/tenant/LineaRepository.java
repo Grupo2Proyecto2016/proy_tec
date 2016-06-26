@@ -119,15 +119,35 @@ public class LineaRepository {
 		Query q = entityManager.createNativeQuery("SELECT DISTINCT l.id_linea FROM Linea l,  Parada p, linea_parada lp "
 											+ "where l.habilitado = true "
 											+ "and lp.linea_id_linea = l.id_linea "
-											+ "and lp.paradas_id_parada in ("+auxin+")");
+											+ "and lp.paradas_id_parada in ("+auxin+")");				
 		resultados = q.getResultList();
 		for (int i = 0; i < resultados.size(); i++) 
-		{
-			
+		{			
 			Linea axuLinea = findByID(resultados.get(i).longValue());
 			lineas.add(axuLinea);
 		}
 		return lineas;				
+	}
+
+	public boolean lineExists(long linenumber) 
+	{
+		Query q = entityManager.createQuery("select count(*) from Linea where id_linea = :idl");
+		q.setParameter("idl", linenumber);
+		long cantidad;
+		try
+		{
+			cantidad = (long) q.getSingleResult();
+		} 
+		catch(NoResultException ex) 
+		{
+			return false;
+		}
+		catch(NullPointerException ex) 
+		{
+			return false;
+		}
+		
+		return (cantidad >= 2);	
 	}
 
 //	public List<Parada> findDestinationTerminalsByOrigin(long id_parada) 
