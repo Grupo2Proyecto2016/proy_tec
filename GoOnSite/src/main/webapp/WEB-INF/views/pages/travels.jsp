@@ -19,7 +19,7 @@
 	<div class="row">
 		<div class="col-xs-2"></div>
 		<div class="col-xs-8">			
-			<form class="form-horizontal" role="form" name="form">
+			<form class="form-horizontal" role="form" name="form" ng-submit="searchTravels()">
 				<div class="panel panel-default">
 					<div class="panel-body">											
 						<div class="form-group">
@@ -46,11 +46,11 @@
 				    	</div>
 				    	<div class="form-group">
 						    <div class="col-sm-6">
-							    <label class="control-label col-sm-6" for="traveldate">
+							    <label class="control-label col-sm-6" for="dateFrom">
 							    	Día del viaje:
 							    </label>
 							    <div class="col-sm-6">
-									<input type="date" class="form-control" min="{{minDate | date:'yyyy-MM-dd'}}" max="{{maxDate | date:'yyyy-MM-dd'}}" name="traveldate" ng-model="travelSearch.date" required>
+									<input type="date" class="form-control" min="{{minDate | date:'yyyy-MM-dd'}}" max="{{maxDate | date:'yyyy-MM-dd'}}" name="dateFrom" ng-model="travelSearch.dateFrom" required>
 							    </div>
 					    	</div>
 					    	<div class="col-sm-6">
@@ -75,7 +75,7 @@
 	</div>
 </div>
 
-<div class="row hidden" style="margin-top: 50px;">
+<div class="row hidden" style="margin-top: 50px;" id="travelsGrid">
 	<div class="col-xs-1"></div>
 	<div class="col-xs-10">
 		<div ui-grid="travelsGrid" ui-grid-pagination class="genericGridHeader"></div>
@@ -255,7 +255,7 @@
 			<p>
 				<img src="static/images/marker_green.png"> Paradas disponibles
 				<img src="static/images/marker_blue.png"> Terminales disponibles
-				<img src="static/images/marker_sm.png">Tú ubicación
+				<img src="static/images/marker_sm.png">Tú ubicación				
 			</p> 
 		</div>
       </div>

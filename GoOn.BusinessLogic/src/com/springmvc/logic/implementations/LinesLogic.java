@@ -128,9 +128,10 @@ public class LinesLogic implements ILinesLogic
 	
 	public List<Viaje> SearchTravels(Calendar dateFrom, Calendar dateTo, List<Integer> origins, List<Integer> destinations) 
 	{
-		
-		// TODO Auto-generated method stub
-		return null;
+		//me quedo con las lineas correspondiente a la lista de origenes seleccionados
+		List<Long> id_lineas = TenantContext.LineaRepository.getidLineasbyIdOrigins(origins);
+		List<Viaje> viajes = TenantContext.ViajeRepository.GetLineTravels(id_lineas, dateFrom);
+		return viajes;
 	}
 
 	public List<Parada> GetStationsByDestinations(List<Integer> destinations) 

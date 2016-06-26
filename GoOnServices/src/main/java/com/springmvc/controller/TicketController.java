@@ -21,7 +21,7 @@ import com.springmvc.requestWrappers.TravelSearchWrapper;
 public class TicketController 
 {
 
-	@RequestMapping(value = "/searchTravels", method = RequestMethod.GET)
+	@RequestMapping(value = "/searchTravels", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
 	public ResponseEntity<List<Viaje>> travels(@RequestBody TravelSearchWrapper searchData, @PathVariable String tenantid)
 	{
 		List<Viaje> travels = new LinesLogic(tenantid).SearchTravels(searchData.dateFrom, searchData.dateTo, searchData.origins, searchData.destinations);
@@ -40,5 +40,5 @@ public class TicketController
 	{
 		List<Parada> stations = new LinesLogic(tenantid).GetStationsByDestinations(destinations);
 		return new ResponseEntity<List<Parada>>(stations, HttpStatus.OK);
-	}
+	}		
 }

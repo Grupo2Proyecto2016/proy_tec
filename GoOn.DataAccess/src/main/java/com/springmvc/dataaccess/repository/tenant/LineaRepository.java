@@ -99,6 +99,11 @@ public class LineaRepository {
 			throw ex;
 		}
 	}
+	
+	public List<Linea> getLineasbyIdOrigins(List<Integer> origins) 
+	{
+		return getLineasbyIdDestinations(origins);
+	}
 
 	public List<Linea> getLineasbyIdDestinations(List<Integer> destinations) 
 	{
@@ -148,6 +153,35 @@ public class LineaRepository {
 		}
 		
 		return (cantidad >= 2);	
+	}
+
+	public List<Long> getidLineasbyIdOrigins(List<Integer> origins) 
+	{
+		List<BigInteger> resultados = new ArrayList();
+		List<Long> lista_longs = new ArrayList(); 
+		String auxin = "";
+		for (int i = 0; i < origins.size(); i++) 
+		{
+			if (i == 0)
+			{
+				auxin = auxin + origins.get(i);				
+			}
+			else
+			{
+				auxin = auxin + "," + origins.get(i);
+			}
+		}
+		Query q = entityManager.createNativeQuery("SELECT DISTINCT l.id_linea FROM Linea l,  Parada p, linea_parada lp "
+											+ "where l.habilitado = true "
+											+ "and lp.linea_id_linea = l.id_linea "
+											+ "and lp.paradas_id_parada in ("+auxin+")");
+		
+		resultados = q.getResultList();		
+		for (int i = 0; i < resultados.size(); i++) 
+		{
+			lista_longs.add(resultados.get(i).longValue());
+		}
+		return lista_longs;		
 	}
 
 //	public List<Parada> findDestinationTerminalsByOrigin(long id_parada) 

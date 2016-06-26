@@ -9,4 +9,5 @@ public class TravelSearchWrapper
 	public Calendar dateTo;
 	public List<Integer> origins;
 	public List<Integer> destinations;
+	public int ticketsCount;
 }
