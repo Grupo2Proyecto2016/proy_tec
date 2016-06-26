@@ -293,17 +293,29 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     	$("#warningRadio").hide();    	
     };
     
-    $scope.searchTravels = function()
+    $scope.searchTravels = function() 
     {
-    	$http.get(servicesUrl + 'searchtravels')
-    		.then(function(result) {
-    			if(result.status == 200)
-    			{
-    				$scope.travels = data;
-    				$scope.travelsGrid.data = $scope.travels;    				
-    			}
-			}
-		);
+    	$("#originModal").modal('hide');
+    	$.blockUI();
+    	//pasar los destinos y sacar de ahi las lineas
+    	$scope.travelSearch.origins = $scope.listaIDSeleccionados;
+    	$scope.travelSearch.destinations = $scope.listaIDSeleccionadosOrigin;    	
+    	$http.post(servicesUrl +'searchTravels', JSON.stringify($scope.travelSearch))
+		.success(function(data, status, headers, config)
+		{				
+			$.unblockUI();
+			//carga la grilla
+			$scope.travels = data;
+			$scope.travelsGrid.data = $scope.travels;
+			$("#travelsGrid").removeClass('hidden');   
+	    										
+		})
+		.error(function()
+		{
+			$.unblockUI();
+			//$scope.error_message = 'Ha ocurrido un error al crear la sucursal. Intente de nuevo en unos instantes.'; 
+			//$("#errorModal").modal("toggle");
+		}); 	
     };
     
     $scope.travelsGrid = 

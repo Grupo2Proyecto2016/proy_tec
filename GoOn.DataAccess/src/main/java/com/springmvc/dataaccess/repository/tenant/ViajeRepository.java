@@ -143,4 +143,31 @@ public class ViajeRepository {
 		travels = (List<Viaje>)q.getResultList();
 		return travels;	
 	}
+
+	public List<Viaje> GetLineTravels(List<Long> id_lineas, Calendar dateFrom) 
+	{
+		List<Viaje> travels = null;
+		String auxin = "";
+		for (int i = 0; i < id_lineas.size(); i++) 
+		{
+			if (i == 0)
+			{
+				auxin = auxin + id_lineas.get(i);				
+			}
+			else
+			{
+				auxin = auxin + "," + id_lineas.get(i);
+			}
+		}
+		Query q = entityManager.createQuery("FROM Viaje v "
+											//+ "WHERE v.inicio = :dateFrom "											
+											+ "WHERE v.linea.id_linea in ("+auxin+")"
+											/*+ "WHERE v.linea.habilitado = TRUE "
+											+ "AND v.inicio = :dateFrom "	
+											+ "AND linea_id_linea in ("+auxin+")"*/
+		);
+		//q.setParameter("dateFrom", dateFrom.getTime());
+		travels = (List<Viaje>)q.getResultList();
+		return travels;
+	}
 }
