@@ -1,5 +1,5 @@
 // create the module and name it scotchApp
-    var goOnApp = angular.module('goOnApp', ['ngRoute', 'ngAnimate', 'ngMessages', 'ui.grid', 'ui.grid.pagination']);
+    var goOnApp = angular.module('goOnApp', ['ngRoute', 'ngAnimate', 'ngMessages', 'ui.grid', 'ui.grid.pagination', 'ui.grid.selection']);
     
     goOnApp.run(function($rootScope) 
 	{

@@ -84,7 +84,7 @@
 					    </form>
 			    	</div>				  
 					<div class="panel-body">
-						<form class="form-horizontal" name="pForm" role="form">
+						<form class="form-horizontal" name="pForm" role="form" ng-submit="createPackage()">
 							<div class="form-group">
 						    	<div class="col-sm-6">
 							    	<label class="control-label col-sm-5" for="emisorOpt">Emisor registrado?:</label>
@@ -162,7 +162,8 @@
 	<div class="row" ng-if="travels.length > 0" style="margin-top: 50px;">
 		<div class="col-xs-2"></div>	
 		<div class="col-xs-8">
-			<div ui-grid="travelsGrid" style=" height: 55%;" ui-grid-pagination></div>
+			<h4 class="text-center">Selecciona un viaje</h4>
+			<div ui-grid="travelsGrid" style=" height: 55%;" ui-grid-selection ui-grid-pagination></div>
 		</div>
 		<div class="col-xs-2"></div>
 	</div>

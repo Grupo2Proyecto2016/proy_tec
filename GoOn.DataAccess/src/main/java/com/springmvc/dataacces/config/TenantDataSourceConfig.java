@@ -44,7 +44,7 @@ public class TenantDataSourceConfig
 	
 	protected EntityManager EntityManager;
 	
-	private String TenantName = null;
+	public String TenantName = null;
 	
 	private final Lock lock = new ReentrantLock();
 

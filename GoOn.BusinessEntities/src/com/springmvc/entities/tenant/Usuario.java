@@ -26,6 +26,8 @@ public class Usuario {
 	
 	private String 	nombre;
 	
+	private String 	ci;
+
 	private String 	apellido;
 	
 	private String 	email;
@@ -58,6 +60,14 @@ public class Usuario {
 		this.sucursal = sucursal;
 	}
 
+	public String getCi() {
+		return ci;
+	}
+
+	public void setCi(String ci) {
+		this.ci = ci;
+	}
+	
 	public List<Authority> getAuthorities()
 	{
 		

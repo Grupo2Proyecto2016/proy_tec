@@ -21,9 +21,13 @@ import com.springmvc.entities.tenant.Usuario;
 import com.springmvc.entities.tenant.Viaje;
 import com.springmvc.enums.Parameter;
 import com.springmvc.logic.implementations.LinesLogic;
+import com.springmvc.logic.implementations.PackageLogic;
 import com.springmvc.logic.implementations.ParametersLogic;
+import com.springmvc.logic.implementations.UsersLogic;
 import com.springmvc.requestWrappers.CalcWrapper;
+import com.springmvc.requestWrappers.CustomResponseWrapper;
 import com.springmvc.requestWrappers.LinesWrapper;
+import com.springmvc.requestWrappers.PackageFormWrapper;
 import com.springmvc.utils.UserContext;
 
 
@@ -37,20 +41,58 @@ public class PackageRestController
 	@RequestMapping(value = "/calcPackage", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
 	public ResponseEntity<String> CalcPackage(@RequestBody CalcWrapper calcWrapper, @PathVariable String tenantid) throws Exception
 	{
-		ParametersLogic pl = new ParametersLogic(tenantid);
-		float priceByKm = pl.FindById(Parameter.PriceByPackageKm.getValue()).getValor();
-		float priceByKg = pl.FindById(Parameter.PriceByKg.getValue()).getValor();
-		float priceByVolume = pl.FindById(Parameter.PriceByVolume.getValue()).getValor();
-		float priceBase = pl.FindById(Parameter.PackageBasePrice.getValue()).getValor();
-		
-		float volumePrice = calcWrapper.volume * priceByVolume;
-		float kgPrice = calcWrapper.weigth * priceByKg;
-		float distancePrice = calcWrapper.distance * priceByKm;
-		int finalPrice = 0;
-		
-		finalPrice = (int)Math.max(priceBase, Math.max((distancePrice * volumePrice), (distancePrice * kgPrice)));
+		PackageLogic pl = new PackageLogic(tenantid);
+		int price = pl.CalcPackage(calcWrapper.distance, calcWrapper.volume, calcWrapper.weigth);
 
-		return new ResponseEntity<String>(Integer.toString(finalPrice), HttpStatus.CREATED);
+		return new ResponseEntity<String>(Integer.toString(price), HttpStatus.CREATED);
+	}
+	
+	@Secured({"ROLE_SALES"})
+	@RequestMapping(value = "/createPackage", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
+	public ResponseEntity<CustomResponseWrapper> createPackage(@RequestBody PackageFormWrapper packageWrapper, @PathVariable String tenantid, HttpServletRequest request) throws Exception
+	{
+		PackageLogic pl = new PackageLogic(tenantid);
+		UsersLogic ul = new UsersLogic(tenantid);
+		
+		Usuario employee = context.GetUser(request, tenantid);
+		
+		Usuario sender = null;
+		if(packageWrapper.eUser != null)
+		{
+			sender = ul.GetUserByName(packageWrapper.eUser);
+		}
+		else
+		{
+			sender = new Usuario();
+			sender.setCi(packageWrapper.eDoc);
+		}
+		
+		Usuario receipt = null;
+		if(packageWrapper.rUser != null)
+		{
+			receipt = ul.GetUserByName(packageWrapper.rUser);
+		}
+		else
+		{
+			receipt = new Usuario();
+			receipt.setCi(packageWrapper.rDoc);
+		}
+		
+		try
+		{
+			pl.CreatePackage(packageWrapper.distance, packageWrapper.volume, packageWrapper.peso, sender, receipt, employee, packageWrapper.travel_id);		
+			CustomResponseWrapper response = new CustomResponseWrapper();
+			response.setSuccess(true);
+			response.setMsg(null);
+			return new ResponseEntity<CustomResponseWrapper>(response, HttpStatus.OK);
+		}
+		catch(Exception e)
+		{
+			CustomResponseWrapper response = new CustomResponseWrapper();
+			response.setSuccess(false);
+			response.setMsg("El viaje seleccionado ya no tiene espacio para encomiendas. Seleccione otro.");
+			return new ResponseEntity<CustomResponseWrapper>(response, HttpStatus.OK);
+		}
 	}
 	
 	@Secured({"ROLE_SALES"})

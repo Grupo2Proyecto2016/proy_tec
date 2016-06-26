@@ -124,7 +124,7 @@ goOnApp.controller('packageController', function($scope, $http, uiGridConstants,
     
     $scope.calcPackage = function()
     {
-    	if($scope.packageForm.peso != null || $scope.volumeInputsFilled())
+    	if($scope.packageInputsFilled())
     	{
     		$scope.calc_error = null;
 	    	var origin = new google.maps.LatLng($scope.packageOrigin.latitud, $scope.packageOrigin.longitud);
@@ -140,7 +140,7 @@ goOnApp.controller('packageController', function($scope, $http, uiGridConstants,
 	    		function(response, status) 
 	    		{
 	    			$scope.packageForm.distance = response.rows[0].elements[0]['distance']['value'] / 1000;
-	    			var volume = $scope.packageForm.alto * $scope.packageForm.ancho * $scope.packageForm.largo / 1000000; 
+	    			$scope.packageForm.volume = $scope.packageForm.alto * $scope.packageForm.ancho * $scope.packageForm.largo / 1000000; 
 	            	$http.post(servicesUrl + 'calcPackage', JSON.stringify({ distance: $scope.packageForm.distance, weigth: $scope.packageForm.peso, volume: volume  }))
 	            		.then(function(result){
 	            			$scope.packagePrice = result.data;
@@ -148,14 +148,60 @@ goOnApp.controller('packageController', function($scope, $http, uiGridConstants,
 	    		}
 	    	);
     	}
-    	else
+    };
+    $scope.packageInputsFilled = function()
+    {
+    	var validCalcForm = $scope.packageForm.peso != null || ($scope.packageForm.alto != null && $scope.packageForm.largo != null && $scope.packageForm.ancho != null);
+    	if(!validCalcForm)
     	{
     		$scope.calc_error = "Debe completar los datos de peso o volumen para realizar el cálculo.";
     	}
+    	return validCalcForm;
     };
-    $scope.volumeInputsFilled = function()
+    
+    $scope.createPackage = function()
     {
-    	return $scope.packageForm.alto != null && $scope.packageForm.largo != null && $scope.packageForm.ancho != null;
+    	if($scope.packageInputsFilled() && $scope.pForm.$valid && $scope.cForm.$valid)
+    	{
+    		$scope.calc_error = null;
+    		var rows = $scope.travelGridApi.selection.getSelectedRows();
+    		if(rows.length == 0)
+    		{
+    			$scope.showErrorPopup("Debe seleccionar un viaje para asignar la encomienda.");
+    		}
+    		else
+    		{
+    			$scope.packageForm.travel_id = rows[0].id_viaje;
+    			if($scope.rOption == "1")
+    			{
+    				$scope.packageForm.rDoc = null;
+    			}
+    			else
+    			{
+    				$scope.packageForm.rUser = null;
+    			}
+    			
+    			if($scope.eOption == "1")
+    			{
+    				$scope.packageForm.eDoc = null;
+    			}
+    			else
+    			{
+    				$scope.packageForm.eUser = null;
+    			}
+    			$http.post(servicesUrl + 'createPackage', JSON.stringify($scope.packageForm))
+        		.then(function(result){
+        			if(result.data.success)
+        			{
+        				$scope.showSuccessAlert("La encomienda ha sido agendada.")
+        			}
+        			else
+        			{
+        				$scope.showErrorPopup(result.msg);
+        			}
+        		});
+    		}
+    	}
     };
     
     $scope.closeSuccessAlert = function()
@@ -170,10 +216,19 @@ goOnApp.controller('packageController', function($scope, $http, uiGridConstants,
     
     $scope.travelsGrid = 
     {
+		enableRowSelection: true,
+		enableRowHeaderSelection: false,
+		multiSelect: false,
+		modifierKeysToMultiSelect: false,
+		noUnselect: true,
+		onRegisterApi: function( gridApi ) 
+		{
+		    $scope.travelGridApi = gridApi;
+		},
 		paginationPageSizes: [15, 30, 45],
 	    paginationPageSize: 15,
 		enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
-		enableFiltering: true,
+		enableFiltering: false,
         columnDefs:
     	[
           { name:'Linea', field: 'linea.numero' },
