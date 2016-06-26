@@ -15,63 +15,65 @@ public class Encomienda {
 	
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long id_encomienda;
-	private String descripcion;
-	private Double peso;
-	private Double volumen;
-	private Date Fecha;
-	private String nombre_destinatario;
-	private String ci_destinatario;	
+	private float peso;
+	private float volumen;
+	private String ci_emisor;
+	private String ci_receptor;
+	private int precio;
 	
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	private Usuario usr_envia;
 	
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	private Usuario usr_recibe;
 	
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	private Usuario usr_crea;
 	
+	@ManyToOne(fetch=FetchType.EAGER)
+	private Viaje viaje;
+	
+	public int getPrecio() {
+		return precio;
+	}
+	public void setPrecio(int precio) {
+		this.precio = precio;
+	}
+	public Viaje getViaje() {
+		return viaje;
+	}
+	public void setViaje(Viaje viaje) {
+		this.viaje = viaje;
+	}
+	public String getCi_receptor() {
+		return ci_receptor;
+	}
+	public void setCi_receptor(String ci_receptor) {
+		this.ci_receptor = ci_receptor;
+	}
 	public long getId_encomienda() {
 		return id_encomienda;
 	}
 	public void setId_encomienda(long id_encomienda) {
 		this.id_encomienda = id_encomienda;
 	}
-	public String getDescripcion() {
-		return descripcion;
-	}
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
-	public Double getPeso() {
+	public float getPeso() {
 		return peso;
 	}
-	public void setPeso(Double peso) {
+	public void setPeso(float peso) {
 		this.peso = peso;
 	}
-	public Double getVolumen() {
+	public float getVolumen() {
 		return volumen;
 	}
-	public void setVolumen(Double volumen) {
+	public void setVolumen(float volumen) {
 		this.volumen = volumen;
 	}
-	public Date getFecha() {
-		return Fecha;
+	public String getCi_emisor() {
+		return ci_emisor;
 	}
-	public void setFecha(Date fecha) {
-		Fecha = fecha;
-	}
-	public String getNombre_destinatario() {
-		return nombre_destinatario;
-	}
-	public void setNombre_destinatario(String nombre_destinatario) {
-		this.nombre_destinatario = nombre_destinatario;
-	}
-	public String getCi_destinatario() {
-		return ci_destinatario;
-	}
-	public void setCi_destinatario(String ci_destinatario) {
-		this.ci_destinatario = ci_destinatario;
+	public void setCi_emisor(String ci_emisor) {
+		this.ci_emisor = ci_emisor;
 	}
 	public Usuario getUsr_envia() {
 		return usr_envia;

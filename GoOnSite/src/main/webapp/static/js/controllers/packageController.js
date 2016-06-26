@@ -141,7 +141,7 @@ goOnApp.controller('packageController', function($scope, $http, uiGridConstants,
 	    		{
 	    			$scope.packageForm.distance = response.rows[0].elements[0]['distance']['value'] / 1000;
 	    			$scope.packageForm.volume = $scope.packageForm.alto * $scope.packageForm.ancho * $scope.packageForm.largo / 1000000; 
-	            	$http.post(servicesUrl + 'calcPackage', JSON.stringify({ distance: $scope.packageForm.distance, weigth: $scope.packageForm.peso, volume: volume  }))
+	            	$http.post(servicesUrl + 'calcPackage', JSON.stringify({ distance: $scope.packageForm.distance, weigth: $scope.packageForm.peso, volume: $scope.packageForm.volume  }))
 	            		.then(function(result){
 	            			$scope.packagePrice = result.data;
 	        		});
@@ -193,7 +193,8 @@ goOnApp.controller('packageController', function($scope, $http, uiGridConstants,
         		.then(function(result){
         			if(result.data.success)
         			{
-        				$scope.showSuccessAlert("La encomienda ha sido agendada.")
+        				$scope.showSuccessAlert("La encomienda ha sido agendada.");
+        				$scope.hidePackageForm();
         			}
         			else
         			{

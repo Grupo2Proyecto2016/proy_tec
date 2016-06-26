@@ -117,6 +117,7 @@ goOnApp.controller('employeesController', function($scope, $http, $filter, uiGri
     	[
           { name:'Nombre', field: 'nombre' },
           { name:'Apellido', field: 'apellido' },
+          { name:'CI', field: 'ci' },
           { name:'Nombre de Usuario', field: 'usrname'},
           { name:'Correo', field: 'email' },
           { name: 'Dirección', field: 'direccion' },

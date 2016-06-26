@@ -39,6 +39,12 @@
 			    	</div>
 				  </div>
 				  <div class="form-group">
+				    <label class="control-label col-sm-4" for="ci">Nro Documento:</label>
+				    <div class="col-sm-6">
+				    	<input type="text" pattern="^[0-9]{6,7}$" title="Ingrese solo números sin el dígito verificador" name="ci" class="form-control" ng-model="userModel.ci" required>
+			    	</div>
+				  </div>
+				  <div class="form-group">
 				    <label class="control-label col-sm-4" for="birth">Fecha de nacimiento:</label>
 				    <div class="col-sm-6">
 				    	<input type="date" name="birth" class="form-control" ng-model="userModel.fch_nacimiento" required>

@@ -2,8 +2,10 @@ package com.springmvc.logic.implementations;
 
 import java.util.List;
 import com.springmvc.dataaccess.context.TenantDAContext;
+import com.springmvc.entities.tenant.Encomienda;
 import com.springmvc.entities.tenant.Parametro;
 import com.springmvc.entities.tenant.Usuario;
+import com.springmvc.entities.tenant.Viaje;
 import com.springmvc.enums.Parameter;
 import com.springmvc.logic.interfaces.IParametersLogic;
 
@@ -36,5 +38,25 @@ public class PackageLogic
 	public void CreatePackage(float distance, float volume, float weigth, Usuario sender, Usuario receipt, Usuario employee, long travelId)
 	{
 		int price = CalcPackage(distance, volume, weigth);
+		Viaje travel = TenantContext.ViajeRepository.FindByID(travelId);
+		
+		Encomienda pack = new Encomienda();
+		pack.setViaje(travel);
+		pack.setPrecio(price);
+		pack.setCi_emisor(sender.getCi());
+		pack.setCi_receptor(receipt.getCi());
+		pack.setPeso(weigth);
+		pack.setVolumen(volume);
+		pack.setUsr_crea(employee);
+		if(sender.getIdUsuario() != 0)
+		{
+			pack.setUsr_envia(sender);
+		}
+		if(receipt.getIdUsuario() != 0)
+		{
+			pack.setUsr_recibe(receipt);
+		}
+		
+		TenantContext.EncomiendaRepository.AddPackage(pack);
 	}
 }

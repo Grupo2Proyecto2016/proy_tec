@@ -91,6 +91,7 @@ public class UserRestController
     	userToPersist.setNombre(user.nombre);
     	userToPersist.setApellido(user.apellido);
     	userToPersist.setUsrname(user.usrname);
+    	userToPersist.setCi(user.ci);
     	userToPersist.setEmail(user.email);
     	userToPersist.setTelefono(user.telefono);
     	userToPersist.setDireccion(user.direccion);
@@ -123,6 +124,7 @@ public class UserRestController
     	userToPersist.setPasswd(hashedPass);
     	userToPersist.setNombre(user.nombre);
     	userToPersist.setApellido(user.apellido);
+    	userToPersist.setCi(user.ci);
     	userToPersist.setUsrname(user.usrname);
     	userToPersist.setEmail(user.email);
     	userToPersist.setTelefono(user.telefono);

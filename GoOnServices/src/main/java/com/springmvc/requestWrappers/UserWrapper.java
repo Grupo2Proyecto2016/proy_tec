@@ -12,6 +12,8 @@ public class UserWrapper
 
 	public String 	usrname;
 
+	public String 	ci;
+	
 	public String 	passwd;
 	
 	public String 	email;

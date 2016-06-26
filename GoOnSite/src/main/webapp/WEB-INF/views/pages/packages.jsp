@@ -110,7 +110,7 @@
 							    	<div ng-show="eOption == 2">
 								    	<label class="control-label col-sm-5" for="emisorDoc">CI Emisor:</label>
 										<div class="col-sm-7">
-											<input type="number" min="10000000" step="1" class="form-control" name="emisorDoc" ng-model="packageForm.eDoc" ng-required="eOption == 2">
+											<input type="text" pattern="^[0-9]{6,7}$" title="Ingrese solo números sin el dígito verificador" class="form-control" name="emisorDoc" ng-model="packageForm.eDoc" ng-required="eOption == 2">
 									    </div>
 							    	</div>
 							    	<div ng-show="eOption == 1">
@@ -129,7 +129,7 @@
 									<div ng-show="rOption == 2">
 										<label class="control-label col-sm-5" for="receptorDoc">CI Receptor:</label>
 										<div class="col-sm-7">
-											<input type="number" min="10000000" step="1" class="form-control" name="receptorDoc" ng-model="packageForm.rDoc" ng-required="rOption == 2">
+											<input type="text" pattern="^[0-9]{6,7}$" title="Ingrese solo números sin el dígito verificador" class="form-control" name="receptorDoc" ng-model="packageForm.rDoc" ng-required="rOption == 2">
 									    </div>
 								    </div>
 								    <div ng-show="rOption == 1">

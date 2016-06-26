@@ -68,6 +68,12 @@
 										<p>{{$parent.user.apellido}}</p>
 									</div>
 								</div>
+								<div class="form-group">
+								    <label class="control-label col-sm-4" for="ci">Nro Documento:</label>
+								    <div class="col-sm-8">
+								    	<p>{{$parent.user.ci}}</p>
+							    	</div>
+							    </div>
 								<div class="form-group row">
 									<label class="control-label col-sm-4" for="birth">Fecha
 										de nacimiento:</label>
@@ -199,6 +205,12 @@
 									ng-model="userModel.apellido" required>
 							</div>
 						</div>
+						<div class="form-group">
+						    <label class="control-label col-sm-4" for="ci">Nro Documento:</label>
+						    <div class="col-sm-6">
+						    	<input type="text" pattern="^[0-9]{6,7}$" title="Ingrese solo números sin el dígito verificador" name="ci" class="form-control" ng-model="userModel.ci" required>
+					    	</div>
+					    </div>
 						<div class="form-group">
 							<label class="control-label col-sm-4" for="birth">Fecha
 								de nacimiento:</label>
