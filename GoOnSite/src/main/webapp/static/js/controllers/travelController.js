@@ -303,22 +303,25 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     	$http.post(servicesUrl +'searchTravels', JSON.stringify($scope.travelSearch))
 		.success(function(data, status, headers, config)
 		{				
+			$("#travelsSearchGrid").removeClass('hidden');
 			$.unblockUI();
 			//carga la grilla
 			$scope.travels = data;
-			$scope.travelsGrid.data = $scope.travels;
-			$("#travelsGrid").removeClass('hidden');   
-	    										
+			$scope.travelsSearchGrid.data = $scope.travels;			  
+			//hace scroll hasta la tabla
+			element = document.getElementById("travelsSearchGrid");
+			alignWithTop = true;
+			element.scrollIntoView(alignWithTop);    										
 		})
 		.error(function()
 		{
 			$.unblockUI();
-			//$scope.error_message = 'Ha ocurrido un error al crear la sucursal. Intente de nuevo en unos instantes.'; 
+			//$scope.error_message = ''; 
 			//$("#errorModal").modal("toggle");
 		}); 	
     };
     
-    $scope.travelsGrid = 
+    $scope.travelsSearchGrid = 
     {
 		paginationPageSizes: [15, 30, 45],
 	    paginationPageSize: 15,
@@ -335,14 +338,9 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
         	  name: 'Pasajeros Parados', 
         	  cellTemplate: '<div class="text-center ngCellText">{{row.entity.linea.viaja_parado | SiNo}}</div>'
           },
-          { name:'Nº Coche', field: 'vehiculo.id_vehiculo' },
-//          { name: 'Acciones',
-//        	enableFiltering: false,
-//        	enableSorting: false,
-//            cellTemplate:'<p align="center"><button style="" class="btn-xs btn-danger" ng-click="grid.appScope.showDeleteDialog(row)">Eliminar</button></p>'
-//    	  }
+          { name:'Nº Coche', field: 'vehiculo.id_vehiculo' }
         ]
-    };
+     };
     
     $scope.showDestinationMap = function()
     {
