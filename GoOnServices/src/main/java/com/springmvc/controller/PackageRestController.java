@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.springmvc.entities.tenant.Encomienda;
 import com.springmvc.entities.tenant.Linea;
 import com.springmvc.entities.tenant.Parada;
 import com.springmvc.entities.tenant.Usuario;
@@ -45,6 +46,17 @@ public class PackageRestController
 		int price = pl.CalcPackage(calcWrapper.distance, calcWrapper.volume, calcWrapper.weigth);
 
 		return new ResponseEntity<String>(Integer.toString(price), HttpStatus.CREATED);
+	}
+	
+	@Secured({"ROLE_CLIENT"})
+	@RequestMapping(value = "/userPackages", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<List<Encomienda>> UserPackages(@PathVariable String tenantid, HttpServletRequest request) throws Exception
+	{
+		Usuario currentUser = context.GetUser(request, tenantid);
+		PackageLogic pl = new PackageLogic(tenantid);
+		List<Encomienda> packages = pl.GetUserPackages(currentUser);
+
+		return new ResponseEntity<List<Encomienda>>(packages, HttpStatus.OK);
 	}
 	
 	@Secured({"ROLE_SALES"})

@@ -6,6 +6,7 @@ import com.springmvc.entities.tenant.Encomienda;
 import com.springmvc.entities.tenant.Parametro;
 import com.springmvc.entities.tenant.Usuario;
 import com.springmvc.entities.tenant.Viaje;
+import com.springmvc.enums.PackageStatus;
 import com.springmvc.enums.Parameter;
 import com.springmvc.logic.interfaces.IParametersLogic;
 
@@ -41,6 +42,7 @@ public class PackageLogic
 		Viaje travel = TenantContext.ViajeRepository.FindByID(travelId);
 		
 		Encomienda pack = new Encomienda();
+		pack.setStatus(PackageStatus.Created.getValue());
 		pack.setViaje(travel);
 		pack.setPrecio(price);
 		pack.setCi_emisor(sender.getCi());
@@ -58,5 +60,10 @@ public class PackageLogic
 		}
 		
 		TenantContext.EncomiendaRepository.AddPackage(pack);
+	}
+
+	public List<Encomienda> GetUserPackages(Usuario currentUser) 
+	{
+		return TenantContext.EncomiendaRepository.GetByClient(currentUser.getIdUsuario());
 	}
 }
