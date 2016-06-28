@@ -25,8 +25,12 @@ public class MantenimientoRepository {
 	{
 		List<Mantenimiento> mantenimientos = null;
 		Query q = entityManager.createQuery("FROM Mantenimiento");
-		mantenimientos = (List<Mantenimiento>)q.getResultList();
-		return mantenimientos;	
+		try {
+			mantenimientos = (List<Mantenimiento>)q.getResultList();
+			return mantenimientos;
+		} catch (Exception e) {
+			throw e;
+		}
 	}
 	
 	public void InsertMantenimiento(Mantenimiento mantenimiento)
@@ -73,8 +77,6 @@ public class MantenimientoRepository {
 		try
 		{
 			t.begin();
-			mant.setEstado(0);
-			mant.setFecha(new Date());
 			t.commit();
 		}
 		catch(Exception ex)

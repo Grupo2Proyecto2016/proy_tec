@@ -44,7 +44,23 @@
 									</select>	
 						    	</div>
 					    	</div>
-				    	</div>								
+				    	</div>	
+				    	<div class="form-group">
+				    		<div class="col-sm-6">
+									<label class="control-label col-sm-3" for="dayFrom">Desde el día:</label>
+									<div class="col-sm-9">
+										<input type="date" class="form-control" min="{{minDate | date:'yyyy-MM-dd'}}" max="{{mantenimientoForm.dayTo | date:'yyyy-MM-dd'}}" name="mantenimientoForm.dayFrom" ng-model="mantenimientoForm.dayFrom" required>
+								    </div>
+							</div>
+							<div class="col-sm-6" style="padding: 0;">
+								<div class="col-sm-12">
+								    <label class="control-label col-sm-3" for="dayTo">Hasta el día:</label>
+									<div class="col-sm-9">
+										<input type="date" class="form-control" name="dayTo" min="{{mantenimientoForm.dayFrom | date:'yyyy-MM-dd'}}" max="{{maxDate | date:'yyyy-MM-dd'}}" ng-model="mantenimientoForm.dayTo" required>
+								    </div>
+								</div>	
+							</div>  
+						</div>						
 		  		<div class="form-group"> 
 		    		<div class="col-sm-10">
 		      		<button style="float: right" type="submit" class="btn btn-info">Crear</button>

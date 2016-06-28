@@ -4,6 +4,10 @@ goOnApp.controller('mantenimientoController', function($scope, $http, uiGridCons
     $scope.error_message = '';
     $scope.custom_response = null;
     $scope.mantenimientoToDelete = null;
+    $scope.minDate = new Date();
+    $scope.maxDate = new Date();
+    $scope.minDate.setDate($scope.minDate.getDate() + 1);
+	$scope.maxDate.setDate($scope.maxDate.getDate() + 30);
     
     i18nService.setCurrentLang('es');
     
@@ -12,8 +16,8 @@ goOnApp.controller('mantenimientoController', function($scope, $http, uiGridCons
     $scope.initForm = function()
     {
 	    $scope.mantenimientoForm.costo = 0;
-	    $scope.mantenimientoForm.estado = 0;
-	    $scope.mantenimientoForm.fecha = null;
+	    $scope.mantenimientoForm.inicio = null;
+	    $scope.mantenimientoForm.fin = null;
 	    $scope.mantenimientoForm.taller = 0;
 	    $scope.mantenimientoForm.vehiculo = 0;
 	    $scope.mantenimientoForm.user_crea = 0;
@@ -154,8 +158,8 @@ goOnApp.controller('mantenimientoController', function($scope, $http, uiGridCons
         columnDefs:
     	[
           { name:'Costo', field: 'costo' },
-          { name:'Estado', field: 'estado' },
-          {field: 'fecha', displayName: 'Fecha',type: 'date', cellFilter: 'date:\'dd-MM-yyyy H:mm\'' },
+          {field: 'inicio', displayName: 'Fecha de Inicio',type: 'date', cellFilter: 'date:\'dd-MM-yyyy H:mm\'' },
+          {field: 'fin', displayName: 'Fecha de Fin',type: 'date', cellFilter: 'date:\'dd-MM-yyyy H:mm\'' },
           { name:'Nro Vehículo', field: 'vehiculo.id_vehiculo'},
           { name:'Taller', field: 'taller.nombre' },
           { name: 'Nombre Usuario', field: 'user_crea.nombre' },

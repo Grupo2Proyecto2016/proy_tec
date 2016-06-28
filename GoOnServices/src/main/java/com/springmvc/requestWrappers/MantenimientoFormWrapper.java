@@ -1,21 +1,20 @@
 package com.springmvc.requestWrappers;
 
+import java.util.Calendar;
 import java.util.Date;
 import com.springmvc.entities.tenant.Taller;
 import com.springmvc.entities.tenant.Usuario;
 import com.springmvc.entities.tenant.Vehiculo;
 
-public class MantenimientoWrapper 
+public class MantenimientoFormWrapper 
 {
-	private long id_mantenimiento;
-	private Date fecha;
-	private Double costo;
-	private int estado;
-	private Taller taller;
-	private Vehiculo vehiculo;
-	private Usuario user_crea;
-	
-	
+	public long id_mantenimiento;
+	public Calendar dayFrom;
+	public Calendar dayTo;
+	public Double costo;
+	public Taller taller;
+	public Vehiculo vehiculo;
+	public Usuario user_crea;
 	
 	public long getId_mantenimiento() {
 		return id_mantenimiento;
@@ -23,23 +22,23 @@ public class MantenimientoWrapper
 	public void setId_mantenimiento(long id_mantenimiento) {
 		this.id_mantenimiento = id_mantenimiento;
 	}
-	public Date getFecha() {
-		return fecha;
+	public Calendar getFechaInicio() {
+		return dayFrom;
 	}
-	public void setFecha(Date fecha) {
-		this.fecha = fecha;
+	public void setFechaInicio(Calendar dayFrom) {
+		this.dayFrom = dayFrom;
+	}
+	public Calendar getFechaFin() {
+		return dayTo;
+	}
+	public void setFechaFin(Calendar dayTo) {
+		this.dayTo = dayTo;
 	}
 	public Double getCosto() {
 		return costo;
 	}
 	public void setCosto(Double costo) {
 		this.costo = costo;
-	}
-	public int getEstado() {
-		return estado;
-	}
-	public void setEstado(int estado) {
-		this.estado = estado;
 	}
 	public Taller getTaller() {
 		return taller;
@@ -59,10 +58,4 @@ public class MantenimientoWrapper
 	public void setUser_crea(Usuario user_crea) {
 		this.user_crea = user_crea;
 	}
-	
-	
-	
-	
-	
-	
 }

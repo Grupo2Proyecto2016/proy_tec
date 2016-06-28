@@ -14,9 +14,9 @@ public class Mantenimiento {
 	
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long id_mantenimiento;
-	private Date fecha;
+	private Date inicio;
+	private Date fin;
 	private Double costo;
-	private int estado;
 	@ManyToOne(fetch=FetchType.EAGER)
 	private Taller taller;
 	@ManyToOne(fetch=FetchType.EAGER)
@@ -30,23 +30,23 @@ public class Mantenimiento {
 	public void setId_mantenimiento(long id_mantenimiento) {
 		this.id_mantenimiento = id_mantenimiento;
 	}
-	public Date getFecha() {
-		return fecha;
+	public Date getInicio() {
+		return inicio;
 	}
-	public void setFecha(Date fecha) {
-		this.fecha = fecha;
+	public void setInicio(Date inicio) {
+		this.inicio = inicio;
+	}
+	public Date getFin() {
+		return fin;
+	}
+	public void setFin(Date fin) {
+		this.fin = fin;
 	}
 	public Double getCosto() {
 		return costo;
 	}
 	public void setCosto(Double costo) {
 		this.costo = costo;
-	}
-	public int getEstado() {
-		return estado;
-	}
-	public void setEstado(int estado) {
-		this.estado = estado;
 	}
 	public Taller getTaller() {
 		return taller;

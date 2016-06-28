@@ -7,6 +7,7 @@ import com.springmvc.dataaccess.context.TenantDAContext;
 import com.springmvc.entities.tenant.Mantenimiento;
 import com.springmvc.entities.tenant.Usuario;
 import com.springmvc.logic.interfaces.IMantenimientoLogic;
+import com.springmvc.requestWrappers.MantenimientoFormWrapper;
 
 public class MantenimientoLogic implements IMantenimientoLogic {
 
@@ -27,13 +28,9 @@ public class MantenimientoLogic implements IMantenimientoLogic {
 		TenantContext.TallerRepository.FindByID(id_taller);
 	}
 	
-	public void createMantenimiento(Mantenimiento mantenimiento) {
-		// Cuando el vehículo entra al mantenimiento el estado es "1"
-		mantenimiento.setEstado(1);
+	public void createMantenimiento(MantenimientoFormWrapper mantenimiento) {
 		mantenimiento.setCosto(null);
-		mantenimiento.setFecha(null);
 		TenantContext.MantenimientoRepository.InsertMantenimiento(mantenimiento);
-		
 	}
 	
 	public List<Mantenimiento> getMantenimientos() {

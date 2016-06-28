@@ -1,6 +1,7 @@
 package com.springmvc.controller;
 
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,6 +21,7 @@ import com.springmvc.logic.implementations.BranchesLogic;
 import com.springmvc.logic.implementations.MantenimientoLogic;
 import com.springmvc.logic.interfaces.IMantenimientoLogic;
 import com.springmvc.requestWrappers.CustomResponseWrapper;
+import com.springmvc.requestWrappers.MantenimientoFormWrapper;
 import com.springmvc.utils.UserContext;
 
 @RestController
@@ -41,7 +43,7 @@ public class MantenimientoRestController {
 	
     @Secured({"ROLE_ADMIN"})
 	@RequestMapping(value = "/createMantenimiento", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
-    public ResponseEntity<Void> CreateMantenimiento(@RequestBody Mantenimiento mantenimiento, @PathVariable String tenantid, HttpServletRequest request)
+    public ResponseEntity<Void> CreateMantenimiento(@RequestBody MantenimientoFormWrapper mantenimiento, @PathVariable String tenantid, HttpServletRequest request)
     {
     	Usuario user = context.GetUser(request, tenantid);
     	if(user == null)
@@ -53,7 +55,10 @@ public class MantenimientoRestController {
     		mantenimiento.setUser_crea(user);
     	}
     	
-    	MantenimientoLogic ml = new MantenimientoLogic(tenantid);		
+    	mantenimiento.dayFrom.setTimeZone(TimeZone.getDefault());
+    	mantenimiento.dayTo.setTimeZone(TimeZone.getDefault());
+    	
+    	MantenimientoLogic ml = new MantenimientoLogic(tenantid);	
 		ml.createMantenimiento(mantenimiento);		
 		return new ResponseEntity<Void>(HttpStatus.CREATED);		
     }
