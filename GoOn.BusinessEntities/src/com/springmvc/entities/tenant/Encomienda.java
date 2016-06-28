@@ -19,6 +19,7 @@ public class Encomienda {
 	private float volumen;
 	private String ci_emisor;
 	private String ci_receptor;
+	private int status;
 	private int precio;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
@@ -33,6 +34,12 @@ public class Encomienda {
 	@ManyToOne(fetch=FetchType.EAGER)
 	private Viaje viaje;
 	
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
+	}
 	public int getPrecio() {
 		return precio;
 	}

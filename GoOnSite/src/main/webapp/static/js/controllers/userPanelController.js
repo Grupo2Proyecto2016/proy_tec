@@ -2,9 +2,45 @@ goOnApp.controller('userPanelController', function($scope, $http, $location, uiG
 {
 	$scope.userModel = {};
 	$scope.passwordModel = null; //Modelo para cambiar el password
+	$scope.myPackages = [];
 	
 	i18nService.setCurrentLang('es');
     $scope.message = 'Desde aquí puedes gestionar tus datos personales, pasajes y encomiendas';
+    
+    $scope.getPackages = function()
+    {
+    	$.blockUI();
+    	$http.get(servicesUrl + 'userPackages')
+    		.then(function(response) 
+			{
+	        	if(response.status == 200)
+	        	{
+	        		$scope.myPackages = response.data;
+	        	}
+	        	$.unblockUI();
+    		})
+		;
+    };
+    $scope.getPackages();
+    
+    $scope.getPackageStatus = function(status)
+    {
+    	switch (status) 
+    	{
+		case 1:
+			return "Pendiente"
+			break;
+		case 2:
+			return "Transportado"
+			break;
+		case 3:
+			return "Retirado"
+			break;
+		default:
+			return "";
+			break;
+		}
+    };
     
     $scope.showPasswordModal = function()
     {

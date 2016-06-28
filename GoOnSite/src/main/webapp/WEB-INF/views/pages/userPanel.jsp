@@ -36,7 +36,37 @@
 								</h5>
 							</div>
 							<div id="myTicketsPanel" class="panel-collapse collapse">
-								<div class="panel-body"></div>
+								<div class="panel-body">
+									<table ng-show="myPackages.length > 0" style="width: 100%;" class="panelTable">
+										<thead> 
+											<tr>
+												<th>Origen</th>
+												<th>Destino</th>
+												<th>F. Envío</th>
+												<th>CI emisor</th>
+												<th>CI receptor</th>
+												<th>Precio</th>
+												<th>Estado</th>
+												<th></th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr ng-repeat="pack in myPackages">
+												<td>{{pack.viaje.linea.origen.descripcion}}</td>
+												<td>{{pack.viaje.linea.destino.descripcion}}</td>
+												<td>{{pack.viaje.inicio | date:'dd-MM-yyyy HH:mm'}}</td>
+												<td>{{pack.ci_emisor}}</td>
+												<td>{{pack.ci_receptor}}</td>
+												<td>$ {{pack.precio}}</td>
+												<td>{{ getPackageStatus(pack.status)}}</td>
+												<td>
+													<button ng-show="pack.status == 1" class="btn btn-sm btn-success">Seguir</button>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									<h5 class="text-center" ng-show="myPackages.length == 0">Todavía no tienes ninguna encomienda.</h5>
+								</div>
 							</div>
 						</div>
 					</div>
