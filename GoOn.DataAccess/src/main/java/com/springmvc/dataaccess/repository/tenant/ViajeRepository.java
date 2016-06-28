@@ -168,6 +168,8 @@ public class ViajeRepository {
 											+ "AND v.inicio = :dateFrom "	
 											+ "AND linea_id_linea in ("+auxin+")"*/
 		);
+		//como se busca por fecha, entra en juego la comparacion por hora, en este caso es 00:00:00
+		//entonces tiene que ser entre 2 dias para que entre en la clausula where
 		q.setParameter("dateFrom", dateFrom.getTime());
 		dateFrom.add(Calendar.DAY_OF_YEAR, 1);
 		q.setParameter("dateTo", dateFrom.getTime());
