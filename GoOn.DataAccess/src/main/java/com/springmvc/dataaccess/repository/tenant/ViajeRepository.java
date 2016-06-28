@@ -162,11 +162,15 @@ public class ViajeRepository {
 		Query q = entityManager.createQuery("FROM Viaje v "
 											//+ "WHERE v.inicio = :dateFrom "											
 											+ "WHERE v.linea.id_linea in ("+auxin+")"
+											+ "AND v.inicio > :dateFrom "
+											+ "AND v.inicio < :dateTo "
 											/*+ "WHERE v.linea.habilitado = TRUE "
 											+ "AND v.inicio = :dateFrom "	
 											+ "AND linea_id_linea in ("+auxin+")"*/
 		);
-		//q.setParameter("dateFrom", dateFrom.getTime());
+		q.setParameter("dateFrom", dateFrom.getTime());
+		dateFrom.add(Calendar.DAY_OF_YEAR, 1);
+		q.setParameter("dateTo", dateFrom.getTime());
 		travels = (List<Viaje>)q.getResultList();
 		return travels;
 	}

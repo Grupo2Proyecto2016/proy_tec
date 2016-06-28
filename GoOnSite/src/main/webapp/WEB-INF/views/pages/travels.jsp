@@ -75,10 +75,10 @@
 	</div>
 </div>
 
-<div class="row hidden" style="margin-top: 50px;" id="travelsGrid">
+<div class="row" style="margin-top: 50px;" id="travelsSearchGrid">
 	<div class="col-xs-1"></div>
 	<div class="col-xs-10">
-		<div ui-grid="travelsGrid" ui-grid-pagination class="genericGridHeader"></div>
+		<div ui-grid="travelsSearchGrid" ui-grid-pagination class="genericGridHeader"></div>
 	</div>
 	<div class="col-xs-1"></div>
 </div>
