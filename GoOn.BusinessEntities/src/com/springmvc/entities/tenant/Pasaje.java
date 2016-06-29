@@ -27,9 +27,6 @@ public class Pasaje {
 	@ManyToOne(fetch=FetchType.EAGER)
 	private Viaje viaje; 
 	
-	@ManyToOne(fetch=FetchType.EAGER)
-	private Linea linea;
-	
 	@ManyToOne(fetch=FetchType.EAGER)	
 	private Asiento asiento; 
 	
