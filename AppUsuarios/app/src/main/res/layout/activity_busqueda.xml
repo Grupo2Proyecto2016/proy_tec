@@ -25,15 +25,14 @@
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay">
             </android.support.v7.widget.Toolbar>
-
         </android.support.design.widget.AppBarLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="30dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:weightSum="7">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -41,15 +40,21 @@
                 android:textColor="@color/detalles"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="@string/mensajeBusqueda"
-                android:id="@+id/seleccioneRuta"/>
+                android:id="@+id/seleccioneRuta"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
 
             <LinearLayout
                 android:id="@+id/linear1_busqueda_form"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="55dp"
                 android:baselineAligned="false"
+                android:layout_weight="2"
                 android:weightSum="5">
 
                 <Button
@@ -79,8 +84,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="55dp"
                 android:baselineAligned="false"
+                android:layout_weight="2"
                 android:weightSum="2">
 
                 <android.support.design.widget.TextInputLayout
@@ -120,8 +125,8 @@
                 android:layout_height="wrap_content"
                 android:text="Buscar"
                 android:id="@+id/buscarButton"
-                android:layout_marginTop="58dp"
                 android:background="@color/detalles"
+                android:layout_weight="1"
                 android:layout_gravity="center_horizontal"
                 android:textColor="@color/wallet_bright_foreground_holo_dark"
                 android:layout_below="@+id/view"

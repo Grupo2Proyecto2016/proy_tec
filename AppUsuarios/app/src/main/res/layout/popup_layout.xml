@@ -21,6 +21,7 @@
             <ImageView
                 android:id="@+id/popupLogo"
                 android:layout_gravity="center_vertical"
+                android:src="@mipmap/icon"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:padding="0dip"/>

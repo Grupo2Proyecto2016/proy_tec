@@ -73,7 +73,6 @@ public class NosotrosActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(empresa.getNombre());
         ///////////ACTIONBAR////////////////
-
     }
 
 
@@ -137,17 +136,8 @@ public class NosotrosActivity extends AppCompatActivity {
         telefono.setText(Double.toString(empresa.getTelefono()));
         pais.setText(empresa.getPais());
 
-        String encodedDataString = empresa.getLogoS();
-
-        encodedDataString = encodedDataString.replace("data:image/png;base64,","");
-
-        byte[] imageAsBytes = Base64.decode(encodedDataString.getBytes(), 0);
-        logo.setImageBitmap(BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length));
-
         // Clear the default translucent background
         popup.setBackgroundDrawable(new BitmapDrawable());
-
-        // Displaying the popup at the specified location, + offsets.
         popup.showAtLocation(layout, Gravity.CENTER, 0, 0);
 
         // Getting a reference to Close button, and close the popup when clicked.

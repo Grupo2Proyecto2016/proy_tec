@@ -1,15 +1,12 @@
 package com.example.malladam.AppUsuarios.adapters;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
@@ -17,11 +14,19 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 /**
  * Created by malladam on 17/05/2016.
@@ -71,6 +76,27 @@ public class VolleyS {
     }
 
 
+    public void llamarWString(int metodo, String url,final JSONObject jsonObject, Response.Listener<String> response, Response.ErrorListener errorListener) throws TimeoutException, ExecutionException, InterruptedException {
+        StringRequest myReq = new StringRequest(metodo, url, response, errorListener) {
+
+            protected Map<String, String> getParams() throws com.android.volley.AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            };
+
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                return jsonObject.toString().getBytes();
+            }
+
+            @Override
+            public String getBodyContentType() {
+                return "application/json";
+            }
+        };
+        addToQueue(myReq);
+    }
+
 
     public void addToQueue(Request request) {
         if (request != null) {
@@ -81,6 +107,7 @@ public class VolleyS {
             mRequestQueue.add(request);
         }
     }
+
 }
 
 

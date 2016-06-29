@@ -121,7 +121,6 @@ public class SucursalesActivity extends AppCompatActivity implements OnMapReadyC
                         for (int i = 0; i < response.length(); i++) {
                             Sucursal sucursal = new Sucursal();
                             JSONObject jsonObject = (JSONObject) response.get(i);
-
                             sucursal.setAddTerminal(jsonObject.getBoolean("addTerminal"));
                             sucursal.setHasTerminal(jsonObject.getBoolean("hasTerminal"));
                             sucursal.setDireccion(jsonObject.getString("direccion"));
@@ -131,9 +130,7 @@ public class SucursalesActivity extends AppCompatActivity implements OnMapReadyC
                             sucursal.setMail(jsonObject.getString("mail"));
                             sucursal.setTelefono(jsonObject.getInt("telefono"));
                             sucursal.setNombre(jsonObject.getString("nombre"));
-
                             sucursales.add(sucursal);
-
                         }
                     if(!sucursales.isEmpty()){
                         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -149,7 +146,6 @@ public class SucursalesActivity extends AppCompatActivity implements OnMapReadyC
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .show();
                     }
-
                 } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -197,7 +193,6 @@ public class SucursalesActivity extends AppCompatActivity implements OnMapReadyC
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-
     }
     ///////////ACTIONBAR////////////////
 

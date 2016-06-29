@@ -2,37 +2,64 @@ package com.example.malladam.AppUsuarios.Activity;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.Drawable;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.PopupWindow;
 import android.widget.TextView;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.example.malladam.AppUsuarios.DataBaseManager;
 import com.example.malladam.AppUsuarios.R;
 import com.example.malladam.AppUsuarios.adapters.VolleyS;
 import com.example.malladam.AppUsuarios.models.Empresa;
+import com.example.malladam.AppUsuarios.models.Parada;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
-public class BusquedaActivity extends AppCompatActivity  implements NumberPicker.OnValueChangeListener{
+public class BusquedaActivity extends AppCompatActivity  implements NumberPicker.OnValueChangeListener, OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener{
 
     private DataBaseManager dbManager;
     private String currentDate;
@@ -48,10 +75,14 @@ public class BusquedaActivity extends AppCompatActivity  implements NumberPicker
     private Button mOrigen;
     private Button mButtonBuscar;
     private String urlgetCompany;
+    private String urlgetStations;
     private VolleyS volley;
     private Empresa empresa;
     private TextView mCantAsientos;
-    static Dialog d ;
+    private GoogleMap mMap;
+    private PopupWindow pw;
+    private List<Parada> paradas = new ArrayList<Parada>();
+    private Circle circle;
 
 
     @Override
@@ -72,8 +103,36 @@ public class BusquedaActivity extends AppCompatActivity  implements NumberPicker
         mFechaIda.setTextColor(Color.parseColor(empresa.getColorText()));
         mCantAsientos.setTextColor(Color.parseColor(empresa.getColorText()));
 
+        urlgetStations = getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)+getResources().getString(R.string.getStations);
+        volley = volley.getInstance(this);
+
         DrawerLayout mealLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         mealLayout.setBackgroundColor(Color.parseColor(empresa.getColorBack()));
+
+        mOrigen.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                try {
+                    WSgetParadas(true);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (TimeoutException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+                //initiatePopupWindow(true);
+            }
+        });
+
+        mDestino.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                initiatePopupWindow(false);
+            }
+        });
 
         dbManager = new DataBaseManager(this);
 
@@ -88,7 +147,6 @@ public class BusquedaActivity extends AppCompatActivity  implements NumberPicker
             }
         };
         mFechaIda.setOnClickListener(listenerDate);
-
 
         ///////////ACTIONBAR+NAVIGATION////////////////
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
@@ -115,7 +173,6 @@ public class BusquedaActivity extends AppCompatActivity  implements NumberPicker
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name, R.string.app_name) {
 
-            /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
@@ -128,14 +185,12 @@ public class BusquedaActivity extends AppCompatActivity  implements NumberPicker
             }
         };
 
-        // Set the drawer toggle as the DrawerListener
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setTitle(empresa.getNombre());
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         ///////////ACTIONBAR+NAVIGATION////////////
-
 
         //numberPcker//
         mCantAsientos.setOnClickListener(new View.OnClickListener()
@@ -148,9 +203,7 @@ public class BusquedaActivity extends AppCompatActivity  implements NumberPicker
     }
     @Override
     public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-
         Log.i("value is",""+newVal);
-
     }
 
     public void show()
@@ -223,6 +276,13 @@ public class BusquedaActivity extends AppCompatActivity  implements NumberPicker
                                 startActivity(intent);
                                 finish();
                                 return true;
+
+                            case R.id.misEncomiendas:
+                                menuItem.setChecked(true);
+                                intent = new Intent(getApplicationContext(), EncomiendasActivity.class);
+                                startActivity(intent);
+                                finish();
+                                return true;
                         }
                         return true;
                     }
@@ -285,5 +345,128 @@ public class BusquedaActivity extends AppCompatActivity  implements NumberPicker
     }
     ///////////DATEPICKER////////////////
 
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+    }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        for (final Parada item : paradas) {
+            LatLng suc = new LatLng(item.getLatitud(), item.getLongitud());
+            if(item.getEsTerminal()) {
+                mMap.addMarker(new MarkerOptions()
+                        .position(suc)
+                        .title(item.getDireccion())
+                        .snippet(item.getDescripcion())
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+            }else{
+                mMap.addMarker(new MarkerOptions()
+                        .position(suc)
+                        .title(item.getDireccion())
+                        .snippet(item.getDescripcion())
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+            }
+        }
+
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(-34.83346,-56.16735), 10.0f));//montevideo
+        mMap.setOnInfoWindowClickListener(this);
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                double radiusInMeters = 1000;
+                // Fill color of the circle
+                // 0x represents, this is an hexadecimal code
+                // 55 represents percentage of transparency. For 100% transparency, specify 00.
+                // For 0% transparency ( ie, opaque ) , specify ff
+                // The remaining 6 characters(00ff00) specify the fill color
+
+                if(circle != null) {
+                    circle.remove();
+                }
+                CircleOptions circleOptions = new CircleOptions().center(latLng).radius(radiusInMeters).fillColor(0x550000ff).strokeColor(Color.BLUE).strokeWidth(2);
+                circle = mMap.addCircle(circleOptions);
+            }
+        });
+    }
+
+    private void initiatePopupWindow(Boolean origen){
+        LayoutInflater inflater = (LayoutInflater) BusquedaActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.popup_maps, (ViewGroup) findViewById(R.id.popupMaps));
+        Display display = getWindowManager().getDefaultDisplay();
+
+        //layout.setBackgroundColor(Color.parseColor(empresa.getColorBack()));
+        TextView mMapTitle=(TextView)layout.findViewById(R.id.mapTitle);
+        mMapTitle.setTextColor(Color.parseColor(empresa.getColorText()));
+        if(origen){
+            mMapTitle.setText(getResources().getString(R.string.dondesubes));
+        }else {
+            mMapTitle.setText(getResources().getString(R.string.dondequieresir));
+        }
+
+        pw = new PopupWindow(layout, display.getWidth() - 120, display.getHeight() - 120);
+        pw.showAtLocation(layout, Gravity.CENTER, 0, 0);
+
+        ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapPopup)).getMapAsync(this);
+
+        Button buttonOk=(Button)layout.findViewById(R.id.maps_ok);
+        buttonOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SupportMapFragment f = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapPopup);
+                if (f != null)
+                    getSupportFragmentManager().beginTransaction().remove(f).commit();
+                pw.dismiss();
+            }
+        });
+    }
+
+    private void WSgetParadas(final Boolean origen) throws JSONException, TimeoutException, ExecutionException {
+        try {
+            volley.llamarWSarray(Request.Method.GET,urlgetStations, null,new Response.Listener<JSONArray>(){
+                @Override
+                public void onResponse(JSONArray response) {
+                    try {
+                        for (int i = 0; i < response.length(); i++) {
+                            Parada parada = new Parada();
+                            JSONObject jsonObject = (JSONObject) response.get(i);
+                            parada.setDescripcion(jsonObject.getString("descripcion"));
+                            parada.setDireccion(jsonObject.getString("direccion"));
+                            parada.setEsPeaje(false);//hardcode jsonObject.getBoolean("es_peaje")
+                            parada.setEsTerminal(false);//hardcode jsonObject.getBoolean("es_terminal")
+                            parada.setLatitud(jsonObject.getDouble("latitud"));
+                            parada.setLongitud(jsonObject.getDouble("longitud"));
+                            parada.setId_parada(jsonObject.getInt("id_parada"));
+                            parada.setReajuste(jsonObject.getInt("reajuste"));
+                            parada.setSucursal(false);//hardcode  jsonObject.getBoolean("sucursal")
+                            paradas.add(parada);
+                        }
+                        if(!paradas.isEmpty()){
+                            initiatePopupWindow(origen);
+                        }else{
+                            new AlertDialog.Builder(BusquedaActivity.this)
+                                    .setTitle("Ops!")
+                                    .setMessage("No pudimos mostrar las paradas")
+                                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                        }
+                                    })
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    Log.d("el ERROR ",volleyError.toString());
+                }
+            });
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }
