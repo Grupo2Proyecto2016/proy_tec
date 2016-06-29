@@ -67,12 +67,6 @@ public class Pasaje {
 	public void setViaje(Viaje viaje) {
 		this.viaje = viaje;
 	}
-	public Linea getLinea() {
-		return linea;
-	}
-	public void setLinea(Linea linea) {
-		this.linea = linea;
-	}
 	public Asiento getAsiento() {
 		return asiento;
 	}
@@ -90,5 +84,11 @@ public class Pasaje {
 	}
 	public void setParada_baja(Parada parada_baja) {
 		this.parada_baja = parada_baja;
+	}
+	public String getCi_user_compra() {
+		return ci_user_compra;
+	}
+	public void setCi_user_compra(String ci_user_compra) {
+		this.ci_user_compra = ci_user_compra;
 	}
 }
