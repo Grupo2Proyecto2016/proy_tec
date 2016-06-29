@@ -13,21 +13,30 @@ public class Pasaje {
 	
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)	
 	private long id_pasaje;
-	private String Desde; //coordenadas?
-	private String Hasta; //
 	private Double costo;
 	private int estado;
-	@ManyToOne(fetch=FetchType.LAZY)
-	private Usuario user_compra; //puede tener un user vende
-	@ManyToOne(fetch=FetchType.LAZY)
-	private Viaje viaje; //puede tener un user vende
-	@ManyToOne(fetch=FetchType.LAZY)
+	
+	@ManyToOne(fetch=FetchType.EAGER)
+	private Usuario user_compra;
+	
+	private String ci_user_compra; //por si lo compra un usuario no registrado
+	
+	@ManyToOne(fetch=FetchType.EAGER)
+	private Usuario usr_crea;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
+	private Viaje viaje; 
+	
+	@ManyToOne(fetch=FetchType.EAGER)
 	private Linea linea;
-	@ManyToOne(fetch=FetchType.LAZY)	
-	private Asiento asiento; //puede tener un user vende
-	@ManyToOne(fetch=FetchType.LAZY)
+	
+	@ManyToOne(fetch=FetchType.EAGER)	
+	private Asiento asiento; 
+	
+	@ManyToOne(fetch=FetchType.EAGER)
 	private Parada parada_sube;
-	@ManyToOne(fetch=FetchType.LAZY)
+	
+	@ManyToOne(fetch=FetchType.EAGER)
 	private Parada parada_baja;
 	
 	public long getId_pasaje() {
@@ -36,18 +45,7 @@ public class Pasaje {
 	public void setId_pasaje(long id_pasaje) {
 		this.id_pasaje = id_pasaje;
 	}
-	public String getDesde() {
-		return Desde;
-	}
-	public void setDesde(String desde) {
-		Desde = desde;
-	}
-	public String getHasta() {
-		return Hasta;
-	}
-	public void setHasta(String hasta) {
-		Hasta = hasta;
-	}
+	
 	public Double getCosto() {
 		return costo;
 	}
