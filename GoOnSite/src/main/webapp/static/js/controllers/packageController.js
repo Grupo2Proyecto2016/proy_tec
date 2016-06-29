@@ -159,8 +159,27 @@ goOnApp.controller('packageController', function($scope, $http, uiGridConstants,
     	return validCalcForm;
     };
     
+    
     $scope.createPackage = function()
     {
+    	if($scope.rOption == "1")
+		{
+			$scope.packageForm.rDoc = null;
+		}
+		else
+		{
+			$scope.packageForm.rUser = null;
+		}
+		
+		if($scope.eOption == "1")
+		{
+			$scope.packageForm.eDoc = null;
+		}
+		else
+		{
+			$scope.packageForm.eUser = null;
+		}
+		
     	if($scope.packageInputsFilled() && $scope.pForm.$valid && $scope.cForm.$valid)
     	{
     		$scope.calc_error = null;
@@ -172,23 +191,7 @@ goOnApp.controller('packageController', function($scope, $http, uiGridConstants,
     		else
     		{
     			$scope.packageForm.travel_id = rows[0].id_viaje;
-    			if($scope.rOption == "1")
-    			{
-    				$scope.packageForm.rDoc = null;
-    			}
-    			else
-    			{
-    				$scope.packageForm.rUser = null;
-    			}
     			
-    			if($scope.eOption == "1")
-    			{
-    				$scope.packageForm.eDoc = null;
-    			}
-    			else
-    			{
-    				$scope.packageForm.eUser = null;
-    			}
     			$http.post(servicesUrl + 'createPackage', JSON.stringify($scope.packageForm))
         		.then(function(result){
         			if(result.data.success)
