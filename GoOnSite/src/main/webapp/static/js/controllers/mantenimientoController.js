@@ -16,12 +16,11 @@ goOnApp.controller('mantenimientoController', function($scope, $http, uiGridCons
     $scope.initForm = function()
     {
 	    $scope.mantenimientoForm.costo = 0;
-	    $scope.mantenimientoForm.inicio = null;
-	    $scope.mantenimientoForm.fin = null;
 	    $scope.mantenimientoForm.taller = 0;
 	    $scope.mantenimientoForm.vehiculo = 0;
 	    $scope.mantenimientoForm.user_crea = 0;
 	    $scope.user = null;
+	    $scope.salida.costo = null;
     }
     
     $scope.initForm();
@@ -181,7 +180,9 @@ goOnApp.controller('mantenimientoController', function($scope, $http, uiGridCons
     
 	$scope.showDeleteDialog = function(row)
     {
-    	$scope.mantenimientoToDelete = row.entity.id_mantenimiento;
+    	$scope.mantenimientoToDelete.id_mantenimiento = row.entity.id_mantenimiento;
+    
+    	$scope.mantenimientoToDelete.costo = $scope.salida.costo;
     	$("#deleteModal").modal('show');
     };
     

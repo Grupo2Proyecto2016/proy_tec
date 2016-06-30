@@ -67,16 +67,17 @@ public class MantenimientoRepository {
 		return mantenimiento;
 	}
 
-	public void deleteMantenimiento(long id_mantenimiento)
+	public void deleteMantenimiento(Mantenimiento mantenimiento)
 	{
 		
-		Mantenimiento mant = FindByID(id_mantenimiento);
+		Mantenimiento mant = FindByID(mantenimiento.getId_mantenimiento());
 		
 		EntityTransaction t = entityManager.getTransaction();
 		
 		try
 		{
 			t.begin();
+			mant.setCosto(mantenimiento.getCosto());
 			t.commit();
 		}
 		catch(Exception ex)

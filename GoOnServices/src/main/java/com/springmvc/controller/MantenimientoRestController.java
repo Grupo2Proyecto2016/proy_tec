@@ -43,8 +43,12 @@ public class MantenimientoRestController {
 	
     @Secured({"ROLE_ADMIN"})
 	@RequestMapping(value = "/createMantenimiento", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
-    public ResponseEntity<Void> CreateMantenimiento(@RequestBody MantenimientoFormWrapper mantenimiento, @PathVariable String tenantid, HttpServletRequest request)
+    public ResponseEntity<?> CreateMantenimiento(@RequestBody MantenimientoFormWrapper mantenimiento, @PathVariable String tenantid, HttpServletRequest request)
     {
+    	
+    	MantenimientoLogic ml = new MantenimientoLogic(tenantid);
+    	Mantenimiento mantenimientoToPersist = new Mantenimiento();
+    	
     	Usuario user = context.GetUser(request, tenantid);
     	if(user == null)
     	{
@@ -52,25 +56,34 @@ public class MantenimientoRestController {
     	}
     	else
     	{
-    		mantenimiento.setUser_crea(user);
+    		mantenimientoToPersist.setUser_crea(user);
     	}
     	
     	mantenimiento.dayFrom.setTimeZone(TimeZone.getDefault());
     	mantenimiento.dayTo.setTimeZone(TimeZone.getDefault());
     	
-    	MantenimientoLogic ml = new MantenimientoLogic(tenantid);	
-		ml.createMantenimiento(mantenimiento);		
-		return new ResponseEntity<Void>(HttpStatus.CREATED);		
+
+    	mantenimientoToPersist.setCosto(null);
+    	mantenimientoToPersist.setTaller(mantenimiento.taller);
+    	mantenimientoToPersist.setVehiculo(mantenimiento.vehiculo);
+    	
+		ml.createMantenimiento(mantenimientoToPersist, mantenimiento.dayFrom, mantenimiento.dayTo);		
+		return new ResponseEntity(HttpStatus.OK);		
     }
     
     
 	@Secured({"ROLE_ADMIN"})
 	@RequestMapping(value = "/deleteMantenimiento", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
-	public ResponseEntity<CustomResponseWrapper> DeleteBranch(@RequestBody long id_mantenimiento, @PathVariable String tenantid)
+	public ResponseEntity<CustomResponseWrapper> DeleteBranch(@RequestBody MantenimientoFormWrapper mantenimiento, @PathVariable String tenantid)
 	{
 		MantenimientoLogic ml = new MantenimientoLogic(tenantid);
 		CustomResponseWrapper respuesta = new CustomResponseWrapper();
-		ml.deleteMantenimiento(id_mantenimiento);
+		
+		Mantenimiento mantenimientoSalida = new Mantenimiento();
+		mantenimientoSalida.setId_mantenimiento(mantenimiento.getId_mantenimiento());
+		mantenimientoSalida.setCosto(mantenimiento.getCosto());
+		
+		ml.deleteMantenimiento(mantenimientoSalida);
 		respuesta.setSuccess(true);
 
 		return new ResponseEntity<CustomResponseWrapper>(respuesta, HttpStatus.OK);

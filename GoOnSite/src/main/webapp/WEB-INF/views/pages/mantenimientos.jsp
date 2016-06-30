@@ -100,6 +100,13 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h3 class="modal-title">Solicitud de confirmación</h4>
       </div>
+<!-- 		<div class="form-group"> -->
+<!-- 			<label class="control-label col-sm-4" for="costo">Costo:</label> -->
+<!-- 			<div class="col-sm-8"> -->
+<!-- 			<input type="text" pattern="[0-9]+" title="Solo se aceptan números" name="costo" class="form-control" -->
+<!-- 			ng-model="salida.costo" required> -->
+<!-- 			</div> -->
+<!-- 		</div>		 -->
       <div class="modal-body">
         <p>¿Está seguro que desea quitar el vehiculo del Mantenimiento?</p>
       </div>
