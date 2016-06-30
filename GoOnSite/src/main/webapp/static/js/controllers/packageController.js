@@ -1,10 +1,12 @@
 goOnApp.controller('packageController', function($scope, $http, uiGridConstants, i18nService, $timeout) 
 {
     $scope.message = 'Desde este panel puedes dar de alta nuevas encomiendas y consulta las existentes';
+    $scope.pack = {};//package to deliver
     $scope.error_message = null;
+    
     $scope.minDate = new Date();
-    $scope.maxDate = new Date();
-	$scope.maxDate.setDate($scope.maxDate.getDate() + 30);
+	$scope.minDate.setDate($scope.minDate.getDate() - 15);
+	$scope.filterMinDate = angular.copy($scope.minDate);
 	
 	$scope.packageForm = {};
 	$scope.packagePrice = null;
@@ -262,18 +264,26 @@ goOnApp.controller('packageController', function($scope, $http, uiGridConstants,
     };
     $scope.showDeliverDialog = function(row)
     {
-    	$scope.packageToDeliver = row.entity.id_encomienda;
+    	$scope.pack.id_encomienda = row.entity.id_encomienda;
     	$("#deliverModal").modal('show');
     };
     $scope.deliverPackage = function()
     {
-    	alert("entregado!");
+    	$http.post(servicesUrl + 'deliverPackage', JSON.stringify($scope.pack))
+		.then(function(result){
+			if(result.status = 200)
+			{
+				$scope.showSuccessAlert("La encomienda ha quedado como entregada.");
+				$("#deliverModal").modal('hide');
+				$scope.getBranchPackages();
+			}
+		});
     };
     
     $scope.getBranchPackages = function()
     {
 		$.blockUI();
-    	$http.get(servicesUrl + 'getBranchPackages')
+    	$http.get(servicesUrl + 'getBranchPackages?from=' + $scope.filterMinDate)
 		.then(function(result) 
     	{
 			if(result.status == 200)

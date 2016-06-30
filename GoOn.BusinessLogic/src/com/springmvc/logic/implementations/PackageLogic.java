@@ -80,4 +80,9 @@ public class PackageLogic
 		}
 		return packages;
 	}
+
+	public void DeliverPackage(long id_encomienda) 
+	{
+		TenantContext.EncomiendaRepository.DeliverPackage(id_encomienda);
+	}
 }

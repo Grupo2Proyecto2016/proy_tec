@@ -5,6 +5,7 @@ import com.springmvc.entities.tenant.Usuario;
 
 public class PackageFormWrapper 
 {
+	public long id_encomienda;
 	public long travel_id;
 
 	public float distance;

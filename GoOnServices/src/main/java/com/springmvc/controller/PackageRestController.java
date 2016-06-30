@@ -2,8 +2,10 @@ package com.springmvc.controller;
 
 import java.awt.Dimension;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.spi.CalendarDataProvider;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springmvc.entities.tenant.Encomienda;
@@ -31,6 +34,7 @@ import com.springmvc.requestWrappers.CalcWrapper;
 import com.springmvc.requestWrappers.CustomResponseWrapper;
 import com.springmvc.requestWrappers.LinesWrapper;
 import com.springmvc.requestWrappers.PackageFormWrapper;
+import com.springmvc.requestWrappers.UserWrapper;
 import com.springmvc.utils.UserContext;
 
 
@@ -121,21 +125,30 @@ public class PackageRestController
 	
 	@Secured({"ROLE_SALES"})
 	@RequestMapping(value = "/getBranchPackages", method = RequestMethod.GET)
-	public ResponseEntity<List<Encomienda>> getTravels(@PathVariable String tenantid, HttpServletRequest request)
+	public ResponseEntity<List<Encomienda>> getBranchPackages(@RequestParam Date from, @PathVariable String tenantid, HttpServletRequest request)
 	{
-		Calendar from = Calendar.getInstance();
-		from.set(GregorianCalendar.HOUR, 0);
+		from.setHours(0);
 		Calendar to = Calendar.getInstance();
-		to.set(GregorianCalendar.HOUR, 0);
-		to.add(GregorianCalendar.DAY_OF_YEAR, 15);
+		to.setTime(from);
+		to.add(GregorianCalendar.DAY_OF_YEAR, 30);
 		
 		Usuario user = context.GetUser(request, tenantid);
 		Parada terminal = user.getSucursal().getTerminal();
 		PackageLogic pl = new PackageLogic(tenantid);
 		
-		List<Encomienda> packages = pl.GetBranchPackages(terminal, from.getTime(), to.getTime());
+		List<Encomienda> packages = pl.GetBranchPackages(terminal, from, to.getTime());
 
 		return new ResponseEntity<List<Encomienda>>(packages, HttpStatus.OK);
+	}
+	
+	@Secured({"ROLE_SALES"})
+	@RequestMapping(value = "/deliverPackage", method = RequestMethod.POST)
+	public ResponseEntity<Void> deliverPackage(@RequestBody PackageFormWrapper pack, @PathVariable String tenantid, HttpServletRequest request)
+	{
+		PackageLogic pl = new PackageLogic(tenantid);	
+		pl.DeliverPackage(pack.id_encomienda);
+
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 }
 

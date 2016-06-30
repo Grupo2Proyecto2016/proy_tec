@@ -11,6 +11,7 @@ import javax.persistence.Query;
 
 import com.springmvc.entities.tenant.Encomienda;
 import com.springmvc.entities.tenant.Parada;
+import com.springmvc.enums.PackageStatus;
 
 public class EncomiendaRepository {
 	
@@ -78,6 +79,39 @@ public class EncomiendaRepository {
 			return null;
 		}
 		return result;
+	}
+
+	public Encomienda GetById(long id_encomienda) 
+	{
+		Encomienda pack;
+		Query q = entityManager.createQuery("FROM Encomienda e WHERE e.id_encomienda = :idp");
+		q.setParameter("idp", id_encomienda);
+		try
+		{
+			pack = (Encomienda)q.getSingleResult();
+		}
+		catch(NoResultException ex)
+		{
+			return null;
+		}
+		return pack;
+	}
+	
+	public void DeliverPackage(long id_encomienda) 
+	{
+		Encomienda pack = GetById(id_encomienda);
+		EntityTransaction t = entityManager.getTransaction();
+		try
+		{
+			t.begin();
+			pack.setStatus(PackageStatus.Delivered.getValue());
+			t.commit();
+		}
+		catch(Exception ex)
+		{
+			t.rollback();
+			throw ex;
+		}
 	}
 
 }
