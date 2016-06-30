@@ -1,6 +1,7 @@
 package com.springmvc.dataaccess.repository.tenant;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -46,6 +47,28 @@ public class EncomiendaRepository {
 				+ "ORDER BY e.status ASC, e.viaje.inicio DESC "
 		);
 		q.setParameter("idUsuario", idUsuario);
+		try
+		{
+			result = q.getResultList();
+		}
+		catch(NoResultException ex)
+		{
+			return null;
+		}
+		return result;
+	}
+
+	public List<Encomienda> GetBranchPackages(Parada terminal, Date from, Date to) 
+	{
+		List<Encomienda> result = new ArrayList<>();
+		Query q = entityManager.createQuery("SELECT e FROM Encomienda e "
+				+ "WHERE e.viaje.inicio >= :from AND e.viaje.inicio <= :to "
+				+ "AND (e.viaje.linea.origen.id_parada = :idt OR e.viaje.linea.destino.id_parada = :idt) "
+				+ "ORDER BY e.status DESC, e.viaje.inicio ASC "
+		);
+		q.setParameter("idt", terminal.getId_parada());
+		q.setParameter("from", from);
+		q.setParameter("to", to);
 		try
 		{
 			result = q.getResultList();

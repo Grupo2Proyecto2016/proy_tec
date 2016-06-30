@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 
 @Entity
@@ -33,6 +34,9 @@ public class Encomienda {
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	private Viaje viaje;
+	
+	@Transient
+	public boolean ShowDeliverButton;
 	
 	public int getStatus() {
 		return status;

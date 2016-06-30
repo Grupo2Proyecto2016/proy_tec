@@ -1,6 +1,8 @@
 package com.springmvc.controller;
 
 import java.awt.Dimension;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -115,6 +117,25 @@ public class PackageRestController
 		Parada origin = user.getSucursal().getTerminal();
 		List<Viaje> travels = new LinesLogic(tenantid).GetPackageTravels(origin, destination);
 		return new ResponseEntity<List<Viaje>>(travels, HttpStatus.OK);
+	}
+	
+	@Secured({"ROLE_SALES"})
+	@RequestMapping(value = "/getBranchPackages", method = RequestMethod.GET)
+	public ResponseEntity<List<Encomienda>> getTravels(@PathVariable String tenantid, HttpServletRequest request)
+	{
+		Calendar from = Calendar.getInstance();
+		from.set(GregorianCalendar.HOUR, 0);
+		Calendar to = Calendar.getInstance();
+		to.set(GregorianCalendar.HOUR, 0);
+		to.add(GregorianCalendar.DAY_OF_YEAR, 15);
+		
+		Usuario user = context.GetUser(request, tenantid);
+		Parada terminal = user.getSucursal().getTerminal();
+		PackageLogic pl = new PackageLogic(tenantid);
+		
+		List<Encomienda> packages = pl.GetBranchPackages(terminal, from.getTime(), to.getTime());
+
+		return new ResponseEntity<List<Encomienda>>(packages, HttpStatus.OK);
 	}
 }
 

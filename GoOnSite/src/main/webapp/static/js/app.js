@@ -148,7 +148,7 @@
             	if(!$('#errorModal').hasClass('in'))
             	{
             		$timeout(function () { 
-            			$("#errorModal").modal("show");
+            			$("#genericErrorModal").modal("show");
             		}, 500);
             	}
             }

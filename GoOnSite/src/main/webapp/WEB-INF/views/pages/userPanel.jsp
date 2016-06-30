@@ -60,7 +60,9 @@
 												<td>$ {{pack.precio}}</td>
 												<td>{{ getPackageStatus(pack.status)}}</td>
 												<td>
-													<button ng-show="pack.status == 1" class="btn btn-sm btn-success">Seguir</button>
+													<a ng-show="pack.status == 2" class="btn btn-sm btn-success">
+														<i class="fa fa-map-marker fa-lg " style="margin-right: 5px;"></i>Seguir
+													</a>
 												</td>
 											</tr>
 										</tbody>
@@ -196,7 +198,7 @@
 					</h3>
 				</div>
 				<div class="modal-body">
-					<h5>¿Está seguro que deseas dar de baja tu usuario?</h5>
+					<h5>¿Estás seguro que deseas dar de baja tu usuario?</h5>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
