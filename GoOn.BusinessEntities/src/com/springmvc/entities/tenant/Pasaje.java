@@ -13,21 +13,27 @@ public class Pasaje {
 	
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)	
 	private long id_pasaje;
-	private String Desde; //coordenadas?
-	private String Hasta; //
 	private Double costo;
 	private int estado;
-	@ManyToOne(fetch=FetchType.LAZY)
-	private Usuario user_compra; //puede tener un user vende
-	@ManyToOne(fetch=FetchType.LAZY)
-	private Viaje viaje; //puede tener un user vende
-	@ManyToOne(fetch=FetchType.LAZY)
-	private Linea linea;
-	@ManyToOne(fetch=FetchType.LAZY)	
-	private Asiento asiento; //puede tener un user vende
-	@ManyToOne(fetch=FetchType.LAZY)
+	
+	@ManyToOne(fetch=FetchType.EAGER)
+	private Usuario user_compra;
+	
+	private String ci_user_compra; //por si lo compra un usuario no registrado
+	
+	@ManyToOne(fetch=FetchType.EAGER)
+	private Usuario usr_crea;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
+	private Viaje viaje; 
+	
+	@ManyToOne(fetch=FetchType.EAGER)	
+	private Asiento asiento; 
+	
+	@ManyToOne(fetch=FetchType.EAGER)
 	private Parada parada_sube;
-	@ManyToOne(fetch=FetchType.LAZY)
+	
+	@ManyToOne(fetch=FetchType.EAGER)
 	private Parada parada_baja;
 	
 	public long getId_pasaje() {
@@ -36,18 +42,7 @@ public class Pasaje {
 	public void setId_pasaje(long id_pasaje) {
 		this.id_pasaje = id_pasaje;
 	}
-	public String getDesde() {
-		return Desde;
-	}
-	public void setDesde(String desde) {
-		Desde = desde;
-	}
-	public String getHasta() {
-		return Hasta;
-	}
-	public void setHasta(String hasta) {
-		Hasta = hasta;
-	}
+	
 	public Double getCosto() {
 		return costo;
 	}
@@ -72,12 +67,6 @@ public class Pasaje {
 	public void setViaje(Viaje viaje) {
 		this.viaje = viaje;
 	}
-	public Linea getLinea() {
-		return linea;
-	}
-	public void setLinea(Linea linea) {
-		this.linea = linea;
-	}
 	public Asiento getAsiento() {
 		return asiento;
 	}
@@ -95,5 +84,11 @@ public class Pasaje {
 	}
 	public void setParada_baja(Parada parada_baja) {
 		this.parada_baja = parada_baja;
+	}
+	public String getCi_user_compra() {
+		return ci_user_compra;
+	}
+	public void setCi_user_compra(String ci_user_compra) {
+		this.ci_user_compra = ci_user_compra;
 	}
 }

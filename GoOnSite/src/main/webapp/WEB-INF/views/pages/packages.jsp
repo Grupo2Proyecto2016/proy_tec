@@ -44,7 +44,7 @@
 						    	<div class="col-sm-6">
 									<label class="control-label col-sm-5" for="packageHeigth">Alto (cm):</label>
 									<div class="col-sm-7">
-										<input type="number" min="5" step="5" class="form-control" name="packageHeigth" ng-model="packageForm.alto">
+										<input type="number" min="5" step="5" class="form-control" name="packageHeigth" ng-model="packageForm.alto" required>
 								    </div>				
 								</div>	
 					    	</div>				
@@ -54,7 +54,7 @@
 								<div class="col-sm-6">
 									<label class="control-label col-sm-5" for="packageBaseLenght">Largo de base (cm):</label>
 									<div class="col-sm-7">
-										<input type="number" min="5" step="5" class="form-control" name="packageBaseLenght" ng-model="packageForm.largo">
+										<input type="number" min="5" step="5" class="form-control" name="packageBaseLenght" ng-model="packageForm.largo" required>
 								    </div>				
 								</div>	    
 							</div>		
@@ -62,13 +62,13 @@
 								<div class="col-sm-6">
 									<label class="control-label col-sm-3" for="packageWeight">Peso (Kg):</label>
 									<div class="col-sm-9">
-										<input type="number" min="0.1" step="0.1" title="Solo se aceptan números" class="form-control" name="packageWeight" ng-model="packageForm.peso">
+										<input type="number" min="0.1" step="0.1" title="Solo se aceptan números" class="form-control" name="packageWeight" ng-model="packageForm.peso" required>
 								    </div>
 								</div>
 								<div class="col-sm-6">
 									<label class="control-label col-sm-5" for="packageBaseWidth">Ancho de base (cm):</label>
 									<div class="col-sm-7">
-										<input type="number" min="5" step="5" class="form-control" name="packageBaseWidth" ng-model="packageForm.ancho">
+										<input type="number" min="5" step="5" class="form-control" name="packageBaseWidth" ng-model="packageForm.ancho" required>
 								    </div>				
 								</div>
 							</div>
@@ -170,15 +170,66 @@
 		
 </div>
 
+<div id="packagesGridDiv" class="row" style="margin-top: 50px;">
+	<div class="row">
+		<div class="col-xs-3"></div>
+		<div class="col-xs-6">
+			<div class="alert alert-info text-center">
+			  <p>Se muestran encomiendas en un rango de 30 días a partir de la fecha de origen</p>
+			</div>
+		</div>
+		<div class="col-xs-3"></div>
+	</div>
+	
+	<div class="col-xs-2"></div>	
+	<div class="col-xs-8">
+		<form class="form-horizontal" name="packsForm" role="form" ng-submit="getBranchPackages()">
+			<div class="form-group"> 
+				<div class="col-sm-3"></div>
+				<div class="col-sm-3">
+					<label class="control-label col-sm-3">Desde:</label>
+					<div class="col-sm-9">
+						<input type="date" class="form-control"  ng-model="filterMinDate" required>
+				    </div>
+				</div>
+	    		<div class="col-sm-3">
+	      			<button style="float: right; margin-top: 10px;" type="submit"  class="btn btn-sm btn-info">Filtrar</button>
+	    		</div>
+	    		<div class="col-sm-3"></div>
+		    </div>
+	    </form>
+		<div ui-grid="packagesGrid" style=" height: 55%;" ui-grid-pagination></div>
+	</div>
+	<div class="col-xs-2"></div>
+</div>
+
+<div class="modal fade" id="deliverModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header warning">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3 class="modal-title" id="myModalLabel">Entrega de Encomienda</h3>
+      </div>
+      <div class="modal-body">
+	  	<h5 class="text-center">¿Comfirma la entrega de esta encomienda?</h5>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+			<button type="button" class="btn btn-warning" ng-click="deliverPackage()">Entregar</button>
+		</div>        
+      </div>
+    </div>
+  </div>
+ </div>
+ 
 <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header" style="background-color: lightcoral">
+      <div class="modal-header warning">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h3 class="modal-title" id="myModalLabel">Error</h3>
+        <h3 class="modal-title" id="myModalLabel">Atención</h3>
       </div>
       <div class="modal-body">
-      	{{ error_message }}        
+      	<h5 class="text-center">{{ error_message }}</h5>        
       </div>
     </div>
   </div>

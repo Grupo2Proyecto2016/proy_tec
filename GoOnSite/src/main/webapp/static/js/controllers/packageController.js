@@ -1,10 +1,12 @@
 goOnApp.controller('packageController', function($scope, $http, uiGridConstants, i18nService, $timeout) 
 {
     $scope.message = 'Desde este panel puedes dar de alta nuevas encomiendas y consulta las existentes';
+    $scope.pack = {};//package to deliver
     $scope.error_message = null;
+    
     $scope.minDate = new Date();
-    $scope.maxDate = new Date();
-	$scope.maxDate.setDate($scope.maxDate.getDate() + 30);
+	$scope.minDate.setDate($scope.minDate.getDate() - 15);
+	$scope.filterMinDate = angular.copy($scope.minDate);
 	
 	$scope.packageForm = {};
 	$scope.packagePrice = null;
@@ -28,11 +30,14 @@ goOnApp.controller('packageController', function($scope, $http, uiGridConstants,
     	gService = new google.maps.DistanceMatrixService();
     	$("#divPackageForm").removeClass('hidden');
     	$("#packageFormLink").addClass('hidden');
+    	$("#packagesGridDiv").addClass('hidden');
     };
     $scope.hidePackageForm = function()
     {  	  	
     	$("#divPackageForm").addClass('hidden');
     	$("#packageFormLink").removeClass('hidden');
+    	$("#packagesGridDiv").removeClass('hidden');
+    	$scope.getBranchPackages();
     };
     $scope.showErrorPopup = function(message)
     {
@@ -83,7 +88,7 @@ goOnApp.controller('packageController', function($scope, $http, uiGridConstants,
 					if(result.data.length == 0)
 					{
 						$timeout(function () {            
-							$scope.showErrorPopup("Actualmente no existen viajes disponebles para el traslado de la encomienda.");    
+							$scope.showErrorPopup("Actualmente no existen viajes disponibles para el traslado de encomiendas.");    
 				        }, 500);
 					}
 					else
@@ -124,46 +129,52 @@ goOnApp.controller('packageController', function($scope, $http, uiGridConstants,
     
     $scope.calcPackage = function()
     {
-    	if($scope.packageInputsFilled())
-    	{
-    		$scope.calc_error = null;
-	    	var origin = new google.maps.LatLng($scope.packageOrigin.latitud, $scope.packageOrigin.longitud);
-	    	var destination = new google.maps.LatLng($scope.packageForm.destino.latitud, $scope.packageForm.destino.longitud);
-	    	var result = gService.getDistanceMatrix({
-	    	    origins: [origin],
-	    	    destinations: [destination],
-	    	    travelMode: google.maps.TravelMode.DRIVING,
-	    	    unitSystem: google.maps.UnitSystem.METRIC,
-	    	    avoidHighways: false,
-	    	    avoidTolls: false
-	    		},
-	    		function(response, status) 
-	    		{
-	    			$scope.packageForm.distance = response.rows[0].elements[0]['distance']['value'] / 1000;
-	    			$scope.packageForm.volume = $scope.packageForm.alto * $scope.packageForm.ancho * $scope.packageForm.largo / 1000000; 
-	            	$http.post(servicesUrl + 'calcPackage', JSON.stringify({ distance: $scope.packageForm.distance, weigth: $scope.packageForm.peso, volume: $scope.packageForm.volume  }))
-	            		.then(function(result){
-	            			$scope.packagePrice = result.data;
-	        		});
-	    		}
-	    	);
-    	}
+		$scope.calc_error = null;
+    	var origin = new google.maps.LatLng($scope.packageOrigin.latitud, $scope.packageOrigin.longitud);
+    	var destination = new google.maps.LatLng($scope.packageForm.destino.latitud, $scope.packageForm.destino.longitud);
+    	var result = gService.getDistanceMatrix({
+    	    origins: [origin],
+    	    destinations: [destination],
+    	    travelMode: google.maps.TravelMode.DRIVING,
+    	    unitSystem: google.maps.UnitSystem.METRIC,
+    	    avoidHighways: false,
+    	    avoidTolls: false
+    		},
+    		function(response, status) 
+    		{
+    			$scope.packageForm.distance = response.rows[0].elements[0]['distance']['value'] / 1000;
+    			$scope.packageForm.volume = $scope.packageForm.alto * $scope.packageForm.ancho * $scope.packageForm.largo / 1000000; 
+            	$http.post(servicesUrl + 'calcPackage', JSON.stringify({ distance: $scope.packageForm.distance, weigth: $scope.packageForm.peso, volume: $scope.packageForm.volume  }))
+            		.then(function(result){
+            			$scope.packagePrice = result.data;
+        		});
+    		}
+    	);
     };
-    $scope.packageInputsFilled = function()
-    {
-    	var validCalcForm = $scope.packageForm.peso != null || ($scope.packageForm.alto != null && $scope.packageForm.largo != null && $scope.packageForm.ancho != null);
-    	if(!validCalcForm)
-    	{
-    		$scope.calc_error = "Debe completar los datos de peso o volumen para realizar el cálculo.";
-    	}
-    	return validCalcForm;
-    };
+    
     
     $scope.createPackage = function()
     {
-    	if($scope.packageInputsFilled() && $scope.pForm.$valid && $scope.cForm.$valid)
+    	if($scope.rOption == "1")
+		{
+			$scope.packageForm.rDoc = null;
+		}
+		else
+		{
+			$scope.packageForm.rUser = null;
+		}
+		
+		if($scope.eOption == "1")
+		{
+			$scope.packageForm.eDoc = null;
+		}
+		else
+		{
+			$scope.packageForm.eUser = null;
+		}
+		
+    	if($scope.pForm.$valid && $scope.cForm.$valid)
     	{
-    		$scope.calc_error = null;
     		var rows = $scope.travelGridApi.selection.getSelectedRows();
     		if(rows.length == 0)
     		{
@@ -172,23 +183,7 @@ goOnApp.controller('packageController', function($scope, $http, uiGridConstants,
     		else
     		{
     			$scope.packageForm.travel_id = rows[0].id_viaje;
-    			if($scope.rOption == "1")
-    			{
-    				$scope.packageForm.rDoc = null;
-    			}
-    			else
-    			{
-    				$scope.packageForm.rUser = null;
-    			}
     			
-    			if($scope.eOption == "1")
-    			{
-    				$scope.packageForm.eDoc = null;
-    			}
-    			else
-    			{
-    				$scope.packageForm.eUser = null;
-    			}
     			$http.post(servicesUrl + 'createPackage', JSON.stringify($scope.packageForm))
         		.then(function(result){
         			if(result.data.success)
@@ -240,4 +235,79 @@ goOnApp.controller('packageController', function($scope, $http, uiGridConstants,
           { name:'Nº Coche', field: 'vehiculo.id_vehiculo' },
         ]
     };
+    
+    $scope.packagesGrid = 
+    {
+		paginationPageSizes: [15, 30, 45],
+	    paginationPageSize: 15,
+		enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
+		enableFiltering: true,
+		enableColumnMenus: false,
+        columnDefs:
+    	[
+          { name:'CI emisor', field: 'ci_emisor', width: '80', enableSorting: false },
+          { name:'CI receptor', field: 'ci_receptor', width: '90', enableSorting: false },
+          { name:'Origen', field: 'viaje.linea.origen.descripcion', width: '*' },
+          { name:'Destino', field: 'viaje.linea.destino.descripcion', width: '*' },
+          { name:'Peso(kg)', field: 'peso', width: '80'},
+          { name:'Volumen(m3)', field: 'volumen', width: '105'},
+          { name:'Salida', cellTemplate: '<div class="text-center ngCellText">{{ row.entity.viaje.inicio | date:"dd/MM/yyyy @ h:mma"}}</div>', width: '*' },
+          { name:'Nº Coche', field: 'viaje.vehiculo.id_vehiculo', width: '80' },
+          { name:'Estado', field: 'statusDes', width: '100'},
+          { name: ' ',
+          	enableFiltering: false,
+          	enableSorting: false,
+          	width: '60',
+            cellTemplate:'<button style="width: 60px" class="btn-xs btn-warning" ng-show="row.entity.ShowDeliverButton" ng-click="grid.appScope.showDeliverDialog(row)">Entregar</button>'
+      	  }
+        ]
+    };
+    $scope.showDeliverDialog = function(row)
+    {
+    	$scope.pack.id_encomienda = row.entity.id_encomienda;
+    	$("#deliverModal").modal('show');
+    };
+    $scope.deliverPackage = function()
+    {
+    	$http.post(servicesUrl + 'deliverPackage', JSON.stringify($scope.pack))
+		.then(function(result){
+			if(result.status = 200)
+			{
+				$scope.showSuccessAlert("La encomienda ha quedado como entregada.");
+				$("#deliverModal").modal('hide');
+				$scope.getBranchPackages();
+			}
+		});
+    };
+    
+    $scope.getBranchPackages = function()
+    {
+		$.blockUI();
+    	$http.get(servicesUrl + 'getBranchPackages?from=' + $scope.filterMinDate)
+		.then(function(result) 
+    	{
+			if(result.status == 200)
+			{
+				$scope.packages = result.data;
+				angular.forEach($scope.packages, function(pack)
+				{
+					switch(pack.status)
+					{
+						case 1: pack.statusDes = "Ingresada";
+						break;
+						case 2: pack.statusDes = "En camino";
+						break;
+						case 3: pack.statusDes = "Transportada";
+						break;
+						case 4: pack.statusDes = "Entregada";
+						break;
+					}
+				});
+				$scope.packagesGrid.data = $scope.packages;
+			}
+			$.unblockUI();
+    	});
+    };
+    
+    $scope.getBranchPackages();
 }); 	

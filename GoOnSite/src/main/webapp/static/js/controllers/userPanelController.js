@@ -28,13 +28,16 @@ goOnApp.controller('userPanelController', function($scope, $http, $location, uiG
     	switch (status) 
     	{
 		case 1:
-			return "Pendiente"
+			return "Ingresada"
 			break;
 		case 2:
-			return "Transportado"
+			return "En camino"
 			break;
 		case 3:
-			return "Retirado"
+			return "Transportada"
+			break;
+		case 4:
+			return "Entregada"
 			break;
 		default:
 			return "";

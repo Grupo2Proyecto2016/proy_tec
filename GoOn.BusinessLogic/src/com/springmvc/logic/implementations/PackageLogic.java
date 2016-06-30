@@ -1,8 +1,10 @@
 package com.springmvc.logic.implementations;
 
+import java.util.Date;
 import java.util.List;
 import com.springmvc.dataaccess.context.TenantDAContext;
 import com.springmvc.entities.tenant.Encomienda;
+import com.springmvc.entities.tenant.Parada;
 import com.springmvc.entities.tenant.Parametro;
 import com.springmvc.entities.tenant.Usuario;
 import com.springmvc.entities.tenant.Viaje;
@@ -65,5 +67,22 @@ public class PackageLogic
 	public List<Encomienda> GetUserPackages(Usuario currentUser) 
 	{
 		return TenantContext.EncomiendaRepository.GetByClient(currentUser.getIdUsuario());
+	}
+
+	public List<Encomienda> GetBranchPackages(Parada terminal, Date from, Date to) 
+	{
+		List<Encomienda> packages = TenantContext.EncomiendaRepository.GetBranchPackages(terminal, from, to);
+		for (Encomienda pack : packages) 
+		{
+			pack.ShowDeliverButton = pack.getViaje().getLinea().getDestino().getId_parada() == terminal.getId_parada() 
+					&& pack.getStatus() == PackageStatus.Transported.getValue()
+			;
+		}
+		return packages;
+	}
+
+	public void DeliverPackage(long id_encomienda) 
+	{
+		TenantContext.EncomiendaRepository.DeliverPackage(id_encomienda);
 	}
 }

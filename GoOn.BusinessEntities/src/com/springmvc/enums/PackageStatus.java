@@ -3,8 +3,9 @@ package com.springmvc.enums;
 public enum PackageStatus 
 {
 	Created(1),
-	Transported(2),
-	Delivered(3);
+	Carring(2),
+	Transported(3),
+	Delivered(4);
 	
 	private int value; 
 	
