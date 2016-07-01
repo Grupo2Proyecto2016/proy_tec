@@ -114,4 +114,31 @@ public class EncomiendaRepository {
 		}
 	}
 
+	public void UpdatePackagesCI(long idUsuario, String ci) 
+	{
+		List<Encomienda> result = GetByClient(idUsuario);
+		EntityTransaction t = entityManager.getTransaction();
+		try
+		{
+			t.begin();
+			for (Encomienda pack : result) 
+			{
+				if(pack.getUsr_envia() != null && pack.getUsr_envia().getIdUsuario() == idUsuario)
+				{
+					pack.setCi_emisor(ci);
+				}
+				if(pack.getUsr_recibe() != null && pack.getUsr_recibe().getIdUsuario() == idUsuario)
+				{
+					pack.setCi_receptor(ci);
+				}
+			}
+			t.commit();
+		}
+		catch(Exception ex)
+		{
+			t.rollback();
+			throw ex;
+		}
+	}
+
 }

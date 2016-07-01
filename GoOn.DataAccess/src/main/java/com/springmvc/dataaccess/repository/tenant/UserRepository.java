@@ -96,6 +96,7 @@ public class UserRepository
 			t.begin();
 			user.setNombre(userUpdateData.getNombre());
 			user.setApellido(userUpdateData.getApellido());
+			user.setCi(userUpdateData.getCi());
 			user.setDireccion(userUpdateData.getDireccion());
 			user.setTelefono(userUpdateData.getTelefono());
 			user.setEmail(userUpdateData.getEmail());

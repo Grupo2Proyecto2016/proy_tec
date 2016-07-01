@@ -188,6 +188,7 @@ public class UserRestController
 			userUpdateData.setNombre(user.nombre);
 			userUpdateData.setApellido(user.apellido);
 			userUpdateData.setEmail(user.email);
+			userUpdateData.setCi(user.ci);
 			userUpdateData.setTelefono(user.telefono);
 			userUpdateData.setDireccion(user.direccion);
 			userUpdateData.setRol_id_rol(UserRol.Client.getValue());

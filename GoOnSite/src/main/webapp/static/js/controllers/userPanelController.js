@@ -174,6 +174,7 @@ goOnApp.controller('userPanelController', function($scope, $http, $location, uiG
 	        	if(response.status == 200)
 	        	{
 	        		$scope.$parent.user = $scope.userModel;
+	        		$scope.getPackages();
 	        		$scope.hideUpdateUserModal();
 	        	}
 	        	$.unblockUI();
