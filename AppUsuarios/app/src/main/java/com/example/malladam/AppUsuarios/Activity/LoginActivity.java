@@ -216,7 +216,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             //Toast.makeText(LoginActivity.this, volleyError.toString(), Toast.LENGTH_LONG).show();
                             Log.d("el ERROR del token es ",volleyError.toString());
                         }
-                    });
+                    }, null);
             Thread.sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -335,7 +335,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         mUserView.setError("Ok",okIcon);
                         focusView = mUserView;
                         userExist = true;
-
                     }
                 });
                 return super.parseNetworkResponse(response);
@@ -361,5 +360,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
+
 }
 

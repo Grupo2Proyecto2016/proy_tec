@@ -1,29 +1,28 @@
 package com.example.malladam.AppUsuarios.Activity;
 
-import android.app.ActionBar;
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -31,15 +30,25 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.example.malladam.AppUsuarios.DataBaseManager;
 import com.example.malladam.AppUsuarios.R;
 import com.example.malladam.AppUsuarios.adapters.VolleyS;
 import com.example.malladam.AppUsuarios.models.Empresa;
+import com.example.malladam.AppUsuarios.models.Encomienda;
 import com.example.malladam.AppUsuarios.models.Terminal;
 import com.example.malladam.AppUsuarios.utils.MenuTintUtils;
 import com.google.android.gms.maps.model.LatLng;
@@ -55,8 +64,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TimeZone;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
@@ -70,19 +85,36 @@ public class EncomiendasActivity extends AppCompatActivity {
     List listTerminales;
     ArrayAdapter arrayAdapter;
     private VolleyS volley;
-    private String urlgetTerminales,urlCalcPackage;
+    private String urlgetTerminales,urlCalcPackage,urlUserPackages, urlToken;
     List<Terminal> terminales = new ArrayList<Terminal>();
     LatLng latLngOrigen, latLngDestino;
     Integer distanceEnc;
     float volumeEnc;
     String alto, largo, ancho, peso;
-    View focusView = mPeso;
-
+    //View focusView = mPeso;
+    TextView mOrigenEnc,mDestinoEnc, mFechaEnc, mCiEmiEnc, mCiRecEnc, mPrecioEnc, mEstadoEnc;
+    TextView mOrigenEncAUX,mDestinoEncAUX, mFechaEncAUX, mCiEmiEncAUX, mCiRecEncAUX, mPrecioEncAUX, mEstadoEncAUX;
+    TableLayout mTableLayout;
+    TableRow mTableRow;
+    DataBaseManager dbManager;
+    private View mProgressView;
+    Handler mHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_encomiendas);
+
+        mTableLayout = (TableLayout) findViewById(R.id.tableEnc);
+        mTableLayout.setStretchAllColumns(true);
+        mOrigenEnc = (TextView) findViewById(R.id.tvOrigenEnc);
+        mDestinoEnc = (TextView) findViewById(R.id.tvDestinoEnc);
+        mFechaEnc = (TextView) findViewById(R.id.tvFechaEnc);
+        mCiEmiEnc = (TextView) findViewById(R.id.tvCiEmiEnc);
+        mCiRecEnc = (TextView) findViewById(R.id.tvCiRecEnc);
+        mPrecioEnc = (TextView) findViewById(R.id.tvPrecioEnc);
+        mEstadoEnc = (TextView) findViewById(R.id.tvEstadoEnc);
+        mProgressView = findViewById(R.id.enco_progress);
 
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -92,13 +124,30 @@ public class EncomiendasActivity extends AppCompatActivity {
         ///////WS///////
         urlgetTerminales = getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)+getResources().getString(R.string.getTerminals);
         urlCalcPackage = getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)+getResources().getString(R.string.calcPackage);
+        urlUserPackages = getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)+getResources().getString(R.string.userPackages);
+        urlToken = getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)+getResources().getString(R.string.auth);
         volley = volley.getInstance(this);
         ///////WS///////
 
-
         empresa = empresa.getInstance();
+        dbManager = new DataBaseManager(this);
+        mHandler = new Handler();
+
         LinearLayout mealLayout = (LinearLayout) findViewById(R.id.linear_encomiendas);
         mealLayout.setBackgroundColor(Color.parseColor(empresa.getColorBack()));
+
+
+        mOrigenEnc.setTextColor(Color.parseColor(empresa.getColorText()));
+        mDestinoEnc.setTextColor(Color.parseColor(empresa.getColorText()));
+        mFechaEnc.setTextColor(Color.parseColor(empresa.getColorText()));
+        mEstadoEnc.setTextColor(Color.parseColor(empresa.getColorText()));
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            mCiEmiEnc.setTextColor(Color.parseColor(empresa.getColorText()));
+            mCiRecEnc.setTextColor(Color.parseColor(empresa.getColorText()));
+            mPrecioEnc.setTextColor(Color.parseColor(empresa.getColorText()));
+        }
+
 
         ///////////ACTIONBAR+NAVIGATION////////////////
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -110,7 +159,9 @@ public class EncomiendasActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(empresa.getNombre());
         ///////////ACTIONBAR////////////////
 
+        //cargarGrillaEncomeindas(encomiendas);
         try {
+            WSgetUserPackages(dbManager.getTokenLogueado());
             WSgetTerminales();
         } catch (JSONException e) {
             e.printStackTrace();
@@ -230,9 +281,7 @@ public class EncomiendasActivity extends AppCompatActivity {
                 }
                 if (TextUtils.isEmpty(peso)) {
                     peso = "1";
-                }
-
-/*
+                }/*
                 boolean validacion = true;
                 if (TextUtils.isEmpty(alto)) {
                     mAlto.setError(getString(R.string.error_field_required));
@@ -284,6 +333,7 @@ public class EncomiendasActivity extends AppCompatActivity {
                             Toast.makeText(EncomiendasActivity.this, "Error al obtener las terminales desponibles", Toast.LENGTH_LONG).show();
                         }else{
                             listTerminales=covertirTerminalesAlistaSpinner(terminales);
+                            mProgressView.setVisibility(View.GONE);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -294,7 +344,7 @@ public class EncomiendasActivity extends AppCompatActivity {
                 public void onErrorResponse(VolleyError volleyError) {
                     Log.d("el ERROR ",volleyError.toString());
                 }
-            });
+            }, null);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -437,5 +487,249 @@ public class EncomiendasActivity extends AppCompatActivity {
 
         return 0;
     }
+
+    private void WSgetUserPackages(String tokenUser) throws JSONException, TimeoutException, ExecutionException {
+        try {
+            volley.llamarWSarray(Request.Method.GET,urlUserPackages, null,new Response.Listener<JSONArray>(){
+                @Override
+                public void onResponse(JSONArray response) {
+                    List<Encomienda> encomiendas = new ArrayList<Encomienda>();
+                    try {
+                        for (int i = 0; i < response.length(); i++) {
+                            Encomienda encomienda = new Encomienda();
+                            JSONObject jsonObject = (JSONObject) response.get(i);
+                            encomienda.setCiEmisor(jsonObject.getString("ci_emisor"));
+                            encomienda.setCiReceptor(jsonObject.getString("ci_receptor"));
+                            encomienda.setEstado(jsonObject.getString("status"));
+                            encomienda.setPrecio(Float.parseFloat(jsonObject.getString("precio")));
+                            JSONObject viaje = jsonObject.getJSONObject("viaje");
+                            encomienda.setFecha(viaje.getLong("inicio"));
+                            JSONObject linea = viaje.getJSONObject("linea");
+                            JSONObject origen = linea.getJSONObject("origen");
+                            encomienda.setOrigen(origen.getString("descripcion"));
+                            JSONObject destino = linea.getJSONObject("destino");
+                            encomienda.setDestino(destino.getString("descripcion"));
+                            encomiendas.add(encomienda);
+                        }
+                        if(encomiendas.isEmpty()){
+                            Toast.makeText(EncomiendasActivity.this, "Usted no ha enviado encomiendas aún", Toast.LENGTH_LONG).show();
+                        }else{
+                            cargarGrillaEncomeindas(encomiendas);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    if( volleyError instanceof AuthFailureError) {
+                        try {
+                            refrescarLogin(dbManager.getUserLogueado(), dbManager.getPassLogueado());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (TimeoutException e) {
+                            e.printStackTrace();
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    Log.d("el ERROR ",volleyError.toString());
+                }
+            }, tokenUser);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void cargarGrillaEncomeindas(List<Encomienda> encomiendas){
+
+        SimpleDateFormat formato = new SimpleDateFormat("dd-MMM-yyyy");
+
+        for (Encomienda item: encomiendas) {
+
+            mTableRow = new TableRow(this);
+
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+                mCiEmiEncAUX = new TextView(this);
+                mCiRecEncAUX = new TextView(this);
+                mPrecioEncAUX = new TextView(this);
+
+                mCiEmiEncAUX.setText(String.valueOf(item.getCiEmisor()));
+                mCiRecEncAUX.setText(String.valueOf(item.getCiReceptor()));
+                mPrecioEncAUX.setText(String.valueOf(item.getPrecio()));
+
+                mCiEmiEncAUX.setTextColor(Color.parseColor(empresa.getColorText()));
+                mCiRecEncAUX.setTextColor(Color.parseColor(empresa.getColorText()));
+                mPrecioEncAUX.setTextColor(Color.parseColor(empresa.getColorText()));
+
+                mCiEmiEncAUX.setGravity(Gravity.CENTER);
+                mCiRecEncAUX.setGravity(Gravity.CENTER);
+                mPrecioEncAUX.setGravity(Gravity.RIGHT);
+            }
+
+            mOrigenEncAUX = new TextView(this);
+            mDestinoEncAUX = new TextView(this);
+            mFechaEncAUX = new TextView(this);
+            mEstadoEncAUX = new TextView(this);
+
+            mOrigenEncAUX.setText(item.getOrigen());
+            mDestinoEncAUX.setText(item.getDestino());
+            mFechaEncAUX.setText(convertirTimestampADateLocal(item.getFecha()));
+
+            switch (item.getEstado()){
+                case "1":
+                    mEstadoEncAUX.setText("Pendiente");
+                break;
+                case "2":
+                    mEstadoEncAUX.setText("Transportado");
+                break;
+                case "3":
+                    mEstadoEncAUX.setText("Retirado");
+                break;
+                default:
+                    mEstadoEncAUX.setText("");
+                break;
+            }
+
+            mOrigenEncAUX.setGravity(Gravity.LEFT);
+            mDestinoEncAUX.setGravity(Gravity.LEFT);
+            mFechaEncAUX.setGravity(Gravity.CENTER);
+            mEstadoEncAUX.setGravity(Gravity.CENTER);
+
+            mOrigenEncAUX.setTextColor(Color.parseColor(empresa.getColorText()));
+            mDestinoEncAUX.setTextColor(Color.parseColor(empresa.getColorText()));
+            mFechaEncAUX.setTextColor(Color.parseColor(empresa.getColorText()));
+            mEstadoEncAUX.setTextColor(Color.parseColor(empresa.getColorText()));
+
+
+            mTableRow.addView(mOrigenEncAUX);
+            mTableRow.addView(mDestinoEncAUX);
+            mTableRow.addView(mFechaEncAUX);
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+                mTableRow.addView(mCiEmiEncAUX);
+                mTableRow.addView(mCiRecEncAUX);
+                mTableRow.addView(mPrecioEncAUX);
+            }
+            mTableRow.addView(mEstadoEncAUX);
+
+            mTableLayout.addView(mTableRow);
+        }
+    }
+
+    private Boolean rxefrescarLogin(final String user, final String pass) {
+
+        dbManager.eliminarLogin();
+        try {
+            JSONObject jsonBody = new JSONObject();
+            jsonBody.put("username", user);
+            jsonBody.put("password", pass);
+
+            volley.llamarWS(Request.Method.POST, urlToken, jsonBody, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        dbManager.registrarLogin(response.getString("token"), user, pass);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    Log.d("el ERROR del token es ", volleyError.toString());
+
+                    Intent intent = new Intent(EncomiendasActivity.this, LoginActivity.class);
+                    Toast.makeText(EncomiendasActivity.this, getResources().getString(R.string.tokenInvalido), Toast.LENGTH_LONG).show();
+                    startActivity(intent);
+                }
+            }, null);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+
+    private void refrescarLogin(final String user, final String pass)throws JSONException, TimeoutException, ExecutionException {
+
+        dbManager.eliminarLogin();
+
+        JSONObject jsonBody = new JSONObject();
+        jsonBody.put("username", user);
+        jsonBody.put("password", pass);
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,urlToken,jsonBody, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    dbManager.registrarLogin(response.getString("token"), user, pass);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Log.d("el ERROR del token es ", volleyError.toString());
+
+                Intent intent = new Intent(EncomiendasActivity.this, LoginActivity.class);
+                Toast.makeText(EncomiendasActivity.this, getResources().getString(R.string.tokenInvalido), Toast.LENGTH_LONG).show();
+                startActivity(intent);
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+
+            @Override
+            protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+                mHandler.post(new Runnable() {
+                    @Override
+                    // this will run on the main thread.
+                    public void run() {
+                        try {
+                            WSgetUserPackages(dbManager.getTokenLogueado());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (TimeoutException e) {
+                            e.printStackTrace();
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                return super.parseNetworkResponse(response);
+            }
+        };
+        volley.addToQueue(request);
+    }
+
+
+    private String convertirTimestampADateLocal(long timestamp){
+
+        Calendar cal = Calendar.getInstance();
+        TimeZone tz = cal.getTimeZone();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        sdf.setTimeZone(tz);
+        String localTime = sdf.format(new Date(timestamp ));
+        /*CharSequence relTime = DateUtils.getRelativeTimeSpanString(
+                timestamp ,
+                System.currentTimeMillis(),
+                DateUtils.MINUTE_IN_MILLIS); DIFERENCIA DE DIAS ENTRE HOY Y TIMESTAMP*/
+        return  localTime;
+    }
+
+
 
 }

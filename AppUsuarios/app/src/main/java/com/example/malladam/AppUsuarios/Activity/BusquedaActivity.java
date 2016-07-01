@@ -376,11 +376,6 @@ public class BusquedaActivity extends AppCompatActivity  implements NumberPicker
             @Override
             public void onMapClick(LatLng latLng) {
                 double radiusInMeters = 1000;
-                // Fill color of the circle
-                // 0x represents, this is an hexadecimal code
-                // 55 represents percentage of transparency. For 100% transparency, specify 00.
-                // For 0% transparency ( ie, opaque ) , specify ff
-                // The remaining 6 characters(00ff00) specify the fill color
 
                 if(circle != null) {
                     circle.remove();
@@ -464,7 +459,7 @@ public class BusquedaActivity extends AppCompatActivity  implements NumberPicker
                 public void onErrorResponse(VolleyError volleyError) {
                     Log.d("el ERROR ",volleyError.toString());
                 }
-            });
+            }, null);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

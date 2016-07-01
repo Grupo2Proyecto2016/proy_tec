@@ -144,6 +144,38 @@ public class DataBaseManager {
         return logueado;
         }
 
+    public String getPassLogueado() {
+        String pass = null;
+        String user = getUserLogueado();
+        String [] columnas = new String[]{CN_PASS_SESION};
+        Cursor resultado = db.query(TABLE_NAME_SESION, columnas, CN_USUARIO_SESION+" = ?",
+                new String[]{user}, null, null, null);
+        resultado.moveToFirst();
+        if(!resultado.isAfterLast()) {
+            pass = resultado.getString(resultado.getColumnIndex(CN_PASS_SESION));
+        }else{
+            pass = "Sin Determinar";
+        }
+        resultado.close();
+        return pass;
+    }
+
+    public String getTokenLogueado() {
+        String token = null;
+        String user = getUserLogueado();
+        String [] columnas = new String[]{CN_TOKEN_SESION};
+        Cursor resultado = db.query(TABLE_NAME_SESION, columnas, CN_USUARIO_SESION+" = ?",
+                new String[]{user}, null, null, null);
+        resultado.moveToFirst();
+        if(!resultado.isAfterLast()) {
+            token = resultado.getString(resultado.getColumnIndex(CN_TOKEN_SESION));
+        }else{
+            token = "Sin Determinar";
+        }
+        resultado.close();
+        return token;
+    }
+
     public void registrarLogin(String token, String usuario, String pass){
         ContentValues valores = new ContentValues();
         valores.put(CN_USUARIO_SESION,usuario);
@@ -174,23 +206,6 @@ public class DataBaseManager {
         return logueado;
     }
 
-
-
-    public String getPassLogueado() {
-        String pass = null;
-        String user = getUserLogueado();
-        String [] columnas = new String[]{CN_PASS_SESION};
-        Cursor resultado = db.query(TABLE_NAME_SESION, columnas, CN_USUARIO_SESION+" = ?",
-                new String[]{user}, null, null, null);
-        resultado.moveToFirst();
-        if(!resultado.isAfterLast()) {
-            pass = resultado.getString(resultado.getColumnIndex(CN_PASS_SESION));
-        }else{
-            pass = "Sin Determinar";
-        }
-        resultado.close();
-        return pass;
-    }
 }
 
 

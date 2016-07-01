@@ -125,7 +125,7 @@ public class StartActivity extends AppCompatActivity {
                     Toast.makeText(StartActivity.this, getResources().getString(R.string.error_conexion) , Toast.LENGTH_LONG).show();
                     refresh.setVisibility(View.VISIBLE);
                 }
-            });
+            }, null);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

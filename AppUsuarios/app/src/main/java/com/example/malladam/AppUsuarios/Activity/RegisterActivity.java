@@ -327,7 +327,7 @@ public class RegisterActivity extends AppCompatActivity  {
                         }
                     }
                 }
-            });
+            }, null);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

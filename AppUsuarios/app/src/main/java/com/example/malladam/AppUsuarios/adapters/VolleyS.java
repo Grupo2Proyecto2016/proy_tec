@@ -51,24 +51,30 @@ public class VolleyS {
         return mRequestQueue;
     }
 
-    public void llamarWS(int metodo, String urlCreateUser, JSONObject jsonBody,  Response.Listener<JSONObject> response, Response.ErrorListener errorListener) throws TimeoutException, ExecutionException, InterruptedException {
+    public void llamarWS(int metodo, String urlCreateUser, JSONObject jsonBody,  Response.Listener<JSONObject> response, Response.ErrorListener errorListener,final String token) throws TimeoutException, ExecutionException, InterruptedException {
         JsonObjectRequest request = new JsonObjectRequest(metodo,urlCreateUser,jsonBody, response, errorListener) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
                 headers.put("Content-Type", "application/json; charset=utf-8");
+                if (token != null){
+                    headers.put("Authorization", token);
+                }
                 return headers;
             }
         };
         addToQueue(request);
     }
 
-    public void llamarWSarray(int metodo, String urlCreateUser, JSONArray jsonBody, Response.Listener<JSONArray> response, Response.ErrorListener errorListener) throws TimeoutException, ExecutionException, InterruptedException {
+    public void llamarWSarray(int metodo, String urlCreateUser, JSONArray jsonBody, Response.Listener<JSONArray> response, Response.ErrorListener errorListener, final String token) throws TimeoutException, ExecutionException, InterruptedException {
         JsonArrayRequest request = new JsonArrayRequest(metodo,urlCreateUser,jsonBody, response, errorListener) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
                 headers.put("Content-Type", "application/json; charset=utf-8");
+                if (token != null){
+                    headers.put("Authorization", token);
+                }
                 return headers;
             }
         };

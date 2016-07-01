@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">masita</string>
+    <string name="app_name">simpson</string>
     <string name="WSServer">http://10.0.3.2:8080/GoOnServices/</string>
     <string name="action_settings">Configuración</string>
     <string name="action_viajes">Mis Viajes</string>
@@ -69,10 +69,17 @@
     <string name="ancho">"Ancho(cm)"</string>
     <string name="peso">"Peso"</string>
     <string name="precio">"Precio  "</string>
+    <string name="fechaEnvio">"Fecha Envío"</string>
+    <string name="ciEmisor">"CI Emisor"</string>
+    <string name="ciReceptor">"CI Receptor"</string>
+    <string name="estado">"Estado"</string>
+    <string name="tokenInvalido">"Credenciales Inválidas, favor inicie sesión"</string>
 
     <string name="getStations">"/getStations"</string>
     <string name="getTerminals">"/getTerminals"</string>
     <string name="calcPackage">"/calcPackage"</string>
+    <string name="userPackages">"/userPackages"</string>
+    <string name="auth">"/auth"</string>
 
 
 </resources>

@@ -55,7 +55,7 @@
                         android:id="@+id/tvOrigenEnc"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="35"
+                        android:layout_weight="25"
                         android:textStyle="bold"
                         android:lines="2"
                         android:maxLines="2"
@@ -66,7 +66,7 @@
                         android:id="@+id/tvDestinoEnc"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="35"
+                        android:layout_weight="25"
                         android:textStyle="bold"
                         android:lines="2"
                         android:maxLines="2"
@@ -77,21 +77,54 @@
                         android:id="@+id/tvFechaEnc"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="15"
+                        android:layout_weight="10"
+                        android:textStyle="bold"
                         android:lines="2"
                         android:maxLines="2"
                         android:text="@string/fechaEnvio"
+                        android:gravity="center"/>
+
+                    <TextView
+                        android:id="@+id/tvCiEmiEnc"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="10"
                         android:textStyle="bold"
+                        android:lines="2"
+                        android:maxLines="2"
+                        android:text="@string/ciEmisor"
+                        android:gravity="center"/>
+
+                    <TextView
+                        android:id="@+id/tvCiRecEnc"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="10"
+                        android:textStyle="bold"
+                        android:lines="2"
+                        android:maxLines="2"
+                        android:text="@string/ciReceptor"
+                        android:gravity="center"/>
+
+                    <TextView
+                        android:id="@+id/tvPrecioEnc"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="10"
+                        android:lines="2"
+                        android:maxLines="2"
+                        android:textStyle="bold"
+                        android:text="@string/precio"
                         android:gravity="center"/>
 
                     <TextView
                         android:id="@+id/tvEstadoEnc"
                         android:layout_width="fill_parent"
-                        android:textStyle="bold"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="10"
                         android:lines="2"
                         android:maxLines="2"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="15"
+                        android:textStyle="bold"
                         android:text="@string/estado"
                         android:gravity="center"/>
 
