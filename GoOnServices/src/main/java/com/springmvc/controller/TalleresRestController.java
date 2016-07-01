@@ -31,7 +31,7 @@ public class TalleresRestController {
 	
     private ITallerLogic tallerLogic;
 
-    @Secured({"ROLE_ADMIN"})
+    @Secured({"ROLE_COORDINATOR"})
 	@RequestMapping(value = "/getTalleres", method = RequestMethod.GET)
     public ResponseEntity<List<Taller>>  getTaller(@PathVariable String tenantid)
     {
@@ -39,7 +39,7 @@ public class TalleresRestController {
     	return new ResponseEntity<List<Taller>>(talleres, HttpStatus.OK);
     }
 	
-    @Secured({"ROLE_ADMIN"})
+    @Secured({"ROLE_COORDINATOR"})
 	@RequestMapping(value = "/createTaller", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
     public ResponseEntity<Void> CreateTaller(@RequestBody Taller taller, @PathVariable String tenantid)
     {

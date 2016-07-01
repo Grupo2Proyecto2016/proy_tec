@@ -87,6 +87,9 @@ public class Usuario {
 		case 4:
 			auth.setName(AuthorityName.ROLE_CLIENT);
 			break;
+		case 5:
+			auth.setName(AuthorityName.ROLE_COORDINATOR);
+			break;
 		default:
 			break;
 		}

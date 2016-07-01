@@ -28,6 +28,7 @@ public class RolRepository {
 			roles.add(UserRol.Sales.ToRol());
 			roles.add(UserRol.Driver.ToRol());
 			roles.add(UserRol.Client.ToRol());
+			roles.add(UserRol.Coordinator.ToRol());
 			
 			entityManager.getTransaction().begin();
 

@@ -37,7 +37,7 @@ import com.springmvc.requestWrappers.TravelFormWrapper;
 @RequestMapping(value = "/{tenantid}")
 public class LinesRestController{
 	
-	@Secured({"ROLE_ADMIN"})
+	@Secured({"ROLE_ADMIN", "ROLE_COORDINATOR"})
 	@RequestMapping(value = "/getLines", method = RequestMethod.GET)
     public ResponseEntity<List<Linea>> getLines(@PathVariable String tenantid)
     {
@@ -45,7 +45,7 @@ public class LinesRestController{
 		return new ResponseEntity<List<Linea>>(lineas, HttpStatus.OK);
     }
 	
-	@Secured({"ROLE_ADMIN"})
+	@Secured({"ROLE_COORDINATOR"})
 	@RequestMapping(value = "/createLine", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
 	public ResponseEntity<Void> CreateLine(@RequestBody LinesWrapper linesWrapper, @PathVariable String tenantid) throws Exception
 	{
@@ -136,7 +136,7 @@ public class LinesRestController{
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
 	
-	@Secured({"ROLE_ADMIN"})
+	@Secured({"ROLE_COORDINATOR"})
 	@RequestMapping(value = "/deleteLine", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
 	public ResponseEntity<CustomResponseWrapper> DeleteLine(@RequestBody long id_linea, @PathVariable String tenantid)
 	{
@@ -170,7 +170,7 @@ public class LinesRestController{
     	}
     }
 	
-	@Secured({"ROLE_ADMIN"})
+	@Secured({"ROLE_COORDINATOR"})
 	@RequestMapping(value = "/createTravel", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
 	public ResponseEntity<?> createTravel(@RequestBody TravelFormWrapper travel, @PathVariable String tenantid)
 	{
@@ -205,7 +205,7 @@ public class LinesRestController{
 		return new ResponseEntity(HttpStatus.OK);
 	}
 	
-	@Secured({"ROLE_ADMIN"})
+	@Secured({"ROLE_COORDINATOR"})
 	@RequestMapping(value = "/getTravels", method = RequestMethod.GET)
 	public ResponseEntity<List<Viaje>> getTravels(@PathVariable String tenantid)
 	{
@@ -213,7 +213,7 @@ public class LinesRestController{
 		return new ResponseEntity<List<Viaje>>(travels, HttpStatus.OK);
 	}
 	
-	@Secured({"ROLE_ADMIN"})
+	@Secured({"ROLE_COORDINATOR"})
 	@RequestMapping(value = "/deleteTravel", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
 	public ResponseEntity<CustomResponseWrapper> deleteTravel(@RequestBody long travelId, @PathVariable String tenantid)
 	{

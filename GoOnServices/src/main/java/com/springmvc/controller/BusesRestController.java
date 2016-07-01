@@ -28,7 +28,7 @@ public class BusesRestController {
 	
     private IVehiculosLogic vehiculosLogic;
 
-    @Secured({"ROLE_ADMIN"})
+    @Secured({"ROLE_ADMIN", "ROLE_COORDINATOR"})
 	@RequestMapping(value = "/getBuses", method = RequestMethod.GET)
     public ResponseEntity<List<Vehiculo>>  getBuses(@PathVariable String tenantid)
     {

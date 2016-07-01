@@ -33,7 +33,7 @@ public class MantenimientoRestController {
 	
     private IMantenimientoLogic mantenimientoLogic;
 
-    @Secured({"ROLE_ADMIN"})
+    @Secured({"ROLE_COORDINATOR"})
 	@RequestMapping(value = "/getMantenimientos", method = RequestMethod.GET)
     public ResponseEntity<List<Mantenimiento>>  getMantenimiento(@PathVariable String tenantid)
     {
@@ -41,7 +41,7 @@ public class MantenimientoRestController {
     	return new ResponseEntity<List<Mantenimiento>>(mantenimientos, HttpStatus.OK);
     }
 	
-    @Secured({"ROLE_ADMIN"})
+    @Secured({"ROLE_COORDINATOR"})
 	@RequestMapping(value = "/createMantenimiento", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
     public ResponseEntity<?> CreateMantenimiento(@RequestBody MantenimientoFormWrapper mantenimiento, @PathVariable String tenantid, HttpServletRequest request)
     {
@@ -72,7 +72,7 @@ public class MantenimientoRestController {
     }
     
     
-	@Secured({"ROLE_ADMIN"})
+    @Secured({"ROLE_COORDINATOR"})
 	@RequestMapping(value = "/deleteMantenimiento", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
 	public ResponseEntity<CustomResponseWrapper> DeleteBranch(@RequestBody MantenimientoFormWrapper mantenimiento, @PathVariable String tenantid)
 	{

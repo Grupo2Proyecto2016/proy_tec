@@ -1,7 +1,7 @@
 goOnApp.controller('employeesController', function($scope, $http, $filter, uiGridConstants, i18nService) 
 {
 	$scope.userToDelete = null; //Variable temporal para almacenar nombre de usuario que se desea borrar
-	$scope.roles = [{id: 2, name: "Ventas"}, { id:3, name: "Guarda/Conductor"}];
+	$scope.roles = [{id: 2, name: "Ventas"}, { id:3, name: "Guarda/Conductor"}, { id:5, name: "Largador"}];
 	$scope.branches = {};
 	$scope.branchesToGrid = [];
 	$scope.userModel = {};
@@ -69,6 +69,7 @@ goOnApp.controller('employeesController', function($scope, $http, $filter, uiGri
     	$scope.userModel.usrname = userRow.entity.usrname;
     	$scope.userModel.nombre = userRow.entity.nombre;
     	$scope.userModel.apellido = userRow.entity.apellido;
+    	$scope.userModel.ci = userRow.entity.ci;
     	$scope.userModel.telefono = userRow.entity.telefono;
     	$scope.userModel.email = userRow.entity.email;
     	$scope.userModel.direccion = userRow.entity.direccion;
@@ -98,6 +99,9 @@ goOnApp.controller('employeesController', function($scope, $http, $filter, uiGri
 		    					case 2: return 'Ventas'
 		    					break;
 		    					case 3: return 'Guarda/Conductor';
+		    					break;
+		    					case 5: return 'Largador';
+		    					break;
 		    					default: return "";
 		    				}
 		    			};
@@ -124,7 +128,7 @@ goOnApp.controller('employeesController', function($scope, $http, $filter, uiGri
           { name: 'Rol', field: 'getRole()'
         	  , filter: {
               type: uiGridConstants.filter.SELECT,
-              selectOptions: [ { value: 'Administrador', label: 'Administrador' }, { value: 'Ventas', label: 'Ventas' }, { value: 'Guarda/Conductor', label: 'Guarda/Conductor'} ]
+              selectOptions: [ { value: 'Administrador', label: 'Administrador' }, { value: 'Ventas', label: 'Ventas' }, { value: 'Guarda/Conductor', label: 'Guarda/Conductor'}, { value: 'Largador', label: 'Largador'} ]
           }},
           { name: 'Sucursal', field: 'sucursal.nombre'
         	  , filter: {

@@ -107,7 +107,10 @@ public class UsersLogic implements IUsersLogic {
 	public void UpdateUser(com.springmvc.entities.tenant.Usuario userUpdateData) 
 	{
 		TenantContext.UserRepository.UpdateUser(userUpdateData);
-		TenantContext.EncomiendaRepository.UpdatePackagesCI(userUpdateData.getIdUsuario(), userUpdateData.getCi());
+		if(userUpdateData.getRol_id_rol() == UserRol.Client.getValue())
+		{
+			TenantContext.EncomiendaRepository.UpdatePackagesCI(userUpdateData.getIdUsuario(), userUpdateData.getCi());
+		}
 	}
 
 	public void DeleteUser(String usrname) 

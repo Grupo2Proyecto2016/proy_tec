@@ -44,7 +44,7 @@ public class UserRestController
     	return new ResponseEntity<List<Usuario>>(users, HttpStatus.OK);
     }
 	
-	@Secured({"ROLE_ADMIN"})
+	@Secured({"ROLE_COORDINATOR"})
 	@RequestMapping(value = "/getDrivers", method = RequestMethod.GET)
     public ResponseEntity<List<Usuario>>  getDrivers(@PathVariable String tenantid, HttpServletRequest request)
     {
@@ -159,6 +159,7 @@ public class UserRestController
 		userUpdateData.setNombre(user.nombre);
 		userUpdateData.setApellido(user.apellido);
 		userUpdateData.setEmail(user.email);
+		userUpdateData.setCi(user.ci);
 		userUpdateData.setTelefono(user.telefono);
 		userUpdateData.setDireccion(user.direccion);
 		userUpdateData.setRol_id_rol(user.rol_id_rol);

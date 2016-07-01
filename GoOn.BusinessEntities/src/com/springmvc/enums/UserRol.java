@@ -7,7 +7,9 @@ public enum UserRol
 	Admin(1),
 	Sales(2),
 	Driver(3),
-	Client(4);
+	Client(4),
+	Coordinator(5)
+	;
 
 	private int value; 
 		
