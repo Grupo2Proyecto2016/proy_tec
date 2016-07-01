@@ -18,7 +18,37 @@
 								</h5>
 							</div>
 							<div id="myTravelsPanel" class="panel-collapse collapse">
-								<div class="panel-body"></div>
+								<div class="panel-body">
+									<table ng-show="myTickets.length > 0" style="width: 100%;" class="panelTable">
+										<thead> 
+											<tr>
+												<th>Origen</th>
+												<th>Destino</th>
+												<th>Partida</th>
+												<th>Asiento</th>
+												<th>Precio</th>
+												<th>Estado</th>
+												<th></th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr ng-repeat="ticket in myTickets">
+												<td>{{ticket.parada_sube.descripcion}}</td>
+												<td>{{ticket.parada_baja.descripcion}}</td>
+												<td>{{ticket.viaje.inicio | date:'dd-MM-yyyy HH:mm'}}</td>
+												<td>{{ticket.asiento.numero}}</td>
+												<td>$ {{ticket.costo}}</td>
+												<td>{{ getTicketStatus(ticket.estado)}}</td>
+												<td>
+													<a ng-show="pack.status == 3" class="btn btn-sm btn-success">
+														<i class="fa fa-map-marker fa-lg " style="margin-right: 5px;"></i>Seguir
+													</a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									<h5 class="text-center" ng-show="myTickets.length == 0">Todavía no tienes ningún pasaje.</h5>
+								</div>
 							</div>
 						</div>
 					</div>

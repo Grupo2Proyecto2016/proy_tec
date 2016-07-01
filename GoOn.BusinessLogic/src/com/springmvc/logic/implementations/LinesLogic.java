@@ -11,7 +11,9 @@ import java.util.Map;
 import com.springmvc.dataaccess.context.TenantDAContext;
 import com.springmvc.entities.tenant.Linea;
 import com.springmvc.entities.tenant.Parada;
+import com.springmvc.entities.tenant.Pasaje;
 import com.springmvc.entities.tenant.Sucursal;
+import com.springmvc.entities.tenant.Usuario;
 import com.springmvc.entities.tenant.Viaje;
 import com.springmvc.enums.DayOfWeek;
 import com.springmvc.logic.interfaces.ILinesLogic;
@@ -218,5 +220,10 @@ public class LinesLogic implements ILinesLogic
 	public boolean lineExists(long linenumber) 
 	{
 		return TenantContext.LineaRepository.lineExists(linenumber);
+	}
+
+	public List<Pasaje> GetUserTickets(Usuario currentUser) 
+	{
+		return TenantContext.PasajeRepository.GetByClient(currentUser.getIdUsuario());
 	}
 }

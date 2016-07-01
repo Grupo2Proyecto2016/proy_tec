@@ -16,10 +16,10 @@ public class Pasaje {
 	private Double costo;
 	private int estado;
 	
+	private String numero; 
+	
 	@ManyToOne(fetch=FetchType.EAGER)
 	private Usuario user_compra;
-	
-	private String ci_user_compra; //por si lo compra un usuario no registrado
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	private Usuario usr_crea;
@@ -35,6 +35,22 @@ public class Pasaje {
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	private Parada parada_baja;
+	
+	public String getNumero() {
+		return numero;
+	}
+	
+	public void setNumero(String numero) {
+		this.numero = numero;
+	}
+	
+	public Usuario getUsr_crea() {
+		return usr_crea;
+	}
+	
+	public void setUsr_crea(Usuario usr_crea) {
+		this.usr_crea = usr_crea;
+	}
 	
 	public long getId_pasaje() {
 		return id_pasaje;
@@ -84,11 +100,5 @@ public class Pasaje {
 	}
 	public void setParada_baja(Parada parada_baja) {
 		this.parada_baja = parada_baja;
-	}
-	public String getCi_user_compra() {
-		return ci_user_compra;
-	}
-	public void setCi_user_compra(String ci_user_compra) {
-		this.ci_user_compra = ci_user_compra;
 	}
 }

@@ -3,6 +3,7 @@ goOnApp.controller('userPanelController', function($scope, $http, $location, uiG
 	$scope.userModel = {};
 	$scope.passwordModel = null; //Modelo para cambiar el password
 	$scope.myPackages = [];
+	$scope.myTickets = [];
 	
 	i18nService.setCurrentLang('es');
     $scope.message = 'Desde aquí puedes gestionar tus datos personales, pasajes y encomiendas';
@@ -23,6 +24,22 @@ goOnApp.controller('userPanelController', function($scope, $http, $location, uiG
     };
     $scope.getPackages();
     
+    $scope.getTickets = function()
+    {
+    	$.blockUI();
+    	$http.get(servicesUrl + 'userTickets')
+    		.then(function(response) 
+			{
+	        	if(response.status == 200)
+	        	{
+	        		$scope.myTickets = response.data;
+	        	}
+	        	$.unblockUI();
+    		})
+		;
+    };
+    $scope.getTickets();
+    
     $scope.getPackageStatus = function(status)
     {
     	switch (status) 
@@ -38,6 +55,31 @@ goOnApp.controller('userPanelController', function($scope, $http, $location, uiG
 			break;
 		case 4:
 			return "Entregada"
+			break;
+		default:
+			return "";
+			break;
+		}
+    };
+    
+    $scope.getTicketStatus = function(status)
+    {
+    	switch (status) 
+    	{
+		case 1:
+			return "Reservado"
+			break;
+		case 2:
+			return "Comprado"
+			break;
+		case 3:
+			return "En viaje"
+			break;
+		case 4:
+			return "Cobrado"
+			break;
+		case 5:
+			return "Cancelado"
 			break;
 		default:
 			return "";
