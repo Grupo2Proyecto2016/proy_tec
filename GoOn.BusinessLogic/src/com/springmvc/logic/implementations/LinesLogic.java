@@ -15,6 +15,7 @@ import com.springmvc.entities.tenant.Pasaje;
 import com.springmvc.entities.tenant.Sucursal;
 import com.springmvc.entities.tenant.Usuario;
 import com.springmvc.entities.tenant.Viaje;
+import com.springmvc.entities.tenant.ViajesBuscados;
 import com.springmvc.enums.DayOfWeek;
 import com.springmvc.logic.interfaces.ILinesLogic;
 
@@ -135,6 +136,12 @@ public class LinesLogic implements ILinesLogic
 		List<Long> id_lineas = TenantContext.LineaRepository.getidLineasbyIdOrigins(origins);
 		List<Viaje> viajes = TenantContext.ViajeRepository.GetLineTravels(id_lineas, dateFrom);
 		return viajes;
+	}
+	
+	public List<ViajesBuscados> SearchTravelsAdvanced(Calendar dateFrom, Calendar dateTo, List<Integer> origins, List<Integer> destinations)
+	{		
+		List<ViajesBuscados> viajes = TenantContext.ViajeRepository.getTravelsAdvanced(origins, destinations, dateFrom);
+		return viajes;		
 	}
 
 	public List<Parada> GetStationsByDestinations(List<Integer> destinations) 

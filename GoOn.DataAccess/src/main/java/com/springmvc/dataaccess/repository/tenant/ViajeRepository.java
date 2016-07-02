@@ -12,6 +12,7 @@ import javax.persistence.Query;
 import com.springmvc.entities.tenant.Linea;
 import com.springmvc.entities.tenant.Vehiculo;
 import com.springmvc.entities.tenant.Viaje;
+import com.springmvc.entities.tenant.ViajesBuscados;
 
 public class ViajeRepository {
 
@@ -175,5 +176,85 @@ public class ViajeRepository {
 		q.setParameter("dateTo", dateFrom.getTime());
 		travels = (List<Viaje>)q.getResultList();
 		return travels;
+	}
+
+	public List<ViajesBuscados> getTravelsAdvanced(List<Integer> origins, List<Integer> destinations,Calendar dateFrom) 
+	{
+		List<ViajesBuscados> viajes = null;
+		
+		String lstOrigins = ""; //cambiar por funcion
+		for (int i = 0; i < origins.size(); i++) 
+		{
+			if (i == 0)
+			{
+				lstOrigins = lstOrigins + origins.get(i);				
+			}
+			else
+			{
+				lstOrigins = lstOrigins + "," + origins.get(i);
+			}
+		}
+		
+		String lstDestinatios = "";
+		for (int i = 0; i < destinations.size(); i++) 
+		{
+			if (i == 0)
+			{
+				lstDestinatios = lstDestinatios + destinations.get(i);				
+			}
+			else
+			{
+				lstDestinatios = lstDestinatios + "," + destinations.get(i);
+			}
+		}
+		
+		Query q = entityManager.createNativeQuery("SELECT 	v.id_viaje, " +
+														"CASE WHEN l.viaja_parado is true THEN ve.cantasientos + ve.cantparados " +
+														"ELSE ve.cantasientos " +
+														"END AS lugares, " +
+														"v.inicio, " +
+														"l.numero, " +
+														"lpo.linea_id_linea, " +
+														"lpo.origen, " +
+														"po.descripcion origen_descripcion, " +
+														"lpd.destino, " +
+														"pd.descripcion destino_descripcion " + 
+													"FROM " +
+													"( " +
+														"SELECT lp.linea_id_linea, lp.paradas_id_parada AS origen FROM " + 
+														"linea_parada lp " +
+														"WHERE lp.paradas_id_parada IN (" + lstOrigins + ") " +
+													") AS lpo " +
+													"INNER JOIN " +
+													"( " +
+														"SELECT lp.linea_id_linea, lp.paradas_id_parada AS destino FROM " + 
+														"linea_parada lp " +
+														"WHERE lp.paradas_id_parada IN (" + lstDestinatios + ") " +
+													") AS lpd " +
+													"ON lpo.linea_id_linea = lpd.linea_id_linea " +
+													" " +
+													"INNER JOIN linea l " +
+													"ON l.id_linea = lpo.linea_id_linea " +
+													" " +
+													"INNER JOIN parada po " +
+													"ON po.id_parada = lpo.origen " +
+													" " +
+													"INNER JOIN parada pd " +
+													"ON pd.id_parada = lpd.destino " +
+													" " +
+													"INNER JOIN viaje v " +
+													"ON v.linea_id_linea = lpo.linea_id_linea " +
+													" " + 													
+													"INNER JOIN vehiculo ve " +
+													"ON ve.id_vehiculo = v.vehiculo_id_vehiculo " +
+													"WHERE v.inicio > :dateFrom AND v.inicio < :dateTo");		
+		
+		q.setParameter("dateFrom", dateFrom.getTime());
+		dateFrom.add(Calendar.DAY_OF_YEAR, 1);
+		q.setParameter("dateTo", dateFrom.getTime());
+		
+		viajes = (List<ViajesBuscados>)q.getResultList();
+		
+		return viajes;
 	}
 }

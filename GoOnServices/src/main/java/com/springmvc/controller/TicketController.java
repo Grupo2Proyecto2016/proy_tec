@@ -19,6 +19,7 @@ import com.springmvc.entities.tenant.Parada;
 import com.springmvc.entities.tenant.Pasaje;
 import com.springmvc.entities.tenant.Usuario;
 import com.springmvc.entities.tenant.Viaje;
+import com.springmvc.entities.tenant.ViajesBuscados;
 import com.springmvc.logic.implementations.LinesLogic;
 import com.springmvc.logic.implementations.PackageLogic;
 import com.springmvc.requestWrappers.TravelSearchWrapper;
@@ -33,11 +34,19 @@ public class TicketController
     private UserContext context;
 	
 	@RequestMapping(value = "/searchTravels", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
+	public ResponseEntity<List<ViajesBuscados>> travels(@RequestBody TravelSearchWrapper searchData, @PathVariable String tenantid)
+	{
+		List<ViajesBuscados> travels = new LinesLogic(tenantid).SearchTravelsAdvanced(searchData.dateFrom, searchData.dateTo, searchData.origins, searchData.destinations); 
+		return new ResponseEntity<List<ViajesBuscados>>(travels, HttpStatus.OK);
+	}
+	
+	/*@RequestMapping(value = "/searchTravels", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
 	public ResponseEntity<List<Viaje>> travels(@RequestBody TravelSearchWrapper searchData, @PathVariable String tenantid)
 	{
 		List<Viaje> travels = new LinesLogic(tenantid).SearchTravels(searchData.dateFrom, searchData.dateTo, searchData.origins, searchData.destinations);
 		return new ResponseEntity<List<Viaje>>(travels, HttpStatus.OK);
 	}
+	 */
 	
 	@RequestMapping(value = "/getStations", method = RequestMethod.GET)
 	public ResponseEntity<List<Parada>> getStations(@PathVariable String tenantid)

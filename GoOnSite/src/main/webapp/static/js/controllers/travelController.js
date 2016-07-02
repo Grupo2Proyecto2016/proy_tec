@@ -330,7 +330,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
         columnDefs:
     	[
           { name:'Linea', field: 'linea.numero' },
-          { name:'Origen', field: 'linea.origen.descripcion' },
+          { name:'Origen', field: 'linea.origen_description' },
           { name:'Destino', field: 'linea.destino.descripcion'},
           { name:'Salida', cellTemplate: '<div class="text-center ngCellText">{{ row.entity.inicio | date:"dd/MM/yyyy @ h:mma"}}</div>' },
           { name:'Tiempo Estimado (min)', field: 'linea.tiempo_estimado' },
