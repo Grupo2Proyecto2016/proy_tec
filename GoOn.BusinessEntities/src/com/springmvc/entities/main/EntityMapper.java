@@ -11,8 +11,9 @@ public class EntityMapper
 {
 	static <T> List<T> map(Class<T> type, List<Object[]> records)
 	{
-		   List<T> result = new LinkedList<>();
-		   for(Object[] record : records){
+		   List<T> result = new ArrayList();
+		   for(Object[] record : records)
+		   {
 		      result.add(map(type, record));
 		   }
 		   return result;
