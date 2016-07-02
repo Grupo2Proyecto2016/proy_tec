@@ -1,8 +1,12 @@
 package com.springmvc.entities.tenant;
 
 import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.Date;
 
+import javax.persistence.Entity;
+
+@Entity
 public class ViajesBuscados {
 	
 	private long id_viaje;
@@ -14,6 +18,21 @@ public class ViajesBuscados {
 	private String origen_description; 
 	private long destino;
 	private String destino_description;
+	
+	public ViajesBuscados(BigInteger id_viaje, Integer lugares, Timestamp inicio, Integer numero, BigInteger linea_id_linea, BigInteger origen,
+			String origen_description, BigInteger destino, String destino_description) 
+	{
+		super();
+		this.id_viaje = id_viaje.longValue();
+		this.lugares = lugares;
+		this.inicio = inicio;
+		this.numero = numero;
+		this.linea_id_linea = linea_id_linea.longValue();
+		this.origen = origen.longValue();
+		this.origen_description = origen_description;
+		this.destino = destino.longValue();
+		this.destino_description = destino_description;
+	}
 	
 	public long getId_viaje() {
 		return id_viaje;

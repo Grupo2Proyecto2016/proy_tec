@@ -1,14 +1,18 @@
 package com.springmvc.dataaccess.repository.tenant;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
+import com.springmvc.entities.main.EntityMapper;
 import com.springmvc.entities.tenant.Linea;
 import com.springmvc.entities.tenant.Vehiculo;
 import com.springmvc.entities.tenant.Viaje;
@@ -253,8 +257,7 @@ public class ViajeRepository {
 		dateFrom.add(Calendar.DAY_OF_YEAR, 1);
 		q.setParameter("dateTo", dateFrom.getTime());
 		
-		viajes = (List<ViajesBuscados>)q.getResultList();
-		
+		viajes = EntityMapper.getResultList(q, ViajesBuscados.class);
 		return viajes;
 	}
 }
