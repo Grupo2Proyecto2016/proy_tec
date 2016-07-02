@@ -64,7 +64,7 @@
                     <li><a href="#home"><i class="fa fa-home"></i> Inicio</a></li>
                     <li><a ng-click="showPackageCalc()" ng-show="user == null || user.rol_id_rol != 2"><i class="fa fa-calculator"></i> Calcular Encomienda</a></li>
                     <li><a href="#packages" ng-show="user != null && user.rol_id_rol == 2"><i class="fa fa-cubes"></i> Encomiendas</a></li>
-                    <li><a href="#travels" ng-show="user != null && (user.rol_id_rol == 2 || user.rol_id_rol == 4)"><i class="fa fa-bus"></i> Pasajes</a></li>
+                    <li><a href="#travels" ng-show="user == null || (user != null && (user.rol_id_rol == 2 || user.rol_id_rol == 4))"><i class="fa fa-bus"></i> Pasajes</a></li>
                     
                     <li ng-show="user == null || user.rol_id_rol != 1"><a href="#outbranches"><i class="fa fa-building"></i> Nuestras Sucursales</a></li>
 

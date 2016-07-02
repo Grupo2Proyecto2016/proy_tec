@@ -174,7 +174,7 @@
 	<div class="row">
 		<div class="col-xs-3"></div>
 		<div class="col-xs-6">
-			<div class="alert alert-info text-center">
+			<div class="alert alert-warning text-center">
 			  <p>Se muestran encomiendas en un rango de 30 días a partir de la fecha de origen</p>
 			</div>
 		</div>
