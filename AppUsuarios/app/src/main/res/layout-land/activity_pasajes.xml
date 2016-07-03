@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/linear_pasajes"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Activity.PasajesActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:windowNoTitle="true"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ScrollView
+        android:id="@+id/scroll_pasajes_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="false">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
+
+            <TableLayout
+                android:id="@+id/tablePas"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TableRow
+                    android:id="@+id/rowPas"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="100">
+
+                    <TextView
+                        android:id="@+id/tvOrigenPas"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="25"
+                        android:textStyle="bold"
+                        android:lines="2"
+                        android:maxLines="2"
+                        android:text="@string/origenBusqueda"
+                        android:gravity="center"/>
+
+                    <TextView
+                        android:id="@+id/tvDestinoPas"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="25"
+                        android:textStyle="bold"
+                        android:lines="2"
+                        android:maxLines="2"
+                        android:text="@string/destinoBusqueda"
+                        android:gravity="center"/>
+
+                    <TextView
+                        android:id="@+id/tvFechaPas"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="10"
+                        android:textStyle="bold"
+                        android:lines="2"
+                        android:maxLines="2"
+                        android:text="@string/fechaPartida"
+                        android:gravity="center"/>
+
+                    <TextView
+                        android:id="@+id/tvAsientoPas"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="10"
+                        android:textStyle="bold"
+                        android:lines="2"
+                        android:maxLines="2"
+                        android:text="@string/asiento"
+                        android:gravity="center"/>
+
+                    <TextView
+                        android:id="@+id/tvPrecioPas"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="10"
+                        android:lines="2"
+                        android:maxLines="2"
+                        android:textStyle="bold"
+                        android:text="@string/precio"
+                        android:gravity="center"/>
+
+                    <TextView
+                        android:id="@+id/tvEstadoPas"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="10"
+                        android:lines="2"
+                        android:maxLines="2"
+                        android:textStyle="bold"
+                        android:text="@string/estado"
+                        android:gravity="center"/>
+
+                </TableRow>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="3dip"
+                    android:background="@color/detalles"/>
+
+            </TableLayout>
+
+            <ProgressBar
+                android:layout_marginTop="10dp"
+                android:id="@+id/enco_progress"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center"/>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

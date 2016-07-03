@@ -37,13 +37,10 @@ import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
-import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.example.malladam.AppUsuarios.DataBaseManager;
 import com.example.malladam.AppUsuarios.R;
 import com.example.malladam.AppUsuarios.adapters.VolleyS;
@@ -580,14 +577,17 @@ public class EncomiendasActivity extends AppCompatActivity {
 
             switch (item.getEstado()){
                 case "1":
-                    mEstadoEncAUX.setText("Pendiente");
+                    mEstadoEncAUX.setText("Ingresada");
                 break;
                 case "2":
-                    mEstadoEncAUX.setText("Transportado");
+                    mEstadoEncAUX.setText("En camino");
                 break;
                 case "3":
-                    mEstadoEncAUX.setText("Retirado");
+                    mEstadoEncAUX.setText("Transportada");
                 break;
+                case "4":
+                    mEstadoEncAUX.setText("Entregada");
+                    break;
                 default:
                     mEstadoEncAUX.setText("");
                 break;

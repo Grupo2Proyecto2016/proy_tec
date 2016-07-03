@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         setContentView(R.layout.activity_login);
 
         userExist = false;
-        intent = new Intent(this, MainActivity.class);
+        intent = new Intent();
         dbManager = new DataBaseManager(this);
         empresa = empresa.getInstance();
 

@@ -71,7 +71,7 @@ public class DataBaseManager {
     }
 
 
-    public void insertarPasaje(Pasaje pasaje){
+    /*public void insertarPasaje(Pasaje pasaje){
         ContentValues valores = new ContentValues();
         valores.put(CN_ID_VIAJE,"0001");
         valores.put(CN_ID_CLIENTE,"0000");
@@ -85,7 +85,7 @@ public class DataBaseManager {
         valores.put(CN_ESTADO,"CN_ESTADO");
 
         db.insert(TABLE_NAME_PASAJES,null,valores);
-    }
+    }*/
 
     public void insertarUsuarios(){
         ContentValues valores1 = new ContentValues();

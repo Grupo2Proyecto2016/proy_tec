@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.location.Location;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -28,6 +29,7 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -74,15 +76,20 @@ public class BusquedaActivity extends AppCompatActivity  implements NumberPicker
     private Button mDestino;
     private Button mOrigen;
     private Button mButtonBuscar;
-    private String urlgetCompany;
-    private String urlgetStations;
+    private String urlgetCompany, urlgetStations,urlGetFilteredStations;
     private VolleyS volley;
     private Empresa empresa;
     private TextView mCantAsientos;
     private GoogleMap mMap;
     private PopupWindow pw;
     private List<Parada> paradas = new ArrayList<Parada>();
+    private List<Parada> paradasDestino = new ArrayList<Parada>();
+    private List<Parada> paradasOrigen = new ArrayList<Parada>();
+    private List<Parada> paradasByDestino = new ArrayList<Parada>();
     private Circle circle;
+    double radiusInMeters = 1000;
+    LatLng puntoSeleccionado;
+    Boolean origenPress=false;
 
 
     @Override
@@ -104,17 +111,39 @@ public class BusquedaActivity extends AppCompatActivity  implements NumberPicker
         mCantAsientos.setTextColor(Color.parseColor(empresa.getColorText()));
 
         urlgetStations = getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)+getResources().getString(R.string.getStations);
+        urlGetFilteredStations = getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)+getResources().getString(R.string.getFilteredStations);
         volley = volley.getInstance(this);
 
         DrawerLayout mealLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         mealLayout.setBackgroundColor(Color.parseColor(empresa.getColorBack()));
 
-        mOrigen.setOnClickListener(new View.OnClickListener()
-        {
+        mOrigen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                origenPress=true;
+                if(paradasDestino.isEmpty()){
+                    Toast.makeText(BusquedaActivity.this, getResources().getString(R.string.origenSinDestino), Toast.LENGTH_LONG).show();
+                }
+                else{
+                    try {
+                        WSgetParadasByDestino(paradasDestino);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (TimeoutException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        mDestino.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                origenPress=false;
                 try {
-                    WSgetParadas(true);
+                    WSgetAllParadas();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } catch (TimeoutException e) {
@@ -122,15 +151,6 @@ public class BusquedaActivity extends AppCompatActivity  implements NumberPicker
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 }
-                //initiatePopupWindow(true);
-            }
-        });
-
-        mDestino.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v) {
-                initiatePopupWindow(false);
             }
         });
 
@@ -206,8 +226,7 @@ public class BusquedaActivity extends AppCompatActivity  implements NumberPicker
         Log.i("value is",""+newVal);
     }
 
-    public void show()
-    {
+    public void show(){
         final Dialog d = new Dialog(BusquedaActivity.this);
         d.setTitle(getResources().getString(R.string.cantAsientos));
         d.setContentView(R.layout.dialog_number_picker);
@@ -226,8 +245,7 @@ public class BusquedaActivity extends AppCompatActivity  implements NumberPicker
                 d.dismiss();
             }
         });
-        b2.setOnClickListener(new View.OnClickListener()
-        {
+        b2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 d.dismiss(); // dismiss the dialog
@@ -280,6 +298,13 @@ public class BusquedaActivity extends AppCompatActivity  implements NumberPicker
                             case R.id.misEncomiendas:
                                 menuItem.setChecked(true);
                                 intent = new Intent(getApplicationContext(), EncomiendasActivity.class);
+                                startActivity(intent);
+                                finish();
+                                return true;
+
+                            case R.id.misViajes:
+                                menuItem.setChecked(true);
+                                intent = new Intent(getApplicationContext(), PasajesActivity.class);
                                 startActivity(intent);
                                 finish();
                                 return true;
@@ -353,20 +378,41 @@ public class BusquedaActivity extends AppCompatActivity  implements NumberPicker
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        for (final Parada item : paradas) {
-            LatLng suc = new LatLng(item.getLatitud(), item.getLongitud());
-            if(item.getEsTerminal()) {
-                mMap.addMarker(new MarkerOptions()
-                        .position(suc)
-                        .title(item.getDireccion())
-                        .snippet(item.getDescripcion())
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-            }else{
-                mMap.addMarker(new MarkerOptions()
-                        .position(suc)
-                        .title(item.getDireccion())
-                        .snippet(item.getDescripcion())
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+        if(!origenPress) {
+
+            for (final Parada item : paradas) {
+                LatLng suc = new LatLng(item.getLatitud(), item.getLongitud());
+                if (item.getEsTerminal()) {
+                    mMap.addMarker(new MarkerOptions()
+                            .position(suc)
+                            .title(item.getDireccion())
+                            .snippet(item.getDescripcion())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                } else {
+                    mMap.addMarker(new MarkerOptions()
+                            .position(suc)
+                            .title(item.getDireccion())
+                            .snippet(item.getDescripcion())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+                }
+            }
+        }
+        else{
+            for (final Parada item : paradasDestino) {
+                LatLng suc = new LatLng(item.getLatitud(), item.getLongitud());
+                if (item.getEsTerminal()) {
+                    mMap.addMarker(new MarkerOptions()
+                            .position(suc)
+                            .title(item.getDireccion())
+                            .snippet(item.getDescripcion())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                } else {
+                    mMap.addMarker(new MarkerOptions()
+                            .position(suc)
+                            .title(item.getDireccion())
+                            .snippet(item.getDescripcion())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+                }
             }
         }
 
@@ -375,13 +421,14 @@ public class BusquedaActivity extends AppCompatActivity  implements NumberPicker
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                double radiusInMeters = 1000;
 
                 if(circle != null) {
                     circle.remove();
                 }
                 CircleOptions circleOptions = new CircleOptions().center(latLng).radius(radiusInMeters).fillColor(0x550000ff).strokeColor(Color.BLUE).strokeWidth(2);
                 circle = mMap.addCircle(circleOptions);
+
+                puntoSeleccionado = latLng;//actualizo ubicacion de global puntoSeleccionado
             }
         });
     }
@@ -409,6 +456,11 @@ public class BusquedaActivity extends AppCompatActivity  implements NumberPicker
         buttonOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(origenPress){
+                    paradasOrigen = obtenerParadasCercanasApunto(radiusInMeters, puntoSeleccionado, paradasByDestino);
+                }else{
+                    paradasDestino = obtenerParadasCercanasApunto(radiusInMeters, puntoSeleccionado, paradas);
+                }
                 SupportMapFragment f = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapPopup);
                 if (f != null)
                     getSupportFragmentManager().beginTransaction().remove(f).commit();
@@ -417,7 +469,7 @@ public class BusquedaActivity extends AppCompatActivity  implements NumberPicker
         });
     }
 
-    private void WSgetParadas(final Boolean origen) throws JSONException, TimeoutException, ExecutionException {
+    private void WSgetAllParadas() throws JSONException, TimeoutException, ExecutionException {
         try {
             volley.llamarWSarray(Request.Method.GET,urlgetStations, null,new Response.Listener<JSONArray>(){
                 @Override
@@ -438,7 +490,7 @@ public class BusquedaActivity extends AppCompatActivity  implements NumberPicker
                             paradas.add(parada);
                         }
                         if(!paradas.isEmpty()){
-                            initiatePopupWindow(origen);
+                            initiatePopupWindow(false);
                         }else{
                             new AlertDialog.Builder(BusquedaActivity.this)
                                     .setTitle("Ops!")
@@ -463,5 +515,82 @@ public class BusquedaActivity extends AppCompatActivity  implements NumberPicker
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+
+    private void WSgetParadasByDestino(List<Parada> destinos) throws JSONException, TimeoutException, ExecutionException {
+
+        JSONArray jsonArray = getIdByParadas(destinos);
+        try {
+            volley.llamarWSarray(Request.Method.POST,urlGetFilteredStations, jsonArray,new Response.Listener<JSONArray>(){
+                @Override
+                public void onResponse(JSONArray response) {
+                    try {
+                        paradasByDestino.clear();
+                        for (int i = 0; i < response.length(); i++) {
+                            Parada parada = new Parada();
+                            JSONObject jsonObject = (JSONObject) response.get(i);
+                            parada.setDescripcion(jsonObject.getString("descripcion"));
+                            parada.setDireccion(jsonObject.getString("direccion"));
+                            parada.setEsPeaje(false);//hardcode jsonObject.getBoolean("es_peaje")
+                            parada.setEsTerminal(false);//hardcode jsonObject.getBoolean("es_terminal")
+                            parada.setLatitud(jsonObject.getDouble("latitud"));
+                            parada.setLongitud(jsonObject.getDouble("longitud"));
+                            parada.setId_parada(jsonObject.getInt("id_parada"));
+                            parada.setReajuste(jsonObject.getInt("reajuste"));
+                            parada.setSucursal(false);//hardcode  jsonObject.getBoolean("sucursal")
+                            paradasByDestino.add(parada);
+                        }
+                        if(!paradasByDestino.isEmpty()){
+                            initiatePopupWindow(true);
+                        }else{
+                            new AlertDialog.Builder(BusquedaActivity.this)
+                                    .setTitle("Ops!")
+                                    .setMessage("No pudimos obtener las paradas")
+                                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                        }
+                                    })
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    Log.d("el ERROR ",volleyError.toString());
+                }
+            }, null);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    private List<Parada> obtenerParadasCercanasApunto(double radio, LatLng centro, List<Parada> paradas){
+        List<Parada> paradasCercanas = new ArrayList<Parada>();
+
+        for (Parada item: paradas) {
+            float[] results = new float[1];
+            Location.distanceBetween(centro.latitude, centro.longitude,
+                    item.getLatitud(), item.getLongitud(),
+                    results);
+            if(results[0]<=radio){
+                paradasCercanas.add(item);
+            }
+        }
+        return paradasCercanas;
+    }
+
+    private JSONArray getIdByParadas (List<Parada> paradas) throws JSONException {
+        JSONArray jsonArray = new JSONArray();
+        for (Parada item: paradas) {
+            jsonArray.put(item.getId_parada());
+        }
+        return jsonArray;
     }
 }

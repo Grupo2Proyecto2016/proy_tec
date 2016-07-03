@@ -5,108 +5,80 @@ package com.example.malladam.AppUsuarios.models;
  */
 public class Pasaje {
 
-    public String asiento;
-    public String idViaje;
-    public String idCliente;
-    public String idOrigen;
-    public String idDestino;
-    public String fecha;
-    public String valor;
-    public String tipoVenta;
-    public String medioPago;
-    public String estado;
+    private String idPasaje;
+    private String Origen;
+    private String Destino;
+    private long Fecha;
+    private String Asiento;
+    private float Precio;
+    private String Estado;
 
-    public Pasaje(String asiento, String idViaje, String idCliente, String idOrigen, String idDestino, String fecha, String valor, String tipoVenta, String medioPago) {
-        this.asiento = asiento;
-        this.idViaje = idViaje;
-        this.idCliente = idCliente;
-        this.idOrigen = idOrigen;
-        this.idDestino = idDestino;
-        this.fecha = fecha;
-        this.valor = valor;
-        this.tipoVenta = tipoVenta;
-        this.medioPago = medioPago;
-        this.estado = "A"; //Activo ; Inactivo
+    public Pasaje() {
+    }
+
+    public Pasaje(String idPasaje, String origen, String destino, long fecha, String asiento, float precio, String estado) {
+        this.idPasaje = idPasaje;
+        Origen = origen;
+        Destino = destino;
+        Fecha = fecha;
+        Asiento = asiento;
+        Precio = precio;
+        Estado = estado;
+    }
+
+    public String getIdPasaje() {
+        return idPasaje;
+    }
+
+    public void setIdPasaje(String idPasaje) {
+        this.idPasaje = idPasaje;
+    }
+
+    public String getOrigen() {
+        return Origen;
+    }
+
+    public void setOrigen(String origen) {
+        Origen = origen;
+    }
+
+    public String getDestino() {
+        return Destino;
+    }
+
+    public void setDestino(String destino) {
+        Destino = destino;
+    }
+
+    public long getFecha() {
+        return Fecha;
+    }
+
+    public void setFecha(long fecha) {
+        Fecha = fecha;
     }
 
     public String getAsiento() {
-        return asiento;
+        return Asiento;
     }
 
     public void setAsiento(String asiento) {
-        this.asiento = asiento;
+        Asiento = asiento;
     }
 
-    public String getIdViaje() {
-        return idViaje;
+    public float getPrecio() {
+        return Precio;
     }
 
-    public void setIdViaje(String idViaje) {
-        this.idViaje = idViaje;
-    }
-
-    public String getIdCliente() {
-        return idCliente;
-    }
-
-    public void setIdCliente(String idCliente) {
-        this.idCliente = idCliente;
-    }
-
-    public String getIdOrigen() {
-        return idOrigen;
-    }
-
-    public void setIdOrigen(String idOrigen) {
-        this.idOrigen = idOrigen;
-    }
-
-    public String getIdDestino() {
-        return idDestino;
-    }
-
-    public void setIdDestino(String idDestino) {
-        this.idDestino = idDestino;
-    }
-
-    public String getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(String fecha) {
-        this.fecha = fecha;
-    }
-
-    public String getValor() {
-        return valor;
-    }
-
-    public void setValor(String valor) {
-        this.valor = valor;
-    }
-
-    public String getTipoVenta() {
-        return tipoVenta;
-    }
-
-    public void setTipoVenta(String tipoVenta) {
-        this.tipoVenta = tipoVenta;
-    }
-
-    public String getMedioPago() {
-        return medioPago;
-    }
-
-    public void setMedioPago(String medioPago) {
-        this.medioPago = medioPago;
+    public void setPrecio(float precio) {
+        Precio = precio;
     }
 
     public String getEstado() {
-        return estado;
+        return Estado;
     }
 
     public void setEstado(String estado) {
-        this.estado = estado;
+        Estado = estado;
     }
-
 }
