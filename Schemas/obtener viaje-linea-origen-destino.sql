@@ -1,25 +1,27 @@
 ﻿SELECT 	v.id_viaje,
 	CASE WHEN l.viaja_parado is true THEN ve.cantasientos + ve.cantparados
 	ELSE ve.cantasientos
-	END AS lugares,
+	END AS lugares,	
 	v.inicio,
 	l.numero,
 	lpo.linea_id_linea,
 	lpo.origen,
 	po.descripcion origen_descripcion,
 	lpd.destino,
-	pd.descripcion destino_descripcion 
+	pd.descripcion destino_descripcion ,
+	ve.id_vehiculo,
+	ve.cantasientos
 FROM
 (
 	SELECT lp.linea_id_linea, lp.paradas_id_parada AS origen FROM 
 	linea_parada lp
-	WHERE lp.paradas_id_parada IN (1, 3)
+	WHERE lp.paradas_id_parada IN (2)
 ) AS lpo
 INNER JOIN
 (
 	SELECT lp.linea_id_linea, lp.paradas_id_parada AS destino FROM 
 	linea_parada lp
-	WHERE lp.paradas_id_parada IN (4, 2)
+	WHERE lp.paradas_id_parada IN (5)
 ) AS lpd
 ON lpo.linea_id_linea = lpd.linea_id_linea
 
@@ -37,4 +39,5 @@ ON v.linea_id_linea = lpo.linea_id_linea
 
 INNER JOIN vehiculo ve
 ON ve.id_vehiculo = v.vehiculo_id_vehiculo
-WHERE v.inicio = '[fecha]'
+
+

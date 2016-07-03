@@ -298,8 +298,8 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     	$("#originModal").modal('hide');
     	$.blockUI();
     	//pasar los destinos y sacar de ahi las lineas
-    	$scope.travelSearch.origins = $scope.listaIDSeleccionados;
-    	$scope.travelSearch.destinations = $scope.listaIDSeleccionadosOrigin;    	
+    	$scope.travelSearch.origins = $scope.listaIDSeleccionadosOrigin;
+    	$scope.travelSearch.destinations = $scope.listaIDSeleccionados;    	
     	$http.post(servicesUrl +'searchTravels', JSON.stringify($scope.travelSearch))
 		.success(function(data, status, headers, config)
 		{				
@@ -329,16 +329,17 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 		enableFiltering: true,
         columnDefs:
     	[
-          { name:'Linea', field: 'linea.numero' },
-          { name:'Origen', field: 'linea.origen_description' },
-          { name:'Destino', field: 'linea.destino.descripcion'},
+          { name:'Linea', field: 'numero' },
+          { name:'Origen', field: 'origen_description' },
+          { name:'Destino', field: 'destino_description'},
           { name:'Salida', cellTemplate: '<div class="text-center ngCellText">{{ row.entity.inicio | date:"dd/MM/yyyy @ h:mma"}}</div>' },
-          { name:'Tiempo Estimado (min)', field: 'linea.tiempo_estimado' },
-          { 
+          //{ name:'Tiempo Estimado (min)', field: 'linea.tiempo_estimado' },
+          /*{ 
         	  name: 'Pasajeros Parados', 
         	  cellTemplate: '<div class="text-center ngCellText">{{row.entity.linea.viaja_parado | SiNo}}</div>'
-          },
-          { name:'Nº Coche', field: 'vehiculo.id_vehiculo' }
+          },*/
+          { name:'Nº Coche', field: 'id_vehiculo' },
+          { name:'Asientos Disp.', field: 'cantasientos' }
         ]
      };
     

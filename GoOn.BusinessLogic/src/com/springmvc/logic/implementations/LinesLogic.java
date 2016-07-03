@@ -141,6 +141,13 @@ public class LinesLogic implements ILinesLogic
 	public List<ViajesBuscados> SearchTravelsAdvanced(Calendar dateFrom, Calendar dateTo, List<Integer> origins, List<Integer> destinations)
 	{		
 		List<ViajesBuscados> viajes = TenantContext.ViajeRepository.getTravelsAdvanced(origins, destinations, dateFrom);
+		for(int x = 0; x < viajes.size(); x ++)
+		{
+			int cant_vendidos = TenantContext.PasajeRepository.getCantVendidos(viajes.get(x).getOrigen(), viajes.get(x).getDestino(), 
+																			   viajes.get(x).getLinea_id_linea(), viajes.get(x).getId_viaje());
+			int cant_total = viajes.get(x).getCantasientos();
+			viajes.get(x).setCantasientos(cant_total - cant_vendidos);
+		}
 		return viajes;		
 	}
 
