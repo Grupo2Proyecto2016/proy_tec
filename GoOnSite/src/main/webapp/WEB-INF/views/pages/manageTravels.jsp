@@ -60,7 +60,7 @@
 							    <div class="col-sm-9">
 							    	<select name="conductor" class="form-control"
 										ng-model="travelForm.driver"
-										ng-options="driver as driver.usrname for driver in drivers"
+										ng-options="driver as driver.customDes for driver in drivers"
 										required>
 										<option value="">Seleccione un chofer</option>
 									</select>	
@@ -76,7 +76,7 @@
 							    <div class="col-sm-9">
 							    	<select name="vehiculo" class="form-control"
 										ng-model="travelForm.bus"
-										ng-options="bus as bus.id_vehiculo for bus in buses"
+										ng-options="bus as bus.customDes for bus in buses"
 										required>
 										<option value="">Seleccione un coche</option>
 									</select>	

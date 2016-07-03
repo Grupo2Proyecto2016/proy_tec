@@ -31,7 +31,10 @@ goOnApp.controller('manageTravelsController', function($scope, $http, uiGridCons
     $scope.getDrivers = function()
     {
     	$http.get(servicesUrl + 'getDrivers').success(function(data, status, headers, config) {
-    		$scope.drivers = data;        	
+    		$scope.drivers = data;
+    		angular.forEach($scope.drivers, function(d){
+    			d.customDes = d.usrname + ": " + d.nombre + " " + d.apellido;
+    		});
 		});
     };    
     
@@ -39,6 +42,9 @@ goOnApp.controller('manageTravelsController', function($scope, $http, uiGridCons
     	$http.get(servicesUrl + 'getBuses').success(function(data, status, headers, config) 
     	{
         	$scope.buses = data;
+        	angular.forEach($scope.buses, function(b){
+    			b.customDes = b.id_vehiculo + ": " + b.matricula;
+    		});
     	});
     };
     

@@ -41,11 +41,24 @@ public class BusesRestController {
     public ResponseEntity<Void> CreateBus(@RequestBody Vehiculo vehiculo, @PathVariable String tenantid)
     {
 		VehiculosLogic vl = new VehiculosLogic(tenantid);
-	    for (int i = 0; i < vehiculo.getCantAsientos(); i++) 
+		for (int i = 0; i < vehiculo.getCantAccesibles(); i++) 
 		{
+	    	int number = i+1;
 			Asiento auxAsiento = new Asiento();
-			auxAsiento.setNumero(i+1);
-			auxAsiento.setEs_ventana(false);
+			auxAsiento.setNumero(number);
+			auxAsiento.setEs_ventana(true);
+			auxAsiento.setHabilitado(true);	
+			auxAsiento.setEs_accesible(true);
+			vehiculo.getAsientos().add(auxAsiento);			
+		}
+		
+		for (int i = 0; i < vehiculo.getCantAsientos(); i++) 
+		{
+	    	int number = i+1;
+	    	boolean isWindow = number % 4 == 0 || number % 4 == 1;
+			Asiento auxAsiento = new Asiento();
+			auxAsiento.setNumero(number);
+			auxAsiento.setEs_ventana(isWindow);
 			auxAsiento.setHabilitado(true);	
 			auxAsiento.setEs_accesible(false);
 			vehiculo.getAsientos().add(auxAsiento);			
