@@ -15,6 +15,8 @@ public interface IMantenimientoLogic {
 	
 	public List<Mantenimiento> getMantenimientos();
 	
+	public List<Mantenimiento> findServiceByDate(long id_vehiculo, Calendar inicioViaje, Calendar finViaje);
+	
 	public void deleteMantenimiento(Mantenimiento mantenimiento);
 	
 }

@@ -1,5 +1,6 @@
 package com.springmvc.controller;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -17,11 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.springmvc.entities.tenant.Mantenimiento;
 import com.springmvc.entities.tenant.Usuario;
+import com.springmvc.entities.tenant.Vehiculo;
 import com.springmvc.logic.implementations.BranchesLogic;
 import com.springmvc.logic.implementations.MantenimientoLogic;
 import com.springmvc.logic.interfaces.IMantenimientoLogic;
 import com.springmvc.requestWrappers.CustomResponseWrapper;
 import com.springmvc.requestWrappers.MantenimientoFormWrapper;
+import com.springmvc.requestWrappers.TravelFormWrapper;
 import com.springmvc.utils.UserContext;
 
 @RestController
@@ -41,6 +44,24 @@ public class MantenimientoRestController {
     	return new ResponseEntity<List<Mantenimiento>>(mantenimientos, HttpStatus.OK);
     }
 	
+    @Secured({"ROLE_COORDINATOR"})
+	@RequestMapping(value = "/findServiceByDate", method = RequestMethod.GET, consumes="application/json", produces = "application/json")
+    public ResponseEntity<List<Mantenimiento>> findServiceByDate(@RequestBody TravelFormWrapper viaje, @PathVariable String tenantid)
+    {
+      	MantenimientoLogic ml = new MantenimientoLogic(tenantid);
+      	viaje.dayFrom.setTimeZone(TimeZone.getDefault());
+    	viaje.dayTo.setTimeZone(TimeZone.getDefault());
+    	List<Mantenimiento> mantenimientos = ml.findServiceByDate(viaje.bus.getId_vehiculo(), viaje.dayFrom, viaje.dayTo);	
+    	if(mantenimientos == null)
+    	{
+    		return new ResponseEntity(HttpStatus.NOT_FOUND);
+    	}
+    	else
+    	{
+    		return new ResponseEntity<List<Mantenimiento>>(mantenimientos, HttpStatus.OK);
+    	}
+    }
+    
     @Secured({"ROLE_COORDINATOR"})
 	@RequestMapping(value = "/createMantenimiento", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
     public ResponseEntity<?> CreateMantenimiento(@RequestBody MantenimientoFormWrapper mantenimiento, @PathVariable String tenantid, HttpServletRequest request)
