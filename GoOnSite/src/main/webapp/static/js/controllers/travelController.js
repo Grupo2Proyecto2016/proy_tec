@@ -339,7 +339,12 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
         	  cellTemplate: '<div class="text-center ngCellText">{{row.entity.linea.viaja_parado | SiNo}}</div>'
           },*/
           { name:'Nº Coche', field: 'id_vehiculo' },
-          { name:'Asientos Disp.', field: 'cantasientos' }
+          { name:'Asientos Disp.', field: 'cantasientos' },
+          { name: 'Acciones',
+          	enableFiltering: false,
+          	enableSorting: false,
+              cellTemplate:'<button style="width: 50%" class="btn-xs btn-primary" ng-click="grid.appScope.selectSeats(row.entity.id_viaje, row.entity.origen, row.entity.destino, row.entity.linea_id_linea, row.entity.id_vehiculo)">Comprar</button>'
+      	  }
         ]
      };
     
@@ -404,6 +409,30 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     			}
     	);
     };
+    
+    $scope.selectSeats = function(id_viaje, origen, destino, id_linea, id_vehiculo)
+    {
+    	$.blockUI();    	
+    	$scope.seatsForm = {};
+    	$scope.seatsForm.id_viaje = id_viaje;
+    	$scope.seatsForm.origen = origen;
+    	$scope.seatsForm.destino = destino;
+    	$scope.seatsForm.id_linea = id_linea;
+    	$scope.seatsForm.id_vehiculo = id_vehiculo;
+    	$http.post(servicesUrl +'getSeats', JSON.stringify($scope.seatsForm))
+		.success(function(data, status, headers, config)
+		{				
+			$("#selectTicketsModal").modal('show');
+			$.unblockUI();
+			//cargar lista de asientos
+			//$scope.travels = data;
+			//$scope.travelsSearchGrid.data = $scope.travels;						    										
+		})
+		.error(function()
+		{
+			$.unblockUI();
+		});
+    }
     
     $scope.buyTicket = function()
 	{

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.springmvc.dataaccess.context.TenantDAContext;
+import com.springmvc.entities.tenant.Asiento;
 import com.springmvc.entities.tenant.Linea;
 import com.springmvc.entities.tenant.Parada;
 import com.springmvc.entities.tenant.Pasaje;
@@ -239,5 +240,15 @@ public class LinesLogic implements ILinesLogic
 	public List<Pasaje> GetUserTickets(Usuario currentUser) 
 	{
 		return TenantContext.PasajeRepository.GetByClient(currentUser.getIdUsuario());
+	}
+
+	public List<Asiento> getSeats(int id_viaje, int id_linea, int origen, int destino, long id_vehiculo) 
+	{
+		List<Asiento> asientos = new ArrayList<>();
+		asientos = TenantContext.AsientoRepository.getByVehiculo(id_vehiculo);
+		List<Long> reservados = new ArrayList<>();
+		reservados = TenantContext.PasajeRepository.getListaReservados(origen, destino, id_linea, id_viaje);
+		//ver los reservados y marcarlos
+		return asientos;
 	}
 }

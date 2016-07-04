@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.springmvc.entities.tenant.Asiento;
 import com.springmvc.entities.tenant.Encomienda;
 import com.springmvc.entities.tenant.Parada;
 import com.springmvc.entities.tenant.Pasaje;
@@ -23,6 +24,7 @@ import com.springmvc.entities.tenant.ViajesBuscados;
 import com.springmvc.logic.implementations.LinesLogic;
 import com.springmvc.logic.implementations.PackageLogic;
 import com.springmvc.requestWrappers.TravelSearchWrapper;
+import com.springmvc.requestWrappers.seatsFormWrapper;
 import com.springmvc.utils.UserContext;
 
 @RestController
@@ -47,6 +49,13 @@ public class TicketController
 		return new ResponseEntity<List<Viaje>>(travels, HttpStatus.OK);
 	}
 	 */
+	
+	@RequestMapping(value = "/getSeats", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
+	public ResponseEntity<List<Asiento>> getSeats(@RequestBody seatsFormWrapper searchData, @PathVariable String tenantid)
+	{
+		List<Asiento> asientos = new LinesLogic(tenantid).getSeats(searchData.id_viaje, searchData.id_linea, searchData.origen, searchData.destino, searchData.id_vehiculo); 
+		return new ResponseEntity<List<Asiento>> (asientos, HttpStatus.OK);		
+	}
 	
 	@RequestMapping(value = "/getStations", method = RequestMethod.GET)
 	public ResponseEntity<List<Parada>> getStations(@PathVariable String tenantid)
