@@ -179,6 +179,8 @@ public class LinesLogic implements ILinesLogic
 																			   viajes.get(x).getLinea_id_linea(), viajes.get(x).getId_viaje());
 			int cant_total = viajes.get(x).getCantasientos();
 			viajes.get(x).setCantasientos(cant_total - cant_vendidos);
+			Double valor = TenantContext.PasajeRepository.getValorPasaje(viajes.get(x).getOrigen(), viajes.get(x).getDestino(),viajes.get(x).getLinea_id_linea());
+			viajes.get(x).setValor(valor);
 		}
 		return viajes;		
 	}
@@ -276,10 +278,32 @@ public class LinesLogic implements ILinesLogic
 	public List<Asiento> getSeats(int id_viaje, int id_linea, int origen, int destino, long id_vehiculo) 
 	{
 		List<Asiento> asientos = new ArrayList<>();
-		asientos = TenantContext.AsientoRepository.getByVehiculo(id_vehiculo);
+		asientos = TenantContext.AsientoRepository.getByVehiculo(id_vehiculo);		
 		List<Long> reservados = new ArrayList<>();
 		reservados = TenantContext.PasajeRepository.getListaReservados(origen, destino, id_linea, id_viaje);
-		//ver los reservados y marcarlos
+		for(int x = 0; x < reservados.size(); x++)
+		{
+			Asiento asiento = getByIdAsiento(asientos, reservados.get(x));
+			asiento.setReservado(true);
+		}
 		return asientos;
 	}
+	
+	public Asiento getByIdAsiento(List<Asiento> asientos, long id_asiento)
+	{
+		for(int x = 0; x < asientos.size(); x++)
+		{
+			if(asientos.get(x).getId_asiento() == id_asiento)
+			{
+				return asientos.get(x); 
+			}
+		}
+		return null;		
+	}
+
+	public Double getTicketValue(int origen, int destino, int id_linea) 
+	{
+		return TenantContext.PasajeRepository.getValorPasaje(origen, destino, id_linea);
+	}	
+
 }

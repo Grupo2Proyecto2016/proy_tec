@@ -20,6 +20,7 @@ public class ViajesBuscados {
 	private String destino_description;
 	private long id_vehiculo;
 	private int cantasientos;
+	private Double valor;
 	
 	public ViajesBuscados(BigInteger id_viaje, Integer lugares, Timestamp inicio, Integer numero, BigInteger linea_id_linea, BigInteger origen,
 			String origen_description, BigInteger destino, String destino_description, BigInteger id_vehiculo, Integer cantasientos) 
@@ -107,6 +108,14 @@ public class ViajesBuscados {
 
 	public void setCantasientos(int cantasientos) {
 		this.cantasientos = cantasientos;
+	}
+
+	public Double getValor() {
+		return valor;
+	}
+
+	public void setValor(Double valor) {
+		this.valor = valor;
 	}
 	
 	

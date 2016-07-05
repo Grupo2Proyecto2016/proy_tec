@@ -57,6 +57,13 @@ public class TicketController
 		return new ResponseEntity<List<Asiento>> (asientos, HttpStatus.OK);		
 	}
 	
+	@RequestMapping(value = "/getTicketValue", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
+	public ResponseEntity<Double> getTicketValue(@RequestBody seatsFormWrapper searchData, @PathVariable String tenantid)
+	{
+		Double value = new LinesLogic(tenantid).getTicketValue(searchData.origen, searchData.destino, searchData.id_linea);				
+		return new ResponseEntity<Double> (value, HttpStatus.OK);		
+	}	
+	
 	@RequestMapping(value = "/getStations", method = RequestMethod.GET)
 	public ResponseEntity<List<Parada>> getStations(@PathVariable String tenantid)
 	{
