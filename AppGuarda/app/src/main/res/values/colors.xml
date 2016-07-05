@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="fondo">#FF99CC00</color>
+    <color name="cabezal">#FF45CC</color>
+    <color name="cabezal_navigation">#2F69B2</color>
+    <color name="backMenu">#8CB8F9</color>
+    <color name="negro">#000000</color>
+
+</resources>
