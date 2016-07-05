@@ -60,8 +60,8 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/origenBusqueda"
-                    android:id="@+id/origenBusqueda"
+                    android:text="@string/destinoBusqueda"
+                    android:id="@+id/destinoBusqueda"
                     android:layout_weight="2"
                     android:drawableLeft="@drawable/ic_place_black_24dp"/>
 
@@ -73,8 +73,8 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/destinoBusqueda"
-                    android:id="@+id/destinoBusqueda"
+                    android:text="@string/origenBusqueda"
+                    android:id="@+id/origenBusqueda"
                     android:layout_weight="2"
                     android:drawableLeft="@drawable/ic_place_black_24dp"/>
 
@@ -91,7 +91,7 @@
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="25dp"
+                    android:layout_marginTop="20dp"
                     android:layout_weight="1"
                     android:id="@+id/view">
                     <EditText
@@ -106,7 +106,7 @@
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="25dp"
+                    android:layout_marginTop="20dp"
                     android:layout_weight="1"
                     android:id="@+id/view2">
                     <EditText
