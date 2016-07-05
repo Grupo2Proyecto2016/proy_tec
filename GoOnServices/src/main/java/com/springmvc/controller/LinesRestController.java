@@ -26,6 +26,7 @@ import com.springmvc.entities.tenant.Linea;
 import com.springmvc.entities.tenant.Parada;
 import com.springmvc.entities.tenant.Viaje;
 import com.springmvc.enums.DayOfWeek;
+import com.springmvc.exceptions.BusInServiceException;
 import com.springmvc.logic.implementations.LinesLogic;
 import com.springmvc.logic.implementations.UsersLogic;
 import com.springmvc.logic.implementations.VehiculosLogic;
@@ -172,8 +173,10 @@ public class LinesRestController{
 	
 	@Secured({"ROLE_COORDINATOR"})
 	@RequestMapping(value = "/createTravel", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
-	public ResponseEntity<?> createTravel(@RequestBody TravelFormWrapper travel, @PathVariable String tenantid)
+	public ResponseEntity<CustomResponseWrapper> createTravel(@RequestBody TravelFormWrapper travel, @PathVariable String tenantid)
 	{
+		CustomResponseWrapper response = new CustomResponseWrapper();
+		
 		travel.dayFrom.setTimeZone(TimeZone.getDefault());
 		travel.dayTo.setTimeZone(TimeZone.getDefault());
 		
@@ -200,9 +203,18 @@ public class LinesRestController{
 		days.put(DayOfWeek.Saturday, travel.saturday);
 		days.put(DayOfWeek.Sunday, travel.sunday);
 		
-		tl.CreateTravels(travelToPersist, days, travel.dayFrom, travel.dayTo, time);
+		try 
+		{
+			tl.CreateTravels(travelToPersist, days, travel.dayFrom, travel.dayTo, time);
+			response.setSuccess(true);
+		}
+		catch (BusInServiceException e) 
+		{
+			response.setSuccess(false);
+			response.setMsg(e.getMessage());
+		}
 		
-		return new ResponseEntity(HttpStatus.OK);
+		return new ResponseEntity<CustomResponseWrapper>(response, HttpStatus.OK);
 	}
 	
 	@Secured({"ROLE_COORDINATOR"})
