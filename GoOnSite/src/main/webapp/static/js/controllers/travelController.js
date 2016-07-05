@@ -340,6 +340,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
           },*/
           { name:'Nº Coche', field: 'id_vehiculo' },
           { name:'Asientos Disp.', field: 'cantasientos' },
+          { name:'Costo', field: 'valor' },
           { name: 'Acciones',
           	enableFiltering: false,
           	enableSorting: false,
