@@ -68,17 +68,16 @@ public class MantenimientoLogic implements IMantenimientoLogic {
 	
 	public List<Mantenimiento> findServiceByDate(long id_vehiculo, Calendar inicioViaje, Calendar finViaje) {
 		
-		inicioViaje.getTimeZone();
-		finViaje.getTimeZone();
+		Calendar tmpinicioViaje = Calendar.getInstance();
+		tmpinicioViaje.setTime(inicioViaje.getTime());
+		Calendar tmpfinViaje = finViaje;
+		tmpinicioViaje.set(Calendar.MILLISECOND, 0);
+		tmpinicioViaje.set(Calendar.HOUR , 0);
+		tmpinicioViaje.set(Calendar.MINUTE , 0);
+		tmpinicioViaje.set(Calendar.SECOND , 0);
 		
-		inicioViaje.add((Calendar.DATE), 1);
-		inicioViaje.set(Calendar.MILLISECOND, 0);
-		inicioViaje.set(Calendar.HOUR , 0);
-		inicioViaje.set(Calendar.MINUTE , 0);
-		inicioViaje.set(Calendar.SECOND , 0);
-		
-		Date inicio = inicioViaje.getTime();
-		Date fin = finViaje.getTime();
+		Date inicio = tmpinicioViaje.getTime();
+		Date fin = tmpfinViaje.getTime();
 		
 		return TenantContext.MantenimientoRepository.findServiceByDate(id_vehiculo, inicio, fin);
 	}

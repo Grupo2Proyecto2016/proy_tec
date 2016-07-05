@@ -27,6 +27,7 @@ import com.springmvc.entities.tenant.Parada;
 import com.springmvc.entities.tenant.Viaje;
 import com.springmvc.enums.DayOfWeek;
 import com.springmvc.exceptions.BusInServiceException;
+import com.springmvc.exceptions.BusTravelConcurrencyException;
 import com.springmvc.logic.implementations.LinesLogic;
 import com.springmvc.logic.implementations.UsersLogic;
 import com.springmvc.logic.implementations.VehiculosLogic;
@@ -205,10 +206,23 @@ public class LinesRestController{
 		
 		try 
 		{
-			tl.CreateTravels(travelToPersist, days, travel.dayFrom, travel.dayTo, time);
-			response.setSuccess(true);
+			int createdTravels = tl.CreateTravels(travelToPersist, days, travel.dayFrom, travel.dayTo, time);
+			if(createdTravels > 0)
+			{
+				response.setSuccess(true);
+			}
+			else
+			{
+				response.setSuccess(false);
+				response.setMsg("No se ha generado ningún viaje. Valide el rango de fechas y la periodicidad.");
+			}
 		}
 		catch (BusInServiceException e) 
+		{
+			response.setSuccess(false);
+			response.setMsg(e.getMessage());
+		}
+		catch (BusTravelConcurrencyException e) 
 		{
 			response.setSuccess(false);
 			response.setMsg(e.getMessage());

@@ -22,6 +22,7 @@ import com.springmvc.entities.tenant.Viaje;
 import com.springmvc.entities.tenant.ViajesBuscados;
 import com.springmvc.enums.DayOfWeek;
 import com.springmvc.exceptions.BusInServiceException;
+import com.springmvc.exceptions.BusTravelConcurrencyException;
 import com.springmvc.logic.interfaces.ILinesLogic;
 
 public class LinesLogic implements ILinesLogic
@@ -75,9 +76,9 @@ public class LinesLogic implements ILinesLogic
 		TenantContext.LineaRepository.deleteLinea(id_linea);		
 	}
 
-	public void CreateTravels(Viaje travel, Map<DayOfWeek, Boolean> days, Calendar dayFrom, Calendar dayTo, Date time) throws BusInServiceException 
+	public int CreateTravels(Viaje travel, Map<DayOfWeek, Boolean> days, Calendar dayFrom, Calendar dayTo, Date time) throws BusInServiceException, BusTravelConcurrencyException 
 	{
-		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+		int createdTravels = 0;
 		boolean dayInPeriod = true;
 		List<Viaje> travelsToPersist = new ArrayList<>();
 		while (dayInPeriod) 
@@ -90,21 +91,14 @@ public class LinesLogic implements ILinesLogic
 				travelDate.setHours(time.getHours());
 				travelDate.setMinutes(time.getMinutes());
 				
-				boolean isBusAvailable = IsBusAvailable(travel, travelDate);
-				
-				if(isBusAvailable)
-				{
-					Viaje travelToPersist = new Viaje();
-					travelToPersist.setConductor(travel.getConductor());
-					travelToPersist.setLinea(travel.getLinea());
-					travelToPersist.setVehiculo(travel.getVehiculo());
-					travelToPersist.setInicio(travelDate);	
-					travelsToPersist.add(travelToPersist);
-				}
-				else
-				{
-					throw new BusInServiceException("El omnibus estará en mantenimiento el " + df.format(travelDate));
-				}
+				CheckBusAvailability(travel, travelDate);
+
+				Viaje travelToPersist = new Viaje();
+				travelToPersist.setConductor(travel.getConductor());
+				travelToPersist.setLinea(travel.getLinea());
+				travelToPersist.setVehiculo(travel.getVehiculo());
+				travelToPersist.setInicio(travelDate);	
+				travelsToPersist.add(travelToPersist);
 			}
 			dayFrom.add((Calendar.DATE), 1);
 			dayFrom.set(Calendar.MILLISECOND, 0);
@@ -116,21 +110,41 @@ public class LinesLogic implements ILinesLogic
 		for (Viaje travelt : travelsToPersist) 
 		{
 			TenantContext.ViajeRepository.InsertTravel(travelt);
+			createdTravels++;
 		}
+		return createdTravels;
 	}
 
-	private boolean IsBusAvailable(Viaje travel, Date travelDate)
+	private void CheckBusAvailability(Viaje travel, Date travelDate) throws BusInServiceException, BusTravelConcurrencyException
 	{
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		MantenimientoLogic mm = new MantenimientoLogic(TenantContext.TenantName);
 		Calendar beginTravel = Calendar.getInstance();
 		beginTravel.setTime(travelDate);
+		beginTravel.set(GregorianCalendar.HOUR_OF_DAY, travelDate.getHours());
+		beginTravel.set(GregorianCalendar.MINUTE, travelDate.getMinutes());
 		Calendar endTravel = Calendar.getInstance();
 		endTravel.setTime(travelDate);
+		endTravel.set(GregorianCalendar.HOUR_OF_DAY, travelDate.getHours()); 
+		endTravel.set(GregorianCalendar.MINUTE, travelDate.getMinutes());
 		endTravel.add(GregorianCalendar.MINUTE, travel.getLinea().getTiempo_estimado() + 30);
 		List<Mantenimiento> services = mm.findServiceByDate(travel.getVehiculo().getId_vehiculo(), beginTravel, endTravel);
-		return services.isEmpty();
+		if(!services.isEmpty())
+		{
+			throw new BusInServiceException("El omnibus estará en mantenimiento el " + df.format(travelDate));
+		}
+		List<Viaje> travels = GetBusTravels(travel.getVehiculo().getId_vehiculo(), beginTravel, endTravel);
+		if(!travels.isEmpty())
+		{
+			throw new BusTravelConcurrencyException("El omnibus posee viajes a partir de " + df.format(travelDate));
+		}
 	}
 	
+	private List<Viaje> GetBusTravels(long id_vehiculo, Calendar beginTravel, Calendar endTravel) 
+	{
+		return TenantContext.ViajeRepository.GetByBus(id_vehiculo, beginTravel.getTime(), endTravel.getTime());
+	}
+
 	public List<Viaje> GetTravels() 
 	{
 		return TenantContext.ViajeRepository.GetTravels();

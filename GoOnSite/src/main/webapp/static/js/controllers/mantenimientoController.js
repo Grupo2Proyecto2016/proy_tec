@@ -12,6 +12,7 @@ goOnApp.controller('mantenimientoController', function($scope, $http, uiGridCons
     i18nService.setCurrentLang('es');
     
     $scope.mantenimientoForm = {};
+    $scope.salida = {};
     
     $scope.initForm = function()
     {
