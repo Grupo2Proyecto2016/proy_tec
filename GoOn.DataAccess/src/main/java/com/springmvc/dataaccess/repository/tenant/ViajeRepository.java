@@ -3,6 +3,7 @@ package com.springmvc.dataaccess.repository.tenant;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -64,7 +65,7 @@ public class ViajeRepository {
 	public List<Viaje> GetTravels() 
 	{
 		List<Viaje> travels = null;
-		Query q = entityManager.createQuery("FROM Viaje");
+		Query q = entityManager.createQuery("FROM Viaje ORDER BY inicio ASC");
 		travels = (List<Viaje>)q.getResultList();
 		return travels;	
 	}
@@ -261,5 +262,24 @@ public class ViajeRepository {
 		
 		viajes = EntityMapper.getResultList(q, ViajesBuscados.class);
 		return viajes;
+	}
+
+	public List<Viaje> GetByBus(long idBus, Date from, Date to)
+	{
+		List<Viaje> travels = null;
+		Query q = entityManager.createQuery(
+				"FROM Viaje v "
+				//+"LEFT JOIN v.encomiendas e " 
+				+ "WHERE v.linea.habilitado = TRUE "
+				+ "AND v.vehiculo.id_vehiculo = :idBus "
+				+ "AND v.inicio >= :from "
+				+ "AND v.inicio <= :to "
+		);
+		q.setParameter("idBus", idBus); 
+		q.setParameter("from", from);
+		q.setParameter("to", to);
+		
+		travels = (List<Viaje>)q.getResultList();
+		return travels;	
 	}
 }

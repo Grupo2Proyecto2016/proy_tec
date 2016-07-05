@@ -66,6 +66,26 @@ public class MantenimientoRepository {
 		}
 		return mantenimiento;
 	}
+	
+	public List<Mantenimiento> findServiceByDate(long id_vehiculo, Date inicioViaje, Date finViaje)
+	{
+		List<Mantenimiento> mantenimientos = null;
+		Query q = entityManager.createQuery("FROM Mantenimiento WHERE vehiculo_id_vehiculo = :idv "
+				+ "AND id_mantenimiento NOT IN "
+				+ "(SELECT id_mantenimiento FROM Mantenimiento WHERE "
+				+ "(fin < :vi AND fin < :vf) "
+				+ "OR (:vf < inicio AND :vf < fin))");
+		q.setParameter("idv", id_vehiculo);
+		q.setParameter("vi", inicioViaje);
+		q.setParameter("vf", finViaje);
+		try {
+			mantenimientos = (List<Mantenimiento>)q.getResultList();
+			return mantenimientos;
+		}
+		catch (NoResultException ex) {
+			return null;
+		}	
+	}
 
 	public void deleteMantenimiento(Mantenimiento mantenimiento)
 	{

@@ -53,7 +53,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -61,7 +60,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
-public class BusquedaActivity extends AppCompatActivity  implements NumberPicker.OnValueChangeListener, OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener{
+public class BusquedaActivity extends AppCompatActivity implements NumberPicker.OnValueChangeListener, OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener{
 
     private DataBaseManager dbManager;
     private String currentDate;
@@ -76,7 +75,7 @@ public class BusquedaActivity extends AppCompatActivity  implements NumberPicker
     private Button mDestino;
     private Button mOrigen;
     private Button mButtonBuscar;
-    private String urlgetCompany, urlgetStations,urlGetFilteredStations;
+    private String urlgetCompany, urlgetStations,urlGetFilteredStations, urlSearchTravels;
     private VolleyS volley;
     private Empresa empresa;
     private TextView mCantAsientos;
@@ -110,6 +109,7 @@ public class BusquedaActivity extends AppCompatActivity  implements NumberPicker
         mFechaIda.setTextColor(Color.parseColor(empresa.getColorText()));
         mCantAsientos.setTextColor(Color.parseColor(empresa.getColorText()));
 
+        urlSearchTravels = getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)+getResources().getString(R.string.searchTravels);
         urlgetStations = getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)+getResources().getString(R.string.getStations);
         urlGetFilteredStations = getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)+getResources().getString(R.string.getFilteredStations);
         volley = volley.getInstance(this);
@@ -153,6 +153,25 @@ public class BusquedaActivity extends AppCompatActivity  implements NumberPicker
                 }
             }
         });
+
+        mButtonBuscar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //VALIDAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!VALIDAR
+                try {
+                    WSbuscarViajes(currentDate,currentDate,paradasOrigen, paradasDestino,Integer.parseInt(mCantAsientos.getText().toString()));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (TimeoutException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
 
         dbManager = new DataBaseManager(this);
 
@@ -213,8 +232,7 @@ public class BusquedaActivity extends AppCompatActivity  implements NumberPicker
         ///////////ACTIONBAR+NAVIGATION////////////
 
         //numberPcker//
-        mCantAsientos.setOnClickListener(new View.OnClickListener()
-        {
+        mCantAsientos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 show();
@@ -237,8 +255,7 @@ public class BusquedaActivity extends AppCompatActivity  implements NumberPicker
         np.setMinValue(1);
         np.setWrapSelectorWheel(false);
         np.setOnValueChangedListener(this);
-        b1.setOnClickListener(new View.OnClickListener()
-        {
+        b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mCantAsientos.setText(String.valueOf(np.getValue())); //set the value to textview
@@ -343,7 +360,7 @@ public class BusquedaActivity extends AppCompatActivity  implements NumberPicker
 
     ///////////DATEPICKER////////////////
     private void updateDisplay() {
-        currentDate = new StringBuilder().append(day).append(".").append(month + 1).append(".").append(year).toString();
+        currentDate = new StringBuilder().append(year).append("-").append(month + 1).append("-").append(day).toString();
     }
 
     DatePickerDialog.OnDateSetListener myDateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -354,9 +371,20 @@ public class BusquedaActivity extends AppCompatActivity  implements NumberPicker
             month = j;
             day = k;
             updateDisplay();
+
             mFechaIda.setText(currentDate);
         }
     };
+
+    public Calendar getCalendar(int day, int month, int year) {
+        Calendar date = Calendar.getInstance();
+        date.set(Calendar.YEAR, year);
+        date.set(Calendar.MONTH, month+1);
+        date.set(Calendar.DAY_OF_MONTH, day);
+
+        return date;
+    }
+
 
     @Override
     protected Dialog onCreateDialog(int id) {
@@ -378,9 +406,8 @@ public class BusquedaActivity extends AppCompatActivity  implements NumberPicker
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        if(!origenPress) {
-
-            for (final Parada item : paradas) {
+        if(origenPress) {
+            for (Parada item : paradasByDestino) {//bydestino
                 LatLng suc = new LatLng(item.getLatitud(), item.getLongitud());
                 if (item.getEsTerminal()) {
                     mMap.addMarker(new MarkerOptions()
@@ -398,7 +425,7 @@ public class BusquedaActivity extends AppCompatActivity  implements NumberPicker
             }
         }
         else{
-            for (final Parada item : paradasDestino) {
+            for (Parada item : paradas) {
                 LatLng suc = new LatLng(item.getLatitud(), item.getLongitud());
                 if (item.getEsTerminal()) {
                     mMap.addMarker(new MarkerOptions()
@@ -475,6 +502,7 @@ public class BusquedaActivity extends AppCompatActivity  implements NumberPicker
                 @Override
                 public void onResponse(JSONArray response) {
                     try {
+                        paradas.clear();
                         for (int i = 0; i < response.length(); i++) {
                             Parada parada = new Parada();
                             JSONObject jsonObject = (JSONObject) response.get(i);
@@ -569,6 +597,51 @@ public class BusquedaActivity extends AppCompatActivity  implements NumberPicker
         }
     }
 
+
+    private void WSbuscarViajes(String dateFrom, String dateTo, List<Parada> origins, List<Parada> destinations,
+                                int ticketsCount) throws JSONException, TimeoutException, ExecutionException {
+
+        JSONArray jsonArrayOrigenes = getIdByParadas(origins);
+        JSONArray jsonArrayDestinos = getIdByParadas(destinations);
+
+        JSONObject jsonBody = new JSONObject();
+        jsonBody.put("dateFrom",dateFrom);
+        jsonBody.put("dateTo",dateTo);
+        jsonBody.put("origins",jsonArrayOrigenes);
+        jsonBody.put("destinations",jsonArrayDestinos);
+        jsonBody.put("ticketsCount",ticketsCount);
+
+        try {
+            volley.llamarWSCustomArray(Request.Method.POST,urlSearchTravels, jsonBody,new Response.Listener<JSONArray>(){
+            @Override
+            public void onResponse(JSONArray response) {
+                if(response.length()>0){
+                    Intent intent = new Intent(BusquedaActivity.this, ViajesActivity.class);
+                    intent.putExtra("viajesJsonArray", response.toString());
+                    startActivity(intent);
+
+                } else {
+                    new AlertDialog.Builder(BusquedaActivity.this)
+                            .setTitle("Ops!")
+                            .setMessage("No disponemos de viajes con estos parámetros")
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Log.d("el ERROR ",volleyError.toString());
+            }
+        }, null);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     private List<Parada> obtenerParadasCercanasApunto(double radio, LatLng centro, List<Parada> paradas){

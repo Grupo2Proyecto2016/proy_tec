@@ -77,6 +77,8 @@
     <string name="asiento">"Asiento"</string>
     <string name="tokenInvalido">"Credenciales Inválidas, favor inicie sesión"</string>
     <string name="origenSinDestino">"Favor seleccione el Destino"</string>
+    <string name="salida">"Salida"</string>
+    <string name="linea">"Línea"</string>
 
     <string name="getStations">"/getStations"</string>
     <string name="getTerminals">"/getTerminals"</string>
@@ -85,6 +87,7 @@
     <string name="userTickets">"/userTickets"</string>
     <string name="auth">"/auth"</string>
     <string name="getFilteredStations">"/getFilteredStations"</string>
+    <string name="searchTravels">"/searchTravels"</string>
 
 
 </resources>

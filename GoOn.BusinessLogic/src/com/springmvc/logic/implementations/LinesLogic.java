@@ -1,5 +1,7 @@
 package com.springmvc.logic.implementations;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -11,6 +13,7 @@ import java.util.Map;
 import com.springmvc.dataaccess.context.TenantDAContext;
 import com.springmvc.entities.tenant.Asiento;
 import com.springmvc.entities.tenant.Linea;
+import com.springmvc.entities.tenant.Mantenimiento;
 import com.springmvc.entities.tenant.Parada;
 import com.springmvc.entities.tenant.Pasaje;
 import com.springmvc.entities.tenant.Sucursal;
@@ -18,6 +21,8 @@ import com.springmvc.entities.tenant.Usuario;
 import com.springmvc.entities.tenant.Viaje;
 import com.springmvc.entities.tenant.ViajesBuscados;
 import com.springmvc.enums.DayOfWeek;
+import com.springmvc.exceptions.BusInServiceException;
+import com.springmvc.exceptions.BusTravelConcurrencyException;
 import com.springmvc.logic.interfaces.ILinesLogic;
 
 public class LinesLogic implements ILinesLogic
@@ -71,9 +76,11 @@ public class LinesLogic implements ILinesLogic
 		TenantContext.LineaRepository.deleteLinea(id_linea);		
 	}
 
-	public void CreateTravels(Viaje travel, Map<DayOfWeek, Boolean> days, Calendar dayFrom, Calendar dayTo, Date time) 
+	public int CreateTravels(Viaje travel, Map<DayOfWeek, Boolean> days, Calendar dayFrom, Calendar dayTo, Date time) throws BusInServiceException, BusTravelConcurrencyException 
 	{
+		int createdTravels = 0;
 		boolean dayInPeriod = true;
+		List<Viaje> travelsToPersist = new ArrayList<>();
 		while (dayInPeriod) 
 		{
 			int dayOfWeek = dayFrom.get((GregorianCalendar.DAY_OF_WEEK));
@@ -84,12 +91,14 @@ public class LinesLogic implements ILinesLogic
 				travelDate.setHours(time.getHours());
 				travelDate.setMinutes(time.getMinutes());
 				
+				CheckBusAvailability(travel, travelDate);
+
 				Viaje travelToPersist = new Viaje();
 				travelToPersist.setConductor(travel.getConductor());
 				travelToPersist.setLinea(travel.getLinea());
 				travelToPersist.setVehiculo(travel.getVehiculo());
-				travelToPersist.setInicio(travelDate);
-				TenantContext.ViajeRepository.InsertTravel(travelToPersist);
+				travelToPersist.setInicio(travelDate);	
+				travelsToPersist.add(travelToPersist);
 			}
 			dayFrom.add((Calendar.DATE), 1);
 			dayFrom.set(Calendar.MILLISECOND, 0);
@@ -98,6 +107,42 @@ public class LinesLogic implements ILinesLogic
 			dayFrom.set(Calendar.SECOND , 0);
 			dayInPeriod = !dayTo.before(dayFrom);
 		}
+		for (Viaje travelt : travelsToPersist) 
+		{
+			TenantContext.ViajeRepository.InsertTravel(travelt);
+			createdTravels++;
+		}
+		return createdTravels;
+	}
+
+	private void CheckBusAvailability(Viaje travel, Date travelDate) throws BusInServiceException, BusTravelConcurrencyException
+	{
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		MantenimientoLogic mm = new MantenimientoLogic(TenantContext.TenantName);
+		Calendar beginTravel = Calendar.getInstance();
+		beginTravel.setTime(travelDate);
+		beginTravel.set(GregorianCalendar.HOUR_OF_DAY, travelDate.getHours());
+		beginTravel.set(GregorianCalendar.MINUTE, travelDate.getMinutes());
+		Calendar endTravel = Calendar.getInstance();
+		endTravel.setTime(travelDate);
+		endTravel.set(GregorianCalendar.HOUR_OF_DAY, travelDate.getHours()); 
+		endTravel.set(GregorianCalendar.MINUTE, travelDate.getMinutes());
+		endTravel.add(GregorianCalendar.MINUTE, travel.getLinea().getTiempo_estimado() + 30);
+		List<Mantenimiento> services = mm.findServiceByDate(travel.getVehiculo().getId_vehiculo(), beginTravel, endTravel);
+		if(!services.isEmpty())
+		{
+			throw new BusInServiceException("El omnibus estará en mantenimiento el " + df.format(travelDate));
+		}
+		List<Viaje> travels = GetBusTravels(travel.getVehiculo().getId_vehiculo(), beginTravel, endTravel);
+		if(!travels.isEmpty())
+		{
+			throw new BusTravelConcurrencyException("El omnibus posee viajes a partir de " + df.format(travelDate));
+		}
+	}
+	
+	private List<Viaje> GetBusTravels(long id_vehiculo, Calendar beginTravel, Calendar endTravel) 
+	{
+		return TenantContext.ViajeRepository.GetByBus(id_vehiculo, beginTravel.getTime(), endTravel.getTime());
 	}
 
 	public List<Viaje> GetTravels() 
@@ -148,6 +193,8 @@ public class LinesLogic implements ILinesLogic
 																			   viajes.get(x).getLinea_id_linea(), viajes.get(x).getId_viaje());
 			int cant_total = viajes.get(x).getCantasientos();
 			viajes.get(x).setCantasientos(cant_total - cant_vendidos);
+			Double valor = TenantContext.PasajeRepository.getValorPasaje(viajes.get(x).getOrigen(), viajes.get(x).getDestino(),viajes.get(x).getLinea_id_linea());
+			viajes.get(x).setValor(valor);
 		}
 		return viajes;		
 	}
@@ -245,10 +292,32 @@ public class LinesLogic implements ILinesLogic
 	public List<Asiento> getSeats(int id_viaje, int id_linea, int origen, int destino, long id_vehiculo) 
 	{
 		List<Asiento> asientos = new ArrayList<>();
-		asientos = TenantContext.AsientoRepository.getByVehiculo(id_vehiculo);
+		asientos = TenantContext.AsientoRepository.getByVehiculo(id_vehiculo);		
 		List<Long> reservados = new ArrayList<>();
 		reservados = TenantContext.PasajeRepository.getListaReservados(origen, destino, id_linea, id_viaje);
-		//ver los reservados y marcarlos
+		for(int x = 0; x < reservados.size(); x++)
+		{
+			Asiento asiento = getByIdAsiento(asientos, reservados.get(x));
+			asiento.setReservado(true);
+		}
 		return asientos;
 	}
+	
+	public Asiento getByIdAsiento(List<Asiento> asientos, long id_asiento)
+	{
+		for(int x = 0; x < asientos.size(); x++)
+		{
+			if(asientos.get(x).getId_asiento() == id_asiento)
+			{
+				return asientos.get(x); 
+			}
+		}
+		return null;		
+	}
+
+	public Double getTicketValue(int origen, int destino, int id_linea) 
+	{
+		return TenantContext.PasajeRepository.getValorPasaje(origen, destino, id_linea);
+	}	
+
 }

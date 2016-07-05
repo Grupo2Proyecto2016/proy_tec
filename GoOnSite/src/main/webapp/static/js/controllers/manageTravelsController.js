@@ -78,20 +78,20 @@ goOnApp.controller('manageTravelsController', function($scope, $http, uiGridCons
 		{
     		$.blockUI();
     		$http.post(servicesUrl +'createTravel', JSON.stringify($scope.travelForm))
-			.success(function()
-			{				
-				//$scope.hideForm();
-		    	//$scope.travelForm = {};
-		    	$.unblockUI();
-				$scope.showSuccessAlert("Los viajes han sido creados");		
-				$scope.getTravels();
-			})
-			.error(function()
-			{
+			.then(function(result)
+			{	
 				$.unblockUI();
-				$scope.error_message = 'Ha ocurrido un error al crear los viajes. Intente de nuevo en unos instantes.'; 
-				$("#errorModal").modal("toggle");
-			});  
+				if(result.data.success)
+				{
+					$scope.showSuccessAlert("Los viajes han sido creados");		
+					$scope.getTravels();
+				}
+				else
+				{
+					$scope.error_message = 'Ha ocurrido un error al crear los viajes. ' + result.data.msg; 
+					$("#errorModal").modal("toggle");
+				}
+			});
 		}
     };
     

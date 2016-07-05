@@ -5,9 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
@@ -15,7 +14,6 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -74,6 +72,7 @@ import java.util.concurrent.TimeoutException;
 
 public class EncomiendasActivity extends AppCompatActivity {
 
+    int intentosLogin = 0;
     private Empresa empresa;
     Spinner spinnerOrigen;
     Spinner spinnerDestino;
@@ -96,6 +95,7 @@ public class EncomiendasActivity extends AppCompatActivity {
     DataBaseManager dbManager;
     private View mProgressView;
     Handler mHandler;
+    Boolean tokenExpired;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,7 +156,7 @@ public class EncomiendasActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(empresa.getNombre());
         ///////////ACTIONBAR////////////////
 
-        //cargarGrillaEncomeindas(encomiendas);
+
         try {
             WSgetUserPackages(dbManager.getTokenLogueado());
             WSgetTerminales();
@@ -542,8 +542,6 @@ public class EncomiendasActivity extends AppCompatActivity {
 
     private void cargarGrillaEncomeindas(List<Encomienda> encomiendas){
 
-        SimpleDateFormat formato = new SimpleDateFormat("dd-MMM-yyyy");
-
         for (Encomienda item: encomiendas) {
 
             mTableRow = new TableRow(this);
@@ -618,103 +616,6 @@ public class EncomiendasActivity extends AppCompatActivity {
         }
     }
 
-    private Boolean rxefrescarLogin(final String user, final String pass) {
-
-        dbManager.eliminarLogin();
-        try {
-            JSONObject jsonBody = new JSONObject();
-            jsonBody.put("username", user);
-            jsonBody.put("password", pass);
-
-            volley.llamarWS(Request.Method.POST, urlToken, jsonBody, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    try {
-                        dbManager.registrarLogin(response.getString("token"), user, pass);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError volleyError) {
-                    Log.d("el ERROR del token es ", volleyError.toString());
-
-                    Intent intent = new Intent(EncomiendasActivity.this, LoginActivity.class);
-                    Toast.makeText(EncomiendasActivity.this, getResources().getString(R.string.tokenInvalido), Toast.LENGTH_LONG).show();
-                    startActivity(intent);
-                }
-            }, null);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (TimeoutException e) {
-            e.printStackTrace();
-        }
-        return true;
-    }
-
-
-    private void refrescarLogin(final String user, final String pass)throws JSONException, TimeoutException, ExecutionException {
-
-        dbManager.eliminarLogin();
-
-        JSONObject jsonBody = new JSONObject();
-        jsonBody.put("username", user);
-        jsonBody.put("password", pass);
-
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,urlToken,jsonBody, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    dbManager.registrarLogin(response.getString("token"), user, pass);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                Log.d("el ERROR del token es ", volleyError.toString());
-
-                Intent intent = new Intent(EncomiendasActivity.this, LoginActivity.class);
-                Toast.makeText(EncomiendasActivity.this, getResources().getString(R.string.tokenInvalido), Toast.LENGTH_LONG).show();
-                startActivity(intent);
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                return headers;
-            }
-
-            @Override
-            protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
-                mHandler.post(new Runnable() {
-                    @Override
-                    // this will run on the main thread.
-                    public void run() {
-                        try {
-                            WSgetUserPackages(dbManager.getTokenLogueado());
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        } catch (TimeoutException e) {
-                            e.printStackTrace();
-                        } catch (ExecutionException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-                return super.parseNetworkResponse(response);
-            }
-        };
-        volley.addToQueue(request);
-    }
-
 
     private String convertirTimestampADateLocal(long timestamp){
 
@@ -731,5 +632,49 @@ public class EncomiendasActivity extends AppCompatActivity {
     }
 
 
+    private void refrescarLogin(final String user, final String pass)throws JSONException, TimeoutException, ExecutionException {
+
+        dbManager.eliminarLogin();
+
+        JSONObject jsonBody = new JSONObject();
+        jsonBody.put("username", user);
+        jsonBody.put("password", pass);
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,urlToken,jsonBody, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    intentosLogin=0;
+                    dbManager.registrarLogin(response.getString("token"), user, pass);
+                    WSgetUserPackages(dbManager.getTokenLogueado());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (TimeoutException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Log.d("el ERROR del token es ", volleyError.toString());
+                if(intentosLogin >= 2) {
+                    Intent intent = new Intent(EncomiendasActivity.this, LoginActivity.class);
+                    Toast.makeText(EncomiendasActivity.this, getResources().getString(R.string.tokenInvalido), Toast.LENGTH_LONG).show();
+                    startActivity(intent);
+                }
+                else intentosLogin++;
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
+        volley.addToQueue(request);
+    }
 
 }

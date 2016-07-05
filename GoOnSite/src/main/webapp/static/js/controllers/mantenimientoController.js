@@ -14,6 +14,7 @@ goOnApp.controller('mantenimientoController', function($scope, $http, uiGridCons
     
     $scope.mantenimientoForm = {};
     $scope.mantenimientoToDelete = {};
+
     
     $scope.initForm = function()
     {

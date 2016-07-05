@@ -11,6 +11,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.malladam.AppUsuarios.models.CustomRequest;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -112,6 +113,23 @@ public class VolleyS {
             request.setRetryPolicy(new DefaultRetryPolicy(60000, 3, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
             mRequestQueue.add(request);
         }
+    }
+
+
+    public void llamarWSCustomArray(int metodo, String url, JSONObject jsonBody, Response.Listener<JSONArray> response, Response.ErrorListener errorListener, final String token) throws TimeoutException, ExecutionException, InterruptedException {
+
+        CustomRequest request = new CustomRequest(metodo, url, jsonBody, response, errorListener) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                if (token != null){
+                    headers.put("Authorization", token);
+                }
+                return headers;
+            }
+        };
+        addToQueue(request);
     }
 
 }
