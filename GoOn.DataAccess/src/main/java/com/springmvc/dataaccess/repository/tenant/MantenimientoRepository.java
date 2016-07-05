@@ -78,6 +78,7 @@ public class MantenimientoRepository {
 		{
 			t.begin();
 			mant.setCosto(mantenimiento.getCosto());
+			mant.setFacturaContent(mantenimiento.getFacturaContent());
 			t.commit();
 		}
 		catch(Exception ex)

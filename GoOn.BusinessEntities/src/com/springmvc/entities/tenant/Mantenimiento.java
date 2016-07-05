@@ -8,6 +8,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Mantenimiento {
@@ -23,6 +26,11 @@ public class Mantenimiento {
 	private Vehiculo vehiculo;
 	@ManyToOne(fetch=FetchType.EAGER)
 	private Usuario user_crea;
+	@JsonIgnore
+	private byte[] facturaContent;
+	
+	@Transient
+	public String factura;
 	
 	public long getId_mantenimiento() {
 		return id_mantenimiento;
@@ -66,4 +74,12 @@ public class Mantenimiento {
 	public void setUser_crea(Usuario user_crea) {
 		this.user_crea = user_crea;
 	}
+	
+	public byte[] getFacturaContent() {
+		return facturaContent;
+	}
+	public void setFacturaContent(byte[] facturaContent) {
+		this.facturaContent = facturaContent;
+	}
+
 }

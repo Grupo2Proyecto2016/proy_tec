@@ -1,5 +1,6 @@
 package com.springmvc.controller;
 
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -82,6 +83,14 @@ public class MantenimientoRestController {
 		Mantenimiento mantenimientoSalida = new Mantenimiento();
 		mantenimientoSalida.setId_mantenimiento(mantenimiento.getId_mantenimiento());
 		mantenimientoSalida.setCosto(mantenimiento.getCosto());
+		
+		if(mantenimiento.factura != null)
+		{
+			//save file
+			mantenimiento.setFacturaContent(mantenimiento.factura.getBytes(Charset.forName("UTF-8")));
+		}
+		
+		mantenimientoSalida.setFacturaContent(mantenimiento.getFacturaContent());
 		
 		ml.deleteMantenimiento(mantenimientoSalida);
 		respuesta.setSuccess(true);

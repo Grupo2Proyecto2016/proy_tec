@@ -93,60 +93,73 @@
 	<div class="col-xs-1"></div>
 </div>
 
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header warning">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h3 class="modal-title">Solicitud de confirmación</h4>
-      </div>
-<!-- 		<div class="form-group"> -->
-<!-- 			<label class="control-label col-sm-4" for="costo">Costo:</label> -->
-<!-- 			<div class="col-sm-8"> -->
-<!-- 			<input type="text" pattern="[0-9]+" title="Solo se aceptan números" name="costo" class="form-control" -->
-<!-- 			ng-model="salida.costo" required> -->
-<!-- 			</div> -->
-<!-- 		</div>		 -->
-      <div class="modal-body">
-        <p>¿Está seguro que desea quitar el vehiculo del Mantenimiento?</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-danger" ng-click="deleteMantenimiento()">Aceptar</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div>
-
-
-<div class="modal fade" id="mantenimientoDetailsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header" style="background-color: green">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-				<h3 class="modal-title" style="color: white" id="myModalLabel">Detalles</h3>
-			</div>
-			<div class="modal-body">
-				<form class="form-horizontal">
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="vehiculo">Vehiculo::</label>
-						<div class="col-sm-8">
-							<p>{{elMantenimiento.vehiculo.id_vehiculo}}</p>
+	<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content" style="width: 400px">
+				<div class="modal-header warning">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h3 class="modal-title" id="myModalLabel">Solicitud de confirmación</h3>
+				</div>
+				<div class="modal-body">
+					<form class="form-signin" id="loginForm" name="costoForm"
+						role="form" ng-submit="deleteMantenimiento()">
+						<div class="form-group">
+							<label class="control-label col-sm-4" for="costo">Costo:</label>
+							<div class="col-sm-8">
+							
+								<input type="text" pattern="[0-9]+" title="Solo se aceptan números" name="costo" class="form-control"
+									ng-model="mantenimientoToDelete.costo" >
+							</div>
 						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="taller">Taller:</label>
-						<div class="col-sm-8">
-							<p>{{elMantenimiento.taller.id_taller}}</p>
+					  	<div class="form-group">
+						  <label class="control-label col-sm-4" for="factura">Factura:</label>
+						  	<div class="col-sm-8">
+						  	
+						  		<input type="file" class="form-control" name="factura" accept=".png" fileread="mantenimientoToDelete.factura">
+						  		
+						 	</div>
 						</div>
-					</div>
-				</form>
+						<button class="btn btn-single btn-warning btn-block"">
+							Confirmar</button>
+					</form>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
+
+
+<!-- <div class="modal fade" id="mantenimientoDetailsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"> -->
+<!-- 	<div class="modal-dialog" role="document"> -->
+<!-- 		<div class="modal-content"> -->
+<!-- 			<div class="modal-header" style="background-color: green"> -->
+<!-- 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"> -->
+<!-- 					<span aria-hidden="true">&times;</span> -->
+<!-- 				</button> -->
+<!-- 				<h3 class="modal-title" style="color: white" id="myModalLabel">Detalles</h3> -->
+<!-- 			</div> -->
+<!-- 			<div class="modal-body"> -->
+<!-- 				<form class="form-horizontal"> -->
+<!-- 					<div class="form-group"> -->
+<!-- 						<label class="control-label col-sm-4" for="vehiculo">Vehiculo::</label> -->
+<!-- 						<div class="col-sm-8"> -->
+<!-- 							<p>{{elMantenimiento.vehiculo.id_vehiculo}}</p> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 					<div class="form-group"> -->
+<!-- 						<label class="control-label col-sm-4" for="taller">Taller:</label> -->
+<!-- 						<div class="col-sm-8"> -->
+<!-- 							<p>{{elMantenimiento.taller.id_taller}}</p> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 				</form> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
+<!-- </div> -->
 
 
 <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

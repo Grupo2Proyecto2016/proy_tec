@@ -57,6 +57,8 @@ public class MantenimientoLogic implements IMantenimientoLogic {
 	    	mantenimientoToPersist.setInicio(mantenimientoInicio);
 	    	mantenimientoToPersist.setFin(mantenimientoFin);
 	    	mantenimientoToPersist.setUser_crea(mantenimiento.getUser_crea());
+	    	mantenimientoToPersist.setFacturaContent(null);
+
 			TenantContext.MantenimientoRepository.InsertMantenimiento(mantenimientoToPersist);
 
 	}
@@ -68,6 +70,10 @@ public class MantenimientoLogic implements IMantenimientoLogic {
 	
 	public void deleteMantenimiento(Mantenimiento mantenimiento) 
 	{
+		if(mantenimiento.factura != null)
+		{
+			mantenimiento.setFacturaContent(mantenimiento.getFacturaContent());
+		}
 		TenantContext.MantenimientoRepository.deleteMantenimiento(mantenimiento);
 	}
 }

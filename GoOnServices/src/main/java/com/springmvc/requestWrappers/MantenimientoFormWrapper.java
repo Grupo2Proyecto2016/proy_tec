@@ -15,7 +15,16 @@ public class MantenimientoFormWrapper
 	public Taller taller;
 	public Vehiculo vehiculo;
 	public Usuario user_crea;
+	public byte[] facturaContent;
+	public String factura;
 	
+
+	public byte[] getFacturaContent() {
+		return facturaContent;
+	}
+	public void setFacturaContent(byte[] facturaContent) {
+		this.facturaContent = facturaContent;
+	}
 	public long getId_mantenimiento() {
 		return id_mantenimiento;
 	}
