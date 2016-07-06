@@ -265,47 +265,38 @@
 
 <div class="modal fade" id="selectTicketsModal" tabindex="-1" role="dialog">
 	<div class="modal-dialog">
-		<div class="modal-content" style="width: 650px;height: 570px;">
+		<div class="modal-content" style="width: 650px;height: 650px;">
 			<div class="modal-header" style="background-color: cornflowerblue;">
 			  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			  <h3 class="text-center modal-title">Seleccione sus asientos</h4>
 			</div>
 			<div class="modal-body">
-		      	
+		    	<div id="seat-map">
+					<div class="front-indicator"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;Frente</div>					
+				</div>	
+				<div class="booking-details">
+					<h2>Detalle de Seleccion</h2>
+					
+					<!--<h3> Asientos Seleccionados (<span id="counter">0</span>):</h3>-->
+					<!-- <ul id="selected-seats"></ul> -->
+					<div  id="selected-seats">
+						<table class="table table-condensed">
+							<thead>
+								<tr>
+									<th>Asiento</th>
+									<th>Precio&nbsp;(UYU)</th>								
+								</tr>
+								<tr ng-repeat="s in reservados track by $index">
+									<td>{{s.txt}}</td>								
+									<td>{{s.price}}</td>	
+								</tr>							
+							</thead>						
+						</table>
+					</div>
+					Total: <b>$<span id="total">0</span></b>									
+					<div id="legend"></div>
+				</div>					      	
 		    </div>
 		</div>
 	</div>
 </div>
-	
- <script type="text/javascript">
-     
-//      $('#lineDetailsLink').popover({
-//    	    html: true,
-//    	    title: function () {
-//    	        return $('#lineDetailHeader').html();
-//    	    },
-//    	    content: function () {
-//    	        return $('#lineDetailContent').html();
-//    	    }
-//    	});
-     
-//      $('#busDetailsLink').popover({
-//     	    html: true,
-//     	    title: function () {
-//     	        return $('#busDetailHeader').html();
-//     	    },
-//     	    content: function () {
-//     	        return $('#busDetailContent').html();
-//     	    }
-//    	});
-     
-//      $('#driverDetailsLink').popover({
-//     	    html: true,
-//     	    title: function () {
-//     	        return $('#driverDetailHeader').html();
-//     	    },
-//     	    content: function () {
-//     	        return $('#driverDetailContent').html();
-//     	    }
-//    	});
- </script>

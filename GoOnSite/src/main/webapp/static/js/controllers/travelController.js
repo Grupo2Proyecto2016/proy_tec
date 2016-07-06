@@ -344,7 +344,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
           { name: 'Acciones',
           	enableFiltering: false,
           	enableSorting: false,
-              cellTemplate:'<button style="width: 50%" class="btn-xs btn-primary" ng-click="grid.appScope.selectSeats(row.entity.id_viaje, row.entity.origen, row.entity.destino, row.entity.linea_id_linea, row.entity.id_vehiculo)">Comprar</button>'
+              cellTemplate:'<button style="width: 50%" class="btn-xs btn-primary" ng-click="grid.appScope.selectSeats(row.entity.id_viaje, row.entity.origen, row.entity.destino, row.entity.linea_id_linea, row.entity.id_vehiculo, row.entity.valor)">Comprar</button>'
       	  }
         ]
      };
@@ -411,7 +411,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     	);
     };
     
-    $scope.selectSeats = function(id_viaje, origen, destino, id_linea, id_vehiculo)
+    $scope.selectSeats = function(id_viaje, origen, destino, id_linea, id_vehiculo, valor)
     {
     	$.blockUI();    	
     	$scope.seatsForm = {};
@@ -426,14 +426,154 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 			$("#selectTicketsModal").modal('show');
 			$.unblockUI();
 			//cargar lista de asientos
-			//$scope.travels = data;
-			//$scope.travelsSearchGrid.data = $scope.travels;						    										
+			$scope.seats = {};
+			$scope.seats = data;
+			$scope.selected = {};
+			//scripts para la seleccion de asientos.
+			var lugares = 0;
+			var txt_map = '';
+			var array_asientos = [];
+			$scope.reservados = [];
+			for (var i=0; i <$scope.seats.length; i++)
+			{
+				if($scope.seats[i].reservado == true)
+				{
+					$scope.reservados.push($scope.seats[i].id_asiento);
+				}
+				switch(lugares) 
+				{
+					case 0:
+							txt_map = txt_map + "a[" + $scope.seats[i].id_asiento + "]";
+							lugares++;
+							break;
+					case 1: 
+							txt_map = txt_map + "a[" + $scope.seats[i].id_asiento + "]_";
+							lugares++;
+							break;
+					case 2:
+							txt_map = txt_map + "a[" + $scope.seats[i].id_asiento + "]";
+							lugares++;
+							break;
+					case 3:
+							txt_map = txt_map + "a[" + $scope.seats[i].id_asiento + "]";
+							array_asientos.push(txt_map);
+							txt_map = '';
+							lugares = 0;
+							break;					
+				}
+			}
+			//si no queda de 4 asientos, agrega el pico
+			if (txt_map != '')
+			{
+				array_asientos.push(txt_map);
+			}
+			//mete los espacios
+			/*for(var i = 0; i < array_asientos.length; i++)
+			{
+				aux = array_asientos[i];
+				aux = aux.substring(0, 2) + "_" + aux.substring(2, 4); 
+				array_asientos[i] = aux;
+			}*/
+			var firstSeatLabel = 1;
+			var $cart = $('#selected-seats');
+			var $counter = $('#counter');
+			var $total = $('#total');
+
+			$scope.sc = $('#seat-map').seatCharts({
+				map: array_asientos,
+				seats: {
+					a: {
+						price   : valor,
+						classes : 'first-class', //your custom CSS class
+						category: 'First Class'
+					}/*,
+					e: {
+						price   : 40,
+						classes : 'economy-class', //your custom CSS class
+						category: 'Economy Class'
+					}	*/				
+				
+				},
+				naming : {
+					top : false,
+					getLabel : function (character, row, column) {
+						return firstSeatLabel++;
+					},
+				},
+				legend : {
+					node : $('#legend'),
+				    items : [
+						[ 'a', 'available',   'Asiento Libre' ],
+						/*[ 'e', 'available',   'Economy Class'],*/
+						[ 'a', 'unavailable', 'Asiento Ocupado']
+				    ]					
+				},
+				click: function () {
+					if (this.status() == 'available') 
+					{
+						//let's create a new <li> which we'll add to the cart items
+						/*$('<li>'+this.data().category+' Seat # '+this.settings.label+': <b>$'+this.data().price+'</b> <a href="#" class="cancel-cart-item">[cancel]</a></li>')
+							.attr('id', 'cart-item-'+this.settings.id)
+							.data('seatId', this.settings.id)
+							.appendTo($cart);*/
+						
+						
+						var sel_seat = [];
+						sel_seat.txt = this.settings.label;
+						sel_seat.price = this.data().price;
+						sel_seat.id = this.settings.id;
+						$scope.reservados.push(sel_seat);						
+						/*
+						 * Lets update the counter and total
+						 *
+						 * .find function will not find the current seat, because it will change its stauts only after return
+						 * 'selected'. This is why we have to add 1 to the length and the current seat price to the total.
+						 */
+						$counter.text($scope.sc.find('selected').length+1);
+						$total.text($scope.recalculateTotal($scope.sc)+this.data().price);
+						
+						return 'selected';
+					} else if (this.status() == 'selected') {
+						//update the counter
+						$counter.text($scope.sc.find('selected').length-1);
+						//and total
+						$total.text($scope.recalculateTotal($scope.sc)-this.data().price);
+					
+						//remove the item from our cart
+						//$('#cart-item-'+this.settings.id).remove();
+					
+						//seat has been vacated
+						return 'available';
+					} else if (this.status() == 'unavailable') {
+						//seat has been already booked
+						return 'unavailable';
+					} else {
+						return this.style();
+					}
+				}
+			});
+
+			//fin scripts
+			$scope.sc.get($scope.reservados).status('unavailable');
+
 		})
 		.error(function()
 		{
 			$.unblockUI();
 		});
     }
+    
+    $scope.recalculateTotal = function(sc) 
+    {
+		var total = 0;	
+		//basically find every selected seat and sum its price
+		sc.find('selected').each(function () {
+			total += this.data().price;
+		});
+		$scope.$digest;
+		return total;		
+	}
+
     
     $scope.buyTicket = function()
 	{
