@@ -21,6 +21,7 @@ import com.springmvc.entities.tenant.Usuario;
 import com.springmvc.entities.tenant.Viaje;
 import com.springmvc.entities.tenant.ViajesBuscados;
 import com.springmvc.enums.DayOfWeek;
+import com.springmvc.enums.TicketStatus;
 import com.springmvc.exceptions.BusInServiceException;
 import com.springmvc.exceptions.BusTravelConcurrencyException;
 import com.springmvc.exceptions.BusyDriverException;
@@ -317,6 +318,11 @@ public class LinesLogic implements ILinesLogic
 	{
 		return TenantContext.PasajeRepository.GetByClient(currentUser.getIdUsuario());
 	}
+	
+	public List<Pasaje> GetTicketsByStatusAndTime(TicketStatus status, Date date) 
+	{
+		return TenantContext.PasajeRepository.GetByStatusAndTime(status, date);
+	}
 
 	public List<Asiento> getSeats(int id_viaje, int id_linea, int origen, int destino, long id_vehiculo) 
 	{
@@ -347,6 +353,11 @@ public class LinesLogic implements ILinesLogic
 	public Double getTicketValue(int origen, int destino, int id_linea) 
 	{
 		return TenantContext.PasajeRepository.getValorPasaje(origen, destino, id_linea);
+	}
+
+	public void DeleteTicket(Pasaje ticket) 
+	{
+		TenantContext.PasajeRepository.deleteTicket(ticket);
 	}	
 
 }

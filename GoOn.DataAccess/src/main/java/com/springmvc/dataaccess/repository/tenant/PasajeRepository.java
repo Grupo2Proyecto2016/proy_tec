@@ -2,14 +2,17 @@ package com.springmvc.dataaccess.repository.tenant;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import com.springmvc.entities.tenant.Encomienda;
 import com.springmvc.entities.tenant.Pasaje;
+import com.springmvc.enums.TicketStatus;
 
 public class PasajeRepository {
 	
@@ -248,6 +251,44 @@ public class PasajeRepository {
 													" WHERE r.id_parada >= r.origen AND r.id_parada <= r.destino " +  
 													" GROUP BY r.costo_minimo, r.all_travel, r.costo_maximo");
 		return (Double) q.getSingleResult();		
+	}
+
+	public List<Pasaje> GetByStatusAndTime(TicketStatus status, Date date)
+	{
+		List<Pasaje> result = new ArrayList<>();
+		Query q = entityManager.createQuery("SELECT p FROM Pasaje p "
+				+ "WHERE p.estado = :status "
+				+ "AND p.viaje.inicio <= :date "
+		);
+		q.setParameter("status", status.getValue());
+		q.setParameter("date", date);
+		try
+		{
+			result = q.getResultList();
+		}
+		catch(NoResultException ex)
+		{
+			return null;
+		}
+		return result;
+	}
+
+	public void deleteTicket(Pasaje ticket) 
+	{
+		EntityTransaction t = entityManager.getTransaction();
+		
+		try
+		{
+			t.begin();
+			entityManager.remove(ticket);
+			entityManager.flush();
+			t.commit();
+		}
+		catch(Exception ex)
+		{
+			t.rollback();
+			throw ex;
+		}
 	}
 	
 }
