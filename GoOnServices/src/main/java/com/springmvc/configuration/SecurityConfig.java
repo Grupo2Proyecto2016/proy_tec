@@ -27,6 +27,9 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 @EnableWebMvc
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
+		@Autowired
+		ReservationChecker checker;
+		
 		@Bean
 		public static PropertySourcesPlaceholderConfigurer properties() {
 		    final PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer = new PropertySourcesPlaceholderConfigurer();
@@ -100,5 +103,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	        // disable page caching
 	        httpSecurity.headers().cacheControl();
+	        checker.run();
 	    }
 } 

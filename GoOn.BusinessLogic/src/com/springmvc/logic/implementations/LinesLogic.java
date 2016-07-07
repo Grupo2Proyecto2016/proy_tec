@@ -318,6 +318,11 @@ public class LinesLogic implements ILinesLogic
 	{
 		return TenantContext.PasajeRepository.GetByClient(currentUser.getIdUsuario());
 	}
+	
+	public List<Pasaje> GetTicketsByStatusAndTime(TicketStatus status, Date date) 
+	{
+		return TenantContext.PasajeRepository.GetByStatusAndTime(status, date);
+	}
 
 	public List<Asiento> getSeats(int id_viaje, int id_linea, int origen, int destino, long id_vehiculo) 
 	{
@@ -370,6 +375,11 @@ public class LinesLogic implements ILinesLogic
 			ticketToPersist.setId_pasaje(0);
 			TenantContext.LineaRepository.InsertTicket(ticketToPersist);
 		}
+	}
+
+	public void DeleteTicket(Pasaje ticket) 
+	{
+		TenantContext.PasajeRepository.deleteTicket(ticket);
 	}	
 
 }
