@@ -28,6 +28,7 @@ import com.springmvc.entities.tenant.Viaje;
 import com.springmvc.enums.DayOfWeek;
 import com.springmvc.exceptions.BusInServiceException;
 import com.springmvc.exceptions.BusTravelConcurrencyException;
+import com.springmvc.exceptions.BusyDriverException;
 import com.springmvc.logic.implementations.LinesLogic;
 import com.springmvc.logic.implementations.UsersLogic;
 import com.springmvc.logic.implementations.VehiculosLogic;
@@ -210,6 +211,7 @@ public class LinesRestController{
 			if(createdTravels > 0)
 			{
 				response.setSuccess(true);
+				response.setMsg(String.format("Cantidad de viajes creados: %s", createdTravels));
 			}
 			else
 			{
@@ -223,6 +225,11 @@ public class LinesRestController{
 			response.setMsg(e.getMessage());
 		}
 		catch (BusTravelConcurrencyException e) 
+		{
+			response.setSuccess(false);
+			response.setMsg(e.getMessage());
+		}
+		catch (BusyDriverException e) 
 		{
 			response.setSuccess(false);
 			response.setMsg(e.getMessage());

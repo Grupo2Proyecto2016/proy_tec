@@ -83,7 +83,7 @@ goOnApp.controller('manageTravelsController', function($scope, $http, uiGridCons
 				$.unblockUI();
 				if(result.data.success)
 				{
-					$scope.showSuccessAlert("Los viajes han sido creados");		
+					$scope.showSuccessAlert(result.data.msg);		
 					$scope.getTravels();
 				}
 				else

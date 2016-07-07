@@ -269,13 +269,30 @@ public class ViajeRepository {
 		List<Viaje> travels = null;
 		Query q = entityManager.createQuery(
 				"FROM Viaje v "
-				//+"LEFT JOIN v.encomiendas e " 
 				+ "WHERE v.linea.habilitado = TRUE "
 				+ "AND v.vehiculo.id_vehiculo = :idBus "
 				+ "AND v.inicio >= :from "
 				+ "AND v.inicio <= :to "
 		);
 		q.setParameter("idBus", idBus); 
+		q.setParameter("from", from);
+		q.setParameter("to", to);
+		
+		travels = (List<Viaje>)q.getResultList();
+		return travels;	
+	}
+
+	public List<Viaje> GetByDiver(long userId, Date from, Date to)
+	{
+		List<Viaje> travels = null;
+		Query q = entityManager.createQuery(
+				"FROM Viaje v "
+				+ "WHERE v.linea.habilitado = TRUE "
+				+ "AND v.conductor.id_usuario = :idu "
+				+ "AND v.inicio >= :from "
+				+ "AND v.inicio <= :to "
+		);
+		q.setParameter("idu", userId); 
 		q.setParameter("from", from);
 		q.setParameter("to", to);
 		

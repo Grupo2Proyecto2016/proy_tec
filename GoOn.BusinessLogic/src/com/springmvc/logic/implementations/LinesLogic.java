@@ -23,6 +23,7 @@ import com.springmvc.entities.tenant.ViajesBuscados;
 import com.springmvc.enums.DayOfWeek;
 import com.springmvc.exceptions.BusInServiceException;
 import com.springmvc.exceptions.BusTravelConcurrencyException;
+import com.springmvc.exceptions.BusyDriverException;
 import com.springmvc.logic.interfaces.ILinesLogic;
 
 public class LinesLogic implements ILinesLogic
@@ -76,7 +77,8 @@ public class LinesLogic implements ILinesLogic
 		TenantContext.LineaRepository.deleteLinea(id_linea);		
 	}
 
-	public int CreateTravels(Viaje travel, Map<DayOfWeek, Boolean> days, Calendar dayFrom, Calendar dayTo, Date time) throws BusInServiceException, BusTravelConcurrencyException 
+	public int CreateTravels(Viaje travel, Map<DayOfWeek, Boolean> days, Calendar dayFrom, Calendar dayTo, Date time) 
+			throws BusInServiceException, BusTravelConcurrencyException, BusyDriverException 
 	{
 		int createdTravels = 0;
 		boolean dayInPeriod = true;
@@ -92,7 +94,8 @@ public class LinesLogic implements ILinesLogic
 				travelDate.setMinutes(time.getMinutes());
 				
 				CheckBusAvailability(travel, travelDate);
-
+				CheckDriverAvailability(travel, travelDate);
+				
 				Viaje travelToPersist = new Viaje();
 				travelToPersist.setConductor(travel.getConductor());
 				travelToPersist.setLinea(travel.getLinea());
@@ -127,7 +130,7 @@ public class LinesLogic implements ILinesLogic
 		endTravel.setTime(travelDate);
 		endTravel.set(GregorianCalendar.HOUR_OF_DAY, travelDate.getHours()); 
 		endTravel.set(GregorianCalendar.MINUTE, travelDate.getMinutes());
-		endTravel.add(GregorianCalendar.MINUTE, travel.getLinea().getTiempo_estimado() + 30);
+		endTravel.add(GregorianCalendar.MINUTE, travel.getLinea().getTiempo_estimado() + 10);
 		List<Mantenimiento> services = mm.findServiceByDate(travel.getVehiculo().getId_vehiculo(), beginTravel, endTravel);
 		if(!services.isEmpty())
 		{
@@ -136,10 +139,36 @@ public class LinesLogic implements ILinesLogic
 		List<Viaje> travels = GetBusTravels(travel.getVehiculo().getId_vehiculo(), beginTravel, endTravel);
 		if(!travels.isEmpty())
 		{
-			throw new BusTravelConcurrencyException("El omnibus posee viajes a partir de " + df.format(travelDate));
+			throw new BusTravelConcurrencyException("El ómnibus ya posee viajes entre " + df.format(travelDate)  + " y " + df.format(endTravel.getTime()));
 		}
 	}
 	
+	private void CheckDriverAvailability(Viaje travel, Date travelDate) throws BusyDriverException
+	{
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
+		Calendar beginTravel = Calendar.getInstance();
+		beginTravel.setTime(travelDate);
+		beginTravel.set(GregorianCalendar.HOUR_OF_DAY, travelDate.getHours());
+		beginTravel.set(GregorianCalendar.MINUTE, travelDate.getMinutes());
+		Calendar endTravel = Calendar.getInstance();
+		endTravel.setTime(travelDate);
+		endTravel.set(GregorianCalendar.HOUR_OF_DAY, travelDate.getHours()); 
+		endTravel.set(GregorianCalendar.MINUTE, travelDate.getMinutes());
+		endTravel.add(GregorianCalendar.MINUTE, travel.getLinea().getTiempo_estimado() + 10);
+		
+		List<Viaje> travels = GetDriverTravels(travel.getConductor().getIdUsuario(), beginTravel, endTravel);
+		if(!travels.isEmpty())
+		{
+			throw new BusyDriverException("El conductor ya posee viajes a entre " + df.format(travelDate) + " y " + df.format(endTravel.getTime()));
+		}
+	}
+	
+	private List<Viaje> GetDriverTravels(long userId, Calendar beginTravel, Calendar endTravel) 
+	{
+		return TenantContext.ViajeRepository.GetByDiver(userId, beginTravel.getTime(), endTravel.getTime());
+	}
+
 	private List<Viaje> GetBusTravels(long id_vehiculo, Calendar beginTravel, Calendar endTravel) 
 	{
 		return TenantContext.ViajeRepository.GetByBus(id_vehiculo, beginTravel.getTime(), endTravel.getTime());
