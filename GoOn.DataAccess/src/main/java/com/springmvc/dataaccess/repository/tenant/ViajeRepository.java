@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import javax.persistence.Query;
 
 import com.springmvc.entities.main.EntityMapper;
 import com.springmvc.entities.tenant.Linea;
+import com.springmvc.entities.tenant.Usuario;
 import com.springmvc.entities.tenant.Vehiculo;
 import com.springmvc.entities.tenant.Viaje;
 import com.springmvc.entities.tenant.ViajesBuscados;
@@ -282,7 +284,7 @@ public class ViajeRepository {
 		return travels;	
 	}
 
-	public List<Viaje> GetByDiver(long userId, Date from, Date to)
+	public List<Viaje> GetByDiverAndDate(long userId, Date from, Date to)
 	{
 		List<Viaje> travels = null;
 		Query q = entityManager.createQuery(
@@ -298,5 +300,35 @@ public class ViajeRepository {
 		
 		travels = (List<Viaje>)q.getResultList();
 		return travels;	
+	}
+
+	public Viaje GetLastByDriver(Usuario user)
+	{
+		Calendar from = Calendar.getInstance();
+		from.add(GregorianCalendar.MINUTE, -30);
+		Calendar to = Calendar.getInstance();
+		to.add(GregorianCalendar.MINUTE, 30);
+		
+		Viaje travel = null;
+		Query q = entityManager.createQuery(
+				"FROM Viaje v "
+				+ "WHERE v.linea.habilitado = TRUE "
+				+ "AND v.conductor.id_usuario = :idu "
+				+ "AND v.inicio >= :from "
+				+ "AND v.inicio <= :to "
+		);
+		q.setParameter("idu", user.getIdUsuario()); 
+		q.setParameter("from", from.getTime());
+		q.setParameter("to", to.getTime());
+		q.setMaxResults(1);
+		try
+		{
+			travel = (Viaje)q.getSingleResult();
+		} 
+		catch(NoResultException ex) 
+		{
+			return null;
+		}
+		return travel;	
 	}
 }

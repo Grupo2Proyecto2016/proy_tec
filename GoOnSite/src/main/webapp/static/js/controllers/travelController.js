@@ -25,7 +25,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     
 	$scope.custom_response = null;    
     i18nService.setCurrentLang('es');
-
+      
     //DESTINATION MAP
     $scope.destinationMap = new google.maps.Map(document.getElementById('destinationMap'), 
     {

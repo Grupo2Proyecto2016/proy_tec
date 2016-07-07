@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.springmvc.entities.tenant.Linea;
 import com.springmvc.entities.tenant.Parada;
+import com.springmvc.entities.tenant.Usuario;
 import com.springmvc.entities.tenant.Viaje;
 import com.springmvc.enums.DayOfWeek;
 import com.springmvc.exceptions.BusInServiceException;
@@ -35,10 +39,14 @@ import com.springmvc.logic.implementations.VehiculosLogic;
 import com.springmvc.requestWrappers.CustomResponseWrapper;
 import com.springmvc.requestWrappers.LinesWrapper;
 import com.springmvc.requestWrappers.TravelFormWrapper;
+import com.springmvc.utils.UserContext;
 
 @RestController
 @RequestMapping(value = "/{tenantid}")
 public class LinesRestController{
+	
+	@Autowired
+    private UserContext context;
 	
 	@Secured({"ROLE_ADMIN", "ROLE_COORDINATOR"})
 	@RequestMapping(value = "/getLines", method = RequestMethod.GET)
@@ -171,6 +179,19 @@ public class LinesRestController{
     	{
     		return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
     	}
+    }
+	
+	@RequestMapping(value = "/getLastTravelByDriver", method = RequestMethod.GET)
+    public ResponseEntity<Viaje> GetLastTravelByDriver(@PathVariable String tenantid, HttpServletRequest request) 
+    {
+		LinesLogic ll = new LinesLogic(tenantid);
+		Usuario driver = context.GetUser(request, tenantid);
+		Viaje travel = null;
+		if (driver != null)
+		{
+			travel = ll.GetLastTravelByDriver(driver);
+		}
+		return new ResponseEntity<Viaje>(travel, HttpStatus.OK);
     }
 	
 	@Secured({"ROLE_COORDINATOR"})

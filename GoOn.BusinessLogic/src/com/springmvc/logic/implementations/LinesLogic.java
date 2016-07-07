@@ -167,7 +167,7 @@ public class LinesLogic implements ILinesLogic
 	
 	private List<Viaje> GetDriverTravels(long userId, Calendar beginTravel, Calendar endTravel) 
 	{
-		return TenantContext.ViajeRepository.GetByDiver(userId, beginTravel.getTime(), endTravel.getTime());
+		return TenantContext.ViajeRepository.GetByDiverAndDate(userId, beginTravel.getTime(), endTravel.getTime());
 	}
 
 	private List<Viaje> GetBusTravels(long id_vehiculo, Calendar beginTravel, Calendar endTravel) 
@@ -308,7 +308,6 @@ public class LinesLogic implements ILinesLogic
 		return TenantContext.ParadaRepository.findDestinationTerminalsByOrigin(parada.getId_parada());
 	}
 
-
 	public boolean lineExists(long linenumber) 
 	{
 		return TenantContext.LineaRepository.lineExists(linenumber);
@@ -382,4 +381,8 @@ public class LinesLogic implements ILinesLogic
 		TenantContext.PasajeRepository.deleteTicket(ticket);
 	}	
 
+	public Viaje GetLastTravelByDriver(Usuario user)
+	{
+		return TenantContext.ViajeRepository.GetLastByDriver(user);
+	}
 }

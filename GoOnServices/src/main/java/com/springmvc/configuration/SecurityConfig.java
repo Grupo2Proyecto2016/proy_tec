@@ -103,6 +103,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	        // disable page caching
 	        httpSecurity.headers().cacheControl();
-	        checker.run();
+	        
+	        new Thread(new Runnable(){
+	            @Override
+	            public void run() {
+	            	checker.run();
+                }
+	        }).start();
+	        //checker.run();
 	    }
 } 
