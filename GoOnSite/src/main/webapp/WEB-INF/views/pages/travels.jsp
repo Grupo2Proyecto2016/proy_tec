@@ -296,9 +296,46 @@
 						</table>
 					</div>
 					Total: <b>$<span id="total">0</span></b>									
-					<div id="legend"></div>
-				</div>					      	
+					<div id="legend"></div>					
+				</div>					   
+				<div>
+					<p align="right"><button class="btn btn-sm btn-primary" ng-click="confirmSeats()" ng-disabled="reservados.length<=0">Continuar</button></p>
+				</div>   	
 		    </div>
 		</div>
 	</div>
+</div>
+
+		
+
+<div class="row">
+	<div class="col-xs-2"></div>
+	<div class="col-xs-8">
+		<div class="panel panel-default hidden" id="seatsConfirmForm">
+		<div class="panel-heading">
+			<h3 class="modal-title">Asientos Seleccionados</h3>
+		</div>
+		<div class="panel-body">		
+			<table class="table table-condensed">
+				<thead>
+					<tr>
+						<th>Asiento</th>
+						<th>Precio&nbsp;(UYU)</th>								
+					</tr>							
+				</thead>
+				<tbody>
+					<tr ng-repeat="s in reservados track by $index">
+						<td>{{s.txt}}</td>								
+						<td>{{s.price}}</td>	
+					</tr>
+				</tbody>						
+			</table>
+			<div>Total:<b>$<span>{{precio_total}}</span></b></div>
+			<div>
+				<p align="right"><button class="btn btn-sm btn-primary" ng-click="buyTicket()">Confirmar Compra</button></p>
+			</div>  
+		</div>
+	</div>
+	</div>
+	<div class="col-xs-2"></div>
 </div>

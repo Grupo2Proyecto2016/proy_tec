@@ -21,6 +21,7 @@ import com.springmvc.entities.tenant.Usuario;
 import com.springmvc.entities.tenant.Viaje;
 import com.springmvc.entities.tenant.ViajesBuscados;
 import com.springmvc.enums.DayOfWeek;
+import com.springmvc.enums.TicketStatus;
 import com.springmvc.exceptions.BusInServiceException;
 import com.springmvc.exceptions.BusTravelConcurrencyException;
 import com.springmvc.exceptions.BusyDriverException;
@@ -347,6 +348,28 @@ public class LinesLogic implements ILinesLogic
 	public Double getTicketValue(int origen, int destino, int id_linea) 
 	{
 		return TenantContext.PasajeRepository.getValorPasaje(origen, destino, id_linea);
+	}
+
+	public void buyTickets(Usuario currentUser, long id_viaje, int origen, int destino, Double valor,List<Long> reservados) 
+	{
+		Parada parada_baja = TenantContext.ParadaRepository.findByID(destino);
+		Parada parada_sube = TenantContext.ParadaRepository.findByID(origen);
+		Viaje viaje = TenantContext.ViajeRepository.FindByID(id_viaje);
+		for(int x = 0; x < reservados.size(); x++)
+		{
+			Pasaje ticketToPersist = new Pasaje();
+			Asiento asiento = TenantContext.AsientoRepository.getByID(reservados.get(x));
+			ticketToPersist.setAsiento(asiento);
+			ticketToPersist.setCosto(valor);
+			ticketToPersist.setEstado(TicketStatus.Bought.getValue());			
+			ticketToPersist.setParada_baja(parada_baja);			
+			ticketToPersist.setParada_sube(parada_sube);
+			ticketToPersist.setUser_compra(currentUser);
+			ticketToPersist.setUsr_crea(currentUser);
+			ticketToPersist.setViaje(viaje);
+			ticketToPersist.setId_pasaje(0);
+			TenantContext.LineaRepository.InsertTicket(ticketToPersist);
+		}
 	}	
 
 }

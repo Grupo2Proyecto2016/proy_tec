@@ -20,6 +20,8 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     $scope.listaIDSeleccionados = [];
     $scope.listaIDSeleccionadosOrigin = [];
     
+    $scope.seatsForm = {};
+    
     
 	$scope.custom_response = null;    
     i18nService.setCurrentLang('es');
@@ -420,6 +422,9 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     	$scope.seatsForm.destino = destino;
     	$scope.seatsForm.id_linea = id_linea;
     	$scope.seatsForm.id_vehiculo = id_vehiculo;
+    	$scope.seatsForm.valor = valor;
+    	
+    	
     	$http.post(servicesUrl +'getSeats', JSON.stringify($scope.seatsForm))
 		.success(function(data, status, headers, config)
 		{				
@@ -576,19 +581,38 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     $scope.recalculateTotal = function(sc) 
     {
 		var total = 0;	
+		$scope.precio_total = 0;
 		//basically find every selected seat and sum its price
 		sc.find('selected').each(function () {
 			total += this.data().price;
-		});
+		});		
+		$scope.precio_total = total;
 		$scope.$digest;
 		return total;		
 	}
 
     
+    $scope.confirmSeats = function()
+    {
+    	/*sel_seat.txt = this.settings.label;
+		sel_seat.price = this.data().price;
+		sel_seat.id = this.settings.id;
+		$scope.reservados.push(sel_seat);*/	
+    	$("#selectTicketsModal").modal('hide');
+    	$("#divTravelForm").addClass('hidden');
+    	$("#travelsSearchGrid").addClass('hidden');
+    	$("#seatsConfirmForm").removeClass('hidden');    	
+    }
+    
     $scope.buyTicket = function()
 	{
 		$.blockUI();
-		$http.post(servicesUrl +'buyTicket', JSON.stringify($scope.ticketForm))
+		$scope.seatsForm.seleccionados = [];
+		for(var i = 0; i < $scope.reservados.length; i++) 
+		{
+			$scope.seatsForm.seleccionados.push($scope.reservados[i].id);			
+		}  
+		$http.post(servicesUrl +'buyTicket', JSON.stringify($scope.seatsForm))
 		.then(function(response) 
 			{
 				$.unblockUI();		
@@ -596,17 +620,16 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 	        	{	       
 	        		if (!response.data.success)
 	    			{
-//	    				$scope.error_message = response.data.msg;
-//	    		    	$("#errorModal").modal("toggle");
-	        			$scope.showSuccessAlert("Los boletos han sido acreditados. Accede a tu panel para descargarlos.");	
+	        			$scope.showSuccessAlert("Los boletos han sido acreditados. Accede a tu panel para descargarlos.");	        			
+	        	    	$("#divTravelForm").removeClass('hidden');
+	        	    	$("#travelsSearchGrid").removeClass('hidden');
+	        	    	$("#seatsConfirmForm").addClass('hidden');    	
 	    			}
 	        		else
 	        		{
-//	        			$scope.getTravels();
-//		        		$scope.showSuccessAlert("El viaje ha sido borrada.");	
+	        			
 	        		}	        		
 	        	}
-	        	$scope.hideBuyDialog();
     		}
 		);				
 	};

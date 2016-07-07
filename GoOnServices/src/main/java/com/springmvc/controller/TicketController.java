@@ -23,6 +23,7 @@ import com.springmvc.entities.tenant.Viaje;
 import com.springmvc.entities.tenant.ViajesBuscados;
 import com.springmvc.logic.implementations.LinesLogic;
 import com.springmvc.logic.implementations.PackageLogic;
+import com.springmvc.requestWrappers.BuyTicketWrapper;
 import com.springmvc.requestWrappers.TravelSearchWrapper;
 import com.springmvc.requestWrappers.seatsFormWrapper;
 import com.springmvc.utils.UserContext;
@@ -87,5 +88,15 @@ public class TicketController
 		List<Pasaje> tickets = ll.GetUserTickets(currentUser);
 
 		return new ResponseEntity<List<Pasaje>>(tickets, HttpStatus.OK);
+	}
+	
+	@Secured({"ROLE_CLIENT"})
+	@RequestMapping(value = "/buyTicket", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
+	public ResponseEntity<Void> buyTicket(@RequestBody BuyTicketWrapper buyTicket, @PathVariable String tenantid, HttpServletRequest request)
+	{
+		Usuario currentUser = context.GetUser(request, tenantid);		
+		LinesLogic ll = new LinesLogic(tenantid);
+		ll.buyTickets(currentUser, buyTicket.id_viaje, buyTicket.origen, buyTicket.destino, buyTicket.valor, buyTicket.seleccionados);
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 }

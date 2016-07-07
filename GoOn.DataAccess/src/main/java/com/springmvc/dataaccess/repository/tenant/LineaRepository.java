@@ -11,6 +11,7 @@ import javax.persistence.Query;
 
 import com.springmvc.entities.tenant.Linea;
 import com.springmvc.entities.tenant.Parada;
+import com.springmvc.entities.tenant.Pasaje;
 import com.springmvc.entities.tenant.Viaje;
 
 public class LineaRepository {
@@ -182,6 +183,23 @@ public class LineaRepository {
 			lista_longs.add(resultados.get(i).longValue());
 		}
 		return lista_longs;		
+	}
+
+	public void InsertTicket(Pasaje ticketToPersist) 
+	{
+		EntityTransaction t = entityManager.getTransaction();
+		try
+		{
+			t.begin();	
+			entityManager.persist(ticketToPersist);
+			entityManager.flush();
+			t.commit();
+		}
+		catch(Exception ex)
+		{
+			t.rollback();
+			throw ex;
+		}			
 	}
 
 //	public List<Parada> findDestinationTerminalsByOrigin(long id_parada) 
