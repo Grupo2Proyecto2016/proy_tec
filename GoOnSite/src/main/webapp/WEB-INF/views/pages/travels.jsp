@@ -285,12 +285,14 @@
 								<tr>
 									<th>Asiento</th>
 									<th>Precio&nbsp;(UYU)</th>								
-								</tr>
+								</tr>							
+							</thead>
+							<tbody>
 								<tr ng-repeat="s in reservados track by $index">
 									<td>{{s.txt}}</td>								
 									<td>{{s.price}}</td>	
-								</tr>							
-							</thead>						
+								</tr>
+							</tbody>						
 						</table>
 					</div>
 					Total: <b>$<span id="total">0</span></b>									

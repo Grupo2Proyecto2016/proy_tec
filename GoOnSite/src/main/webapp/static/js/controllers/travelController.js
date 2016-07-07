@@ -531,18 +531,28 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 						 */
 						$counter.text($scope.sc.find('selected').length+1);
 						$total.text($scope.recalculateTotal($scope.sc)+this.data().price);
-						
+						$scope.$apply();
 						return 'selected';
-					} else if (this.status() == 'selected') {
+					} 
+					else if (this.status() == 'selected') 
+					{
 						//update the counter
 						$counter.text($scope.sc.find('selected').length-1);
 						//and total
 						$total.text($scope.recalculateTotal($scope.sc)-this.data().price);
-					
+						
+						for(var i = 0; i < $scope.reservados.length; i++) 
+						{
+						    if($scope.reservados[i].id === this.settings.id) 
+						    {
+						    	$scope.reservados.splice(i, 1);
+						    }
+						}
 						//remove the item from our cart
 						//$('#cart-item-'+this.settings.id).remove();
 					
 						//seat has been vacated
+						$scope.$apply();
 						return 'available';
 					} else if (this.status() == 'unavailable') {
 						//seat has been already booked
