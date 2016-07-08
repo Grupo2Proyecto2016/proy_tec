@@ -1,6 +1,8 @@
 package com.springmvc.logic.implementations;
 
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -11,7 +13,9 @@ import com.springmvc.entities.tenant.Mantenimiento;
 import com.springmvc.entities.tenant.Usuario;
 import com.springmvc.entities.tenant.Viaje;
 import com.springmvc.enums.DayOfWeek;
+import com.springmvc.exceptions.BusTravelConcurrencyException;
 import com.springmvc.logic.interfaces.IMantenimientoLogic;
+import com.springmvc.logic.interfaces.ILinesLogic;
 
 public class MantenimientoLogic implements IMantenimientoLogic {
 
@@ -32,9 +36,24 @@ public class MantenimientoLogic implements IMantenimientoLogic {
 		TenantContext.TallerRepository.FindByID(id_taller);
 	}
 	
-	public void createMantenimiento(Mantenimiento mantenimiento, Calendar inicio, Calendar fin) {
+	public int createMantenimiento(Mantenimiento mantenimiento, Calendar inicio, Calendar fin) throws BusTravelConcurrencyException{
 		
+			int deli = 0;
 		
+			LinesLogic ll = new LinesLogic(TenantContext.TenantName);
+			
+			DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+			
+			List<Viaje> travels = ll.GetBusTravels(mantenimiento.getVehiculo().getId_vehiculo(), inicio, fin);
+			if(!travels.isEmpty())
+			{
+				throw new BusTravelConcurrencyException("El ómnibus ya posee viajes en período seleccionado");
+//				throw new BusTravelConcurrencyException("El ómnibus ya posee viajes entre " + df.format(inicio.getTime())  + " y " + df.format(fin.getTime()));
+			}
+		
+			else
+			{
+			
 			inicio.getTimeZone();
 			fin.getTimeZone();
 			
@@ -59,8 +78,12 @@ public class MantenimientoLogic implements IMantenimientoLogic {
 	    	mantenimientoToPersist.setUser_crea(mantenimiento.getUser_crea());
 	    	mantenimientoToPersist.setFacturaContent(null);
 
-			TenantContext.MantenimientoRepository.InsertMantenimiento(mantenimientoToPersist);
+			
 
+			TenantContext.MantenimientoRepository.InsertMantenimiento(mantenimientoToPersist);
+			deli = 1;
+			}
+			return deli;
 	}
 	
 	public List<Mantenimiento> getMantenimientos() {

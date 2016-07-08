@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import com.springmvc.entities.tenant.Mantenimiento;
+import com.springmvc.exceptions.BusTravelConcurrencyException;
 
 public interface IMantenimientoLogic {
 	
@@ -11,7 +12,7 @@ public interface IMantenimientoLogic {
 	
 	public void findTaller(long id_taller);
 	
-	public void createMantenimiento(Mantenimiento mantenimiento, Calendar inicio, Calendar fin);
+	public int createMantenimiento(Mantenimiento mantenimiento, Calendar inicio, Calendar fin) throws BusTravelConcurrencyException;
 	
 	public List<Mantenimiento> getMantenimientos();
 	

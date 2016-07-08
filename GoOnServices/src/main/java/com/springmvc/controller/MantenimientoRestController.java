@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.springmvc.entities.tenant.Mantenimiento;
 import com.springmvc.entities.tenant.Usuario;
 import com.springmvc.entities.tenant.Vehiculo;
+import com.springmvc.exceptions.BusTravelConcurrencyException;
 import com.springmvc.logic.implementations.BranchesLogic;
 import com.springmvc.logic.implementations.MantenimientoLogic;
 import com.springmvc.logic.interfaces.IMantenimientoLogic;
@@ -65,8 +66,10 @@ public class MantenimientoRestController {
     
     @Secured({"ROLE_COORDINATOR"})
 	@RequestMapping(value = "/createMantenimiento", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
-    public ResponseEntity<?> CreateMantenimiento(@RequestBody MantenimientoFormWrapper mantenimiento, @PathVariable String tenantid, HttpServletRequest request)
+    public ResponseEntity<CustomResponseWrapper> CreateMantenimiento(@RequestBody MantenimientoFormWrapper mantenimiento, @PathVariable String tenantid, HttpServletRequest request)
     {
+    	
+    	CustomResponseWrapper response = new CustomResponseWrapper();
     	
     	MantenimientoLogic ml = new MantenimientoLogic(tenantid);
     	Mantenimiento mantenimientoToPersist = new Mantenimiento();
@@ -89,8 +92,32 @@ public class MantenimientoRestController {
     	mantenimientoToPersist.setTaller(mantenimiento.taller);
     	mantenimientoToPersist.setVehiculo(mantenimiento.vehiculo);
     	
-		ml.createMantenimiento(mantenimientoToPersist, mantenimiento.dayFrom, mantenimiento.dayTo);		
-		return new ResponseEntity(HttpStatus.OK);		
+    	
+    	try 
+    	{
+    		
+    		int deli = ml.createMantenimiento(mantenimientoToPersist, mantenimiento.dayFrom, mantenimiento.dayTo);	
+    		
+    		if (deli == 1)
+    		{
+    			response.setSuccess(true);
+				response.setMsg("Vehiculo enviado al mantenimiento");
+			}
+//    		else
+//    		{
+//				response.setSuccess(false);
+//				response.setMsg("No se ha generado ningún mantenimiento. Valide el rango de fechas.");
+//    		}
+    			
+    		
+		} 
+    	catch (BusTravelConcurrencyException e) {
+			response.setSuccess(false);
+			response.setMsg(e.getMessage());
+		}
+    	
+    	return new ResponseEntity<CustomResponseWrapper>(response, HttpStatus.OK);
+				
     }
     
     
