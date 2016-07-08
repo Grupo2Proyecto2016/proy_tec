@@ -98,6 +98,7 @@ public class LinesLogic implements ILinesLogic
 				CheckDriverAvailability(travel, travelDate);
 				
 				Viaje travelToPersist = new Viaje();
+				travelToPersist.setTerminado(false);
 				travelToPersist.setConductor(travel.getConductor());
 				travelToPersist.setLinea(travel.getLinea());
 				travelToPersist.setVehiculo(travel.getVehiculo());
@@ -175,9 +176,9 @@ public class LinesLogic implements ILinesLogic
 		return TenantContext.ViajeRepository.GetByBus(id_vehiculo, beginTravel.getTime(), endTravel.getTime());
 	}
 
-	public List<Viaje> GetTravels() 
+	public List<Viaje> GetTravels(Date filterDate) 
 	{
-		return TenantContext.ViajeRepository.GetTravels();
+		return TenantContext.ViajeRepository.GetTravels(filterDate);
 	}
 
 	public List<Viaje> GetPackageTravels(Parada origin, Parada destination) 

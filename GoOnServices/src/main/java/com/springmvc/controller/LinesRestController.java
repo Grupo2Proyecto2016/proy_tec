@@ -261,9 +261,9 @@ public class LinesRestController{
 	
 	@Secured({"ROLE_COORDINATOR"})
 	@RequestMapping(value = "/getTravels", method = RequestMethod.GET)
-	public ResponseEntity<List<Viaje>> getTravels(@PathVariable String tenantid)
+	public ResponseEntity<List<Viaje>> getTravels(@RequestParam Date filterDate ,@PathVariable String tenantid)
 	{
-		List<Viaje> travels = new LinesLogic(tenantid).GetTravels();
+		List<Viaje> travels = new LinesLogic(tenantid).GetTravels(filterDate);
 		return new ResponseEntity<List<Viaje>>(travels, HttpStatus.OK);
 	}
 	

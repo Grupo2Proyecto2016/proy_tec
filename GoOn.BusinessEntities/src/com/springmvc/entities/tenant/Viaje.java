@@ -23,6 +23,7 @@ public class Viaje {
 	private Date inicio;
 	private Date fin;
 	private Boolean es_directo;
+	private Boolean terminado;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	private Linea linea;
@@ -87,5 +88,11 @@ public class Viaje {
 	}
 	public void setEncomiendas(List<Encomienda> encomiendas) {
 		this.encomiendas = encomiendas;
+	}
+	public Boolean getTerminado() {
+		return terminado;
+	}
+	public void setTerminado(Boolean terminado) {
+		this.terminado = terminado;
 	}	
 }

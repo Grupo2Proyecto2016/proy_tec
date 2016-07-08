@@ -64,10 +64,23 @@ public class ViajeRepository {
 		}
 	}
 
-	public List<Viaje> GetTravels() 
+	public List<Viaje> GetTravels(Date dateFrom) 
 	{
+		dateFrom.setHours(0);
+		dateFrom.setMinutes(0);
+		Calendar to = Calendar.getInstance();
+		to.setTime(dateFrom);
+		to.add(GregorianCalendar.DAY_OF_YEAR, 30);
+		
 		List<Viaje> travels = null;
-		Query q = entityManager.createQuery("FROM Viaje ORDER BY inicio ASC");
+		Query q = entityManager.createQuery("FROM Viaje "
+				+ "WHERE terminado = FALSE "
+				+ "AND inicio >= :from "
+				+ "AND inicio <= :to "
+				+ "ORDER BY inicio ASC");
+		
+		q.setParameter("from", dateFrom);
+		q.setParameter("to", to.getTime());
 		travels = (List<Viaje>)q.getResultList();
 		return travels;	
 	}
@@ -112,7 +125,7 @@ public class ViajeRepository {
 
 	public boolean HasTickets(long travelId) 
 	{
-		Query q = entityManager.createQuery("select max(id_pasaje) from Pasaje where viaje_id_viaje = :idv");
+		Query q = entityManager.createQuery("select max(id_pasaje) from Pasaje where viaje_id_viaje = :idv ");
 		q.setParameter("idv", travelId);
 		long maxID;
 		try
@@ -137,12 +150,14 @@ public class ViajeRepository {
 				"FROM Viaje v "
 				//+"LEFT JOIN v.encomiendas e " 
 				+ "WHERE v.linea.habilitado = TRUE "
+				+ "AND v.terminado = FALSE "
 				+ "AND v.linea.origen.id_parada = :origin "
 				+ "AND v.linea.destino.id_parada = :destination "
-				+ "AND v.inicio > :tomorrow "
-				+ "AND v.inicio < :limit "
+				+ "AND v.inicio >= :tomorrow "
+				+ "AND v.inicio <= :limit "
 				//+ "GROUP BY v " 
-				+ "AND v.vehiculo.cantEncomiendas > 0 AND size(v.encomiendas) < v.vehiculo.cantEncomiendas"
+				+ "AND v.vehiculo.cantEncomiendas > 0 AND size(v.encomiendas) < v.vehiculo.cantEncomiendas "
+				+ "ORDER BY v.inicio ASC"
 		);
 		q.setParameter("origin", origin);
 		q.setParameter("destination", destination);
@@ -168,13 +183,11 @@ public class ViajeRepository {
 			}
 		}
 		Query q = entityManager.createQuery("FROM Viaje v "
-											//+ "WHERE v.inicio = :dateFrom "											
 											+ "WHERE v.linea.id_linea in ("+auxin+")"
 											+ "AND v.inicio > :dateFrom "
 											+ "AND v.inicio < :dateTo "
-											/*+ "WHERE v.linea.habilitado = TRUE "
-											+ "AND v.inicio = :dateFrom "	
-											+ "AND linea_id_linea in ("+auxin+")"*/
+											+ "AND v.terminado = FALSE "
+											+ "WHERE v.linea.habilitado = TRUE "
 		);
 		//como se busca por fecha, entra en juego la comparacion por hora, en este caso es 00:00:00
 		//entonces tiene que ser entre 2 dias para que entre en la clausula where
@@ -256,7 +269,8 @@ public class ViajeRepository {
 													" " + 													
 													"INNER JOIN vehiculo ve " +
 													"ON ve.id_vehiculo = v.vehiculo_id_vehiculo " +
-													"WHERE v.inicio > :dateFrom AND v.inicio < :dateTo");		
+													"WHERE v.inicio > :dateFrom AND v.inicio < :dateTo "
+													+ "AND v.terminado = FALSE ");		
 		
 		q.setParameter("dateFrom", dateFrom.getTime());
 		dateFrom.add(Calendar.DAY_OF_YEAR, 1);
@@ -275,6 +289,7 @@ public class ViajeRepository {
 				+ "AND v.vehiculo.id_vehiculo = :idBus "
 				+ "AND v.inicio >= :from "
 				+ "AND v.inicio <= :to "
+				+ "AND v.terminado = FALSE "
 		);
 		q.setParameter("idBus", idBus); 
 		q.setParameter("from", from);
@@ -293,6 +308,7 @@ public class ViajeRepository {
 				+ "AND v.conductor.id_usuario = :idu "
 				+ "AND v.inicio >= :from "
 				+ "AND v.inicio <= :to "
+				+ "AND v.terminado = FALSE "
 		);
 		q.setParameter("idu", userId); 
 		q.setParameter("from", from);
@@ -316,6 +332,8 @@ public class ViajeRepository {
 				+ "AND v.conductor.id_usuario = :idu "
 				+ "AND v.inicio >= :from "
 				+ "AND v.inicio <= :to "
+				+ "AND v.terminado = FALSE "
+				+ "ORDER BY v.inicio ASC"
 		);
 		q.setParameter("idu", user.getIdUsuario()); 
 		q.setParameter("from", from.getTime());

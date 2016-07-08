@@ -10,6 +10,10 @@ goOnApp.controller('manageTravelsController', function($scope, $http, uiGridCons
 	$scope.minDate.setDate($scope.minDate.getDate() + 1);
 	$scope.maxDate.setDate($scope.maxDate.getDate() + 30);
 	
+	$scope.filterMinDate = new Date();
+	$scope.filterMinDate.setDate($scope.filterMinDate.getDate() - 15);
+	$scope.filterDate = angular.copy($scope.filterMinDate);
+	
 	$scope.isDayMissing = function()
 	{
 		return !$scope.travelForm.monday 
@@ -108,7 +112,8 @@ goOnApp.controller('manageTravelsController', function($scope, $http, uiGridCons
     
     $scope.getTravels = function()
     {
-    	$http.get(servicesUrl + 'getTravels').success(function(data, status, headers, config)
+    	
+    	$http.get(servicesUrl + 'getTravels?filterDate='+ $scope.filterDate).success(function(data, status, headers, config)
     	{
     		$scope.travels = data;
     		angular.forEach($scope.travels, function(row){
@@ -140,7 +145,6 @@ goOnApp.controller('manageTravelsController', function($scope, $http, uiGridCons
           },
           { name:'Nº Coche', field: 'vehiculo.id_vehiculo' },
           { name:'Conductor', field: 'getDriverName()' },
-          
           { name: 'Acciones',
         	enableFiltering: false,
         	enableSorting: false,

@@ -163,9 +163,34 @@
 	</div>
 </div>
 
-<div class="row" style="margin-top: 50px;">
+<div class="row">
+	<div class="col-xs-3"></div>
+	<div class="col-xs-6">
+		<div class="alert alert-warning text-center">
+		  <p>Se muestran viajes en un rango de 30 días a partir de la fecha de origen</p>
+		</div>
+	</div>
+	<div class="col-xs-3"></div>
+</div>
+
+<div class="row">
 	<div class="col-xs-1"></div>
 	<div class="col-xs-10">
+		<form class="form-horizontal" name="packsForm" role="form" ng-submit="getTravels()">
+			<div class="form-group"> 
+				<div class="col-sm-3"></div>
+				<div class="col-sm-3">
+					<label class="control-label col-sm-3">Desde:</label>
+					<div class="col-sm-9">
+						<input type="date" class="form-control"  ng-model="filterDate" required>
+				    </div>
+				</div>
+	    		<div class="col-sm-3">
+	      			<button style="float: right; margin-top: 10px;" type="submit"  class="btn btn-sm btn-info">Filtrar</button>
+	    		</div>
+	    		<div class="col-sm-3"></div>
+		    </div>
+	    </form>
 		<div ui-grid="travelsGrid" ui-grid-pagination class="genericGridHeader"></div>
 	</div>
 	<div class="col-xs-1"></div>
