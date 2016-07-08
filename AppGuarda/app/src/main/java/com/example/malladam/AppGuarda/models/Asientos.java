@@ -1,4 +1,4 @@
-package com.example.malladam.versionuno.models;
+package com.example.malladam.AppGuarda.models;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -7,7 +7,7 @@ import android.widget.Toast;
 
 import com.android.IntentIntegrator;
 import com.android.IntentResult;
-import com.example.malladam.versionuno.R;
+import com.example.malladam.AppGuarda.R;
 
 import java.util.ArrayList;
 

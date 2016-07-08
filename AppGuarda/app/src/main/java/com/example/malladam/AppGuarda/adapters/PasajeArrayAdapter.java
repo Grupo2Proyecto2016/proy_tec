@@ -1,4 +1,4 @@
-package com.example.malladam.versionuno.adapters;
+package com.example.malladam.AppGuarda.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -9,10 +9,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.malladam.versionuno.AsientosFragment;
-import com.example.malladam.versionuno.R;
-import com.example.malladam.versionuno.models.GroupPasajeDT;
-import com.example.malladam.versionuno.models.PasajeDataType;
+import com.example.malladam.AppGuarda.AsientosFragment;
+import com.example.malladam.AppGuarda.R;
+import com.example.malladam.AppGuarda.models.GroupPasajeDT;
+import com.example.malladam.AppGuarda.models.PasajeDataType;
 
 import java.util.List;
 

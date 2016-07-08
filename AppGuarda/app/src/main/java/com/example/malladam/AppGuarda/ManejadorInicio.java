@@ -1,8 +1,11 @@
-package com.example.malladam.versionuno;
+package com.example.malladam.AppGuarda;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.example.malladam.AppGuarda.Activity.LoginActivity;
+import com.example.malladam.AppGuarda.Activity.MainActivity;
 
 public class ManejadorInicio extends AppCompatActivity {
 

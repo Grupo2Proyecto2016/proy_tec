@@ -1,4 +1,4 @@
-package com.example.malladam.versionuno;
+package com.example.malladam.AppGuarda;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,13 +7,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.android.IntentIntegrator;
 
 
 /**

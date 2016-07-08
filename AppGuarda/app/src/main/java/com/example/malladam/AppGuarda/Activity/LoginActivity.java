@@ -1,13 +1,13 @@
-package com.example.malladam.versionuno;
+package com.example.malladam.AppGuarda.Activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.provider.Settings;
-import android.provider.Telephony;
+import android.graphics.Color;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 
@@ -19,6 +19,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -28,23 +29,27 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.NetworkResponse;
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.RequestFuture;
-import com.example.malladam.versionuno.adapters.VolleyS;
-import com.example.malladam.versionuno.models.Asientos;
+import com.android.volley.toolbox.StringRequest;
+import com.example.malladam.AppGuarda.DataBaseManager;
+import com.example.malladam.AppGuarda.ManejadorInicio;
+import com.example.malladam.AppGuarda.R;
+import com.example.malladam.AppGuarda.adapters.VolleyS;
+import com.example.malladam.AppGuarda.models.Empresa;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
@@ -64,18 +69,37 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     View focusView = mUserView;
     String user;
     String password;
+    String urlUserExist;
+    Handler mHandler;
+    Boolean userExist;
+    private Empresa empresa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        intent = new Intent(this, MainActivity.class);
+        userExist = false;
+        intent = new Intent();
         dbManager = new DataBaseManager(this);
+        empresa = empresa.getInstance();
 
+        urlUserExist = getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)+"/userExists";
         mUserView = (AutoCompleteTextView) findViewById(R.id.user);
+        mUserView.setTextColor(Color.parseColor(empresa.getColorBack()));
 
+        mHandler = new Handler();
         mPasswordView = (EditText) findViewById(R.id.password);
+        mPasswordView.setTextColor(Color.parseColor(empresa.getColorBack()));
+
+        LinearLayout mealLayout = (LinearLayout) findViewById(R.id.linear_login);
+        mealLayout.setBackgroundColor(Color.parseColor(empresa.getColorText()));
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setBackgroundColor(Color.parseColor(empresa.getColorTextHeader()));
+        toolbar.setTitleTextColor(Color.parseColor(empresa.getColorHeader()));
+        setSupportActionBar(toolbar);
+
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -87,6 +111,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
+        mUserView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus) {
+                    try {
+                        WSuserExist(mUserView.getText().toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (TimeoutException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -95,14 +135,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
+
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
-        ///////WS/////
+        /////////////WS/////////////
         urlToken = getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)+"/auth";
         volley = volley.getInstance(this);
-        //////WS/////////////7
+        /////////////WS/////////////
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setTitle(empresa.getNombre());
     }
+
+
+
+
 
 
     private void attemptLogin() {
@@ -130,20 +178,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
     }
-    private Boolean isCredencialesValidas(String user, String pass) {
-        return dbManager.validarUsuario(user, pass);
-    }
-
 
 
     private void WSconsultarValidezCredenciales(final String user, final String pass) throws JSONException, TimeoutException, ExecutionException{
 
-            jsonBody  = new JSONObject();
-            jsonBody.put("username",user);
-            jsonBody.put("password",pass);
+        jsonBody  = new JSONObject();
+        jsonBody.put("username",user);
+        jsonBody.put("password",pass);
 
         try {
-            volley.getToken(urlToken, jsonBody,new Response.Listener<JSONObject>(){
+            volley.llamarWS(Request.Method.POST,urlToken, jsonBody,new Response.Listener<JSONObject>(){
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
@@ -152,18 +196,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         verificarLogin(true);
                         //dbManager.registrarLogin(response.getString("token"),user, pass);/////guardo el usuario logueado en la base
                         Log.d("-el token es : ", response.getString("token"));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError volleyError) {
-                            //Toast.makeText(LoginActivity.this, volleyError.toString(), Toast.LENGTH_LONG).show();
-                            Log.d("el ERROR del token es ",volleyError.toString());
-                        }
-                    });
-            Thread.sleep(13000);
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    //Toast.makeText(LoginActivity.this, volleyError.toString(), Toast.LENGTH_LONG).show();
+                    Log.d("el ERROR del token es ",volleyError.toString());
+                }
+            }, null);
+            Thread.sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -220,6 +264,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
     }
 
+
     public void verificarLogin(Boolean ws){
 
         if ((!credencailesValidas)) {
@@ -235,10 +280,59 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         } else {
             dbManager.registrarLogin(nuevoToken,user, password);
-            //dbManager.registrarLogin(user, password);/////guardo el usuario logueado en la base
             showProgress(true);
+            intent = new Intent(LoginActivity.this, ManejadorInicio.class);
             startActivity(intent);
         }
+    }
+
+
+    private void WSuserExist(final String usuario)throws JSONException, TimeoutException, ExecutionException {
+
+        StringRequest strReq = new StringRequest(Request.Method.GET,urlUserExist+"?username="+usuario,
+                new Response.Listener<String>(){
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("llamarWSstringOK", response.toString());
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Log.d("WSuserExist ERROR ",volleyError.toString());
+                if (volleyError instanceof TimeoutError || volleyError instanceof NoConnectionError) {
+                    Toast.makeText(LoginActivity.this, getResources().getString(R.string.error_timeout),Toast.LENGTH_LONG).show();
+                    userExist = false;
+                    mUserView.setError(getResources().getString(R.string.error_timeout));
+                    focusView = mUserView;
+                } else{
+                    userExist = false;
+                    mUserView.setError("No existe el usuario");
+                    focusView = mUserView;
+                }
+            }
+        })
+        {
+            @Override
+            protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                int mStatusCode = response.statusCode;
+                Log.d("llamarWSstringPARSE", response.toString());
+
+                mHandler.post(new Runnable() {
+                    @Override
+                    // this will run on the main thread.
+                    public void run() {
+                        Drawable okIcon = getResources().getDrawable(R.drawable.ok);
+                        okIcon.setBounds(new Rect(0, 0, okIcon.getIntrinsicWidth(), okIcon.getIntrinsicHeight()));
+                        mUserView.setError("Ok",okIcon);
+                        focusView = mUserView;
+                        userExist = true;
+                    }
+                });
+                return super.parseNetworkResponse(response);
+            }
+        };
+        // Adding request to request queue
+        volley.addToQueue(strReq);
     }
 }
 

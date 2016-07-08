@@ -1,4 +1,4 @@
-package com.example.malladam.versionuno;
+package com.example.malladam.AppGuarda;
 
 
 import android.os.Bundle;
@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.malladam.versionuno.adapters.PasajeArrayAdapter;
-import com.example.malladam.versionuno.models.GroupPasajeDT;
-import com.example.malladam.versionuno.models.PasajeDataType;
+import com.example.malladam.AppGuarda.adapters.PasajeArrayAdapter;
+import com.example.malladam.AppGuarda.models.GroupPasajeDT;
+import com.example.malladam.AppGuarda.models.PasajeDataType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +45,7 @@ public class AsientosFragment extends Fragment {
         /////JUEGO DE DATOS///
 
         PasajeDataType[]pasajes = new PasajeDataType[asientosBus];//obtener los pasajes activos
-        PasajeDataType pasaje3 = new PasajeDataType("41", "001",R.drawable.gps,"Misa", "La PAz", "LAs Peidras", "01-01-01", "500", "A");
+        /*PasajeDataType pasaje3 = new PasajeDataType("41", "001",R.drawable.gps,"Misa", "La PAz", "LAs Peidras", "01-01-01", "500", "A");
         PasajeDataType pasaje6 = new PasajeDataType("02", "001",R.drawable.gps,"Misa", "La PAz", "LAs Peidras", "01-01-01", "500", "A");
         PasajeDataType pasaje5 = new PasajeDataType("04", "001",R.drawable.gps,"Misa", "La PAz", "LAs Peidras", "01-01-01", "500", "A");
         PasajeDataType pasaje4 = new PasajeDataType("01", "001",R.drawable.gps,"Misa", "La PAz", "LAs Peidras", "01-01-01", "500", "A");
@@ -56,7 +56,7 @@ public class AsientosFragment extends Fragment {
         pasajes[40]=pasaje3;
         pasajes[1]=pasaje6;
         pasajes[3]=pasaje5;
-        pasajes[6]=pasaje7;
+        pasajes[6]=pasaje7;*/
 
         PasajeDataType[]pasajesTodos = new PasajeDataType[asientosBus];
 

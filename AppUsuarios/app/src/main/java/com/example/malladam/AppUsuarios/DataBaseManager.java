@@ -66,7 +66,7 @@ public class DataBaseManager {
     private SQLiteDatabase db;
 
     public DataBaseManager(Context context) {
-        DataBaseHelper helper = DataBaseHelper.getInstance(context,context.getString(R.string.app_name));
+        DataBaseHelper helper = DataBaseHelper.getInstance(context,"AppUsuarios"+context.getString(R.string.app_name));
         db = helper.getWritableDatabase();
     }
 
@@ -187,23 +187,6 @@ public class DataBaseManager {
 
     public void eliminarLogin(){
         db.delete(TABLE_NAME_SESION,null,null);
-    }
-
-
-    public String getNombreLogueado() {
-        String logueado = null;
-        String idLogueado = getUserLogueado();
-        String [] columnas = new String[]{CN_NOM_USUARIO};
-        Cursor resultado = db.query(TABLE_NAME_USUARIOS, columnas, CN_USUARIO+" = ?",
-                new String[]{idLogueado}, null, null, null);
-        resultado.moveToFirst();
-        if(!resultado.isAfterLast()) {
-            logueado = resultado.getString(resultado.getColumnIndex(CN_NOM_USUARIO));
-        }else{
-            logueado = "Sin Determinar";
-        }
-        resultado.close();
-        return logueado;
     }
 
 }

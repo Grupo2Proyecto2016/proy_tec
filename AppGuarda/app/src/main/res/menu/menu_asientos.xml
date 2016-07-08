@@ -10,4 +10,10 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
     android:title="@string/action_newpasaje"
     app:showAsAction="always" />
 
+    <item
+        android:id="@+id/action_finish_viaje"
+        android:orderInCategory="100"
+        android:title="@string/action_finish_viaje"
+        app:showAsAction="never" />
+
 </menu>

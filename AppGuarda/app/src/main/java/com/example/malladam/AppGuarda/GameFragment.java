@@ -1,4 +1,4 @@
-package com.example.malladam.versionuno;
+package com.example.malladam.AppGuarda;
 
 
 import android.os.Bundle;
@@ -11,10 +11,10 @@ import android.view.ViewGroup;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SegundoFragment extends Fragment {
+public class GameFragment extends Fragment {
 
 
-    public SegundoFragment() {
+    public GameFragment() {
         // Required empty public constructor
     }
 
@@ -23,7 +23,7 @@ public class SegundoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_segundo, container, false);
+        return inflater.inflate(R.layout.fragment_game, container, false);
     }
 
 }

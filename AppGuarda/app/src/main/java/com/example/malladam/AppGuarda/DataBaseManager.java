@@ -1,11 +1,11 @@
-package com.example.malladam.versionuno;
+package com.example.malladam.AppGuarda;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.malladam.versionuno.models.Pasaje;
+import com.example.malladam.AppGuarda.models.Pasaje;
 
 import java.util.ArrayList;
 
@@ -17,6 +17,7 @@ public class DataBaseManager {
     public static final String TABLE_NAME_PASAJES = "pasajes";
     public static final String TABLE_NAME_USUARIOS = "usuarios";
     public static final String TABLE_NAME_SESION = "sesion";
+    public static final String TABLE_NAME_VIAJE = "viaje";
 
     public static final String CN_ID_PASAJE = "id";
     public static final String CN_ID_VIAJE = "viaje";
@@ -40,6 +41,9 @@ public class DataBaseManager {
     public static final String CN_USUARIO_SESION = "usuario";
     public static final String CN_PASS_SESION = "password";
 
+    public static final String CREATE_TABLE_VIAJE = "create table " +TABLE_NAME_VIAJE+ " ("
+            + CN_ID_VIAJE + " text not null);";
+
     public static final String CREATE_TABLE_PASAJES = "create table " +TABLE_NAME_PASAJES+ " ("
             + CN_ID_PASAJE + " integer primary key autoincrement,"
             + CN_ID_VIAJE + " text not null,"
@@ -60,13 +64,13 @@ public class DataBaseManager {
             + CN_NOM_USUARIO + " text not null,"
             + CN_EMAIL + " text not null);";
 
-    public static final String CREATE_TABLE_SESION = "create table " +TABLE_NAME_SESION+ " (" + CN_USUARIO_SESION + " text not null," +CN_PASS_SESION+ " text not null);";
+    public static final String CREATE_TABLE_SESION = "create table " +TABLE_NAME_SESION+ " (" + CN_TOKEN_SESION + " text not null," + CN_USUARIO_SESION + " text not null," +CN_PASS_SESION+ " text not null);";
     public static final String ALTER_TABLE_SESION = "ALTER TABLE "+TABLE_NAME_SESION+ " ADD COLUMN "+CN_TOKEN_SESION+ " text;";
 
     private SQLiteDatabase db;
 
     public DataBaseManager(Context context) {
-        DataBaseHelper helper = DataBaseHelper.getInstance(context);
+        DataBaseHelper helper = DataBaseHelper.getInstance(context,"AppGuarda"+context.getString(R.string.app_name));
         db = helper.getWritableDatabase();
     }
 
@@ -142,7 +146,7 @@ public class DataBaseManager {
             logueado = resultado.getString(resultado.getColumnIndex(CN_USUARIO_SESION));
         }
         return logueado;
-        }
+    }
 
     public void registrarLogin(String token, String usuario, String pass){
         ContentValues valores = new ContentValues();
@@ -158,38 +162,28 @@ public class DataBaseManager {
     }
 
 
-    public String getNombreLogueado() {
-        String logueado = null;
-        String idLogueado = getUserLogueado();
-        String [] columnas = new String[]{CN_NOM_USUARIO};
-        Cursor resultado = db.query(TABLE_NAME_USUARIOS, columnas, CN_USUARIO+" = ?",
-                new String[]{idLogueado}, null, null, null);
-        resultado.moveToFirst();
-        if(!resultado.isAfterLast()) {
-            logueado = resultado.getString(resultado.getColumnIndex(CN_NOM_USUARIO));
-        }else{
-            logueado = "Sin Determinar";
-        }
-        resultado.close();
-        return logueado;
+
+    public void registrarViaje(String viaje){
+        ContentValues valores = new ContentValues();
+        valores.put(CN_ID_VIAJE,viaje);
+
+        db.insert(TABLE_NAME_VIAJE,null,valores);
     }
 
 
-
-    public String getPassLogueado() {
-        String pass = null;
-        String user = getUserLogueado();
-        String [] columnas = new String[]{CN_PASS_SESION};
-        Cursor resultado = db.query(TABLE_NAME_SESION, columnas, CN_USUARIO_SESION+" = ?",
-                new String[]{user}, null, null, null);
+    public String getViajeActual (){
+        String viaje = null;
+        String [] columnas = new String[]{CN_ID_VIAJE};
+        Cursor resultado = db.query(TABLE_NAME_VIAJE, columnas, null,null, null, null, null);
         resultado.moveToFirst();
         if(!resultado.isAfterLast()) {
-            pass = resultado.getString(resultado.getColumnIndex(CN_PASS_SESION));
-        }else{
-            pass = "Sin Determinar";
+            viaje = resultado.getString(resultado.getColumnIndex(CN_ID_VIAJE));
         }
-        resultado.close();
-        return pass;
+        return viaje;
+    }
+
+    public void eliminarViaje(){
+        db.delete(TABLE_NAME_VIAJE,null,null);
     }
 }
 

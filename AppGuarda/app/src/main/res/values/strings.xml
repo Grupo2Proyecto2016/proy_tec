@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PROY</string>
+    <string name="app_name">perrito</string>
     <string name="WSServer">http://10.0.3.2:8080/GoOnServices/</string>
     <string name="action_settings">Configuración</string>
     <string name="action_viajes">Mis Viajes</string>
@@ -12,6 +12,7 @@
     <string name="title_activity_login">Login</string>
     <string name="scan">Leer QR</string>
     <string name="action_newpasaje">Pasaje</string>
+    <string name="action_finish_viaje">Finalizar Viaje</string>
 
     <!-- Strings related to login -->
     <string name="prompt_user">Usuario</string>
@@ -29,6 +30,10 @@
     <string name="grilla_usuario">"Usuario"</string>
     <string name="grilla_origen">"Origen"</string>
     <string name="grilla_destino">"Destino"</string>
+    <string name="error_conexion">Error en la conexión, Intente nuevamente</string>
+    <string name="iniciarViaje">Iniciar Viaje</string>
+
+    <string name="getSiguienteViaje">/gteSigViaje</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
