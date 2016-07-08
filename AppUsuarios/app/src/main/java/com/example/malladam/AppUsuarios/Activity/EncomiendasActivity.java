@@ -173,7 +173,7 @@ public class EncomiendasActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_encomiendas, menu);
         MenuTintUtils menuTintUtils = new MenuTintUtils();
-        menuTintUtils.tintAllIcons(menu,Color.parseColor(empresa.getColorTextHeader()));
+        menuTintUtils.tintAllIcons(menu,Color.parseColor(empresa.getColorHeader()));
         return true;
     }
 

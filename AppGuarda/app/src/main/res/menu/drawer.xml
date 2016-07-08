@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/misViajes"
+            android:checkable="false"
+            android:title="Mis Viajes"
+            android:icon="@drawable/viajeschofer"
+            >
+        </item>
+
+        <item
+            android:id="@+id/recorrido"
+            android:checkable="false"
+            android:title="Recorrido"
+            android:icon="@drawable/ruta"
+            >
+        </item>
+
+        <item
+            android:id="@+id/paradas"
+            android:checkable="false"
+            android:title="Paradas"
+            android:icon="@drawable/gps"
+            >
+        </item>
+
+        <item
+            android:id="@+id/cerrarSesion"
+            android:checkable="false"
+            android:title="Cerrar Sesión"
+            android:icon="@drawable/logout"
+            >
+        </item>
+
+    </group>
+</menu>

@@ -43,7 +43,6 @@
             android:id="@+id/email_login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="30dp"
             android:orientation="vertical">
 
             <ImageView
@@ -64,7 +63,7 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:inputType="textPersonName"
-                    android:hint="@string/usuarioRegistro" />
+                    android:hint="@string/prompt_user" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -76,11 +75,11 @@
                     android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/contraseñaRegistro"
+                    android:hint="@string/prompt_password"
                     android:imeActionId="@+id/login"
                     android:imeActionLabel="@string/action_sign_in_short"
                     android:imeOptions="actionUnspecified"
-                    android:inputType ="textPassword"
+                    android:inputType="textPassword"
                     android:maxLines="1"
                     android:singleLine="true" />
 
@@ -93,16 +92,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/action_sign_in"
-                android:background="@color/detalles"
                 android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/registro"
-                android:id="@+id/registro"
-                android:layout_gravity="center_horizontal" />
 
         </LinearLayout>
     </ScrollView>

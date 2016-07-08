@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="cabezal_navigation">#2F69B2</color>
+    <color name="fondo">#E52B32B3</color>
+    <color name="cabezal">#AA45CC</color>
+    <color name="backMenu">#636875</color>
+    <color name="negro">#000000</color>
+    <color name="rojo">#FF0000</color>
+    <color name="fondoActivity">#B0C4C6</color>
+    <color name="detalles">#A47BFD</color>
+    <color name="fondoList">#262A34</color>
+
+</resources>
