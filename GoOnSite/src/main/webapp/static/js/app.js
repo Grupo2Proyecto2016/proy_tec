@@ -11,6 +11,7 @@
             return input ? 'Si' : 'No';
         }
     });
+    var showingError = false;
     
     var tenantUrlPart =  urlTenant  + "/";
     var servicesUrl = AppName + tenantUrlPart;
@@ -132,14 +133,16 @@
             {
             	$rootScope.user = null;
             	$location.path('home');
-            	if($('#loginModal').hasClass('in'))
+            	if($('#loginModal').hasClass('in') || showingError)
             	{
             		//do nothing
             	}
             	else
             	{
+            		showingError = true
             		$timeout(function () {            
             			$("#loginModal").modal("show");
+            			showingError = false;
             		}, 500);
             	}
             }

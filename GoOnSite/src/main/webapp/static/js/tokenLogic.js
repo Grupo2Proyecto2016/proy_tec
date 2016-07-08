@@ -23,5 +23,5 @@ function setJwtToken(token) {
 }
 
 function removeJwtToken() {
-    localStorage.removeItem(TOKEN_KEY + urlTenant);
+    localStorage.removeItem(TOKEN_KEY + urlTenant.toLowerCase());
 }
