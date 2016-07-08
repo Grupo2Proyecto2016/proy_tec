@@ -40,7 +40,7 @@
 												<td>$ {{ticket.costo}}</td>
 												<td>{{ getTicketStatus(ticket.estado)}}</td>
 												<td>
-													<a ng-show="pack.status == 3" class="btn btn-sm btn-success">
+													<a ng-show="ticket.estado == 3" class="btn btn-sm btn-success" style="float: right;">
 														<i class="fa fa-map-marker fa-lg " style="margin-right: 5px;"></i>Seguir
 													</a>
 												</td>
@@ -90,7 +90,7 @@
 												<td>$ {{pack.precio}}</td>
 												<td>{{ getPackageStatus(pack.status)}}</td>
 												<td>
-													<a ng-show="pack.status == 2" class="btn btn-sm btn-success">
+													<a ng-show="pack.status == 2" class="btn btn-sm btn-success" style="float: right;">
 														<i class="fa fa-map-marker fa-lg " style="margin-right: 5px;"></i>Seguir
 													</a>
 												</td>

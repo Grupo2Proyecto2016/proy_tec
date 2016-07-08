@@ -11,6 +11,7 @@ import javax.persistence.Query;
 
 import com.springmvc.entities.tenant.Encomienda;
 import com.springmvc.entities.tenant.Parada;
+import com.springmvc.entities.tenant.Pasaje;
 import com.springmvc.enums.PackageStatus;
 
 public class EncomiendaRepository {
@@ -132,6 +133,45 @@ public class EncomiendaRepository {
 					pack.setCi_receptor(ci);
 				}
 			}
+			t.commit();
+		}
+		catch(Exception ex)
+		{
+			t.rollback();
+			throw ex;
+		}
+	}
+
+	public List<Encomienda> GetByTravel(long travelId) 
+	{
+		List<Encomienda> result = new ArrayList<>();
+		Query q = entityManager.createQuery("SELECT e FROM Encomienda e WHERE e.viaje.id_viaje = :idv"
+		);
+		q.setParameter("idv", travelId);
+		try
+		{
+			result = q.getResultList();
+		}
+		catch(NoResultException ex)
+		{
+			return null;
+		}
+		return result;
+	}
+	
+	public void updateByTravel(long travelId, PackageStatus status) 
+	{
+		List<Encomienda> packages =  GetByTravel(travelId);
+		EntityTransaction t = entityManager.getTransaction();
+		
+		try
+		{
+			t.begin();
+			for (Encomienda pack : packages) 
+			{
+				pack.setStatus(status.getValue());
+			}
+			entityManager.flush();
 			t.commit();
 		}
 		catch(Exception ex)

@@ -7,4 +7,5 @@ public enum AuthorityName
     ROLE_DRIVER,
     ROLE_CLIENT,
     ROLE_COORDINATOR,
+    ROLE_ANONYMOUS
 }

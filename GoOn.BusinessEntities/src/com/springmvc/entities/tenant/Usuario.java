@@ -91,6 +91,7 @@ public class Usuario {
 			auth.setName(AuthorityName.ROLE_COORDINATOR);
 			break;
 		default:
+			auth.setName(AuthorityName.ROLE_ANONYMOUS);
 			break;
 		}
 		result.add(auth);

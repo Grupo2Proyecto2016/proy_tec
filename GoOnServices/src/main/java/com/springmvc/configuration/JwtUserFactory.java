@@ -41,10 +41,18 @@ public final class JwtUserFactory {
         );
     }
     
-    private static List<GrantedAuthority> mapToGrantedAuthorities(List<com.springmvc.entities.tenant.Authority> authorities) {
-        return authorities.stream()
-                .map(authority -> new SimpleGrantedAuthority(authority.getName().name()))
-                .collect(Collectors.toList());
+    private static List<GrantedAuthority> mapToGrantedAuthorities(List<com.springmvc.entities.tenant.Authority> authorities) 
+    {
+    	if(authorities == null || authorities.size() == 0)
+    	{
+    		return new ArrayList<>();
+    	}
+    	else
+    	{
+    		return authorities.stream()
+				.map(authority -> new SimpleGrantedAuthority(authority.getName().name()))
+				.collect(Collectors.toList());
+    	}
     }
     
     private static List<GrantedAuthority> mapToMainGrantedAuthorities(List<com.springmvc.entities.main.Authority> authorities) {
