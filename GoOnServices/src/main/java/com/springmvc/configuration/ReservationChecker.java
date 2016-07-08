@@ -17,7 +17,7 @@ public class ReservationChecker extends Thread
 	
 	public void run()
 	{
-		while(true)
+		while(!Thread.currentThread().isInterrupted()) 
 		{
 			List<Thread> tasks = new ArrayList<Thread>();
 			List<Empresa> companies =  tenantLogic.GetCompanies();
@@ -36,13 +36,23 @@ public class ReservationChecker extends Thread
 				catch (InterruptedException e) 
 				{
 					e.printStackTrace();
+					break;
+				}
+				catch (Exception e) 
+				{
+					e.printStackTrace();
 				}
 			}
 			try 
 			{
-				Thread.sleep(30000);
+				Thread.sleep(1000);
 			}
 			catch (InterruptedException e)
+			{
+				e.printStackTrace();
+				break;
+			}
+			catch (Exception e) 
 			{
 				e.printStackTrace();
 			}

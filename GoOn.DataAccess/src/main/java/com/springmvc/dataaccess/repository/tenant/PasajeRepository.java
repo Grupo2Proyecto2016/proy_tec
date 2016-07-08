@@ -290,5 +290,44 @@ public class PasajeRepository {
 			throw ex;
 		}
 	}
+
+	public List<Pasaje> GetByTravel(long travelId)
+	{
+		List<Pasaje> result = new ArrayList<>();
+		Query q = entityManager.createQuery("SELECT p FROM Pasaje p WHERE p.viaje.id_viaje = :idv "
+		);
+		q.setParameter("idv", travelId);
+		try
+		{
+			result = q.getResultList();
+		}
+		catch(NoResultException ex)
+		{
+			return null;
+		}
+		return result;
+	}
+	
+	public void updateByTravel(long travelId, TicketStatus status) 
+	{
+		List<Pasaje> travels = GetByTravel(travelId);
+		EntityTransaction t = entityManager.getTransaction();
+		
+		try
+		{
+			t.begin();
+			for (Pasaje pasaje : travels) 
+			{
+				pasaje.setEstado(status.getValue());
+			}
+			entityManager.flush();
+			t.commit();
+		}
+		catch(Exception ex)
+		{
+			t.rollback();
+			throw ex;
+		}
+	}
 	
 }

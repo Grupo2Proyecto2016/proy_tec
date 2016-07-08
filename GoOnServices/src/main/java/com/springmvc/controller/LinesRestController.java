@@ -285,5 +285,14 @@ public class LinesRestController{
 			respuesta.setSuccess(true);
 		}
 		return new ResponseEntity<CustomResponseWrapper>(respuesta, HttpStatus.OK);
+	}
+	
+	@Secured({"ROLE_DRIVER"})
+	@RequestMapping(value = "/startTravel", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<Void> startTravel(@RequestParam long travelId, @PathVariable String tenantid)
+	{
+		LinesLogic ll = new LinesLogic(tenantid);
+		ll.StartTravel(travelId);
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}	
 }

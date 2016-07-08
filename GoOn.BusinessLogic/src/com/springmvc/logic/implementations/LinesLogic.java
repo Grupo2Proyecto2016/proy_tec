@@ -22,6 +22,7 @@ import com.springmvc.entities.tenant.Usuario;
 import com.springmvc.entities.tenant.Viaje;
 import com.springmvc.entities.tenant.ViajesBuscados;
 import com.springmvc.enums.DayOfWeek;
+import com.springmvc.enums.PackageStatus;
 import com.springmvc.enums.TicketStatus;
 import com.springmvc.exceptions.BusInServiceException;
 import com.springmvc.exceptions.BusTravelConcurrencyException;
@@ -437,5 +438,11 @@ public class LinesLogic implements ILinesLogic
 	public Viaje GetLastTravelByDriver(Usuario user)
 	{
 		return TenantContext.ViajeRepository.GetLastByDriver(user);
+	}
+
+	public void StartTravel(long travelId) 
+	{
+		TenantContext.PasajeRepository.updateByTravel(travelId, TicketStatus.InTravel);
+		TenantContext.EncomiendaRepository.updateByTravel(travelId, PackageStatus.Carring);
 	}
 }
