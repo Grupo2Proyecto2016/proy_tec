@@ -331,9 +331,45 @@
 				</tbody>						
 			</table>
 			<div>Total:<b>$<span>{{precio_total}}</span></b></div>
-			<div>
-				<p align="right"><button class="btn btn-sm btn-primary" ng-click="buyTicket()">Confirmar Compra</button></p>
-			</div>  
+			<form class="form-horizontal" name="pForm" role="form" ng-submit="buyTicket()">
+				<div class="form-group" ng-show="rolCreador == 2">			    	
+			    	<div class="col-sm-6">
+				    	<label class="control-label col-sm-5" for="receptorOpt">Receptor registrado?:</label>
+					    <div class="col-sm-7">
+					    	<select name="receptorOpt" class="form-control" ng-model="rOption" required>
+								<option value="1">Si</option>
+								<option value="2">No</option>
+							</select>	
+				    	</div>
+			    	</div>
+		    	</div>
+		    	<div class="form-group" ng-show="rolCreador == 2">				    
+					<div class="col-sm-6">
+						<div ng-show="rOption == 2">
+							<label class="control-label col-sm-5" for="receptorDoc">CI Receptor:</label>
+							<div class="col-sm-7">
+								<input type="text" pattern="^[0-9]{6,7}$" title="Ingrese solo números sin el dígito verificador" class="form-control" name="receptorDoc" ng-model="seatsForm.rDoc" ng-required="rOption == 2 && rolCreador == 2">
+						    </div>
+					    </div>
+					    <div ng-show="rOption == 1">
+					    	<label class="control-label col-sm-5" for="receptorUser">Usuario receptor:</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" placeholder="username" name="receptorUser" ng-model="seatsForm.rUser" ng-required="rOption == 1 && rolCreador == 2" clientexists>
+						    </div>
+						    <div class="form-group has-error">
+								<div ng-messages="pForm.receptorUser.$error" role="alert" class="col-sm-12 text-center">
+									<span ng-message="clientexists" class="help-block">El cliente Receptor no existe</span>
+							    </div>
+							</div>
+				    	</div>			
+					</div>    
+				</div>	
+				<div class="form-group"> 
+					<div class="col-sm-12">
+				 		<button style="float: right; margin-top: 10px;" class="btn btn-info">Confirmar Compra</button>
+					</div>
+				</div>
+			</form>
 		</div>
 	</div>
 	</div>

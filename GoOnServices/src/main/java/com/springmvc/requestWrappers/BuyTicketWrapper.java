@@ -10,6 +10,8 @@ public class BuyTicketWrapper
 	public int destino;
 	public int id_linea;
 	public int id_vehiculo;
+	public String rDoc;
+	public String rUser;
 	public Double valor;
 	public List<Long> seleccionados = new ArrayList<>();	
 }
