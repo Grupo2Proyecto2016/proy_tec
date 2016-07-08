@@ -181,6 +181,7 @@ public class LinesRestController{
     	}
     }
 	
+	@Secured({"ROLE_DRIVER"})
 	@RequestMapping(value = "/getLastTravelByDriver", method = RequestMethod.GET)
     public ResponseEntity<Viaje> GetLastTravelByDriver(@PathVariable String tenantid, HttpServletRequest request) 
     {
