@@ -1,7 +1,6 @@
 goOnApp.controller('travelController', function($scope, $http, uiGridConstants, i18nService, $timeout) 
 {
-    $scope.message = 'Desde aquí podrás buscar el viaje que deseas y efectuar la compra o reserve de pasajes.';
-    
+    $scope.message = 'Desde aquí podrás buscar el viaje que deseas y efectuar la compra o reserve de pasajes.';       
     $scope.minDate = new Date();
     $scope.maxDate = new Date();
 	$scope.maxDate.setDate($scope.maxDate.getDate() + 30);
@@ -21,7 +20,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     $scope.listaIDSeleccionadosOrigin = [];
     
     $scope.seatsForm = {};
-    
+    $scope.rOption = "1";    
     
 	$scope.custom_response = null;    
     i18nService.setCurrentLang('es');
@@ -439,11 +438,12 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 			var txt_map = '';
 			var array_asientos = [];
 			$scope.reservados = [];
+			$scope.noDisponibles = [];
 			for (var i=0; i <$scope.seats.length; i++)
 			{
 				if($scope.seats[i].reservado == true)
 				{
-					$scope.reservados.push($scope.seats[i].id_asiento);
+					$scope.noDisponibles.push($scope.seats[i].id_asiento);
 				}
 				switch(lugares) 
 				{
@@ -569,7 +569,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 			});
 
 			//fin scripts
-			$scope.sc.get($scope.reservados).status('unavailable');
+			$scope.sc.get($scope.noDisponibles).status('unavailable');
 
 		})
 		.error(function()
@@ -597,7 +597,8 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     	/*sel_seat.txt = this.settings.label;
 		sel_seat.price = this.data().price;
 		sel_seat.id = this.settings.id;
-		$scope.reservados.push(sel_seat);*/	
+		$scope.reservados.push(sel_seat);*/
+    	$scope.rolCreador = $scope.$parent.user.rol_id_rol;
     	$("#selectTicketsModal").modal('hide');
     	$("#divTravelForm").addClass('hidden');
     	$("#travelsSearchGrid").addClass('hidden');
@@ -612,6 +613,19 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 		{
 			$scope.seatsForm.seleccionados.push($scope.reservados[i].id);			
 		}  
+		if($scope.rOption == "1")
+		{
+			$scope.seatsForm.rDoc = null;
+		}
+		else
+		{
+			$scope.seatsForm.rUser = null;
+		}	
+		if ($scope.rolCreador == "4")
+		{
+			$scope.seatsForm.rDoc = null;
+			$scope.seatsForm.rUser = null;
+		}	
 		$http.post(servicesUrl +'buyTicket', JSON.stringify($scope.seatsForm))
 		.then(function(response) 
 			{

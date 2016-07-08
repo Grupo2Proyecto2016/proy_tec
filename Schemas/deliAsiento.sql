@@ -18,7 +18,7 @@
 			ON v.linea_id_linea = l.id_linea
 		INNER JOIN pasaje pas
 			ON pas.viaje_id_viaje = v.id_viaje
-		WHERE v.id_viaje = 1
+		WHERE v.id_viaje = 4
 		AND l.habilitado = true
 	) AS vp
 
@@ -51,9 +51,9 @@ INNER JOIN
 			ELSE lp.paradas_id_parada
 			END AS id_parada,
 
-			CASE WHEN 3 = l.id_parada_destino THEN 1000
-			WHEN 3 = l.id_parada_origen THEN -1
-			ELSE 3
+			CASE WHEN 5 = l.id_parada_destino THEN 1000
+			WHEN 5 = l.id_parada_origen THEN -1
+			ELSE 5
 			END AS origen,
 
 			CASE WHEN 2 = l.id_parada_destino THEN 1000

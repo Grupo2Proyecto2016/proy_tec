@@ -36,6 +36,8 @@ public class Pasaje {
 	@ManyToOne(fetch=FetchType.EAGER)
 	private Parada parada_baja;
 	
+	private String ci_receptor;
+	
 	public String getNumero() {
 		return numero;
 	}
@@ -100,5 +102,13 @@ public class Pasaje {
 	}
 	public void setParada_baja(Parada parada_baja) {
 		this.parada_baja = parada_baja;
+	}
+
+	public String getCi_receptor() {
+		return ci_receptor;
+	}
+
+	public void setCi_receptor(String ci_receptor) {
+		this.ci_receptor = ci_receptor;
 	}
 }
