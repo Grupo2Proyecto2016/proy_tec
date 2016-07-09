@@ -118,7 +118,32 @@ public class TicketController
 		return new ResponseEntity<CustomResponseWrapper>(response, HttpStatus.OK);
 	}
 
-	@Secured({"ROLE_CLIENT", "ROLE_SALES"})
+	@Secured({"ROLE_CLIENT", "ROLE_SALES", "ROLE_DRIVER"})
+	@RequestMapping(value = "/buyTicket", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
+	public ResponseEntity<List<Pasaje>> buyTicket(@RequestBody BuyTicketWrapper buyTicket, @PathVariable String tenantid, HttpServletRequest request)
+	{
+		Usuario currentUser = context.GetUser(request, tenantid);		
+		LinesLogic ll = new LinesLogic(tenantid);
+		List<Pasaje> tickets = null;
+		
+		if (buyTicket.rUser != null)
+		{
+			UsersLogic ul = new UsersLogic(tenantid);
+			Usuario comprador = ul.GetUserByName(buyTicket.rUser);
+			tickets = ll.buyTickets(comprador, currentUser, buyTicket.id_viaje, buyTicket.origen, buyTicket.destino, buyTicket.valor, buyTicket.seleccionados);
+		}
+		else if (buyTicket.rDoc != null)
+		{
+			tickets = ll.buyTickets(buyTicket.rDoc, currentUser, buyTicket.id_viaje, buyTicket.origen, buyTicket.destino, buyTicket.valor, buyTicket.seleccionados);
+		}
+		else
+		{
+			tickets = ll.buyTickets(currentUser, buyTicket.id_viaje, buyTicket.origen, buyTicket.destino, buyTicket.valor, buyTicket.seleccionados);
+		}
+		return new ResponseEntity<List<Pasaje>>(tickets, HttpStatus.OK);
+	}
+	
+	/*@Secured({"ROLE_CLIENT", "ROLE_SALES", "ROLE_DRIVER"})
 	@RequestMapping(value = "/buyTicket", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
 	public ResponseEntity<Void> buyTicket(@RequestBody BuyTicketWrapper buyTicket, @PathVariable String tenantid, HttpServletRequest request)
 	{
@@ -139,5 +164,5 @@ public class TicketController
 			ll.buyTickets(currentUser, buyTicket.id_viaje, buyTicket.origen, buyTicket.destino, buyTicket.valor, buyTicket.seleccionados);
 		}
 		return new ResponseEntity<Void>(HttpStatus.OK);
-	}
+	}*/
 }

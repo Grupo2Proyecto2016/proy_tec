@@ -358,8 +358,9 @@ public class LinesLogic implements ILinesLogic
 		return TenantContext.PasajeRepository.getValorPasaje(origen, destino, id_linea);
 	}
 
-	public void buyTickets(Usuario currentUser, long id_viaje, int origen, int destino, Double valor,List<Long> reservados) 
+	public List<Pasaje> buyTickets(Usuario currentUser, long id_viaje, int origen, int destino, Double valor,List<Long> reservados) 
 	{
+		List<Pasaje> tickets = new ArrayList<>();
 		Parada parada_baja = TenantContext.ParadaRepository.findByID(destino);
 		Parada parada_sube = TenantContext.ParadaRepository.findByID(origen);
 		Viaje viaje = TenantContext.ViajeRepository.FindByID(id_viaje);
@@ -379,11 +380,14 @@ public class LinesLogic implements ILinesLogic
 			ticketToPersist.setNumero(auxNum.toString());
 			ticketToPersist.setId_pasaje(0);
 			TenantContext.LineaRepository.InsertTicket(ticketToPersist);
+			tickets.add(ticketToPersist);
 		}
+		return tickets;
 	}
 	
-	public void buyTickets(Usuario compraUser, Usuario createUser, long id_viaje, int origen, int destino, Double valor,List<Long> reservados) 
+	public List<Pasaje> buyTickets(Usuario compraUser, Usuario createUser, long id_viaje, int origen, int destino, Double valor,List<Long> reservados) 
 	{
+		List<Pasaje> tickets = new ArrayList<>();
 		Parada parada_baja = TenantContext.ParadaRepository.findByID(destino);
 		Parada parada_sube = TenantContext.ParadaRepository.findByID(origen);
 		Viaje viaje = TenantContext.ViajeRepository.FindByID(id_viaje);
@@ -403,11 +407,14 @@ public class LinesLogic implements ILinesLogic
 			ticketToPersist.setNumero(auxNum.toString());
 			ticketToPersist.setId_pasaje(0);
 			TenantContext.LineaRepository.InsertTicket(ticketToPersist);
+			tickets.add(ticketToPersist);
 		}
+		return tickets;
 	}
 	
-	public void buyTickets(String ci_receptor, Usuario createUser, long id_viaje, int origen, int destino, Double valor,List<Long> reservados) 
+	public List<Pasaje> buyTickets(String ci_receptor, Usuario createUser, long id_viaje, int origen, int destino, Double valor,List<Long> reservados) 
 	{
+		List<Pasaje> tickets = new ArrayList<>();
 		Parada parada_baja = TenantContext.ParadaRepository.findByID(destino);
 		Parada parada_sube = TenantContext.ParadaRepository.findByID(origen);
 		Viaje viaje = TenantContext.ViajeRepository.FindByID(id_viaje);
@@ -428,7 +435,9 @@ public class LinesLogic implements ILinesLogic
 			ticketToPersist.setNumero(auxNum.toString());
 			ticketToPersist.setId_pasaje(0);
 			TenantContext.LineaRepository.InsertTicket(ticketToPersist);
+			tickets.add(ticketToPersist);
 		}
+		return tickets;
 	}
 
 	public void DeleteTicket(Pasaje ticket) 
