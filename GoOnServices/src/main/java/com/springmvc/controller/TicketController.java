@@ -23,6 +23,7 @@ import com.springmvc.entities.tenant.Pasaje;
 import com.springmvc.entities.tenant.Usuario;
 import com.springmvc.entities.tenant.Viaje;
 import com.springmvc.entities.tenant.ViajesBuscados;
+import com.springmvc.enums.UserRol;
 import com.springmvc.exceptions.CollectTicketException;
 import com.springmvc.logic.implementations.LinesLogic;
 import com.springmvc.logic.implementations.PackageLogic;
@@ -157,20 +158,28 @@ public class TicketController
 		LinesLogic ll = new LinesLogic(tenantid);
 		List<Pasaje> tickets = null;
 		
-		if (buyTicket.rUser != null)
+		if (currentUser.getRol() == UserRol.Client)
 		{
-			UsersLogic ul = new UsersLogic(tenantid);
-			Usuario comprador = ul.GetUserByName(buyTicket.rUser);
-			tickets = ll.buyTickets(comprador, currentUser, buyTicket.id_viaje, buyTicket.origen, buyTicket.destino, buyTicket.valor, buyTicket.seleccionados);
+			tickets = ll.ClientBuyTickets(currentUser, buyTicket.id_viaje, buyTicket.origen, buyTicket.destino, buyTicket.valor, buyTicket.seleccionados);
 		}
-		else if (buyTicket.rDoc != null)
+		else if(currentUser.getRol() == UserRol.Sales)
 		{
-			tickets = ll.buyTickets(buyTicket.rDoc, currentUser, buyTicket.id_viaje, buyTicket.origen, buyTicket.destino, buyTicket.valor, buyTicket.seleccionados);
+			if (buyTicket.rUser != null)
+			{
+				UsersLogic ul = new UsersLogic(tenantid);
+				Usuario comprador = ul.GetUserByName(buyTicket.rUser);
+				tickets = ll.SalesBuyTicketsFromUser(comprador, currentUser, buyTicket.id_viaje, buyTicket.origen, buyTicket.destino, buyTicket.valor, buyTicket.seleccionados);
+			}
+			else if (buyTicket.rDoc != null)
+			{
+				tickets = ll.SalesBuyTicketsFromCI(buyTicket.rDoc, currentUser, buyTicket.id_viaje, buyTicket.origen, buyTicket.destino, buyTicket.valor, buyTicket.seleccionados);
+			}
 		}
-		else
+		else if(currentUser.getRol() == UserRol.Driver)
 		{
-			tickets = ll.buyTickets(currentUser, buyTicket.id_viaje, buyTicket.origen, buyTicket.destino, buyTicket.valor, buyTicket.seleccionados);
+			tickets = ll.DriverBuyTickets(currentUser, buyTicket.id_viaje, buyTicket.origen, buyTicket.destino, buyTicket.valor, buyTicket.seleccionados);
 		}
+		
 		return new ResponseEntity<List<Pasaje>>(tickets, HttpStatus.OK);
 	}
 	

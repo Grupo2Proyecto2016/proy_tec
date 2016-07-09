@@ -358,7 +358,7 @@ public class LinesLogic implements ILinesLogic
 		return TenantContext.PasajeRepository.getValorPasaje(origen, destino, id_linea);
 	}
 
-	public List<Pasaje> buyTickets(Usuario currentUser, long id_viaje, int origen, int destino, Double valor,List<Long> reservados) 
+	public List<Pasaje> ClientBuyTickets(Usuario currentUser, long id_viaje, int origen, int destino, Double valor,List<Long> reservados) 
 	{
 		List<Pasaje> tickets = new ArrayList<>();
 		Parada parada_baja = TenantContext.ParadaRepository.findByID(destino);
@@ -385,7 +385,7 @@ public class LinesLogic implements ILinesLogic
 		return tickets;
 	}
 	
-	public List<Pasaje> buyTickets(Usuario compraUser, Usuario createUser, long id_viaje, int origen, int destino, Double valor,List<Long> reservados) 
+	public List<Pasaje> SalesBuyTicketsFromUser(Usuario compraUser, Usuario createUser, long id_viaje, int origen, int destino, Double valor,List<Long> reservados) 
 	{
 		List<Pasaje> tickets = new ArrayList<>();
 		Parada parada_baja = TenantContext.ParadaRepository.findByID(destino);
@@ -412,7 +412,7 @@ public class LinesLogic implements ILinesLogic
 		return tickets;
 	}
 	
-	public List<Pasaje> buyTickets(String ci_receptor, Usuario createUser, long id_viaje, int origen, int destino, Double valor,List<Long> reservados) 
+	public List<Pasaje> SalesBuyTicketsFromCI(String ci_receptor, Usuario createUser, long id_viaje, int origen, int destino, Double valor,List<Long> reservados) 
 	{
 		List<Pasaje> tickets = new ArrayList<>();
 		Parada parada_baja = TenantContext.ParadaRepository.findByID(destino);
@@ -430,6 +430,32 @@ public class LinesLogic implements ILinesLogic
 			//ticketToPersist.setUser_compra(currentUser);
 			ticketToPersist.setCi_receptor(ci_receptor);
 			ticketToPersist.setUsr_crea(createUser);
+			ticketToPersist.setViaje(viaje);
+			UUID auxNum = UUID.randomUUID();
+			ticketToPersist.setNumero(auxNum.toString());
+			ticketToPersist.setId_pasaje(0);
+			TenantContext.LineaRepository.InsertTicket(ticketToPersist);
+			tickets.add(ticketToPersist);
+		}
+		return tickets;
+	}
+	
+	public List<Pasaje> DriverBuyTickets(Usuario driver, long id_viaje, int origen, int destino, Double valor,List<Long> reservados) 
+	{
+		List<Pasaje> tickets = new ArrayList<>();
+		Parada parada_baja = TenantContext.ParadaRepository.findByID(destino);
+		Parada parada_sube = TenantContext.ParadaRepository.findByID(origen);
+		Viaje viaje = TenantContext.ViajeRepository.FindByID(id_viaje);
+		for(int x = 0; x < reservados.size(); x++)
+		{
+			Pasaje ticketToPersist = new Pasaje();
+			Asiento asiento = TenantContext.AsientoRepository.getByID(reservados.get(x));
+			ticketToPersist.setAsiento(asiento);
+			ticketToPersist.setCosto(valor);
+			ticketToPersist.setEstado(TicketStatus.cashed.getValue());			
+			ticketToPersist.setParada_baja(parada_baja);			
+			ticketToPersist.setParada_sube(parada_sube);
+			ticketToPersist.setUsr_crea(driver);
 			ticketToPersist.setViaje(viaje);
 			UUID auxNum = UUID.randomUUID();
 			ticketToPersist.setNumero(auxNum.toString());

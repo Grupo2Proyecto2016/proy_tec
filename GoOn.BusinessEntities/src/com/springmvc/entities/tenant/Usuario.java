@@ -1,5 +1,6 @@
 package com.springmvc.entities.tenant;
 
+import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.springmvc.enums.UserRol;
 
 @Entity
 public class Usuario {
@@ -95,6 +97,31 @@ public class Usuario {
 			break;
 		}
 		result.add(auth);
+		return result;
+	}
+	
+	@Transient
+	public UserRol getRol()
+	{
+		UserRol result = null;
+		switch (rol_id_rol) 
+		{
+		case 1:
+			result = UserRol.Admin;
+			break;
+		case 2:
+			result = UserRol.Sales;
+			break;
+		case 3:
+			result = UserRol.Driver;
+			break;
+		case 4:
+			result = UserRol.Client;
+			break;
+		case 5:
+			result = UserRol.Coordinator;
+			break;
+		}
 		return result;
 	}
 	
