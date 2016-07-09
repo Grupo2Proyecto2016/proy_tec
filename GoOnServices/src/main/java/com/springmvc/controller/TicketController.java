@@ -1,4 +1,4 @@
-package com.springmvc.controller;
+	package com.springmvc.controller;
 
 import java.util.List;
 
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.springmvc.entities.tenant.Asiento;
 import com.springmvc.entities.tenant.Encomienda;
+import com.springmvc.entities.tenant.Linea;
 import com.springmvc.entities.tenant.Parada;
 import com.springmvc.entities.tenant.Pasaje;
 import com.springmvc.entities.tenant.Usuario;
@@ -26,6 +27,7 @@ import com.springmvc.exceptions.CollectTicketException;
 import com.springmvc.logic.implementations.LinesLogic;
 import com.springmvc.logic.implementations.PackageLogic;
 import com.springmvc.logic.implementations.UsersLogic;
+import com.springmvc.requestWrappers.AvailableSeatsWrapper;
 import com.springmvc.requestWrappers.BuyTicketWrapper;
 import com.springmvc.requestWrappers.CollectTicketWrapper;
 import com.springmvc.requestWrappers.CustomResponseWrapper;
@@ -61,6 +63,35 @@ public class TicketController
 	{
 		List<Asiento> asientos = new LinesLogic(tenantid).getSeats(searchData.id_viaje, searchData.id_linea, searchData.origen, searchData.destino, searchData.id_vehiculo); 
 		return new ResponseEntity<List<Asiento>> (asientos, HttpStatus.OK);		
+	}
+	
+	@Secured({"ROLE_DRIVER"})
+	@RequestMapping(value = "/getSeatsDriving", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
+	public ResponseEntity<AvailableSeatsWrapper> getSeatsDriving(@RequestBody seatsFormWrapper searchData, @PathVariable String tenantid)
+	{
+		int freeSeats = 0;
+		AvailableSeatsWrapper response = new AvailableSeatsWrapper();
+		response.success = true;
+		
+		LinesLogic ll = new LinesLogic(tenantid);
+		Linea line = ll.GetById(searchData.id_linea);
+		response.cost = ll.GetTravelCost(searchData.origen, searchData.destino, searchData.id_linea);
+		List<Asiento> asientos = new LinesLogic(tenantid).getSeats(searchData.id_viaje, searchData.id_linea, searchData.origen, searchData.destino, searchData.id_vehiculo); 
+		response.seats = asientos;
+		
+		for (Asiento seat : asientos) 
+		{
+			if(!seat.getReservado()) 
+			{
+				freeSeats++;
+			}
+		}
+		if(freeSeats == 0 && !line.getViaja_parado())
+		{
+			response.success = false;
+			response.msg = "No hay más asientos disponibles.";
+		}
+		return new ResponseEntity<AvailableSeatsWrapper> (response, HttpStatus.OK);		
 	}
 	
 	@RequestMapping(value = "/getTicketValue", method = RequestMethod.POST, consumes="application/json", produces = "application/json")

@@ -30,7 +30,7 @@ public class Linea {
 	private Double costo_maximo;
 	private Double costo_minimo;
 	private int tiempo_estimado; //en minutos
-	private Boolean viaja_parado;
+	private Boolean viaja_parado = false;
 	private Boolean habilitado;
 	
 	@ManyToMany(targetEntity=Parada.class, cascade = {CascadeType.ALL})	

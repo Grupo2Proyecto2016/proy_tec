@@ -19,7 +19,7 @@ public class Asiento {
 	private Boolean habilitado;
 	
 	@Transient
-	private Boolean reservado;
+	private Boolean reservado = false;
 	
 	public long getId_asiento() {
 		return id_asiento;
