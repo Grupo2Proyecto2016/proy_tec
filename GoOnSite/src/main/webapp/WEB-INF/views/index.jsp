@@ -17,6 +17,9 @@
 	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-route.js"></script>
 	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.js"></script>
 	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.js"></script>
+	  
+	  <script src="<c:url value='/static/js/qr/qrcode.js' />"></script>
+	  <script src="<c:url value='/static/js/qr/angular-qrcode.js' />"></script>
       <script src="<c:url value='/static/js/app.js' />"></script>
       
 	  <!--ESTILO CUSTOM -->

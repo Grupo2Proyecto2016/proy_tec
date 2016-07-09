@@ -648,18 +648,13 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 					{
 						$.unblockUI();		
 			        	if(response.status == 200)
-			        	{	       
-			        		if (!response.data.success)
-			    			{
-			        			$scope.showSuccessAlert("Los boletos han sido acreditados. Accede a tu panel para descargarlos.");	        			
-			        	    	$("#divTravelForm").removeClass('hidden');
-			        	    	$("#travelsSearchGrid").removeClass('hidden');
-			        	    	$("#seatsConfirmForm").addClass('hidden');    	
-			    			}
-			        		else
-			        		{
-			        			
-			        		}	        		
+			        	{		
+		        			$scope.confirmedSeats = response.data;
+		        			$scope.showSuccessAlert("Los boletos han sido acreditados. Accede a tu panel para descargarlos.");
+		        			$("#seatsInfo").removeClass('hidden');
+		        	    	$("#divTravelForm").removeClass('hidden');
+		        	    	$("#travelsSearchGrid").removeClass('hidden');
+		        	    	$("#seatsConfirmForm").addClass('hidden');
 			        	}
 		    		}
 				);
