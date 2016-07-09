@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springmvc.entities.tenant.Parada;
@@ -80,6 +81,14 @@ public class TerminalsRestController {
 		{
 			return new ResponseEntity<List<Parada>>(new ArrayList<>(), HttpStatus.OK);
 		}
+    }
+	
+	@Secured({"ROLE_DRIVER"})
+	@RequestMapping(value = "/FindNextStationsByOrigin", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<List<Parada>> FindNextStationsByOrigin(@RequestParam long origin, @RequestParam long line, @PathVariable String tenantid, HttpServletRequest request)
+    {
+		List<Parada> stations = new LinesLogic(tenantid).FindNextStationsByOrigin(origin, line);
+		return new ResponseEntity<List<Parada>>(stations, HttpStatus.OK);
     }
 	
 	@Secured({"ROLE_SALES"})
