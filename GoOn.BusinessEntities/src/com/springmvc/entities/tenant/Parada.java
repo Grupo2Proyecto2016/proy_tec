@@ -20,8 +20,8 @@ public class Parada {
 	private String direccion;
 	private double latitud;
 	private double longitud;
-	private Boolean es_terminal;
-	private Boolean es_peaje;
+	private Boolean es_terminal = false;
+	private Boolean es_peaje = false;
 	private float reajuste;
 	
 	@OneToOne(mappedBy="terminal", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
