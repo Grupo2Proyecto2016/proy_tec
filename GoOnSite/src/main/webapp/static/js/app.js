@@ -132,43 +132,45 @@
             if (response.status == 401)
             {
             	$rootScope.user = null;
+            	removeJwtToken();
             	$location.path('home');
-            	if($('#loginModal').hasClass('in') || showingError)
+            	if(!$('#loginModal').hasClass('in') && !$rootScope.showingError)
             	{
-            		//do nothing
-            	}
-            	else
-            	{
-            		showingError = true
+            		$rootScope.showingError = true;
             		$timeout(function () {            
-            			$rootScope.user = null;
             			$("#loginModal").modal("show");
-            			showingError = false;
+            			$rootScope.showingError = false;
             		}, 500);
             	}
             }
             else if(response.status == 500)
             {
-            	if(!$('#errorModal').hasClass('in'))
+            	if(!$('#errorModal').hasClass('in') && !$rootScope.showingError)
             	{
+            		$rootScope.showingError = true;
             		$timeout(function () { 
             			$("#genericErrorModal").modal("show");
+            			$rootScope.showingError = false;
             		}, 500);
             	}
             }
             else if(response.status == -1)
             {
-            	if(!$('#connectErrorModal').hasClass('in'))
+            	if(!$('#connectErrorModal').hasClass('in') && !$rootScope.showingError)
             	{
+            		$rootScope.showingError = true;
             		$timeout(function () {
             			$("#connectErrorModal").modal("show");
+            			$rootScope.showingError = false;
             		}, 500);
             	}
             }
             else if(response.status == 403)
             {
-            	$location.path('home');
-            	$("div.modal-backdrop").remove();
+            	$timeout(function () {
+            		$location.path('home');
+            		$("div.modal-backdrop").remove();
+            	}, 800);
             }
             return $q.resolve(response);
         };

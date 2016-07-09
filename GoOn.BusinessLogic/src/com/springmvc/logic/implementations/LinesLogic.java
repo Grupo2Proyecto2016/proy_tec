@@ -486,4 +486,19 @@ public class LinesLogic implements ILinesLogic
 			}
 		}
 	}
+	
+	public List<Parada> FindNextStationsByOrigin(long id_parada, long id_linea)
+	{
+		return TenantContext.ParadaRepository.findNextStationsByOrigin(id_parada, id_linea);
+	}
+
+	public Linea GetById(int id_linea)
+	{
+		return TenantContext.LineaRepository.findByID(id_linea);
+	}
+	
+	public double GetTravelCost(long origin, long destination, long lineId)
+	{
+		return TenantContext.PasajeRepository.getValorPasaje(origin, destination, lineId);
+	}
 }
