@@ -9,6 +9,13 @@ goOnApp.controller('outBranchesController', function($scope, $http, uiGridConsta
     $scope.markers = [];
     $scope.branchesMarkers = [];
 	
+    
+    $http.post(servicesUrl + 'collectTicket', JSON.stringify({travelId: '1', ticketNumber: '123'}))
+    .then(function(response) 
+	{
+    	var a = 1;
+	});
+    
     $scope.getBranches = function()
     {
     	$http.get(servicesUrl + 'getBranches').success(function(data, status, headers, config) 

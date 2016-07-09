@@ -13,6 +13,7 @@ import javax.persistence.Query;
 import com.springmvc.entities.tenant.Encomienda;
 import com.springmvc.entities.tenant.Pasaje;
 import com.springmvc.enums.TicketStatus;
+import com.springmvc.exceptions.CollectTicketException;
 
 public class PasajeRepository {
 	
@@ -320,6 +321,40 @@ public class PasajeRepository {
 			{
 				pasaje.setEstado(status.getValue());
 			}
+			entityManager.flush();
+			t.commit();
+		}
+		catch(Exception ex)
+		{
+			t.rollback();
+			throw ex;
+		}
+	}
+
+	public Pasaje GetByNumber(String ticketNumber) 
+	{
+		Pasaje result = null;
+		Query q = entityManager.createQuery("SELECT p FROM Pasaje p WHERE p.numero = :num ");
+		q.setParameter("num", ticketNumber);
+		try
+		{
+			result = (Pasaje)q.getSingleResult();
+		}
+		catch(NoResultException ex)
+		{
+			return null;
+		}
+		return result;
+	}
+
+	public void Collect(Pasaje ticket) 
+	{
+		EntityTransaction t = entityManager.getTransaction();
+		
+		try
+		{
+			t.begin();
+			ticket.setEstado(TicketStatus.cashed.getValue());
 			entityManager.flush();
 			t.commit();
 		}

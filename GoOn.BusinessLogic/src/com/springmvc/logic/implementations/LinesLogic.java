@@ -27,6 +27,7 @@ import com.springmvc.enums.TicketStatus;
 import com.springmvc.exceptions.BusInServiceException;
 import com.springmvc.exceptions.BusTravelConcurrencyException;
 import com.springmvc.exceptions.BusyDriverException;
+import com.springmvc.exceptions.CollectTicketException;
 import com.springmvc.logic.interfaces.ILinesLogic;
 
 public class LinesLogic implements ILinesLogic
@@ -444,5 +445,36 @@ public class LinesLogic implements ILinesLogic
 	{
 		TenantContext.PasajeRepository.updateByTravel(travelId, TicketStatus.InTravel);
 		TenantContext.EncomiendaRepository.updateByTravel(travelId, PackageStatus.Carring);
+	}
+
+	public void CollectTicket(long travelId, String ticketNumber) throws CollectTicketException 
+	{
+		Pasaje ticket = TenantContext.PasajeRepository.GetByNumber(ticketNumber);
+		if(ticket == null)
+		{
+			throw new CollectTicketException("El boleto es inválido.");
+		}
+		else
+		{
+			if(ticket.getViaje().getId_viaje() != travelId)
+			{
+				throw new CollectTicketException(String.format("El boleto corresponde a otro viaje. Linea %s, Coche Nº %s", 
+						ticket.getViaje().getLinea().getNumero(),
+						ticket.getViaje().getVehiculo().getId_vehiculo()
+				));
+			}
+			else if(ticket.getEstado() == TicketStatus.Reserved.getValue())
+			{
+				throw new CollectTicketException("El boleto no fue abonado.");
+			}
+			else if(ticket.getEstado() == TicketStatus.cashed.getValue())
+			{
+				throw new CollectTicketException("El boleto ya fue utilizado anteriormente.");
+			}
+			else
+			{
+				TenantContext.PasajeRepository.Collect(ticket);
+			}
+		}
 	}
 }

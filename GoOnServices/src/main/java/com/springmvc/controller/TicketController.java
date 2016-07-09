@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springmvc.entities.tenant.Asiento;
@@ -21,10 +22,13 @@ import com.springmvc.entities.tenant.Pasaje;
 import com.springmvc.entities.tenant.Usuario;
 import com.springmvc.entities.tenant.Viaje;
 import com.springmvc.entities.tenant.ViajesBuscados;
+import com.springmvc.exceptions.CollectTicketException;
 import com.springmvc.logic.implementations.LinesLogic;
 import com.springmvc.logic.implementations.PackageLogic;
 import com.springmvc.logic.implementations.UsersLogic;
 import com.springmvc.requestWrappers.BuyTicketWrapper;
+import com.springmvc.requestWrappers.CollectTicketWrapper;
+import com.springmvc.requestWrappers.CustomResponseWrapper;
 import com.springmvc.requestWrappers.TravelSearchWrapper;
 import com.springmvc.requestWrappers.seatsFormWrapper;
 import com.springmvc.utils.UserContext;
@@ -89,6 +93,29 @@ public class TicketController
 		List<Pasaje> tickets = ll.GetUserTickets(currentUser);
 
 		return new ResponseEntity<List<Pasaje>>(tickets, HttpStatus.OK);
+	}
+	
+	@Secured({"ROLE_DRIVER"})
+	@RequestMapping(value = "/collectTicket", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity<CustomResponseWrapper> collectTicket(@RequestBody CollectTicketWrapper collectTicket, @PathVariable String tenantid)
+	{
+		CustomResponseWrapper response = new CustomResponseWrapper();
+		LinesLogic ll = new LinesLogic(tenantid);
+		
+		try 
+		{
+			ll.CollectTicket(collectTicket.travelId, collectTicket.ticketNumber);
+			response.setSuccess(true);
+			response.setMsg("El boleto ha sido cobrado");
+		}
+		catch (CollectTicketException e)
+		{
+			response.setSuccess(false);
+			response.setMsg(e.getMessage());
+			System.out.println(e.getMessage());
+		}
+		
+		return new ResponseEntity<CustomResponseWrapper>(response, HttpStatus.OK);
 	}
 
 	@Secured({"ROLE_CLIENT", "ROLE_SALES"})

@@ -141,6 +141,7 @@
             	{
             		showingError = true
             		$timeout(function () {            
+            			$rootScope.user = null;
             			$("#loginModal").modal("show");
             			showingError = false;
             		}, 500);
