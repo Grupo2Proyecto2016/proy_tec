@@ -102,21 +102,21 @@ goOnApp.controller('mantenimientoController', function($scope, $http, uiGridCons
 			
 			$scope.mantenimientoForm.user_crea = $scope.user
 			$http.post(servicesUrl +'createMantenimiento', JSON.stringify($scope.mantenimientoForm))
-			.success(function()
-			{
+			.then(function(result)
+			{	
 				$.unblockUI();
-				$scope.hideForm();
-				$scope.initForm();
-				$scope.showSuccessAlert("Vehiculo enviado al mantenimiento.");	
-				$scope.getMantenimientos();				
-			})
-			.error(function()
-			{
-				$.unblockUI();
-				$scope.error_message = 'Ha ocurrido un error al enviar el vehículo. Intente de nuevo en unos instantes.'; 
-				$("#errorModal").modal("toggle");
-			})
-			;    			
+				if(result.data.success)
+				{
+					$scope.showSuccessAlert(result.data.msg);		
+					$scope.getMantenimientos();	
+				}
+				else
+				{
+					$scope.error_message = 'Ha ocurrido un error al enviar el vehículo. ' + result.data.msg; 
+					$("#errorModal").modal("toggle");
+				}
+			});
+			
 		}
 	};
 	

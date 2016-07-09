@@ -174,7 +174,7 @@ public class LinesLogic implements ILinesLogic
 		return TenantContext.ViajeRepository.GetByDiverAndDate(userId, beginTravel.getTime(), endTravel.getTime());
 	}
 
-	private List<Viaje> GetBusTravels(long id_vehiculo, Calendar beginTravel, Calendar endTravel) 
+	public List<Viaje> GetBusTravels(long id_vehiculo, Calendar beginTravel, Calendar endTravel) 
 	{
 		return TenantContext.ViajeRepository.GetByBus(id_vehiculo, beginTravel.getTime(), endTravel.getTime());
 	}
