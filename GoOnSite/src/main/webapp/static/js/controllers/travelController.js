@@ -598,7 +598,14 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 		sel_seat.price = this.data().price;
 		sel_seat.id = this.settings.id;
 		$scope.reservados.push(sel_seat);*/
-    	$scope.rolCreador = $scope.$parent.user.rol_id_rol;
+    	if($scope.$parent.user == null)
+    	{
+    		$scope.rolCreador = 0;
+    	}
+    	else
+    	{
+    		$scope.rolCreador = $scope.$parent.user.rol_id_rol;
+    	}
     	$("#selectTicketsModal").modal('hide');
     	$("#divTravelForm").addClass('hidden');
     	$("#travelsSearchGrid").addClass('hidden');
@@ -607,45 +614,61 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     
     $scope.buyTicket = function()
 	{
-		$.blockUI();
-		$scope.seatsForm.seleccionados = [];
-		for(var i = 0; i < $scope.reservados.length; i++) 
-		{
-			$scope.seatsForm.seleccionados.push($scope.reservados[i].id);			
-		}  
-		if($scope.rOption == "1")
-		{
-			$scope.seatsForm.rDoc = null;
-		}
-		else
-		{
-			$scope.seatsForm.rUser = null;
-		}	
-		if ($scope.rolCreador == "4")
-		{
-			$scope.seatsForm.rDoc = null;
-			$scope.seatsForm.rUser = null;
-		}	
-		$http.post(servicesUrl +'buyTicket', JSON.stringify($scope.seatsForm))
+    	$.blockUI();
+    	$http.get(servicesUrl + 'getUserInfo')
 		.then(function(response) 
+		{
+			if(response.status == 404)
 			{
-				$.unblockUI();		
-	        	if(response.status == 200)
-	        	{	       
-	        		if (!response.data.success)
-	    			{
-	        			$scope.showSuccessAlert("Los boletos han sido acreditados. Accede a tu panel para descargarlos.");	        			
-	        	    	$("#divTravelForm").removeClass('hidden');
-	        	    	$("#travelsSearchGrid").removeClass('hidden');
-	        	    	$("#seatsConfirmForm").addClass('hidden');    	
-	    			}
-	        		else
-	        		{
-	        			
-	        		}	        		
-	        	}
-    		}
-		);				
+				$("#loginModal").modal("show");
+				$.unblockUI();
+			}
+			else
+			{				
+				$scope.seatsForm.seleccionados = [];
+				for(var i = 0; i < $scope.reservados.length; i++) 
+				{
+					$scope.seatsForm.seleccionados.push($scope.reservados[i].id);			
+				}  
+				if($scope.rOption == "1")
+				{
+					$scope.seatsForm.rDoc = null;
+				}
+				else
+				{
+					$scope.seatsForm.rUser = null;
+				}	
+				if ($scope.rolCreador == "4")
+				{
+					$scope.seatsForm.rDoc = null;
+					$scope.seatsForm.rUser = null;
+				}	
+				$http.post(servicesUrl +'buyTicket', JSON.stringify($scope.seatsForm))
+				.then(function(response) 
+					{
+						$.unblockUI();		
+			        	if(response.status == 200)
+			        	{	       
+			        		if (!response.data.success)
+			    			{
+			        			$scope.showSuccessAlert("Los boletos han sido acreditados. Accede a tu panel para descargarlos.");	        			
+			        	    	$("#divTravelForm").removeClass('hidden');
+			        	    	$("#travelsSearchGrid").removeClass('hidden');
+			        	    	$("#seatsConfirmForm").addClass('hidden');    	
+			    			}
+			        		else
+			        		{
+			        			
+			        		}	        		
+			        	}
+		    		}
+				);
+			}
+			
+		}
+		);
+    	
+						
 	};
 	$scope.showBuyDialog = function(row)
     {

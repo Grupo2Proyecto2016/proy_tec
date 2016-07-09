@@ -37,16 +37,20 @@
 					<div class="form-group">
 						<label class="control-label col-sm-4" for="rut">Rut:</label>
 						<div class="col-sm-8">
-							<input type="number" name="rut" class="form-control"
-								ng-model="companyForm.rut" required>
+							<input type="text" pattern="[0-9]+"
+								title="Solo se aceptan números" name="rut"
+								class="form-control" ng-model="companyForm.rut"
+								required>
 						</div>
 					</div>
 	
 					<div class="form-group">
 						<label class="control-label col-sm-4" for="phone">Teléfono:</label>
 						<div class="col-sm-8">
-							<input type="number" name="rut" class="form-control"
-								ng-model="companyForm.phone" required>
+							<input type="text" pattern="[0-9]+"
+								title="Solo se aceptan números" name="telefono"
+								class="form-control" ng-model="companyForm.phone"
+								required>
 						</div>
 					</div>
 	

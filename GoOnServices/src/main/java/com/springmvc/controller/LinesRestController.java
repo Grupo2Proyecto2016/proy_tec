@@ -108,10 +108,11 @@ public class LinesRestController{
 			Linea vuelta = new Linea();	
 			
 			Parada parada_origen_vuelta = tl.findParadaByID(linesWrapper.getParadas().get(linesWrapper.getParadas().size()-1).getId_parada());			 
-			Parada parada_destino_vuelta = tl.findParadaByID(linesWrapper.getParadas().get(0).getId_parada());
-			
-			vuelta.setDestino(parada_destino_vuelta);
 			vuelta.setOrigen(parada_origen_vuelta);
+			
+			Parada parada_destino_vuelta = tl.findParadaByID(linesWrapper.getParadas().get(0).getId_parada());			
+			vuelta.setDestino(parada_destino_vuelta);
+			
 			
 			vuelta.setNumero(linesWrapper.getNumero());
 			vuelta.setCosto_minimo(linesWrapper.getCosto_minimo());
@@ -125,20 +126,22 @@ public class LinesRestController{
 			{
 				if (linesWrapper.getParadasV().get(i).getId_parada() > 0)
 				{
-					Parada auxParada = tl.findParadaByID(linesWrapper.getParadasV().get(i).getId_parada());
-					vuelta.getParadas().add(auxParada);
+					long auxID = linesWrapper.getParadasV().get(i).getId_parada();
+					Parada auxParadaV = tl.findParadaByID(auxID);
+					
+					vuelta.getParadas().add(auxParadaV);
 				}
 				else
 				{
 					Parada auxParada = new Parada();
-					auxParada.setId_parada(linesWrapper.getParadas().get(i).getId_parada());
-					auxParada.setDescripcion(linesWrapper.getParadas().get(i).getDescripcion());
-					auxParada.setDireccion(linesWrapper.getParadas().get(i).getDireccion());
-					auxParada.setEs_peaje(linesWrapper.getParadas().get(i).getEs_peaje());
-					auxParada.setEs_terminal(linesWrapper.getParadas().get(i).getEs_terminal());
-					auxParada.setLatitud(linesWrapper.getParadas().get(i).getLatitud());
-					auxParada.setLongitud(linesWrapper.getParadas().get(i).getLongitud());
-					auxParada.setReajuste(linesWrapper.getParadas().get(i).getReajuste());
+					auxParada.setId_parada(linesWrapper.getParadasV().get(i).getId_parada());
+					auxParada.setDescripcion(linesWrapper.getParadasV().get(i).getDescripcion());
+					auxParada.setDireccion(linesWrapper.getParadasV().get(i).getDireccion());
+					auxParada.setEs_peaje(linesWrapper.getParadasV().get(i).getEs_peaje());
+					auxParada.setEs_terminal(linesWrapper.getParadasV().get(i).getEs_terminal());
+					auxParada.setLatitud(linesWrapper.getParadasV().get(i).getLatitud());
+					auxParada.setLongitud(linesWrapper.getParadasV().get(i).getLongitud());
+					auxParada.setReajuste(linesWrapper.getParadasV().get(i).getReajuste());
 					vuelta.getParadas().add(auxParada);
 				}
 			}

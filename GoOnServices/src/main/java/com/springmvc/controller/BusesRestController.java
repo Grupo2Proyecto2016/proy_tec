@@ -45,6 +45,7 @@ public class BusesRestController {
 		{
 	    	int number = i+1;
 			Asiento auxAsiento = new Asiento();
+			auxAsiento.setId_asiento(0);
 			auxAsiento.setNumero(number);
 			auxAsiento.setEs_ventana(true);
 			auxAsiento.setHabilitado(true);	
@@ -57,6 +58,7 @@ public class BusesRestController {
 	    	int number = i+1;
 	    	boolean isWindow = number % 4 == 0 || number % 4 == 1;
 			Asiento auxAsiento = new Asiento();
+			auxAsiento.setId_asiento(0);
 			auxAsiento.setNumero(number);
 			auxAsiento.setEs_ventana(isWindow);
 			auxAsiento.setHabilitado(true);	
