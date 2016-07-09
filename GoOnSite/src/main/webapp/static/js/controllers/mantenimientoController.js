@@ -107,6 +107,7 @@ goOnApp.controller('mantenimientoController', function($scope, $http, uiGridCons
 				$.unblockUI();
 				if(result.data.success)
 				{
+					$scope.hideForm();
 					$scope.showSuccessAlert(result.data.msg);		
 					$scope.getMantenimientos();	
 				}

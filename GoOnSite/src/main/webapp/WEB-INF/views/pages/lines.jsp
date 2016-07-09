@@ -64,7 +64,7 @@
 							    </div>
 							</div>
 							<div class="col-sm-6">
-								<label class="control-label col-sm-3" for="tiempo_estimado">Duración:</label>
+								<label class="control-label col-sm-3" for="tiempo_estimado" title="Se le suma la demora preconfigurada" >Duración por parada (Minutos):</label>
 								<div class="col-sm-9">
 									<input type="text" pattern="[0-9]+" title="Solo se aceptan números" class="form-control" name="tiempo_estimado" ng-model="lineForm.tiempo_estimado" required>
 							    </div>				
@@ -227,7 +227,7 @@
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="hideForm()">
 						<span aria-hidden="true">×</span>
 						</button> 
-						<h5 class="modal-title">Lista Paradas
+						<h5 class="modal-title">Lista de Paradas
 							<button type="button" class="btn btn-default btn-xs" id="btnReajusta" ng-click="reajustaValores()" ng-show="lineForm.calculo==2"><i class="fa fa-retweet fa-lg"></i>Calcular Reajustes</button>
 						</h5>
 					</div>				
@@ -290,6 +290,7 @@
 			<div class="panel panel-default">				
 				<div class="panel-heading">
 					<div> 
+					<h5 class="modal-title">Viaje de vuelta</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="hideForm()">
 						<span aria-hidden="true">×</span>
 						</button> 
@@ -313,7 +314,7 @@
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="hideForm()">
 						<span aria-hidden="true">×</span>
 						</button> 
-						<h5 class="modal-title">Lista Paradas
+						<h5 class="modal-title">Lista de Paradas
 							<button type="button" class="btn btn-default btn-xs" id="btnReajustaV" ng-click="reajustaValoresV()" ng-show="lineForm.calculo==2"><i class="fa fa-retweet fa-lg"></i>Calcular Reajustes</button>
 						</h5>
 					</div>				
