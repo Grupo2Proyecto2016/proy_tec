@@ -1,13 +1,13 @@
 // create the module and name it scotchApp
     var goOnApp = angular.module('goOnApp', ['ngRoute', 'ngAnimate', 'ngMessages', 'ui.grid', 'ui.grid.pagination', 'ui.grid.selection', 'monospaced.qrcode']);
     
-    goOnApp.run(function($rootScope) 
+    goOnApp.run(function($rootScope, $templateCache) 
 	{
     	$rootScope.showingError = false;
         $rootScope.user = null;
-        $rootScope.$on('$viewContentLoaded', function() {
-            $templateCache.removeAll();
-         });
+//        $rootScope.$on('$viewContentLoaded', function() {
+//            $templateCache.removeAll();
+//         });
     });
     
     goOnApp.filter('SiNo', function() {
@@ -203,7 +203,7 @@
             return response;
         }
     }); 
-                                 
+                          
     goOnApp.config(['$httpProvider', function($httpProvider) {
         $httpProvider.interceptors.push('authInterceptor');
         $httpProvider.interceptors.push('tokenInterceptor');
