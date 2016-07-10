@@ -181,4 +181,14 @@ goOnApp.controller('userPanelController', function($scope, $http, $location, uiG
     		})
 		;
     };
+    
+    $scope.showTicket = function(ticket)
+    {
+    	$scope.ticketToShow = ticket;
+    	$("#viewTicketModal").modal('show');
+    };
+    $scope.printDiv = function()
+    {
+        window.print();
+    };
 });

@@ -39,6 +39,12 @@
 												<td>{{ticket.asiento.numero}}</td>
 												<td>$ {{ticket.costo}}</td>
 												<td>{{ getTicketStatus(ticket.estado)}}</td>
+												
+												<td>
+													<a ng-click="showTicket(ticket)" class="btn btn-sm btn-info" style="float: right;">
+														<i class="fa fa-eye" style="margin-right: 5px;"></i>Ver
+													</a>
+												</td>
 												<td>
 													<a ng-show="ticket.estado == 3" class="btn btn-sm btn-success" style="float: right;">
 														<i class="fa fa-map-marker fa-lg " style="margin-right: 5px;"></i>Seguir
@@ -313,6 +319,45 @@
 		</div>
 	</div>
 
+	<div class="modal fade" id="viewTicketModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header text-center form">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h3 class="modal-title" id="myModalLabel">Boleto</h3>
+	        <h5 class="text-center" ng-click="printDiv()"> &nbsp;<i class="fa fa-print" aria-hidden="true"></i> Imprimir</h5>
+	      </div>
+	      <div class="modal-body">
+		        <div class="panel-body" id="printSection">	
+					<div id="forPrint">
+					    <div>
+					        <div>
+					            <div class="well well-sm">
+					                <div class="row">
+					                    <div class="col-sm-6 col-md-4">
+					                    	<qrcode version="3" error-correction-level="M" size="150" data="{{ticketToShow.numero}}"></qrcode>
+					                    </div>
+					                    <div class="col-sm-6 col-md-8">
+					                    	<h4><i class="fa fa-bus" aria-hidden="true"></i> Línea {{ticketToShow.viaje.linea.id_linea}} - Coche: {{ticketToShow.viaje.vehiculo.id_vehiculo}} - <i class="fa fa-hashtag" aria-hidden="true"> Asiento</i> {{ticketToShow.asiento.numero}}</h4>
+					                        <small> <i class="fa fa-map-marker"></i>&nbsp;Desde:<cite title="Montevideo">{{ticketToShow.parada_sube.descripcion}}</cite></small>
+					                        <small> <i class="fa fa-map-marker"></i>&nbsp;Hasta:<cite title="Piriapolis">{{ticketToShow.parada_baja.descripcion}}</cite></small>
+					                        <p>
+					                        	<i class="fa fa-calendar"></i>&nbsp;Fecha: {{ticketToShow.viaje.inicio | date:'dd-MM-yyyy'}}
+					                            <br />
+					                            <i class="fa fa-clock-o"></i>&nbsp;Salida de Terminal:{{ticketToShow.viaje.inicio | date:'HH:nn'}} 
+					                            <br />
+					                        </p>		                        
+					                    </div>
+					                </div>
+					            </div>
+					        </div>
+					    </div>
+					</div>
+				</div>
+	      </div>
+	    </div>
+	  </div>
+	</div>
 
 
 	<!-- DESPUES DE ACA NO SE PUEDE ESCRIBIR NADA  -->

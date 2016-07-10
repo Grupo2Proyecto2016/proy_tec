@@ -111,6 +111,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	            	checker.run();
                 }
 	        }).start();
-	        //checker.run();
 	    }
 } 
