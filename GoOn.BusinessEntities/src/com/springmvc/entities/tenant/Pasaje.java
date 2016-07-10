@@ -16,6 +16,8 @@ public class Pasaje {
 	private Double costo;
 	private int estado;
 	
+	private String paymentId;
+	
 	private String numero; 
 	
 	@ManyToOne(fetch=FetchType.EAGER)
@@ -110,5 +112,13 @@ public class Pasaje {
 
 	public void setCi_receptor(String ci_receptor) {
 		this.ci_receptor = ci_receptor;
+	}
+
+	public String getPaymentId() {
+		return paymentId;
+	}
+
+	public void setPaymentId(String paymentId) {
+		this.paymentId = paymentId;
 	}
 }
