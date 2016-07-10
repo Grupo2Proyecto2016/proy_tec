@@ -527,4 +527,9 @@ public class LinesLogic implements ILinesLogic
 	{
 		return TenantContext.PasajeRepository.getValorPasaje(origin, destination, lineId);
 	}
+
+	public List<Pasaje> GetActiveTickets(Date from, Date to) 
+	{
+		return TenantContext.PasajeRepository.GetActive(from, to);
+	}
 }

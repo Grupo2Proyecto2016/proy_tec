@@ -120,6 +120,11 @@
     		controller  : 'packageController'
     	})
     	
+    	.when('/tickets', {
+    		templateUrl : tenantUrlPart + 'pages/tickets.html',
+    		controller  : 'ticketController'
+    	})
+    	
 		.otherwise({
 			redirectTo: '/'
     	});
@@ -354,7 +359,7 @@
         $scope.signOut = function()
         {
         	removeJwtToken();
-        	$scope.user = null;
+        	$rootScope.user = null;
         	$location.path('home');
         };
     });
