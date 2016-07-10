@@ -536,6 +536,8 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 						 */
 						$counter.text($scope.sc.find('selected').length+1);
 						$total.text($scope.recalculateTotal($scope.sc)+this.data().price);
+						$scope.precio_total = $scope.precio_total+this.data().price;
+						$scope.$digest;
 						$scope.$apply();
 						return 'selected';
 					} 
@@ -545,6 +547,8 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 						$counter.text($scope.sc.find('selected').length-1);
 						//and total
 						$total.text($scope.recalculateTotal($scope.sc)-this.data().price);
+						$scope.precio_total = $scope.precio_total-this.data().price;
+						$scope.$digest;
 						
 						for(var i = 0; i < $scope.reservados.length; i++) 
 						{
@@ -586,8 +590,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 		sc.find('selected').each(function () {
 			total += this.data().price;
 		});		
-		$scope.precio_total = total;
-		$scope.$digest;
+		$scope.precio_total = total;		
 		return total;		
 	}
 
