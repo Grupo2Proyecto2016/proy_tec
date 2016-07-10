@@ -117,7 +117,7 @@
 	                                    <div class="col-sm-12">
 	                                        <p class="text-center"><strong>{{$root.user.nombre}} {{$root.user.apellido}}</strong></p>
 	                                        <p class="text-left small">{{$root.user.email}}</p>
-	                                        <p class="text-left" ng-show="user != null && user.rol_id_rol == 4">
+	                                        <p class="text-left" ng-show="$root.user != null && $root.user.rol_id_rol == 4">
 	                                            <a href="#userPanel" class="btn btn-primary btn-block btn-sm">Mi Cuenta</a>
 	                                        </p>
 	                                        <p class="text-left">

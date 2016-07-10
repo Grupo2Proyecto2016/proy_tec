@@ -29,7 +29,7 @@ goOnApp.controller('ticketController', function($scope, $http, uiGridConstants, 
         columnDefs:
     	[
           { name:'Cliente', field: 'ci_receptor', width: '80', enableSorting: false },
-          { name:'Origen', field: 'viaje.linea.origen.descripcion', width: '*', enableFiltering: false },
+          { name:'Origen', field: 'viaje.linea.origen.descripcion', width: '*'},
           { name:'Destino', field: 'viaje.linea.destino.descripcion', width: '*' },
           { name:'Salida', cellTemplate: '<div class="text-center ngCellText">{{ row.entity.viaje.inicio | date:"dd/MM/yyyy @ h:mma"}}</div>', width: '*', enableFiltering: false, enableSorting: false },
           { name:'Nº Coche', field: 'viaje.vehiculo.id_vehiculo', width: '80' },
@@ -39,7 +39,7 @@ goOnApp.controller('ticketController', function($scope, $http, uiGridConstants, 
           	enableFiltering: false,
           	enableSorting: false,
           	width: '130',
-            cellTemplate:'<button style="width: 60px" class="btn-xs btn-success" ng-show="row.entity.estado == 1" ng-click="grid.appScope.confirmReservationDialog(row)">Confirmar</button>'
+            cellTemplate:'<button style="width: 70px" class="btn-xs btn-success" ng-show="row.entity.estado == 1" ng-click="grid.appScope.confirmReservationDialog(row)">Confirmar</button>'
             	+ '<button style="width: 60px" class="btn-xs btn-warning" ng-click="grid.appScope.cancelTicketDialog(row)">Cancelar</button>'
       	  }
         ]

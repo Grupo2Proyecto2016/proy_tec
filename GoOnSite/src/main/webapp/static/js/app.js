@@ -3,7 +3,11 @@
     
     goOnApp.run(function($rootScope) 
 	{
+    	$rootScope.showingError = false;
         $rootScope.user = null;
+        $rootScope.$on('$viewContentLoaded', function() {
+            $templateCache.removeAll();
+         });
     });
     
     goOnApp.filter('SiNo', function() {
@@ -11,7 +15,6 @@
             return input ? 'Si' : 'No';
         }
     });
-    var showingError = false;
     
     var tenantUrlPart =  urlTenant  + "/";
     var servicesUrl = AppName + tenantUrlPart;
@@ -318,22 +321,28 @@
     	
     	$scope.getCompany();
     	
-    	$http.get(servicesUrl + 'getUserInfo')
-	    	.then(function(response) 
-			{
-	    		if(response.status == 200)
-	    		{
-	    			$rootScope.user = response.data;
-	    		}
-    			else
-    			{
-    				$rootScope.user = null;
-    				removeJwtToken();
-    			}
-	    		$scope.userInfoReady = true;
-	    	}
-		);
-        
+    	$scope.getUserInfo = function()
+    	{
+    		$http.get(servicesUrl + 'getUserInfo')
+		    	.then(function(response) 
+				{
+		    		if(response.status == 200)
+		    		{
+		    			$rootScope.user = response.data;
+		    		}
+	    			else
+	    			{
+	    				$rootScope.user = null;
+	    				removeJwtToken();
+	    			}
+		    		//$rootScope.$apply();
+		    		$scope.userInfoReady = true;
+		    	}
+	    	);
+    	}
+    	
+    	$scope.getUserInfo();
+    	
         $scope.signIn = function()
         {
         	$http.post(servicesUrl + 'auth', JSON.stringify($scope.loginForm))
