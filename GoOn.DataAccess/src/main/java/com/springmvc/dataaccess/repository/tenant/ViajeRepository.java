@@ -349,4 +349,39 @@ public class ViajeRepository {
 		}
 		return travel;	
 	}
+
+	public void finish(long travelId)
+	{
+		Viaje travel = GetById(travelId);
+		EntityTransaction t = entityManager.getTransaction();
+		try
+		{
+			t.begin();
+			travel.setTerminado(true);
+			entityManager.flush();
+			t.commit();
+		}
+		catch(Exception ex)
+		{
+			t.rollback();
+			throw ex;
+		}
+	}
+
+	private Viaje GetById(long travelId)
+	{
+		Viaje travel = null;
+		Query q = entityManager.createQuery("FROM Viaje v WHERE v.id_viaje = :idv ");
+		q.setParameter("idv", travelId); 
+		q.setMaxResults(1);
+		try
+		{
+			travel = (Viaje)q.getSingleResult();
+		} 
+		catch(NoResultException ex) 
+		{
+			return null;
+		}
+		return travel;
+	}
 }
