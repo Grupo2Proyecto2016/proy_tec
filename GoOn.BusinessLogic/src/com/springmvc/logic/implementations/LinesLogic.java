@@ -13,6 +13,7 @@ import java.util.UUID;
 
 import com.springmvc.dataaccess.context.TenantDAContext;
 import com.springmvc.entities.tenant.Asiento;
+import com.springmvc.entities.tenant.Devolucion;
 import com.springmvc.entities.tenant.Linea;
 import com.springmvc.entities.tenant.Mantenimiento;
 import com.springmvc.entities.tenant.Parada;
@@ -363,6 +364,13 @@ public class LinesLogic implements ILinesLogic
 		TenantContext.LineaRepository.ClientConfirmTickets(tickets, paymentId);
 	}
 	
+	public void SalesConfirmTicket(Pasaje ticket) 
+	{
+		List<Pasaje> tickets = new ArrayList<>();
+		tickets.add(ticket);
+		TenantContext.LineaRepository.ClientConfirmTickets(tickets, null);
+	}
+	
 	public List<Pasaje> ClientReserveTickets(Usuario currentUser, long id_viaje, int origen, int destino, Double valor,List<Long> reservados) 
 	{
 		List<Pasaje> tickets = new ArrayList<>();
@@ -536,5 +544,19 @@ public class LinesLogic implements ILinesLogic
 	public List<Pasaje> GetActiveTickets(Date from, Date to) 
 	{
 		return TenantContext.PasajeRepository.GetActive(from, to);
+	}
+
+	public void CancelTicket(Pasaje ticket) 
+	{
+		if(ticket.getPaymentId() != null)
+		{
+			Devolucion refund = new Devolucion();
+			refund.setCi_cliente(ticket.getCi_receptor());
+			refund.setId_pago(ticket.getPaymentId());
+			refund.setRealizado(false);
+			
+			TenantContext.PasajeRepository.AddRefund(refund);
+		}
+		DeleteTicket(ticket);
 	}
 }

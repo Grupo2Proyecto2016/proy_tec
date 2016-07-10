@@ -10,6 +10,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
+import com.springmvc.entities.tenant.Devolucion;
 import com.springmvc.entities.tenant.Encomienda;
 import com.springmvc.entities.tenant.Pasaje;
 import com.springmvc.enums.TicketStatus;
@@ -384,6 +385,23 @@ public class PasajeRepository {
 			return null;
 		}
 		return result;
+	}
+
+	public void AddRefund(Devolucion refund) 
+	{
+		EntityTransaction t = entityManager.getTransaction();
+		try
+		{
+			t.begin();	
+			entityManager.persist(refund);
+			entityManager.flush();
+			t.commit();
+		}
+		catch(Exception ex)
+		{
+			t.rollback();
+			throw ex;
+		}
 	}
 	
 }
