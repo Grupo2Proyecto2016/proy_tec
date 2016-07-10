@@ -30,16 +30,9 @@ import com.paypal.base.rest.PayPalRESTException;
 import com.springmvc.entities.tenant.Pasaje;
 import com.springmvc.entities.tenant.Usuario;
 import com.springmvc.logic.implementations.LinesLogic;
-import com.springmvc.requestWrappers.LinesWrapper;
+import com.springmvc.requestWrappers.CustomPayPalResponseWrapper;
 import com.springmvc.requestWrappers.PayPalWrapper;
 import com.springmvc.utils.UserContext;
-
-import scala.util.parsing.json.JSONObject;
-import urn.ebay.apis.CoreComponentTypes.BasicAmountType;
-import urn.ebay.apis.eBLBaseComponents.CurrencyCodeType;
-import urn.ebay.apis.eBLBaseComponents.PaymentActionCodeType;
-import urn.ebay.apis.eBLBaseComponents.PaymentDetailsItemType;
-import urn.ebay.apis.eBLBaseComponents.PaymentDetailsType;
 
 @RestController
 @RequestMapping(value = "/{tenantid}")
@@ -89,8 +82,8 @@ public class PayPalRestController
 		payment.setPayer(payer);
 		payment.setTransactions(transactions);
 		RedirectUrls redirectUrls = new RedirectUrls();
-		redirectUrls.setCancelUrl("http://localhost:8080/GoOnSite/rolo#/payPalError");
-		redirectUrls.setReturnUrl("http://localhost:8080/GoOnSite/rolo#/payPalCheckout");
+		redirectUrls.setCancelUrl("http://localhost:8080/GoOnSite/" + tenantid + "#/payPalError");
+		redirectUrls.setReturnUrl("http://localhost:8080/GoOnSite/" + tenantid + "#/payPalCheckout");
 		payment.setRedirectUrls(redirectUrls);
 
 		Payment createdPayment = null;
@@ -110,7 +103,7 @@ public class PayPalRestController
 	@Secured({"ROLE_CLIENT"})
 	@RequestMapping(value = "/payPaypal", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
 	@ResponseBody
-	public String payPaypal(@RequestBody PayPalWrapper paypal, @PathVariable String tenantid, HttpServletRequest request)
+	public ResponseEntity<CustomPayPalResponseWrapper> payPaypal(@RequestBody PayPalWrapper paypal, @PathVariable String tenantid, HttpServletRequest request)
     {
 		
 		//reservar pasajes, si no se puede no sigo //llamando a clientreservetickets
@@ -154,18 +147,32 @@ public class PayPalRestController
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		CustomPayPalResponseWrapper respuesta = new CustomPayPalResponseWrapper();
 		//si el pago quedó cambio el estado a pagado de los pasajes reservados		
-		if (pagoRealizado.getState() == "approved")
+		if (pagoRealizado.getState().equals("approved"))
 		{
 			//pagoRealizado.getId(); //id del pago realizado
+			try 
+			{
+				ll.ClientConfirmTickets(tickets, pagoRealizado.getId());
+				respuesta.setSuccess(true);
+				respuesta.setTickets(tickets);
+			}
+			catch (Exception e) 
+			{
+				//Rolbackear todos los pasajes
+				e.printStackTrace();
+				respuesta.setSuccess(false);
+			}
 			
 		}
 		else
 		{
-			
+			respuesta.setSuccess(false);
+			respuesta.setMsg("Ha ocurrido un error al realizar el pago");		
 		}
-		return pagoRealizado.toJSON();	
+		pagoRealizado.toJSON();	
+		return new ResponseEntity<CustomPayPalResponseWrapper>(respuesta, HttpStatus.OK);
     }
 	
 }
