@@ -364,5 +364,26 @@ public class PasajeRepository {
 			throw ex;
 		}
 	}
+
+	public List<Pasaje> GetActive(Date from, Date to) 
+	{
+		List<Pasaje> result = new ArrayList<>();
+		Query q = entityManager.createQuery("SELECT p FROM Pasaje p "
+				+ "WHERE p.viaje.inicio >= :from AND p.viaje.inicio <= :to "
+				+ "AND (p.estado = 1 OR p.estado = 2) "
+				+ "ORDER BY p.viaje.inicio ASC "
+		);
+		q.setParameter("from", from);
+		q.setParameter("to", to);
+		try
+		{
+			result = q.getResultList();
+		}
+		catch(NoResultException ex)
+		{
+			return null;
+		}
+		return result;
+	}
 	
 }

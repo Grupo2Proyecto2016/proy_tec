@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
-<div ng-show="$parent.user != null">
+<div ng-show="$root.user != null">
 	<div class="jumbotron text-center">
 		<h3>Mi Cuenta</h3>
 
@@ -121,38 +121,38 @@
 								<div class="form-group row">
 									<label class="control-label col-sm-4" for="name">Nombre:</label>
 									<div class="col-sm-8">
-										<p>{{$parent.user.nombre}}</p>
+										<p>{{$root.user.nombre}}</p>
 									</div>
 								</div>
 								<div class="form-group row">
 									<label class="control-label col-sm-4" for="surname">Apellido:</label>
 									<div class="col-sm-8">
-										<p>{{$parent.user.apellido}}</p>
+										<p>{{$root.user.apellido}}</p>
 									</div>
 								</div>
 								<div class="form-group">
 								    <label class="control-label col-sm-4" for="ci">Nro Documento:</label>
 								    <div class="col-sm-8">
-								    	<p>{{$parent.user.ci}}</p>
+								    	<p>{{$root.user.ci}}</p>
 							    	</div>
 							    </div>
 								<div class="form-group row">
 									<label class="control-label col-sm-4" for="birth">Fecha
 										de nacimiento:</label>
 									<div class="col-sm-8">
-										<p>{{$parent.user.fch_nacimiento | date:'dd/MM/yyyy' }}</p>
+										<p>{{$root.user.fch_nacimiento | date:'dd/MM/yyyy' }}</p>
 									</div>
 								</div>
 								<div class="form-group row">
 									<label class="control-label col-sm-4" for="mail">Correo:</label>
 									<div class="col-sm-8">
-										<p>{{$parent.user.email}}</p>
+										<p>{{$root.user.email}}</p>
 									</div>
 								</div>
 								<div class="form-group row">
 									<label class="control-label col-sm-4" for="address">Dirección:</label>
 									<div class="col-sm-8">
-										<p>{{$parent.user.direccion}}</p>
+										<p>{{$root.user.direccion}}</p>
 									</div>
 								</div>
 							</div>
@@ -320,7 +320,7 @@
 
 
 
-<div ng-show="$parent.user == null">
+<div ng-show="$root.user == null">
 	<div id="successAlert" class="row" style="display: none">
 		<div class="col-xs-2"></div>
 		<div class="col-xs-8">

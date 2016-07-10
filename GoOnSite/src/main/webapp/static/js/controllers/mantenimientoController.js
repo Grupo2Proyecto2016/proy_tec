@@ -21,10 +21,7 @@ goOnApp.controller('mantenimientoController', function($scope, $http, uiGridCons
 
 	    $scope.mantenimientoForm.taller = 0;
 	    $scope.mantenimientoForm.vehiculo = 0;
-	    $scope.mantenimientoForm.user_crea = 0;
 
-	    $scope.user = null;
-	    
 		$scope.mantenimientoToDelete.id_mantenimiento = null;
 		$scope.mantenimientoToDelete.costo = null;
 		$scope.mantenimientoToDelete.factura = null;
@@ -84,23 +81,6 @@ goOnApp.controller('mantenimientoController', function($scope, $http, uiGridCons
 		{
 			$.blockUI();
 			
-			$http.get(servicesUrl + 'getUserInfo')
-			.then(function(response) 
-			{
-				if(response.status == 200)
-				{
-					$scope.user = response.data;
-				}
-				else
-				{
-					$scope.user = null;
-					removeJwtToken();
-				}
-				$scope.userInfoReady = true;
-			}
-			);
-			
-			$scope.mantenimientoForm.user_crea = $scope.user
 			$http.post(servicesUrl +'createMantenimiento', JSON.stringify($scope.mantenimientoForm))
 			.then(function(result)
 			{	

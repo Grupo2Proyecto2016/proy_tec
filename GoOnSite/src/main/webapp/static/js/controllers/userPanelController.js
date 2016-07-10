@@ -1,4 +1,4 @@
-goOnApp.controller('userPanelController', function($scope, $http, $location, uiGridConstants, i18nService) 
+goOnApp.controller('userPanelController', function($scope, $http, $location, uiGridConstants, i18nService, $rootScope) 
 {
 	$scope.userModel = {};
 	$scope.passwordModel = null; //Modelo para cambiar el password
@@ -108,7 +108,7 @@ goOnApp.controller('userPanelController', function($scope, $http, $location, uiG
 	        	{
 	        		$scope.showSuccessAlert("Tu contraseña ha sido cambiada. Tienes que volver a ingresar a la plataforma.");
 	        		$scope.hidePasswordModal();
-	        		$scope.$parent.user = null;
+	        		$rootScope.user = null;
 	        		shorSignInForm();
 	        	}
 	        	$.unblockUI();
@@ -157,7 +157,7 @@ goOnApp.controller('userPanelController', function($scope, $http, $location, uiG
     
     $scope.showUpdateUserModal = function()
     {
-    	$scope.userModel = angular.copy($scope.$parent.user);
+    	$scope.userModel = angular.copy($rootScope.user);
     	$scope.userModel.fch_nacimiento = new Date($scope.userModel.fch_nacimiento);
     	$("#updateUserModal").modal('show');
     };
@@ -173,7 +173,7 @@ goOnApp.controller('userPanelController', function($scope, $http, $location, uiG
     		.then(function(response) {
 	        	if(response.status == 200)
 	        	{
-	        		$scope.$parent.user = $scope.userModel;
+	        		$scope.$parent.getUserInfo();
 	        		$scope.getPackages();
 	        		$scope.hideUpdateUserModal();
 	        	}

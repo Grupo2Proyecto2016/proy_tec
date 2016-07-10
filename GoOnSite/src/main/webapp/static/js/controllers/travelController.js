@@ -1,4 +1,4 @@
-goOnApp.controller('travelController', function($scope, $http, uiGridConstants, i18nService, $timeout) 
+goOnApp.controller('travelController', function($scope, $http, uiGridConstants, i18nService, $timeout, $rootScope) 
 {
     $scope.message = 'Desde aquí podrás buscar el viaje que deseas y efectuar la compra o reserve de pasajes.';       
     $scope.minDate = new Date();
@@ -598,13 +598,13 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 		sel_seat.price = this.data().price;
 		sel_seat.id = this.settings.id;
 		$scope.reservados.push(sel_seat);*/
-    	if($scope.$parent.user == null)
+    	if($rootScope.user == null)
     	{
     		$scope.rolCreador = 0;
     	}
     	else
     	{
-    		$scope.rolCreador = $scope.$parent.user.rol_id_rol;
+    		$scope.rolCreador = $rootScope.user.rol_id_rol;
     	}
     	$("#selectTicketsModal").modal('hide');
     	$("#divTravelForm").addClass('hidden');

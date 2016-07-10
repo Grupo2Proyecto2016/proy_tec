@@ -51,6 +51,7 @@
       <script src="<c:url value='/static/js/controllers/manageTravelsController.js' />"></script>
       <script src="<c:url value='/static/js/controllers/mantenimientoController.js' />"></script>
       <script src="<c:url value='/static/js/controllers/packageController.js' />"></script>
+      <script src="<c:url value='/static/js/controllers/ticketController.js' />"></script>
     </head>
     <body style="visibility: hidden">
 
@@ -70,14 +71,16 @@
                 
 					<!--PUBLICAS -->
                     <li><a href="#home"><i class="fa fa-home"></i> Inicio</a></li>
-                    <li><a ng-click="showPackageCalc()" ng-show="user == null || user.rol_id_rol != 2"><i class="fa fa-calculator"></i> Calcular Encomienda</a></li>
-                    <li><a href="#packages" ng-show="user != null && user.rol_id_rol == 2"><i class="fa fa-cubes"></i> Encomiendas</a></li>
-                    <li><a href="#travels" ng-show="user == null || (user != null && (user.rol_id_rol == 2 || user.rol_id_rol == 4))"><i class="fa fa-bus"></i> Pasajes</a></li>
+                    <li><a ng-click="showPackageCalc()" ng-show="$root.user == null || $root.user.rol_id_rol != 2"><i class="fa fa-calculator"></i> Calcular Encomienda</a></li>
+                    <li><a href="#packages" ng-show="$root.user != null && $root.user.rol_id_rol == 2"><i class="fa fa-cubes"></i> Encomiendas</a></li>
+                    <li><a href="#tickets" ng-show="$root.user != null && $root.user.rol_id_rol == 2"><i class="fa fa-bus"></i> Boletos</a></li>
+                    <li><a href="#travels" ng-show="$root.user != null && $root.user.rol_id_rol == 2"><i class="fa fa-money"></i> Vender Pasaje</a></li>
+                    <li><a href="#travels" ng-show="$root.user == null || ($root.user != null && $root.user.rol_id_rol == 4)"><i class="fa fa-bus"></i> Pasajes</a></li>
                     
-                    <li ng-show="user == null || user.rol_id_rol != 1"><a href="#outbranches"><i class="fa fa-building"></i> Nuestras Sucursales</a></li>
+                    <li ng-show="$root.user == null || user.rol_id_rol != 1"><a href="#outbranches"><i class="fa fa-building"></i> Nuestras Sucursales</a></li>
 
                     <!--ADMINISTRADOR-->
-                    <li ng-show="user != null && (user.rol_id_rol == 1 || user.rol_id_rol == 5)" class="dropdown">
+                    <li ng-show="$root.user != null && ($root.user.rol_id_rol == 1 || $root.user.rol_id_rol == 5)" class="dropdown">
 	                    <a class="dropdown-toggle" data-toggle="dropdown">
 <!-- 	                        <span class="glyphicon glyphicon-user"></span>  -->
 	                        <i class="fa fa-cogs"></i>
@@ -85,17 +88,17 @@
 	                        <span class="glyphicon glyphicon-chevron-down"></span>
 	                    </a>
 	                    <ul class="dropdown-menu admin-menu">
-	                    	<li ng-show="user != null && user.rol_id_rol == 1"><a href="#company"><i class="fa fa-cog"></i> Empresa</a></li>
-							<li ng-show="user != null && user.rol_id_rol == 1"><a href="#parameters"><i class="fa fa-bars"></i> Parámetros</a></li>
-							<li ng-show="user != null && user.rol_id_rol == 1"><a href="#branches"><i class="fa fa-building"></i> Sucursales</a></li>
-		                    <li ng-show="user != null && user.rol_id_rol == 1"><a href="#terminals"><i class="fa fa-flag-o"></i> Terminales</a></li>
-		                    <li ng-show="user != null && user.rol_id_rol == 1"><a href="#employees"><i class="fa fa-users"></i> Personal</a></li>
-		                    <li ng-show="user != null && user.rol_id_rol == 1"><a href="#bus"><i class="fa fa-bus"></i> Vehículos</a></li>
+	                    	<li ng-show="$root.user != null && $root.user.rol_id_rol == 1"><a href="#company"><i class="fa fa-cog"></i> Empresa</a></li>
+							<li ng-show="$root.user != null && $root.user.rol_id_rol == 1"><a href="#parameters"><i class="fa fa-bars"></i> Parámetros</a></li>
+							<li ng-show="$root.user != null && $root.user.rol_id_rol == 1"><a href="#branches"><i class="fa fa-building"></i> Sucursales</a></li>
+		                    <li ng-show="$root.user != null && $root.user.rol_id_rol == 1"><a href="#terminals"><i class="fa fa-flag-o"></i> Terminales</a></li>
+		                    <li ng-show="$root.user != null && $root.user.rol_id_rol == 1"><a href="#employees"><i class="fa fa-users"></i> Personal</a></li>
+		                    <li ng-show="$root.user != null && $root.user.rol_id_rol == 1"><a href="#bus"><i class="fa fa-bus"></i> Vehículos</a></li>
 
-		                    <li ng-show="user != null && user.rol_id_rol == 5"><a href="#taller"><i class="fa fa-industry"></i> Talleres</a></li>
-		                    <li ng-show="user != null && user.rol_id_rol == 5"><a href="#mantenimiento"><i class="fa fa-wrench"></i> Service</a></li>
-		                    <li ng-show="user != null && user.rol_id_rol == 5"><a href="#lines"><i class="fa fa-map-o"></i> Lineas</a></li>
-	                    	<li ng-show="user != null && user.rol_id_rol == 5"><a href="#manageTravels"><i class="fa fa-calendar-check-o"></i> Viajes</a></li>
+		                    <li ng-show="$root.user != null && $root.user.rol_id_rol == 5"><a href="#taller"><i class="fa fa-industry"></i> Talleres</a></li>
+		                    <li ng-show="$root.user != null && $root.user.rol_id_rol == 5"><a href="#mantenimiento"><i class="fa fa-wrench"></i> Service</a></li>
+		                    <li ng-show="$root.user != null && $root.user.rol_id_rol == 5"><a href="#lines"><i class="fa fa-map-o"></i> Lineas</a></li>
+	                    	<li ng-show="$root.user != null && $root.user.rol_id_rol == 5"><a href="#manageTravels"><i class="fa fa-calendar-check-o"></i> Viajes</a></li>
 	                    </ul>
                		</li>
                     
@@ -104,10 +107,10 @@
       				<li ng-show="user == null"><a href="#register"><i class="fa fa-user-plus" aria-hidden="true"></i> Registrarme</a></li>
       				
       				<!-- USUARIO LOGEADO -->
-      				<li ng-show="user != null" class="dropdown">
+      				<li ng-show="$root.user != null" class="dropdown">
 	                    <a class="dropdown-toggle" data-toggle="dropdown">
 	                        <span class="glyphicon glyphicon-user"></span> 
-	                        <strong>{{user.usrname}}</strong>
+	                        <strong>{{$root.user.usrname}}</strong>
 	                        <span class="glyphicon glyphicon-chevron-down"></span>
 	                    </a>
 	                    <ul class="dropdown-menu">
@@ -115,9 +118,9 @@
 	                            <div class="navbar-login">
 	                                <div class="row" style="padding: 10px;">
 	                                    <div class="col-sm-12">
-	                                        <p class="text-center"><strong>{{user.nombre}} {{user.apellido}}</strong></p>
-	                                        <p class="text-left small">{{user.email}}</p>
-	                                        <p class="text-left" ng-show="user != null && user.rol_id_rol == 4">
+	                                        <p class="text-center"><strong>{{$root.user.nombre}} {{$root.user.apellido}}</strong></p>
+	                                        <p class="text-left small">{{$root.user.email}}</p>
+	                                        <p class="text-left" ng-show="$root.user != null && $root.user.rol_id_rol == 4">
 	                                            <a href="#userPanel" class="btn btn-primary btn-block btn-sm">Mi Cuenta</a>
 	                                        </p>
 	                                        <p class="text-left">

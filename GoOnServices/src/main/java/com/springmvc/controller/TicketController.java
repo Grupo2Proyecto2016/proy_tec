@@ -1,5 +1,8 @@
 	package com.springmvc.controller;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -182,6 +185,23 @@ public class TicketController
 		
 		return new ResponseEntity<List<Pasaje>>(tickets, HttpStatus.OK);
 	}
+	
+	
+	@Secured({"ROLE_SALES"})
+	@RequestMapping(value = "/getActiveTickets", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<List<Pasaje>> getActiveTickets(@RequestParam Date from, @PathVariable String tenantid)
+	{
+		from.setHours(0);
+		Calendar to = Calendar.getInstance();
+		to.setTime(from);
+		to.add(GregorianCalendar.DAY_OF_YEAR, 30);
+		
+		LinesLogic ll = new LinesLogic(tenantid);
+		List<Pasaje> tickets = ll.GetActiveTickets(from, to.getTime());
+		
+		return new ResponseEntity<List<Pasaje>>(tickets, HttpStatus.OK);
+	}
+	
 	
 	/*@Secured({"ROLE_CLIENT", "ROLE_SALES", "ROLE_DRIVER"})
 	@RequestMapping(value = "/buyTicket", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
