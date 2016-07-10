@@ -408,10 +408,15 @@
 				</div>	
 				<div class="form-group"> 
 					<div class="col-sm-12">
-				 		<button style="float: right; margin-top: 10px;" class="btn btn-info">Confirmar Compra</button>
-					</div>
+				 		<button style="float: right; margin-top: 10px;" class="btn btn-info">Reservar</button>
+					</div>					
 				</div>
 			</form>
+			<div class="col-sm-12">
+		 		<form action='checkout' METHOD='POST'>
+					<input type='image' name='paypal_submit' id='paypal_submit' onclick="iniciarCheckout();" src='https://www.paypal.com/es_ES/i/btn/btn_dg_pay_w_paypal.gif' border='0' align='top' alt='Pagar con Paypal'/>
+				</form>
+			</div>
 		</div>
 	</div>
 	</div>
@@ -454,7 +459,13 @@
 	<div class="col-xs-2"></div>
 </div>	
 
-
+<script>
+	var dg = new PAYPAL.apps.DGFlow(
+	{
+		trigger: 'paypal_submit',
+		expType: 'instant'
+	});
+</script>
 
 
 

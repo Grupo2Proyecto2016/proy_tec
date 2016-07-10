@@ -665,7 +665,27 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 					$scope.seatsForm.rDoc = null;
 					$scope.seatsForm.rUser = null;
 				}	
-				$http.post(servicesUrl +'buyTicket', JSON.stringify($scope.seatsForm))
+				$http.get(servicesUrl +'getPaypal')
+				.then(function(response) 
+				{
+					$.unblockUI();		
+		        	if(response.status == 200)
+		        	{		
+	        			$scope.payPalInfo = response.data;
+	        			var link = ""
+	        			for(var i=0; i < $scope.payPalInfo.links.length; i++)
+	        			{
+	        				var item = $scope.payPalInfo.links[i];
+	        				if(item.rel == "approval_url")
+	        				{
+	        					link = item.href;
+	        				}	
+	        			}
+	        			window.location = link;
+		        	}
+	    		}
+				);
+				/*$http.post(servicesUrl +'buyTicket', JSON.stringify($scope.seatsForm))
 				.then(function(response) 
 					{
 						$.unblockUI();		
@@ -679,7 +699,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 		        	    	$("#seatsConfirmForm").addClass('hidden');
 			        	}
 		    		}
-				);
+				);*/
 			}
 			
 		}
@@ -687,6 +707,16 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     	
 						
 	};
+	
+	$scope.iniciarCheckout = function()
+	{
+		$http.get(servicesUrl + 'iniciarCheckout')
+		.then(function(response) 
+		{
+			
+		});
+	};
+	
 	$scope.showBuyDialog = function(row)
     {
     	$("#buyModal").modal('show');

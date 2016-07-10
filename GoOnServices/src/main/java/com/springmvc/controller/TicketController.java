@@ -153,7 +153,7 @@ public class TicketController
 		return new ResponseEntity<CustomResponseWrapper>(response, HttpStatus.OK);
 	}
 
-	@Secured({"ROLE_CLIENT", "ROLE_SALES", "ROLE_DRIVER"})
+	@Secured({"ROLE_SALES", "ROLE_DRIVER"})
 	@RequestMapping(value = "/buyTicket", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
 	public ResponseEntity<List<Pasaje>> buyTicket(@RequestBody BuyTicketWrapper buyTicket, @PathVariable String tenantid, HttpServletRequest request)
 	{
@@ -161,11 +161,7 @@ public class TicketController
 		LinesLogic ll = new LinesLogic(tenantid);
 		List<Pasaje> tickets = null;
 		
-		if (currentUser.getRol() == UserRol.Client)
-		{
-			tickets = ll.ClientBuyTickets(currentUser, buyTicket.id_viaje, buyTicket.origen, buyTicket.destino, buyTicket.valor, buyTicket.seleccionados);
-		}
-		else if(currentUser.getRol() == UserRol.Sales)
+		if(currentUser.getRol() == UserRol.Sales)
 		{
 			if (buyTicket.rUser != null)
 			{
