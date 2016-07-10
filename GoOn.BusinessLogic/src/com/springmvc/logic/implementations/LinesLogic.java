@@ -617,4 +617,11 @@ public class LinesLogic implements ILinesLogic
 		}
 		DeleteTicket(ticket);
 	}
+
+	public void FinishTravel(long travelId) 
+	{
+		TenantContext.PasajeRepository.updateByTravel(travelId, TicketStatus.cashed);
+		TenantContext.EncomiendaRepository.updateByTravel(travelId, PackageStatus.Transported);
+		TenantContext.ViajeRepository.finish(travelId);
+	}
 }

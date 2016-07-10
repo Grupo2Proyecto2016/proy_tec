@@ -299,4 +299,13 @@ public class LinesRestController{
 		ll.StartTravel(travelId);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}	
+	
+	@Secured({"ROLE_DRIVER"})
+	@RequestMapping(value = "/finishTravel", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<Void> finishTravel(@RequestParam long travelId, @PathVariable String tenantid)
+	{
+		LinesLogic ll = new LinesLogic(tenantid);
+		ll.FinishTravel(travelId);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
 }
