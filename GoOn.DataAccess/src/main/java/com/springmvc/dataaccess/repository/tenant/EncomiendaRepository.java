@@ -180,5 +180,4 @@ public class EncomiendaRepository {
 			throw ex;
 		}
 	}
-
 }

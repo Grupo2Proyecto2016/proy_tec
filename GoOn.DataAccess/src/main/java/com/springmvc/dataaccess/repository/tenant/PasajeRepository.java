@@ -404,4 +404,27 @@ public class PasajeRepository {
 		}
 	}
 	
+	public void UpdateTicketsCI(long idUsuario, String ci) 
+	{
+		List<Pasaje> result = GetByClient(idUsuario);
+		EntityTransaction t = entityManager.getTransaction();
+		try
+		{
+			t.begin();
+			for (Pasaje ticket : result) 
+			{
+				if(ticket.getUser_compra() != null && ticket.getUser_compra().getIdUsuario() == idUsuario)
+				{
+					ticket.setCi_receptor(ci);
+				}
+				entityManager.merge(ticket);
+			}
+			t.commit();
+		}
+		catch(Exception ex)
+		{
+			t.rollback();
+			throw ex;
+		}
+	}
 }

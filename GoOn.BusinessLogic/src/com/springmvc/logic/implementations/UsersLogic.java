@@ -110,6 +110,7 @@ public class UsersLogic implements IUsersLogic {
 		if(userUpdateData.getRol_id_rol() == UserRol.Client.getValue())
 		{
 			TenantContext.EncomiendaRepository.UpdatePackagesCI(userUpdateData.getIdUsuario(), userUpdateData.getCi());
+			TenantContext.PasajeRepository.UpdateTicketsCI(userUpdateData.getIdUsuario(), userUpdateData.getCi());
 		}
 	}
 
