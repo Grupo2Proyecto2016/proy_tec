@@ -373,7 +373,8 @@
 				</tbody>						
 			</table>
 			<div>Total:<b>$<span>{{precio_total}}</span></b></div>
-			<form class="form-horizontal" name="pForm" role="form" ng-submit="buyTicket()">
+			<form class="form-horizontal" name="pForm" role="form" >
+<!-- 			ng-submit="reserveTicket()" -->
 				<div class="form-group" ng-show="rolCreador == 2">			    	
 			    	<div class="col-sm-6">
 				    	<label class="control-label col-sm-5" for="receptorOpt">Receptor registrado?:</label>
@@ -406,66 +407,26 @@
 				    	</div>			
 					</div>    
 				</div>	
-				<div class="form-group"> 
+				<div class="form-group"  ng-show="rolCreador == 2"> 
+					<div class="col-sm-6">
+				 		<button style="float: right; margin-top: 10px;" class="btn btn-info" ng-click="reserveTicket();">Reservar</button>
+					</div>					
+					<div class="col-sm-6">
+				 		<button style="float: right; margin-top: 10px;" class="btn btn-info" ng-click="buyTicket();">Comprar</button>
+					</div>
+				</div>
+				<div class="form-group"  ng-show="rolCreador == 4"> 
 					<div class="col-sm-12">
-				 		<button style="float: right; margin-top: 10px;" class="btn btn-info">Reservar</button>
+				 		<input type='image' name='paypal_pay' id='paypal_pay' ng-click="payTicket();" style="float: right; margin-top: 10px;" src='https://www.paypal.com/es_ES/i/btn/btn_dg_pay_w_paypal.gif' border='0' align='top' alt='Pagar con Paypal'/>
 					</div>					
 				</div>
-			</form>
-			<div class="col-sm-12">
-		 		<form action='checkout' METHOD='POST'>
-					<input type='image' name='paypal_submit' id='paypal_submit' onclick="iniciarCheckout();" src='https://www.paypal.com/es_ES/i/btn/btn_dg_pay_w_paypal.gif' border='0' align='top' alt='Pagar con Paypal'/>
-				</form>
-			</div>
+			</form>			
 		</div>
 	</div>
 	</div>
 	<div class="col-xs-2"></div>
 </div>
 
-<div class="row">
-	<div class="col-xs-2"></div>
-	<div class="col-xs-8">
-		<div class="panel panel-default hidden" id="seatsInfo">
-		<div class="panel-heading">
-			<h4 class="modal-title">Asientos Confirmados</h4>
-		</div>
-		<div class="panel-body">	
-		<div class="container">
-		    <div class="row" ng-repeat="cs in confirmedSeats track by $index">
-		        <div class="col-xs-8">
-		            <div class="well well-sm">
-		                <div class="row">
-		                    <div class="col-sm-6 col-md-4">
-		                        	<qrcode version="3" error-correction-level="M" size="150" data="{{cs.numero}}"></qrcode>		                  		
-		                    </div>
-		                    <div class="col-sm-6 col-md-8">
-		                    	<h4><i class="fa fa-bus" aria-hidden="true"></i> Línea {{cs.viaje.linea.id_linea}} - Coche: {{cs.viaje.vehiculo.id_vehiculo}} - <i class="fa fa-hashtag" aria-hidden="true"> Asiento</i> {{cs.asiento.numero}}</h4>
-		                        <small> <i class="fa fa-map-marker"></i>&nbsp;Desde:<cite title="Montevideo">Montevideo</cite></small>
-		                        <small> <i class="fa fa-map-marker"></i>&nbsp;Hasta:<cite title="Piriapolis">Piriapolis </cite></small>
-		                        <p>
-		                        	<i class="fa fa-calendar"></i>&nbsp;Fecha: 10/07/2016
-		                            <br />
-		                            <i class="fa fa-clock-o"></i>&nbsp;Salida de Terminal: 20:30
-		                            <br />
-		                        </p>
-		                    </div>
-		                </div>
-		            </div>
-		        </div>
-		    </div>
-		</div>
-	</div>
-	<div class="col-xs-2"></div>
-</div>	
-
-<script>
-	var dg = new PAYPAL.apps.DGFlow(
-	{
-		trigger: 'paypal_submit',
-		expType: 'instant'
-	});
-</script>
 
 
 

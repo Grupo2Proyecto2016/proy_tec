@@ -633,7 +633,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     	
     }
     
-    $scope.buyTicket = function()
+    $scope.payTicket = function()
 	{
     	$.blockUI();
     	$http.get(servicesUrl + 'getUserInfo')
@@ -684,22 +684,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 	        			window.location = link;
 		        	}
 	    		}
-				);
-				/*$http.post(servicesUrl +'buyTicket', JSON.stringify($scope.seatsForm))
-				.then(function(response) 
-					{
-						$.unblockUI();		
-			        	if(response.status == 200)
-			        	{		
-		        			$scope.confirmedSeats = response.data;
-		        			$scope.showSuccessAlert("Los boletos han sido acreditados. Accede a tu panel para descargarlos.");
-		        			$("#seatsInfo").removeClass('hidden');
-		        	    	$("#divTravelForm").removeClass('hidden');
-		        	    	$("#travelsSearchGrid").removeClass('hidden');
-		        	    	$("#seatsConfirmForm").addClass('hidden');
-			        	}
-		    		}
-				);*/
+				);				
 			}
 			
 		}
@@ -707,6 +692,115 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     	
 						
 	};
+	//pago paypal
+	//pago cash
+	//reserva
+	$scope.reserveTicket = function()
+	{
+		$.blockUI();
+    	$http.get(servicesUrl + 'getUserInfo')
+		.then(function(response) 
+		{
+			if(response.status == 404)
+			{
+				$("#loginModal").modal("show");
+				$.unblockUI();
+			}
+			else
+			{				
+				localStorage.setItem("userTickets", JSON.stringify($scope.seatsForm));
+				$scope.seatsForm.seleccionados = [];
+				for(var i = 0; i < $scope.reservados.length; i++) 
+				{
+					$scope.seatsForm.seleccionados.push($scope.reservados[i].id);			
+				}  
+				if($scope.rOption == "1")
+				{
+					$scope.seatsForm.rDoc = null;
+				}
+				else
+				{
+					$scope.seatsForm.rUser = null;
+				}	
+				if ($scope.rolCreador == "4")
+				{
+					$scope.seatsForm.rDoc = null;
+					$scope.seatsForm.rUser = null;
+				}
+				
+				$http.post(servicesUrl +'reserveTicket', JSON.stringify($scope.seatsForm))
+				.then(function(response) 
+					{
+						$.unblockUI();		
+			        	if(response.status == 200)
+			        	{		
+		        			$scope.confirmedSeats = response.data;
+		        			$scope.showSuccessAlert("Los boletos han sido reservados..");
+		        			$("#seatsInfo").removeClass('hidden');
+		        	    	$("#divTravelForm").removeClass('hidden');
+		        	    	$("#travelsSearchGrid").removeClass('hidden');
+		        	    	$("#seatsConfirmForm").addClass('hidden');
+			        	}
+		    		}
+				);
+			}
+			
+		}
+		);
+	}
+	
+	$scope.buyTicket = function()
+	{
+		$.blockUI();
+    	$http.get(servicesUrl + 'getUserInfo')
+		.then(function(response) 
+		{
+			if(response.status == 404)
+			{
+				$("#loginModal").modal("show");
+				$.unblockUI();
+			}
+			else
+			{				
+				localStorage.setItem("userTickets", JSON.stringify($scope.seatsForm));
+				$scope.seatsForm.seleccionados = [];
+				for(var i = 0; i < $scope.reservados.length; i++) 
+				{
+					$scope.seatsForm.seleccionados.push($scope.reservados[i].id);			
+				}  
+				if($scope.rOption == "1")
+				{
+					$scope.seatsForm.rDoc = null;
+				}
+				else
+				{
+					$scope.seatsForm.rUser = null;
+				}	
+				if ($scope.rolCreador == "4")
+				{
+					$scope.seatsForm.rDoc = null;
+					$scope.seatsForm.rUser = null;
+				}
+				$http.post(servicesUrl +'buyTicket', JSON.stringify($scope.seatsForm))
+				.then(function(response) 
+					{
+						$.unblockUI();		
+			        	if(response.status == 200)
+			        	{		
+		        			$scope.confirmedSeats = response.data;
+		        			$scope.showSuccessAlert("Los boletos han sido reservados..");
+		        			$("#seatsInfo").removeClass('hidden');
+		        	    	$("#divTravelForm").removeClass('hidden');
+		        	    	$("#travelsSearchGrid").removeClass('hidden');
+		        	    	$("#seatsConfirmForm").addClass('hidden');
+			        	}
+		    		}
+				);
+			}
+			
+		}
+		);
+	}
 	
 	$scope.iniciarCheckout = function()
 	{

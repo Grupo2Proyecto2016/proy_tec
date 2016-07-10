@@ -183,6 +183,35 @@ public class TicketController
 		return new ResponseEntity<List<Pasaje>>(tickets, HttpStatus.OK);
 	}
 	
+	@Secured({"ROLE_SALES", "ROLE_DRIVER"})
+	@RequestMapping(value = "/reserveTicket", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
+	public ResponseEntity<List<Pasaje>> reserveTicket(@RequestBody BuyTicketWrapper buyTicket, @PathVariable String tenantid, HttpServletRequest request)
+	{
+		Usuario currentUser = context.GetUser(request, tenantid);		
+		LinesLogic ll = new LinesLogic(tenantid);
+		List<Pasaje> tickets = null;
+		
+		if(currentUser.getRol() == UserRol.Sales)
+		{
+			if (buyTicket.rUser != null)
+			{
+				UsersLogic ul = new UsersLogic(tenantid);
+				Usuario comprador = ul.GetUserByName(buyTicket.rUser);
+				tickets = ll.SalesReserveTicketsFromUser(comprador, currentUser, buyTicket.id_viaje, buyTicket.origen, buyTicket.destino, buyTicket.valor, buyTicket.seleccionados);
+			}
+			else if (buyTicket.rDoc != null)
+			{
+				tickets = ll.SalesReserveTicketsFromCI(buyTicket.rDoc, currentUser, buyTicket.id_viaje, buyTicket.origen, buyTicket.destino, buyTicket.valor, buyTicket.seleccionados);
+			}
+		}
+		else if(currentUser.getRol() == UserRol.Driver)
+		{
+			tickets = ll.DriverBuyTickets(currentUser, buyTicket.id_viaje, buyTicket.origen, buyTicket.destino, buyTicket.valor, buyTicket.seleccionados);
+		}
+		
+		return new ResponseEntity<List<Pasaje>>(tickets, HttpStatus.OK);
+	}
+	
 	
 	@Secured({"ROLE_SALES"})
 	@RequestMapping(value = "/getActiveTickets", method = RequestMethod.GET, produces = "application/json")

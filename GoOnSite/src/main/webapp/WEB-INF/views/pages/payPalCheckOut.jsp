@@ -28,7 +28,7 @@
 				                        <p>
 				                        	<i class="fa fa-calendar"></i>&nbsp;Fecha: {{cs.viaje.inicio | date:'dd-MM-yyyy'}}
 				                            <br />
-				                            <i class="fa fa-clock-o"></i>&nbsp;Salida de Terminal:{{cs.viaje.inicio | date:'HH:nn'}} 
+				                            <i class="fa fa-clock-o"></i>&nbsp;Salida de Terminal:{{cs.viaje.inicio | date:'HH:mm'}} 
 				                            <br />
 				                        </p>
 				                    </div>
