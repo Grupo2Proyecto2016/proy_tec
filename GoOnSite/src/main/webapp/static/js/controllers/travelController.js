@@ -1,9 +1,6 @@
 goOnApp.controller('travelController', function($scope, $http, uiGridConstants, i18nService, $timeout, $rootScope, $routeParams) 
 {
-	alert($routeParams.nombre);
-	alert($routeParams.apellido);
-	
-    $scope.message = 'Desde aquí podrás buscar el viaje que deseas y efectuar la compra o reserve de pasajes.';       
+	$scope.message = 'Desde aquí podrás buscar el viaje que deseas y efectuar la compra o reserve de pasajes.';       
     $scope.minDate = new Date();
     $scope.maxDate = new Date();
 	$scope.maxDate.setDate($scope.maxDate.getDate() + 30);
@@ -630,7 +627,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 			}
 			else
 			{		
-				localStorage.setItem(getJwtToken() + "userTickets", JSON.stringify($scope.seatsForm));
+				localStorage.setItem(/*getJwtToken() + */"userTickets", JSON.stringify($scope.seatsForm));
 			}
 		});
     	
@@ -649,7 +646,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 			}
 			else
 			{				
-				localStorage.setItem(getJwtToken() + "userTickets", JSON.stringify($scope.seatsForm));
+				localStorage.setItem("userTickets", JSON.stringify($scope.seatsForm));
 				$scope.seatsForm.seleccionados = [];
 				for(var i = 0; i < $scope.reservados.length; i++) 
 				{
