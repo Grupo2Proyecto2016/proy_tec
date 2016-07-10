@@ -22,6 +22,9 @@
 	  <script src="<c:url value='/static/js/qr/angular-qrcode.js' />"></script>
       <script src="<c:url value='/static/js/app.js' />"></script>
       
+      <!-- PAYPAL -->
+      <script src="https://js.braintreegateway.com/js/braintree-2.26.0.min.js"></script>
+      
 	  <!--ESTILO CUSTOM -->
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.6/{{company.css}}/bootstrap.min.css" />
       
