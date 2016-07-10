@@ -13,6 +13,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,8 +55,14 @@ public class MainController {
 	}
 	
 	@RequestMapping(value = "/{tenantid}/pages/{page}", method = RequestMethod.GET)
-	public String getPages(@RequestHeader HttpHeaders headers, @PathVariable(value="tenantid") String tenantid, @PathVariable(value="page") String page, HttpServletResponse response) 
+	public String getPages(@RequestParam(value="paymentId", required=false, defaultValue="") String paymentId,
+						   @RequestParam(required=false, defaultValue="") String tokenPP,
+						   @RequestParam(value="PayerID", required=false, defaultValue="") String PayerID,
+			               @RequestHeader HttpHeaders headers, @PathVariable(value="tenantid") String tenantid, 
+						   @PathVariable(value="page") String page, HttpServletResponse response,
+						   Model model) 
 	{
+		
 		String token = headers.getFirst("Authorization");
 		String newToken = RefreshToken(token, tenantid);
 		if(newToken != null)
@@ -66,8 +73,16 @@ public class MainController {
 		{
 			throw new HttpUnauthorizedException();
 		}
+		
+		model.addAttribute("paymentId", paymentId);
+		model.addAttribute("tokenPP", tokenPP);
+		model.addAttribute("PayerID", PayerID );
+		
 		return "pages/" + page;
 	}
+	
+	
+	
 	
 	boolean TenantExist(String tenantid)
 	{

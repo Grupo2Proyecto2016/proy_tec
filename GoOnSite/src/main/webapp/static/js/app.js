@@ -128,6 +128,16 @@
     		controller  : 'ticketController'
     	})
     	
+    	.when('/payPalCheckout', {
+    		templateUrl : tenantUrlPart + 'pages/payPalCheckOut.html',
+    		controller  : 'payPalCheckoutController'
+    	})
+    	
+    	.when('/payPalError', {
+    		templateUrl : tenantUrlPart + 'pages/payPalError.html',
+    		controller  : 'payPalErrorController'
+    	})
+    	
 		.otherwise({
 			redirectTo: '/'
     	});

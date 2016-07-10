@@ -71,6 +71,16 @@
 			<artifactId>GoOn.BusinessLogic</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+		    <groupId>com.paypal.sdk</groupId>
+		    <artifactId>rest-api-sdk</artifactId>
+		    <version>LATEST</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.paypal.sdk</groupId>
+		    <artifactId>merchantsdk</artifactId>
+		    <version>2.14.117</version>
+		</dependency>
 	</dependencies>
 
 

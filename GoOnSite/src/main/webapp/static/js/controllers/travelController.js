@@ -612,7 +612,28 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     	$("#selectTicketsModal").modal('hide');
     	$("#divTravelForm").addClass('hidden');
     	$("#travelsSearchGrid").addClass('hidden');
-    	$("#seatsConfirmForm").removeClass('hidden');    	
+    	$("#seatsConfirmForm").removeClass('hidden');
+    	
+    	$scope.seatsForm.seleccionados = [];
+		for(var i = 0; i < $scope.reservados.length; i++) 
+		{
+			$scope.seatsForm.seleccionados.push($scope.reservados[i].id);			
+		} 
+		
+		$http.get(servicesUrl + 'getUserInfo')
+		.then(function(response) 
+		{
+			if(response.status == 404)
+			{
+				$("#loginModal").modal("show");
+				$.unblockUI();
+			}
+			else
+			{		
+				localStorage.setItem(getJwtToken() + "userTickets", JSON.stringify($scope.seatsForm));
+			}
+		});
+    	
     }
     
     $scope.buyTicket = function()
@@ -628,6 +649,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 			}
 			else
 			{				
+				localStorage.setItem(getJwtToken() + "userTickets", JSON.stringify($scope.seatsForm));
 				$scope.seatsForm.seleccionados = [];
 				for(var i = 0; i < $scope.reservados.length; i++) 
 				{
@@ -646,7 +668,27 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 					$scope.seatsForm.rDoc = null;
 					$scope.seatsForm.rUser = null;
 				}	
-				$http.post(servicesUrl +'buyTicket', JSON.stringify($scope.seatsForm))
+				$http.get(servicesUrl +'getPaypal')
+				.then(function(response) 
+				{
+					$.unblockUI();		
+		        	if(response.status == 200)
+		        	{		
+	        			$scope.payPalInfo = response.data;
+	        			var link = ""
+	        			for(var i=0; i < $scope.payPalInfo.links.length; i++)
+	        			{
+	        				var item = $scope.payPalInfo.links[i];
+	        				if(item.rel == "approval_url")
+	        				{
+	        					link = item.href;
+	        				}	
+	        			}
+	        			window.location = link;
+		        	}
+	    		}
+				);
+				/*$http.post(servicesUrl +'buyTicket', JSON.stringify($scope.seatsForm))
 				.then(function(response) 
 					{
 						$.unblockUI();		
@@ -660,7 +702,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 		        	    	$("#seatsConfirmForm").addClass('hidden');
 			        	}
 		    		}
-				);
+				);*/
 			}
 			
 		}
@@ -668,6 +710,16 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     	
 						
 	};
+	
+	$scope.iniciarCheckout = function()
+	{
+		$http.get(servicesUrl + 'iniciarCheckout')
+		.then(function(response) 
+		{
+			
+		});
+	};
+	
 	$scope.showBuyDialog = function(row)
     {
     	$("#buyModal").modal('show');
@@ -677,6 +729,28 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     	$("#buyModal").modal('hide');
     };
     
+    $scope.printDiv = function(idDiv)
+    {
+    	
+    	
+    	//var printSection = document.getElementById('printSection');
+
+        // if there is no printing section, create one
+//        if (!printSection) {
+//            printSection = document.createElement('div');
+//            printSection.id = 'printSection';
+//            document.body.appendChild(printSection);
+//        }
+//        var elemToPrint = document.getElementById(idDiv);
+//        
+//        var domClone = elemToPrint.cloneNode(true);
+//        
+//        printSection.appendChild(domClone);
+        
+        window.print();
+        
+        //printSection.innerHTML = '';
+    }
     
     $scope.getStations();
 }); 	

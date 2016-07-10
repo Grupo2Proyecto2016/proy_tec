@@ -15,6 +15,45 @@
 	<div class="col-xs-1"></div>
 </div>
 
+<div class="row">
+	<div class="col-xs-2"></div>
+	<div class="col-xs-8">
+		<div class="panel panel-default hidden" id="seatsInfo">
+			<div class="panel-heading">
+				<h4 class="modal-title">Asientos Confirmados</h4>
+				<p ng-click="printDiv('forPrint')"> &nbsp;<i class="fa fa-print" aria-hidden="true"></i> Imprimir</p>
+			</div>
+			<div class="panel-body" id="printSection">	
+				<div class="container" id="forPrint">
+				    <div class="row" ng-repeat="cs in confirmedSeats track by $index">
+				        <div class="col-xs-8">
+				            <div class="well well-sm">
+				                <div class="row">
+				                    <div class="col-sm-6 col-md-4">
+				                    	<qrcode version="3" error-correction-level="M" size="150" data="{{cs.numero}}"></qrcode>
+				                    </div>
+				                    <div class="col-sm-6 col-md-8">
+				                    	<h4><i class="fa fa-bus" aria-hidden="true"></i> Línea {{cs.viaje.linea.id_linea}} - Coche: {{cs.viaje.vehiculo.id_vehiculo}} - <i class="fa fa-hashtag" aria-hidden="true"> Asiento</i> {{cs.asiento.numero}}</h4>
+				                        <small> <i class="fa fa-map-marker"></i>&nbsp;Desde:<cite title="Montevideo">{{cs.parada_sube.descripcion}}</cite></small>
+				                        <small> <i class="fa fa-map-marker"></i>&nbsp;Hasta:<cite title="Piriapolis">{{cs.parada_baja.descripcion}}</cite></small>
+				                        <p>
+				                        	<i class="fa fa-calendar"></i>&nbsp;Fecha: {{cs.viaje.inicio | date:'dd-MM-yyyy'}}
+				                            <br />
+				                            <i class="fa fa-clock-o"></i>&nbsp;Salida de Terminal:{{cs.viaje.inicio | date:'HH:nn'}} 
+				                            <br />
+				                        </p>		                        
+				                    </div>
+				                </div>
+				            </div>
+				        </div>
+				    </div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-2"></div>
+</div>	
+
 <div id="divTravelForm">
 	<div class="row">
 		<div class="col-xs-2"></div>
@@ -74,6 +113,9 @@
 		<div class="col-xs-1"></div>
 	</div>
 </div>
+
+
+
 
 <div class="row" style="margin-top: 50px;" id="travelsSearchGrid">
 	<div class="col-xs-1"></div>
@@ -366,10 +408,15 @@
 				</div>	
 				<div class="form-group"> 
 					<div class="col-sm-12">
-				 		<button style="float: right; margin-top: 10px;" class="btn btn-info">Confirmar Compra</button>
-					</div>
+				 		<button style="float: right; margin-top: 10px;" class="btn btn-info">Reservar</button>
+					</div>					
 				</div>
 			</form>
+			<div class="col-sm-12">
+		 		<form action='checkout' METHOD='POST'>
+					<input type='image' name='paypal_submit' id='paypal_submit' onclick="iniciarCheckout();" src='https://www.paypal.com/es_ES/i/btn/btn_dg_pay_w_paypal.gif' border='0' align='top' alt='Pagar con Paypal'/>
+				</form>
+			</div>
 		</div>
 	</div>
 	</div>
@@ -412,7 +459,13 @@
 	<div class="col-xs-2"></div>
 </div>	
 
-
+<script>
+	var dg = new PAYPAL.apps.DGFlow(
+	{
+		trigger: 'paypal_submit',
+		expType: 'instant'
+	});
+</script>
 
 
 
