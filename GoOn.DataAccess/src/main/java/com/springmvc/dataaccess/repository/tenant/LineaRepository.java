@@ -208,14 +208,15 @@ public class LineaRepository {
 		EntityTransaction t = entityManager.getTransaction();
 		try
 		{
-			t.begin();	
 			for (Pasaje ticket : tickets)
 			{
+				t.begin();	
 				ticket.setPaymentId(paymentId);
 				ticket.setEstado(TicketStatus.Bought.getValue());
+				entityManager.merge(ticket);
+				entityManager.flush();
+				t.commit();
 			}
-			entityManager.flush();
-			t.commit();
 		}
 		catch(Exception ex)
 		{

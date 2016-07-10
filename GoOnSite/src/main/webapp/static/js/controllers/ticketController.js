@@ -74,16 +74,16 @@ goOnApp.controller('ticketController', function($scope, $http, uiGridConstants, 
     
     $scope.confirmReservationDialog = function(row)
     {
-    	$scope.ticketToConfirm = row.entity.id_pasaje;
+    	$scope.ticketToConfirm = row.entity;
     	$("#reservationModal").modal('show');
     };
     $scope.confirmReservation = function()
     {
-    	$http.post(servicesUrl + 'confirmReservation?ticketId=' + $scope.ticketToConfirm)
+    	$http.post(servicesUrl + 'confirmReservation',  JSON.stringify($scope.ticketToConfirm))
 		.then(function(result){
 			if(result.status = 200)
 			{
-				$scope.showSuccessAlert("El pasaje ha sido confirmado");
+				$scope.showSuccessAlert("La reserva ha sido confirmada");
 				$("#reservationModal").modal('hide');
 				$scope.getActiveTickets();
 			}
@@ -92,16 +92,16 @@ goOnApp.controller('ticketController', function($scope, $http, uiGridConstants, 
     
     $scope.cancelTicketDialog = function(row)
     {
-    	$scope.ticketToCancel = row.entity.id_pasaje;
+    	$scope.ticketToCancel = row.entity;
     	$("#cancelTicketModal").modal('show');
     };
     $scope.cancelTicket = function()
     {
-    	$http.post(servicesUrl + 'cancelTicket?ticketId=' + $scope.ticketToCancel)
+    	$http.post(servicesUrl + 'cancelTicket', JSON.stringify($scope.ticketToCancel))
 		.then(function(result){
 			if(result.status = 200)
 			{
-				$scope.showSuccessAlert("El pasaje ha cancelado");
+				$scope.showSuccessAlert(result.data.msg);
 				$("#cancelTicketModal").modal('hide');
 				$scope.getActiveTickets();
 			}

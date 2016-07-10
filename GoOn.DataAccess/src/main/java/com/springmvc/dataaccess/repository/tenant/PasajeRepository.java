@@ -282,7 +282,7 @@ public class PasajeRepository {
 		try
 		{
 			t.begin();
-			entityManager.remove(ticket);
+			entityManager.remove(entityManager.contains(ticket) ? ticket : entityManager.merge(ticket));
 			entityManager.flush();
 			t.commit();
 		}
