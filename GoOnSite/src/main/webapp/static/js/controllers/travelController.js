@@ -627,7 +627,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 			}
 			else
 			{		
-				localStorage.setItem(getJwtToken() + "userTickets", JSON.stringify($scope.seatsForm));
+				localStorage.setItem(/*getJwtToken() + */"userTickets", JSON.stringify($scope.seatsForm));
 			}
 		});
     	
@@ -646,7 +646,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 			}
 			else
 			{				
-				localStorage.setItem(getJwtToken() + "userTickets", JSON.stringify($scope.seatsForm));
+				localStorage.setItem("userTickets", JSON.stringify($scope.seatsForm));
 				$scope.seatsForm.seleccionados = [];
 				for(var i = 0; i < $scope.reservados.length; i++) 
 				{

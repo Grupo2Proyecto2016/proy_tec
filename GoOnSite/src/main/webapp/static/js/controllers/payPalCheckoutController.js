@@ -3,7 +3,11 @@ goOnApp.controller('payPalCheckoutController', function($scope, $http, uiGridCon
 	$scope.pagar = function()
 	{		
 		//sacar del storage los pasajes y mandarlos en el json
-		$http.post(servicesUrl +'payPaypal', JSON.stringify($routeParams))
+		$scope.seatsForm = JSON.parse(localStorage.getItem(/*getJwtToken() + */"userTickets"));
+		$scope.seatsForm.paymentId = $routeParams.paymentId;
+		$scope.seatsForm.token = $routeParams.token;
+		$scope.seatsForm.PayerID = $routeParams.PayerID;		
+		$http.post(servicesUrl +'payPaypal', JSON.stringify($scope.seatsForm))
 		.then(function(response) 
 		{
 			$.unblockUI();		

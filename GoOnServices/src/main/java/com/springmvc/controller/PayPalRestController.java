@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,9 @@ import com.paypal.api.payments.Transaction;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.OAuthTokenCredential;
 import com.paypal.base.rest.PayPalRESTException;
+import com.springmvc.entities.tenant.Pasaje;
+import com.springmvc.entities.tenant.Usuario;
+import com.springmvc.logic.implementations.LinesLogic;
 import com.springmvc.requestWrappers.LinesWrapper;
 import com.springmvc.requestWrappers.PayPalWrapper;
 import com.springmvc.utils.UserContext;
@@ -105,10 +110,15 @@ public class PayPalRestController
 	@Secured({"ROLE_CLIENT"})
 	@RequestMapping(value = "/payPaypal", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
 	@ResponseBody
-	public String payPaypal(@RequestBody PayPalWrapper paypal, @PathVariable String tenantid)
+	public String payPaypal(@RequestBody PayPalWrapper paypal, @PathVariable String tenantid, HttpServletRequest request)
     {
 		
 		//reservar pasajes, si no se puede no sigo //llamando a clientreservetickets
+		
+		Usuario currentUser = context.GetUser(request, tenantid);		
+		LinesLogic ll = new LinesLogic(tenantid);
+		List<Pasaje> tickets = null;
+		tickets = ll.ClientReserveTickets(currentUser, paypal.id_viaje, paypal.origen, paypal.destino, paypal.valor, paypal.seleccionados);
 		
 		Map<String, String> sdkConfig = new HashMap<String, String>();
 		sdkConfig.put("mode", "sandbox");
@@ -145,7 +155,16 @@ public class PayPalRestController
 			e.printStackTrace();
 		}
 		
-		//si el pago quedó cambio el estado a pagado de los pasajes reservados
+		//si el pago quedó cambio el estado a pagado de los pasajes reservados		
+		if (pagoRealizado.getState() == "approved")
+		{
+			//pagoRealizado.getId(); //id del pago realizado
+			
+		}
+		else
+		{
+			
+		}
 		return pagoRealizado.toJSON();	
     }
 	
