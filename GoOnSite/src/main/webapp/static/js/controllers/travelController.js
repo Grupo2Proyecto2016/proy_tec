@@ -665,7 +665,11 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 					$scope.seatsForm.rDoc = null;
 					$scope.seatsForm.rUser = null;
 				}	
-				$http.get(servicesUrl +'getPaypal')
+				//$http.get(servicesUrl +'getPaypal')
+				$scope.wrapper = {};
+				$scope.wrapper.total = $scope.precio_total;
+				$scope.wrapper.descripcion = "GoOn Services - Compra de Pasajes";	
+				$http.post(servicesUrl +'getPaypal',  JSON.stringify($scope.wrapper))
 				.then(function(response) 
 				{
 					$.unblockUI();		

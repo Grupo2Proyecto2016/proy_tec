@@ -32,6 +32,7 @@ import com.springmvc.entities.tenant.Usuario;
 import com.springmvc.logic.implementations.LinesLogic;
 import com.springmvc.requestWrappers.CustomPayPalResponseWrapper;
 import com.springmvc.requestWrappers.PayPalWrapper;
+import com.springmvc.requestWrappers.PaymentWrapper;
 import com.springmvc.utils.UserContext;
 
 @RestController
@@ -43,9 +44,9 @@ public class PayPalRestController
     private UserContext context;
 	
 	@Secured({"ROLE_CLIENT"})
-	@RequestMapping(value = "/getPaypal", method = RequestMethod.GET, /*consumes="application/json",*/ produces = "application/json")
+	@RequestMapping(value = "/getPaypal", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
 	@ResponseBody
-	public String getPayPal(@PathVariable String tenantid)
+	public String getPayPal(@RequestBody PaymentWrapper pay, @PathVariable String tenantid)
     {
 		Map<String, String> sdkConfig = new HashMap<String, String>();
 		sdkConfig.put("mode", "sandbox");
@@ -65,10 +66,11 @@ public class PayPalRestController
 
 		Amount amount = new Amount();
 		amount.setCurrency("USD");
-		amount.setTotal("12");
+		
+		amount.setTotal(pay.total);
 		
 		Transaction transaction = new Transaction();
-		transaction.setDescription("Pago de pasaje GoOn");
+		transaction.setDescription(pay.descripcion);
 		transaction.setAmount(amount);
 		
 		List<Transaction> transactions = new ArrayList<Transaction>();
@@ -82,7 +84,7 @@ public class PayPalRestController
 		payment.setPayer(payer);
 		payment.setTransactions(transactions);
 		RedirectUrls redirectUrls = new RedirectUrls();
-		redirectUrls.setCancelUrl("http://localhost:8080/GoOnSite/" + tenantid + "#/payPalError");
+		redirectUrls.setCancelUrl("http://localhost:8080/GoOnSite/" + tenantid + "#/home");
 		redirectUrls.setReturnUrl("http://localhost:8080/GoOnSite/" + tenantid + "#/payPalCheckout");
 		payment.setRedirectUrls(redirectUrls);
 
