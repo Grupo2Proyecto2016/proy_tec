@@ -48,7 +48,6 @@ public class ViajeRepository {
 
 	public void InsertTravel(Viaje travel) 
 	{
-		travel.setEncomiendas(new ArrayList<>());
 		EntityTransaction t = entityManager.getTransaction();
 		try
 		{

@@ -38,8 +38,10 @@ goOnApp.controller('ticketController', function($scope, $http, uiGridConstants, 
           { name: ' ',
           	enableFiltering: false,
           	enableSorting: false,
-          	width: '130',
-            cellTemplate:'<button style="width: 70px" class="btn-xs btn-success" ng-show="row.entity.estado == 1" ng-click="grid.appScope.confirmReservationDialog(row)">Confirmar</button>'
+          	width: '180',
+            cellTemplate:
+            	'<button style="width: 50px" class="btn-xs btn-info" ng-click="grid.appScope.showTicket(row)">Ver</button>'
+            	+ '<button style="width: 70px" class="btn-xs btn-success" ng-show="row.entity.estado == 1" ng-click="grid.appScope.confirmReservationDialog(row)">Confirmar</button>'
             	+ '<button style="width: 60px" class="btn-xs btn-warning" ng-click="grid.appScope.cancelTicketDialog(row)">Cancelar</button>'
       	  }
         ]
@@ -71,6 +73,16 @@ goOnApp.controller('ticketController', function($scope, $http, uiGridConstants, 
     };
     
     $scope.getActiveTickets();
+    
+    $scope.showTicket = function(row)
+    {
+    	$scope.ticketToShow = row.entity;
+    	$("#viewTicketModal").modal('show');
+    };
+    $scope.printDiv = function()
+    {
+        window.print();
+    };
     
     $scope.confirmReservationDialog = function(row)
     {

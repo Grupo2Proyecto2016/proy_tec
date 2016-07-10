@@ -33,11 +33,7 @@ public class Viaje {
 
 	@ManyToOne(fetch=FetchType.EAGER)
 	private Vehiculo vehiculo;
-	
-	@OneToMany(cascade = CascadeType.ALL , fetch = FetchType.EAGER)   
-	@JoinColumn(name = "id_viaje")
-    private List<Encomienda> encomiendas;
-	
+
 	@Transient
 	public int asientosLibres;
 	
@@ -82,12 +78,6 @@ public class Viaje {
 	}
 	public void setVehiculo(Vehiculo vehiculo) {
 		this.vehiculo = vehiculo;
-	}
-	public List<Encomienda> getEncomiendas() {
-		return encomiendas;
-	}
-	public void setEncomiendas(List<Encomienda> encomiendas) {
-		this.encomiendas = encomiendas;
 	}
 	public Boolean getTerminado() {
 		return terminado;
