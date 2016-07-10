@@ -23,12 +23,12 @@
 				                    </div>
 				                    <div class="col-sm-6 col-md-8">
 				                    	<h4><i class="fa fa-bus" aria-hidden="true"></i> Línea {{cs.viaje.linea.id_linea}} - Coche: {{cs.viaje.vehiculo.id_vehiculo}} - <i class="fa fa-hashtag" aria-hidden="true"> Asiento</i> {{cs.asiento.numero}}</h4>
-				                        <small> <i class="fa fa-map-marker"></i>&nbsp;Desde:<cite title="Montevideo">Montevideo</cite></small>
-				                        <small> <i class="fa fa-map-marker"></i>&nbsp;Hasta:<cite title="Piriapolis">Piriapolis </cite></small>
+				                        <small> <i class="fa fa-map-marker"></i>&nbsp;Desde:<cite title="{{cs.parada_sube.descripcion}}">{{cs.parada_sube.descripcion}}</cite></small>
+				                        <small> <i class="fa fa-map-marker"></i>&nbsp;Hasta:<cite title="{{cs.parada_baja.descripcion}}">{{cs.parada_baja.descripcion}}</cite></small>
 				                        <p>
-				                        	<i class="fa fa-calendar"></i>&nbsp;Fecha: 10/07/2016
+				                        	<i class="fa fa-calendar"></i>&nbsp;Fecha: {{cs.viaje.inicio | date:'dd-MM-yyyy'}}
 				                            <br />
-				                            <i class="fa fa-clock-o"></i>&nbsp;Salida de Terminal: 20:30
+				                            <i class="fa fa-clock-o"></i>&nbsp;Salida de Terminal:{{cs.viaje.inicio | date:'HH:nn'}} 
 				                            <br />
 				                        </p>
 				                    </div>
