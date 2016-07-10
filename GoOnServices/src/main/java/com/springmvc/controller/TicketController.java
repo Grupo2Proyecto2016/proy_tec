@@ -26,6 +26,7 @@ import com.springmvc.entities.tenant.Pasaje;
 import com.springmvc.entities.tenant.Usuario;
 import com.springmvc.entities.tenant.Viaje;
 import com.springmvc.entities.tenant.ViajesBuscados;
+import com.springmvc.enums.TicketStatus;
 import com.springmvc.enums.UserRol;
 import com.springmvc.exceptions.CollectTicketException;
 import com.springmvc.logic.implementations.LinesLogic;
@@ -198,27 +199,40 @@ public class TicketController
 		return new ResponseEntity<List<Pasaje>>(tickets, HttpStatus.OK);
 	}
 	
-	
-	/*@Secured({"ROLE_CLIENT", "ROLE_SALES", "ROLE_DRIVER"})
-	@RequestMapping(value = "/buyTicket", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
-	public ResponseEntity<Void> buyTicket(@RequestBody BuyTicketWrapper buyTicket, @PathVariable String tenantid, HttpServletRequest request)
+	@Secured({"ROLE_SALES"})
+	@RequestMapping(value = "/cancelTicket", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
+	public ResponseEntity<CustomResponseWrapper> getActiveTickets(@RequestBody Pasaje ticket, @PathVariable String tenantid)
 	{
-		Usuario currentUser = context.GetUser(request, tenantid);		
+		CustomResponseWrapper response = new CustomResponseWrapper();
+		
 		LinesLogic ll = new LinesLogic(tenantid);
-		if (buyTicket.rUser != null)
+		ll.CancelTicket(ticket);
+		
+		if(ticket.getEstado() == TicketStatus.Bought.getValue())
 		{
-			UsersLogic ul = new UsersLogic(tenantid);
-			Usuario comprador = ul.GetUserByName(buyTicket.rUser);
-			ll.buyTickets(comprador, currentUser, buyTicket.id_viaje, buyTicket.origen, buyTicket.destino, buyTicket.valor, buyTicket.seleccionados);
-		}
-		else if (buyTicket.rDoc != null)
-		{
-			ll.buyTickets(buyTicket.rDoc, currentUser, buyTicket.id_viaje, buyTicket.origen, buyTicket.destino, buyTicket.valor, buyTicket.seleccionados);
+			if(ticket.getPaymentId() != null)
+			{
+				response.setMsg("El pasaje fue cancelado. El reembolzo será acreditado dentro de las próximas 48 horas.");
+			}
+			else
+			{
+				response.setMsg(String.format("El pasaje fue cancelado. Debe retornar al cliente $ %s", ticket.getCosto()));
+			}
 		}
 		else
 		{
-			ll.buyTickets(currentUser, buyTicket.id_viaje, buyTicket.origen, buyTicket.destino, buyTicket.valor, buyTicket.seleccionados);
+			response.setMsg("El reserva fue cancelada.");
 		}
-		return new ResponseEntity<Void>(HttpStatus.OK);
-	}*/
+		return new ResponseEntity<CustomResponseWrapper>(response, HttpStatus.OK);
+	}
+	
+	@Secured({"ROLE_SALES"})
+	@RequestMapping(value = "/confirmReservation", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
+	public ResponseEntity<Void> confirmReservation(@RequestBody Pasaje ticket, @PathVariable String tenantid)
+	{
+		LinesLogic ll = new LinesLogic(tenantid);
+		ll.SalesConfirmTicket(ticket);
+		return new ResponseEntity(HttpStatus.OK);
+	}
+	
 }

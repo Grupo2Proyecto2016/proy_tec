@@ -1,5 +1,8 @@
-goOnApp.controller('travelController', function($scope, $http, uiGridConstants, i18nService, $timeout, $rootScope) 
+goOnApp.controller('travelController', function($scope, $http, uiGridConstants, i18nService, $timeout, $rootScope, $routeParams) 
 {
+	alert($routeParams.nombre);
+	alert($routeParams.apellido);
+	
     $scope.message = 'Desde aquí podrás buscar el viaje que deseas y efectuar la compra o reserve de pasajes.';       
     $scope.minDate = new Date();
     $scope.maxDate = new Date();

@@ -13,6 +13,7 @@ import com.springmvc.entities.tenant.Linea;
 import com.springmvc.entities.tenant.Parada;
 import com.springmvc.entities.tenant.Pasaje;
 import com.springmvc.entities.tenant.Viaje;
+import com.springmvc.enums.TicketStatus;
 
 public class LineaRepository {
 	
@@ -200,6 +201,27 @@ public class LineaRepository {
 			t.rollback();
 			throw ex;
 		}			
+	}
+
+	public void ClientConfirmTickets(List<Pasaje> tickets, String paymentId) 
+	{
+		EntityTransaction t = entityManager.getTransaction();
+		try
+		{
+			t.begin();	
+			for (Pasaje ticket : tickets)
+			{
+				ticket.setPaymentId(paymentId);
+				ticket.setEstado(TicketStatus.Bought.getValue());
+			}
+			entityManager.flush();
+			t.commit();
+		}
+		catch(Exception ex)
+		{
+			t.rollback();
+			throw ex;
+		}
 	}
 
 //	public List<Parada> findDestinationTerminalsByOrigin(long id_parada) 

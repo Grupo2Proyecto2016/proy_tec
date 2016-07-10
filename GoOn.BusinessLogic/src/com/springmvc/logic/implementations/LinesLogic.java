@@ -13,6 +13,7 @@ import java.util.UUID;
 
 import com.springmvc.dataaccess.context.TenantDAContext;
 import com.springmvc.entities.tenant.Asiento;
+import com.springmvc.entities.tenant.Devolucion;
 import com.springmvc.entities.tenant.Linea;
 import com.springmvc.entities.tenant.Mantenimiento;
 import com.springmvc.entities.tenant.Parada;
@@ -358,31 +359,16 @@ public class LinesLogic implements ILinesLogic
 		return TenantContext.PasajeRepository.getValorPasaje(origen, destino, id_linea);
 	}
 
-	public List<Pasaje> ClientConfirmTickets(Usuario currentUser, long id_viaje, int origen, int destino, Double valor,List<Long> reservados) 
+	public void ClientConfirmTickets(List<Pasaje> tickets, String paymentId) 
+	{
+		TenantContext.LineaRepository.ClientConfirmTickets(tickets, paymentId);
+	}
+	
+	public void SalesConfirmTicket(Pasaje ticket) 
 	{
 		List<Pasaje> tickets = new ArrayList<>();
-		Parada parada_baja = TenantContext.ParadaRepository.findByID(destino);
-		Parada parada_sube = TenantContext.ParadaRepository.findByID(origen);
-		Viaje viaje = TenantContext.ViajeRepository.FindByID(id_viaje);
-		for(int x = 0; x < reservados.size(); x++)
-		{
-			Pasaje ticketToPersist = new Pasaje();
-			Asiento asiento = TenantContext.AsientoRepository.getByID(reservados.get(x));
-			ticketToPersist.setAsiento(asiento);
-			ticketToPersist.setCosto(valor);
-			ticketToPersist.setEstado(TicketStatus.Bought.getValue());			
-			ticketToPersist.setParada_baja(parada_baja);			
-			ticketToPersist.setParada_sube(parada_sube);
-			ticketToPersist.setUser_compra(currentUser);
-			ticketToPersist.setUsr_crea(currentUser);
-			ticketToPersist.setViaje(viaje);
-			UUID auxNum = UUID.randomUUID();
-			ticketToPersist.setNumero(auxNum.toString());
-			ticketToPersist.setId_pasaje(0);
-			TenantContext.LineaRepository.InsertTicket(ticketToPersist);
-			tickets.add(ticketToPersist);
-		}
-		return tickets;
+		tickets.add(ticket);
+		TenantContext.LineaRepository.ClientConfirmTickets(tickets, null);
 	}
 	
 	public List<Pasaje> ClientReserveTickets(Usuario currentUser, long id_viaje, int origen, int destino, Double valor,List<Long> reservados) 
@@ -558,5 +544,19 @@ public class LinesLogic implements ILinesLogic
 	public List<Pasaje> GetActiveTickets(Date from, Date to) 
 	{
 		return TenantContext.PasajeRepository.GetActive(from, to);
+	}
+
+	public void CancelTicket(Pasaje ticket) 
+	{
+		if(ticket.getPaymentId() != null)
+		{
+			Devolucion refund = new Devolucion();
+			refund.setCi_cliente(ticket.getCi_receptor());
+			refund.setId_pago(ticket.getPaymentId());
+			refund.setRealizado(false);
+			
+			TenantContext.PasajeRepository.AddRefund(refund);
+		}
+		DeleteTicket(ticket);
 	}
 }
