@@ -9,18 +9,6 @@ goOnApp.controller('outBranchesController', function($scope, $http, uiGridConsta
     $scope.markers = [];
     $scope.branchesMarkers = [];
     
-    $http.post(servicesUrl + 'setTravelLocation', JSON.stringify({travelId: '1', lat: '-34.8912486', lng: '-56.1871611'}))
-    .then(function(result) 
-	{
-    	var a = 1;
-	});
-    
-    $http.get(servicesUrl + 'getLastTravelLocation?travelId=1')
-    .then(function(result) 
-	{
-    	var a = 1;
-	});
-    
     $scope.getBranches = function()
     {
     	$http.get(servicesUrl + 'getBranches').success(function(data, status, headers, config) 

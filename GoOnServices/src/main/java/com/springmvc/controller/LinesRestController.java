@@ -311,7 +311,7 @@ public class LinesRestController{
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
-	@Secured({"ROLE_CLIENT", "ROLE_DRIVER"})
+	@Secured({"ROLE_CLIENT"})
 	@RequestMapping(value = "/getLastTravelLocation", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<ViajeUbicacion> GetLastTravelLocation(@RequestParam long travelId, @PathVariable String tenantid)
 	{
