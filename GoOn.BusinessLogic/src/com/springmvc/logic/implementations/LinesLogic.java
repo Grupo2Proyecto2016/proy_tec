@@ -553,7 +553,7 @@ public class LinesLogic implements ILinesLogic
 		TenantContext.EncomiendaRepository.updateByTravel(travelId, PackageStatus.Carring);
 	}
 
-	public void CollectTicket(long travelId, String ticketNumber) throws CollectTicketException 
+	public Pasaje CollectTicket(long travelId, String ticketNumber) throws CollectTicketException 
 	{
 		Pasaje ticket = TenantContext.PasajeRepository.GetByNumber(ticketNumber);
 		if(ticket == null)
@@ -582,6 +582,7 @@ public class LinesLogic implements ILinesLogic
 				TenantContext.PasajeRepository.Collect(ticket);
 			}
 		}
+		return ticket;
 	}
 	
 	public List<Parada> FindNextStationsByOrigin(long id_parada, long id_linea)

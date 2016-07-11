@@ -34,6 +34,7 @@ import com.springmvc.logic.implementations.PackageLogic;
 import com.springmvc.logic.implementations.UsersLogic;
 import com.springmvc.requestWrappers.AvailableSeatsWrapper;
 import com.springmvc.requestWrappers.BuyTicketWrapper;
+import com.springmvc.requestWrappers.CollectCustomResponseWrapper;
 import com.springmvc.requestWrappers.CollectTicketWrapper;
 import com.springmvc.requestWrappers.CustomResponseWrapper;
 import com.springmvc.requestWrappers.TravelSearchWrapper;
@@ -133,25 +134,27 @@ public class TicketController
 	
 	@Secured({"ROLE_DRIVER"})
 	@RequestMapping(value = "/collectTicket", method = RequestMethod.POST, produces = "application/json")
-	public ResponseEntity<CustomResponseWrapper> collectTicket(@RequestBody CollectTicketWrapper collectTicket, @PathVariable String tenantid)
+	public ResponseEntity<CollectCustomResponseWrapper> collectTicket(@RequestBody CollectTicketWrapper collectTicket, @PathVariable String tenantid)
 	{
-		CustomResponseWrapper response = new CustomResponseWrapper();
+		Pasaje collectedTicket = null;
+		CollectCustomResponseWrapper response = new CollectCustomResponseWrapper();
 		LinesLogic ll = new LinesLogic(tenantid);
 		
 		try 
 		{
-			ll.CollectTicket(collectTicket.travelId, collectTicket.ticketNumber);
-			response.setSuccess(true);
-			response.setMsg("El boleto ha sido cobrado");
+			collectedTicket = ll.CollectTicket(collectTicket.travelId, collectTicket.ticketNumber);
+			response.ticket = collectedTicket;
+			response.success = true;
+			response.msg = "El boleto ha sido cobrado";
 		}
 		catch (CollectTicketException e)
 		{
-			response.setSuccess(false);
-			response.setMsg(e.getMessage());
+			response.success = false;
+			response.msg = e.getMessage();
 			System.out.println(e.getMessage());
 		}
 		
-		return new ResponseEntity<CustomResponseWrapper>(response, HttpStatus.OK);
+		return new ResponseEntity<CollectCustomResponseWrapper>(response, HttpStatus.OK);
 	}
 
 	@Secured({"ROLE_SALES", "ROLE_DRIVER"})
