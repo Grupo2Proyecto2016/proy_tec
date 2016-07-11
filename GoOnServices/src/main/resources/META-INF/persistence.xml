@@ -18,6 +18,7 @@
 		<class>com.springmvc.entities.tenant.Sucursal</class>
 		<class>com.springmvc.entities.tenant.Parametro</class>
 		<class>com.springmvc.entities.tenant.Devolucion</class>
+		<class>com.springmvc.entities.tenant.ViajeUbicacion</class>
 
     </persistence-unit>
 </persistence>
