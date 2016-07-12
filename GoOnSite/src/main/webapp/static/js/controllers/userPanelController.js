@@ -1,4 +1,4 @@
-goOnApp.controller('userPanelController', function($scope, $http, $location, uiGridConstants, i18nService, $rootScope) 
+goOnApp.controller('userPanelController', function($scope, $http, $location, uiGridConstants, $timeout, i18nService, $rootScope) 
 {
 	$scope.userModel = {};
 	$scope.passwordModel = null; //Modelo para cambiar el password
@@ -191,4 +191,119 @@ goOnApp.controller('userPanelController', function($scope, $http, $location, uiG
     {
         window.print();
     };
+    
+    //MONITOREO
+    $scope.travelToWatch = null;
+    $scope.travelMap = new google.maps.Map(document.getElementById('travelMap'), 
+	{
+    	zoom: 12,
+    	center: {lat: -34.894418, lng: -56.165775}
+	});
+    $scope.busMarker = new google.maps.Marker({
+		map: $scope.travelMap,
+		position: null,
+		icon: "static/images/busMarker.png",
+		zIndex: 1000
+	});
+    var directionsService = new google.maps.DirectionsService;
+    
+    var directionsDisplay = new google.maps.DirectionsRenderer({map: $scope.travelMap});
+    
+    $scope.showTravelLocationModal = function(travel)
+    {
+    	$scope.busMarker.setPosition(null);
+    	$scope.travelToWatch = travel.id_viaje;
+    	$("#travelLocationModal").modal('show');	
+    	$timeout(function () {            
+    		google.maps.event.trigger($scope.travelMap, 'resize');
+    		$scope.displayTravel(travel.linea, directionsDisplay);
+        }, 400);
+    };
+    
+    
+    $scope.displayTravel = function(line, directionsDisplay)
+    {
+    	//ordeno paradas
+    	line.paradas.sort(function(a, b){return a.id_parada - b.id_parada});
+
+    	var origin = null;
+    	var destination = null;
+    	
+       	var waypts = [];
+    	for (var i = 0; i < line.paradas.length; i++) 
+    	{
+    		var position = new google.maps.LatLng(line.paradas[i].latitud, line.paradas[i].longitud);
+    	    if(line.paradas[i].id_parada == line.origen.id_parada)
+    	    {
+    	    	origin = position;
+    	    }
+    	    else if(line.paradas[i].id_parada == line.destino.id_parada)
+    	    {
+    	    	destination = position;
+    	    }
+    	    else
+    	    {
+    	    	waypts.push({location: position, stopover: true});    	        	    	
+    	    }
+    	}
+
+    	directionsService.route(
+    		{
+	    	    origin: origin,
+	    	    destination: destination,
+	    	    waypoints: waypts,
+	    	    travelMode: google.maps.TravelMode.DRIVING
+    	    },
+    	    function(response, status) 
+    	    {
+	    	    if (status === google.maps.DirectionsStatus.OK) 
+	    	    {
+	    	    	directionsDisplay.setDirections(response);
+	    	    	$scope.$digest();
+	    	    } 
+	    	    else 
+	    	    {
+	    	      window.alert('Falló el request de direcciones: ' + status);
+	    	    }
+    	    }
+	    );
+    	
+    	locateUser();
+    };
+    
+    function locateBus()
+    {
+    	if($scope.travelToWatch != null && $('#travelLocationModal').hasClass('in'))
+    	{
+    		$http.get(servicesUrl + 'getLastTravelLocation?travelId=' + $scope.travelToWatch)
+    		.then(function(result) 
+	    	{
+    			if(result.status == 200 && result.data != null)
+    			{
+    				var busPosition = new google.maps.LatLng(result.data.latitud, result.data.longitud);
+    				$scope.busMarker.setPosition(busPosition);
+    			}
+	    	});
+    	}
+    	setTimeout(locateBus, 5000 );
+    }
+    
+    function locateUser()
+    {
+    	if(!!navigator.geolocation) 
+    	{
+	    	navigator.geolocation.getCurrentPosition(function(position) {
+	    		
+	    		var geolocate = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+	    		
+	    		var userMarker = new google.maps.Marker({
+	    			map: $scope.travelMap,
+	    			position: geolocate,
+	    			icon: "static/images/marker_sm.png"
+	    		});
+	    	});
+    	}
+    }
+    
+    locateBus();
 });

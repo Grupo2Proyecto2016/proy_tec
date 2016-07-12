@@ -29,6 +29,7 @@
 												<th>Precio</th>
 												<th>Estado</th>
 												<th></th>
+												<th></th>
 											</tr>
 										</thead>
 										<tbody>
@@ -46,7 +47,7 @@
 													</a>
 												</td>
 												<td>
-													<a ng-show="ticket.estado == 3" class="btn btn-sm btn-success" style="float: right;">
+													<a ng-show="ticket.estado == 3" ng-click="showTravelLocationModal(ticket.viaje)" class="btn btn-sm btn-success" style="float: right;">
 														<i class="fa fa-map-marker fa-lg " style="margin-right: 5px;"></i>Seguir
 													</a>
 												</td>
@@ -96,7 +97,7 @@
 												<td>$ {{pack.precio}}</td>
 												<td>{{ getPackageStatus(pack.status)}}</td>
 												<td>
-													<a ng-show="pack.status == 2" class="btn btn-sm btn-success" style="float: right;">
+													<a ng-show="pack.status == 2" ng-click="showTravelLocationModal(pack.viaje)" class="btn btn-sm btn-success" style="float: right;">
 														<i class="fa fa-map-marker fa-lg " style="margin-right: 5px;"></i>Seguir
 													</a>
 												</td>
@@ -359,7 +360,20 @@
 	  </div>
 	</div>
 
-
+	<div class="modal fade" id="travelLocationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header text-center form">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h3 class="modal-title" id="myModalLabel">Monitoreo del viaje</h3>
+	      </div>
+	      <div class="modal-body">
+        	<div id="travelMap" style="width: 570px;height: 500px;">
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
 	<!-- DESPUES DE ACA NO SE PUEDE ESCRIBIR NADA  -->
 </div>
 
