@@ -56,10 +56,18 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
         
         var bounds = new google.maps.LatLngBounds();
         //hacer for each porque puede devolver mas de un lugar
+        $scope.userMarkers.forEach(function(marker) 
+        {
+        	marker.setMap(null);
+        });
+        if ($scope.circle !== null)
+  	  	{
+  	  		$scope.circle.setMap(null);
+  	  	}
         places.forEach(function(place) 
         {
         	$scope.userMarkers = [];        
-        	$scope.placeMarkerAndPanTo(place.geometry.location, $scope.destinationMap, false);
+        	$scope.placeMarkerAndPanTo(place.geometry.location, $scope.destinationMap, true);
         });         	        
     });
     
@@ -71,6 +79,11 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
         {
         	marker.setMap(null);
         });
+        
+        if ($scope.circle !== null)
+  	  	{
+  	  		$scope.circle.setMap(null);
+  	  	}
         
         $scope.userMarkers = [];        
     	$scope.placeMarkerAndPanTo(e.latLng, $scope.destinationMap, true);    	    	
@@ -210,6 +223,38 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     $scope.originMap.controls[google.maps.ControlPosition.TOP_LEFT].push(originInput);
     //
     
+    originSearchBox.addListener('places_changed', function() 
+    {
+    	
+    	$scope.userMarkersOrigin.forEach(function(marker) 
+        {
+          marker.setMap(null);
+        });
+    	
+    	var places = originSearchBox.getPlaces();
+
+        if (places.length == 0) 
+        {
+        	return;
+        }
+        
+        var bounds = new google.maps.LatLngBounds();
+        //hacer for each porque puede devolver mas de un lugar
+        $scope.userMarkersOrigin.forEach(function(marker) 
+        {
+        	marker.setMap(null);
+        });
+        if ($scope.circleOrigin !== null)
+  	  	{
+  	  		$scope.circleOrigin.setMap(null);
+  	  	}
+        places.forEach(function(place) 
+        {
+        	$scope.userMarkersOrigin = [];        
+        	$scope.placeMarkerAndPanTo(place.geometry.location, $scope.originMap, false);
+        });         	        
+    });
+    
     $scope.originMap.addListener('click', function(e) 
     {
     	//Borra los anteriores, en este caso es uno solo, pero eventualmente podrian ser mas
@@ -218,7 +263,10 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
         {
           marker.setMap(null);
         });
-        
+        if ($scope.circleOrigin !== null)
+  	  	{
+  	  		$scope.circleOrigin.setMap(null);
+  	  	}
         $scope.userMarkersOrigin = [];        
     	$scope.placeMarkerAndPanTo(e.latLng, $scope.originMap);    	    	
     	//$scope.$digest();
