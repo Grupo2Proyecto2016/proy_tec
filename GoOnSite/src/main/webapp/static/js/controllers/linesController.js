@@ -499,7 +499,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
 	  	    reajusta: false,
 	  	    reajuste: 0,
 	  	    km: 0,
-	  	    id_parada:$scope.lineForm.origen
+	  	    id_parada:$scope.lineForm.destino
 	  	});
 		
 		if($scope.markersV.length == 0)
@@ -534,7 +534,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     	{
     		position: myLatlng,
 	  	    map: $scope.map,
-	  	    animation: google.maps.Animation.DROP, //just for fun
+	  	    animation: google.maps.Animation.DROP,
 	  	    es_terminal: true,
 	  	    es_peaje: false,
 	  	    es_origen: true,
@@ -582,7 +582,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
 	  	    reajusta: false,
 	  	    reajuste: 0,
 	  	    km: 0,
-	  	    id_parada:$scope.lineForm.destino
+	  	    id_parada:$scope.lineForm.origen
 	  	});
     	
     	if($scope.markersV.length == 0)
