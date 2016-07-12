@@ -21,7 +21,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     
     $scope.seatsForm = {};
     $scope.rOption = "1";    
-    
+    $scope.frmOpt = "0";    
 	$scope.custom_response = null;    
     i18nService.setCurrentLang('es');
       
@@ -674,8 +674,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 				$scope.wrapper.descripcion = "GoOn Services - Compra de Pasajes";	
 				$http.post(servicesUrl +'getPaypal',  JSON.stringify($scope.wrapper))
 				.then(function(response) 
-				{
-					$.unblockUI();		
+				{							
 		        	if(response.status == 200)
 		        	{		
 	        			$scope.payPalInfo = response.data;
@@ -689,6 +688,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 	        				}	
 	        			}
 	        			window.location = link;
+	        			$.unblockUI();
 		        	}
 	    		}
 				);				
@@ -826,6 +826,23 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     {
     	$("#buyModal").modal('hide');
     };
+    
+    $scope.travelSubmit = function()
+    {
+    	if($scope.frmOpt == "1")
+    	{
+    		$scope.reserveTicket();
+    	}
+    	else if($scope.frmOpt == "2")
+    	{
+    		$scope.buyTicket();
+    	}
+    	else if($scope.frmOpt == "3")
+    	{
+    		$scope.payTicket();
+    	}
+    	
+    }
     
     $scope.printDiv = function(idDiv)
     {

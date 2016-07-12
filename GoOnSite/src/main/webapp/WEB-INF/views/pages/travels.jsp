@@ -39,7 +39,7 @@
 				                        <p>
 				                        	<i class="fa fa-calendar"></i>&nbsp;Fecha: {{cs.viaje.inicio | date:'dd-MM-yyyy'}}
 				                            <br />
-				                            <i class="fa fa-clock-o"></i>&nbsp;Salida de Terminal:{{cs.viaje.inicio | date:'HH:nn'}} 
+				                            <i class="fa fa-clock-o"></i>&nbsp;Salida de Terminal:{{cs.viaje.inicio | date:'HH:mm'}} 
 				                            <br />
 				                        </p>		                        
 				                    </div>
@@ -297,7 +297,8 @@
 			<p>
 				<img src="static/images/marker_green.png"> Paradas disponibles
 				<img src="static/images/marker_blue.png"> Terminales disponibles
-				<img src="static/images/marker_sm.png">Tú ubicación				
+				<img src="static/images/marker_sm.png">Tú ubicación
+				&nbsp;&nbsp;<button class="btn btn-sm btn-primary" data-dismiss="modal" ng-disabled="listaIDSeleccionadosOrigin.length<=0"><i class="fa fa-check-square fa-lg pull-left"></i>Continuar</button>				
 			</p> 
 		</div>
       </div>
@@ -373,7 +374,7 @@
 				</tbody>						
 			</table>
 			<div>Total:<b>$<span>{{precio_total}}</span></b></div>
-			<form class="form-horizontal" name="pForm" role="form" >
+			<form class="form-horizontal" name="pForm" role="form" ng-submit="travelSubmit()" >
 <!-- 			ng-submit="reserveTicket()" -->
 				<div class="form-group" ng-show="rolCreador == 2">			    	
 			    	<div class="col-sm-6">
@@ -391,7 +392,7 @@
 						<div ng-show="rOption == 2">
 							<label class="control-label col-sm-5" for="receptorDoc">CI Receptor:</label>
 							<div class="col-sm-7">
-								<input type="text" pattern="^[0-9]{6,7}$" title="Ingrese solo números sin el dígito verificador" class="form-control" name="receptorDoc" ng-model="seatsForm.rDoc" ng-required="rOption == 2 && rolCreador == 2">
+								<input type="text" pattern="^[0-9]{6,7}$" title="Ingrese solo números sin el dígito verificador" class="form-control" name="receptorDoc" ng-model="seatsForm.rDoc" ng-required="(rOption == 2) && (rolCreador == 2)">
 						    </div>
 					    </div>
 					    <div ng-show="rOption == 1">
@@ -409,15 +410,15 @@
 				</div>	
 				<div class="form-group"  ng-show="rolCreador == 2"> 
 					<div class="col-sm-6">
-				 		<button style="float: right; margin-top: 10px;" class="btn btn-info" ng-click="reserveTicket();">Reservar</button>
+				 		<button style="float: right; margin-top: 10px;" class="btn btn-info" ng-click="frmOpt=1">Reservar</button>
 					</div>					
 					<div class="col-sm-6">
-				 		<button style="float: right; margin-top: 10px;" class="btn btn-info" ng-click="buyTicket();">Comprar</button>
+				 		<button style="float: right; margin-top: 10px;" class="btn btn-info" ng-click="frmOpt=2">Comprar</button>
 					</div>
 				</div>
 				<div class="form-group"  ng-show="rolCreador == 4"> 
 					<div class="col-sm-12">
-				 		<input type='image' name='paypal_pay' id='paypal_pay' ng-click="payTicket();" style="float: right; margin-top: 10px;" src='https://www.paypal.com/es_ES/i/btn/btn_dg_pay_w_paypal.gif' border='0' align='top' alt='Pagar con Paypal'/>
+				 		<input type='image' name='paypal_pay' id='paypal_pay' ng-click="frmOpt=3" style="float: right; margin-top: 10px;" src='https://www.paypal.com/es_ES/i/btn/btn_dg_pay_w_paypal.gif' border='0' align='top' alt='Pagar con Paypal'/>
 					</div>					
 				</div>
 			</form>			
