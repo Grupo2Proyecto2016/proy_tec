@@ -61,53 +61,61 @@ public class PasajeArrayAdapter<T> extends ArrayAdapter<T> {
         PasajeDataType pasaje3 = grupo.getPasaje3();
         PasajeDataType pasaje4 = grupo.getPasaje4();
 
-        if(pasaje1 == null){
-            numero1.setText(String.valueOf((position * 4) +1));
-            asiento1.setImageResource(R.drawable.icon_seat_libre);
-            asiento1.setColorFilter(Color.GREEN);
-        }else{
-            asiento1.setImageResource(R.drawable.icon_seat_ocupado);
-            asiento1.setColorFilter(Color.RED);
+        if(pasaje1 !=null) {
+            if(pasaje1.getId_pasaje() == null){
+                numero1.setText(String.valueOf((position * 4) +1));
+                asiento1.setImageResource(R.drawable.icon_seat_libre);
+                asiento1.setColorFilter(Color.GREEN);
+            }else{
+                asiento1.setImageResource(R.drawable.icon_seat_ocupado);
+                asiento1.setColorFilter(Color.RED);
+            }
+            asiento1.setTag((position * 4) +1);
         }
-        asiento1.setTag((position * 4) +1);
 
-        if(pasaje2 == null){
-            numero2.setText(String.valueOf((position * 4) +2));
-            asiento2.setImageResource(R.drawable.icon_seat_libre);
-            asiento2.setColorFilter(Color.GREEN);
-        }else{
-            asiento2.setImageResource(R.drawable.icon_seat_ocupado);
-            asiento2.setColorFilter(Color.RED);
+
+        if(pasaje2 !=null) {
+            if(pasaje2.getId_pasaje() == null){
+                numero2.setText(String.valueOf((position * 4) +2));
+                asiento2.setImageResource(R.drawable.icon_seat_libre);
+                asiento2.setColorFilter(Color.GREEN);
+            }else{
+                asiento2.setImageResource(R.drawable.icon_seat_ocupado);
+                asiento2.setColorFilter(Color.RED);
+            }
+            asiento2.setTag((position * 4) +2);
         }
-        asiento2.setTag((position * 4) +2);
 
-        if(pasaje3 == null){
-            numero3.setText(String.valueOf((position * 4) +3));
-            asiento3.setImageResource(R.drawable.icon_seat_libre);
-            asiento3.setColorFilter(Color.GREEN);
-        }else{
-            asiento3.setImageResource(R.drawable.icon_seat_ocupado);
-            asiento3.setColorFilter(Color.RED);
+
+        if(pasaje3 !=null) {
+            if(pasaje3.getId_pasaje() == null){
+                numero3.setText(String.valueOf((position * 4) +3));
+                asiento3.setImageResource(R.drawable.icon_seat_libre);
+                asiento3.setColorFilter(Color.GREEN);
+            }else{
+                asiento3.setImageResource(R.drawable.icon_seat_ocupado);
+                asiento3.setColorFilter(Color.RED);
+            }
+            asiento3.setTag((position * 4) +3);
         }
-        asiento3.setTag((position * 4) +3);
 
-        if(pasaje4 == null){
-            numero4.setText(String.valueOf((position * 4) +4));
-            asiento4.setImageResource(R.drawable.icon_seat_libre);
-            asiento4.setColorFilter(Color.GREEN);
-        }else{
-            asiento4.setImageResource(R.drawable.icon_seat_ocupado);
-            asiento4.setColorFilter(Color.RED);
+        if(pasaje4 !=null) {
+            if (pasaje4.getId_pasaje() == null) {
+                numero4.setText(String.valueOf((position * 4) + 4));
+                asiento4.setImageResource(R.drawable.icon_seat_libre);
+                asiento4.setColorFilter(Color.GREEN);
+            } else {
+                asiento4.setImageResource(R.drawable.icon_seat_ocupado);
+                asiento4.setColorFilter(Color.RED);
+            }
+            asiento4.setTag((position * 4) + 4);
+            //Devolver al ListView la fila creada
         }
-        asiento4.setTag((position * 4) +4);
-        //Devolver al ListView la fila creada
-
 
         asiento1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 int asiento = (Integer) v.getTag();
                 asientosFragment.desplegarInfo(asiento);
-
             }
         });
         asiento2.setOnClickListener(new View.OnClickListener() {
@@ -124,8 +132,10 @@ public class PasajeArrayAdapter<T> extends ArrayAdapter<T> {
         });
         asiento4.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                int asiento = (Integer) v.getTag();
-                asientosFragment.desplegarInfo(asiento);
+                if(v.getTag() != null){
+                    int asiento = (Integer) v.getTag();
+                    asientosFragment.desplegarInfo(asiento);
+                }
             }
         });
 

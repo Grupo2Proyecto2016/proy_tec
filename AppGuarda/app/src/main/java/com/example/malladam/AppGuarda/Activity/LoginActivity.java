@@ -46,9 +46,12 @@ import com.example.malladam.AppGuarda.R;
 import com.example.malladam.AppGuarda.adapters.VolleyS;
 import com.example.malladam.AppGuarda.models.Empresa;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
@@ -149,10 +152,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
 
-
-
-
-
     private void attemptLogin() {
         mUserView.setError(null);
         mPasswordView.setError(null);
@@ -191,11 +190,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
-                        credencailesValidas = true;
-                        nuevoToken = (response.getString("token"));
-                        verificarLogin(true);
-                        //dbManager.registrarLogin(response.getString("token"),user, pass);/////guardo el usuario logueado en la base
-                        Log.d("-el token es : ", response.getString("token"));
+                        List<String> roles = new ArrayList<String>();
+                        JSONObject user = response.getJSONObject("user");
+                        JSONArray authorities =user.getJSONArray("authorities");
+                        for (int i = 0; i < authorities.length(); i++) {
+                            JSONObject json = (JSONObject) authorities.get(i);
+                            roles.add(json.getString("name"));
+                        }
+                        if(roles.contains("ROLE_DRIVER")){
+                            credencailesValidas = true;
+                            nuevoToken = (response.getString("token"));
+                            verificarLogin(true);
+                        }
+                        else{
+                            mUserView.setError(getString(R.string.error_invalid_role));
+                            focusView = mUserView;
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -321,6 +331,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     @Override
                     // this will run on the main thread.
                     public void run() {
+
                         Drawable okIcon = getResources().getDrawable(R.drawable.ok);
                         okIcon.setBounds(new Rect(0, 0, okIcon.getIntrinsicWidth(), okIcon.getIntrinsicHeight()));
                         mUserView.setError("Ok",okIcon);

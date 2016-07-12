@@ -1,21 +1,29 @@
 package com.example.malladam.AppGuarda.models;
 
+import com.android.IntentResult;
+
 /**
  * Created by malladam on 01/05/2016.
  */
 public class PasajeDataType {
 
-    public String asiento;
-    public String idViaje;
-    public int icon;
-    public String nomCliente;
-    public String nomOrigen;
-    public String nomDestino;
-    public String fecha;
-    public String valor;
-    public String estado;
+    private Integer id_pasaje;
+    private String asiento;
+    private String idViaje;
+    private int icon;
+    private String nomCliente;
+    private String nomOrigen;
+    private String nomDestino;
+    private String fecha;
+    private String valor;
+    private String estado;
 
-    public PasajeDataType(String asiento, String idViaje, int icon, String nomCliente, String nomOrigen, String nomDestino, String fecha, String valor, String estado) {
+
+    public PasajeDataType() {
+    }
+
+    public PasajeDataType(Integer id_pasaje, String asiento, String idViaje, int icon, String nomCliente, String nomOrigen, String nomDestino, String fecha, String valor, String estado) {
+        this.id_pasaje = id_pasaje;
         this.asiento = asiento;
         this.idViaje = idViaje;
         this.icon = icon;
@@ -25,6 +33,14 @@ public class PasajeDataType {
         this.fecha = fecha;
         this.valor = valor;
         this.estado = estado;
+    }
+
+    public Integer getId_pasaje() {
+        return id_pasaje;
+    }
+
+    public void setId_pasaje(Integer id_pasaje) {
+        this.id_pasaje = id_pasaje;
     }
 
     public String getAsiento() {

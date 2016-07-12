@@ -74,8 +74,7 @@ public class EncomiendasActivity extends AppCompatActivity {
 
     int intentosLogin = 0;
     private Empresa empresa;
-    Spinner spinnerOrigen;
-    Spinner spinnerDestino;
+    Spinner spinnerOrigen, spinnerDestino;
     EditText mAlto, mLargo, mAncho, mPeso;
     TextView mPrecio, mTextPrecio;
     List listTerminales;
@@ -95,7 +94,6 @@ public class EncomiendasActivity extends AppCompatActivity {
     DataBaseManager dbManager;
     private View mProgressView;
     Handler mHandler;
-    Boolean tokenExpired;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

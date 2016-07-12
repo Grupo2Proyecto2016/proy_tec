@@ -5,8 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.android.IntentIntegrator;
-import com.android.IntentResult;
 import com.example.malladam.AppGuarda.R;
 
 import java.util.ArrayList;
@@ -24,7 +22,7 @@ public class Asientos extends AppCompatActivity {
     /*
         @Override
         public boolean onCreateOptionsMenu(Menu menu) {
-            getMenuInflater().inflate(R.menu.menu_asientos, menu);
+            getMenuInflater().inflate(R.menu.menu_asientos_en_viaje, menu);
             retn true;
         }
     /*
@@ -42,7 +40,7 @@ public class Asientos extends AppCompatActivity {
         }
     */
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+        /*IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
 
         if (scanningResult != null) {
             String scanContent = scanningResult.getContents();
@@ -60,14 +58,14 @@ public class Asientos extends AppCompatActivity {
                 //GRABAR NUEVO PASAJE
                 PasajeDataType pasajeDTnuevo = null; //convertir Pasaje a PasajeDataType
                 pasajesDT.add(pasajeDTnuevo);
-                /*ExpListItems = SetStandardGroups(pasajesDT);
+                ExpListItems = SetStandardGroups(pasajesDT);
                 ExpAdapter = new ExpandListAdapter(Asientos.this, ExpListItems);
                 ExpandList.setAdapter(ExpAdapter);
-*/
-                Toast.makeText(getApplicationContext(),"Pasaje Aceptado, asiento: " + qr[0], Toast.LENGTH_LONG).show();
+
+
             }
         } else {
             Toast.makeText(getApplicationContext(), "Sin QR", Toast.LENGTH_SHORT).show();
-        }
+        }*/
     }
 }

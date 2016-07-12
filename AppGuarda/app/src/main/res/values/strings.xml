@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">perrito</string>
+    <string name="app_name">undiaantes</string>
     <string name="WSServer">http://10.0.3.2:8080/GoOnServices/</string>
     <string name="action_settings">Configuración</string>
     <string name="action_viajes">Mis Viajes</string>
@@ -11,8 +11,16 @@
     <string name="error_timeout">Tiempo de espera agotado, Intente nuevamente</string>
     <string name="title_activity_login">Login</string>
     <string name="scan">Leer QR</string>
-    <string name="action_newpasaje">Pasaje</string>
+    <string name="action_newpasaje">Cobrar Pasaje</string>
+    <string name="action_venderpasaje">Vender Pasaje</string>
     <string name="action_finish_viaje">Finalizar Viaje</string>
+    <string name="button_cancelar">Cancelar</string>
+    <string name="button_aceptar">Aceptar</string>
+    <string name="precio">Precio</string>
+    <string name="origen">Origen</string>
+    <string name="destino">Destino</string>
+
+
 
     <!-- Strings related to login -->
     <string name="prompt_user">Usuario</string>
@@ -32,8 +40,15 @@
     <string name="grilla_destino">"Destino"</string>
     <string name="error_conexion">Error en la conexión, Intente nuevamente</string>
     <string name="iniciarViaje">Iniciar Viaje</string>
+    <string name="tokenInvalido">"Credenciales Inválidas, favor inicie sesión"</string>
+    <string name="error_invalid_role">Usuario sin permiso</string>
 
-    <string name="getSiguienteViaje">/gteSigViaje</string>
+    <string name="auth">"/auth"</string>
+    <string name="getSiguienteViaje">/getLastTravelByDriver</string>
+    <string name="startTravel">/startTravel</string>
+    <string name="collectTicket">/collectTicket</string>
+    <string name="findNextStationsByOrigin">/FindNextStationsByOrigin</string>
+    <string name="setTravelLocation">/setTravelLocation</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
