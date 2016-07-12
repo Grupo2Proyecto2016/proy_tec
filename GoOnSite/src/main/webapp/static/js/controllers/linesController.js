@@ -820,24 +820,25 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
    	}//fin de placemarker
     
     $scope.deleteMarker = function(indice, vuelta)
-    {
+    {    	
     	if (vuelta)
-    	{
+    	{	
     		if ($scope.markersV[indice].es_terminal)
         	{
         		return;
         	}
-        	$scope.markersV[indice].map = null;
+        	$scope.markersV[indice].setMap(null);
         	$scope.markersV.splice(indice, 1);    	
         	$scope.createRouteV();
     	}
     	else
     	{
+    		
     		if ($scope.markers[indice].es_terminal)
         	{
         		return;
         	}
-        	$scope.markers[indice].map = null;
+        	$scope.markers[indice].setMap(null);
         	$scope.markers.splice(indice, 1);    	
         	$scope.createRoute();
     	}    	
