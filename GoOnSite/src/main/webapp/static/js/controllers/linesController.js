@@ -304,7 +304,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
 		}
 		else
 		{
-			$scope.persistLine();
+			$scope.persistLine();		
 		}
 		
     };
