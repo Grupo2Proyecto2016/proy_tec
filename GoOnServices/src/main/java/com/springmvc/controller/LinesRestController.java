@@ -30,6 +30,7 @@ import com.springmvc.entities.tenant.Linea;
 import com.springmvc.entities.tenant.Parada;
 import com.springmvc.entities.tenant.Usuario;
 import com.springmvc.entities.tenant.Viaje;
+import com.springmvc.entities.tenant.ViajeUbicacion;
 import com.springmvc.enums.DayOfWeek;
 import com.springmvc.exceptions.BusInServiceException;
 import com.springmvc.exceptions.BusTravelConcurrencyException;
@@ -40,6 +41,7 @@ import com.springmvc.logic.implementations.VehiculosLogic;
 import com.springmvc.requestWrappers.CustomResponseWrapper;
 import com.springmvc.requestWrappers.LinesWrapper;
 import com.springmvc.requestWrappers.TravelFormWrapper;
+import com.springmvc.requestWrappers.TravelLocationTravel;
 import com.springmvc.utils.UserContext;
 
 @RestController
@@ -307,5 +309,23 @@ public class LinesRestController{
 		LinesLogic ll = new LinesLogic(tenantid);
 		ll.FinishTravel(travelId);
 		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	@Secured({"ROLE_CLIENT"})
+	@RequestMapping(value = "/getLastTravelLocation", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<ViajeUbicacion> GetLastTravelLocation(@RequestParam long travelId, @PathVariable String tenantid)
+	{
+		LinesLogic ll = new LinesLogic(tenantid);
+		ViajeUbicacion travelLoc = ll.GetLastTravelLocation(travelId);
+		return new ResponseEntity<ViajeUbicacion>(travelLoc, HttpStatus.OK);
+	}
+	
+	@Secured({"ROLE_DRIVER"})
+	@RequestMapping(value = "/setTravelLocation", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
+	public ResponseEntity<Void> setTravelLocation(@RequestBody TravelLocationTravel travelLoc, @PathVariable String tenantid)
+	{
+		LinesLogic ll = new LinesLogic(tenantid);
+		ll.InsertTravelLocation(travelLoc.travelId, travelLoc.lat, travelLoc.lng);
+		return new ResponseEntity(HttpStatus.OK);
 	}
 }

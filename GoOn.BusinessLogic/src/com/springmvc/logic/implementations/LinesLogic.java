@@ -21,6 +21,7 @@ import com.springmvc.entities.tenant.Pasaje;
 import com.springmvc.entities.tenant.Sucursal;
 import com.springmvc.entities.tenant.Usuario;
 import com.springmvc.entities.tenant.Viaje;
+import com.springmvc.entities.tenant.ViajeUbicacion;
 import com.springmvc.entities.tenant.ViajesBuscados;
 import com.springmvc.enums.DayOfWeek;
 import com.springmvc.enums.PackageStatus;
@@ -624,5 +625,21 @@ public class LinesLogic implements ILinesLogic
 		TenantContext.PasajeRepository.updateByTravel(travelId, TicketStatus.cashed);
 		TenantContext.EncomiendaRepository.updateByTravel(travelId, PackageStatus.Transported);
 		TenantContext.ViajeRepository.finish(travelId);
+	}
+	
+	public ViajeUbicacion GetLastTravelLocation(long travelId)
+	{
+		return TenantContext.ViajeUbicacionRepository.GetLast(travelId);
+	}
+	
+	public void InsertTravelLocation(long travelId, double lat, double lng)
+	{
+		Viaje travel = TenantContext.ViajeRepository.FindByID(travelId);
+		ViajeUbicacion travelLoc = new ViajeUbicacion();
+		travelLoc.setFecha(new Date());
+		travelLoc.setLatitud(lat);
+		travelLoc.setLongitud(lng);
+		travelLoc.setViaje(travel);
+		TenantContext.ViajeUbicacionRepository.InsertTravelLoc(travelLoc);
 	}
 }
