@@ -15,6 +15,7 @@ goOnApp.controller('payPalCheckoutController', function($scope, $http, uiGridCon
         	{		
     			$scope.payPalInfo = response.data;  
     			$scope.confirmedSeats = $scope.payPalInfo.tickets; 
+    			$scope.$digest();
         	}
 		}
 		);
