@@ -5,7 +5,7 @@
       <meta charset=UTF-8">
       <!-- STYLES -->
 	  <link rel="stylesheet" href="<c:url value='/static/css/custom.css' />" />
-      <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.css" />
+      <link rel="stylesheet" href="<c:url value='/static/css/font-awesome.min.css'/>" />
       
       <!-- SCRIPTS -->
 	  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXLMRyM-qhBcFx4Lvv6XxACYvWYY8ey-U&libraries=places,geometry" async defer></script>
