@@ -381,6 +381,12 @@
         	$rootScope.user = null;
         	$location.path('home');
         };
+        
+        $scope.getTicketStorageKey = function()
+        {
+        	return $rootScope.user.usrname + "_" + $scope.company.nombreTenant + "_userTickets";
+        }
+        
     });
     
     goOnApp.directive("compareTo", function() {

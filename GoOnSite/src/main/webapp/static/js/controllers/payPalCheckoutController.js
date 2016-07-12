@@ -3,7 +3,7 @@ goOnApp.controller('payPalCheckoutController', function($scope, $http, uiGridCon
 	$scope.pagar = function()
 	{		
 		//sacar del storage los pasajes y mandarlos en el json
-		$scope.seatsForm = JSON.parse(localStorage.getItem(/*getJwtToken() + */"userTickets"));
+		$scope.seatsForm = JSON.parse(localStorage.getItem($scope.$parent.getTicketStorageKey()));
 		$scope.seatsForm.paymentId = $routeParams.paymentId;
 		$scope.seatsForm.token = $routeParams.token;
 		$scope.seatsForm.PayerID = $routeParams.PayerID;		
@@ -15,7 +15,10 @@ goOnApp.controller('payPalCheckoutController', function($scope, $http, uiGridCon
         	{		
     			$scope.payPalInfo = response.data;  
     			$scope.confirmedSeats = $scope.payPalInfo.tickets; 
-    			$scope.$digest();
+    			//$scope.$digest();
+    			localStorage.removeItem($scope.$parent.getTicketStorageKey());
+    			$scope.$apply();
+    			
         	}
 		}
 		);

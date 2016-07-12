@@ -24,6 +24,11 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     $scope.frmOpt = "0";    
 	$scope.custom_response = null;    
     i18nService.setCurrentLang('es');
+    
+    if($rootScope.user !== null)
+    {
+    	localStorage.removeItem($scope.$parent.getTicketStorageKey());
+    }
       
     //DESTINATION MAP
     $scope.destinationMap = new google.maps.Map(document.getElementById('destinationMap'), 
@@ -644,30 +649,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 
     
     $scope.confirmSeats = function()
-    {
-    	/*sel_seat.txt = this.settings.label;
-		sel_seat.price = this.data().price;
-		sel_seat.id = this.settings.id;
-		$scope.reservados.push(sel_seat);*/
-    	if($rootScope.user == null)
-    	{
-    		$scope.rolCreador = 0;
-    	}
-    	else
-    	{
-    		$scope.rolCreador = $rootScope.user.rol_id_rol;
-    	}
-    	$("#selectTicketsModal").modal('hide');
-    	$("#divTravelForm").addClass('hidden');
-    	$("#travelsSearchGrid").addClass('hidden');
-    	$("#seatsConfirmForm").removeClass('hidden');
-    	
-    	$scope.seatsForm.seleccionados = [];
-		for(var i = 0; i < $scope.reservados.length; i++) 
-		{
-			$scope.seatsForm.seleccionados.push($scope.reservados[i].id);			
-		} 
-		
+    {	
 		$http.get(servicesUrl + 'getUserInfo')
 		.then(function(response) 
 		{
@@ -677,11 +659,20 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 				$.unblockUI();
 			}
 			else
-			{		
-				localStorage.setItem(/*getJwtToken() + */"userTickets", JSON.stringify($scope.seatsForm));
+			{
+				$scope.seatsForm.seleccionados = [];
+				for(var i = 0; i < $scope.reservados.length; i++) 
+				{
+					$scope.seatsForm.seleccionados.push($scope.reservados[i].id);			
+				}
+				localStorage.setItem($scope.$parent.getTicketStorageKey(), JSON.stringify($scope.seatsForm));				
+				$("#selectTicketsModal").modal('hide');
+		    	$("#divTravelForm").addClass('hidden');
+		    	$("#travelsSearchGrid").addClass('hidden');
+		    	$("#seatsConfirmForm").removeClass('hidden');	    
+				
 			}
-		});
-    	
+		});    	
     }
     
     $scope.payTicket = function()
@@ -692,12 +683,12 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 		{
 			if(response.status == 404)
 			{
-				$("#loginModal").modal("show");
+				$("#loginModal").modal("show");		
 				$.unblockUI();
 			}
 			else
 			{				
-				localStorage.setItem("userTickets", JSON.stringify($scope.seatsForm));
+				//localStorage.setItem("userTickets", JSON.stringify($scope.seatsForm));
 				$scope.seatsForm.seleccionados = [];
 				for(var i = 0; i < $scope.reservados.length; i++) 
 				{
@@ -711,7 +702,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 				{
 					$scope.seatsForm.rUser = null;
 				}	
-				if ($scope.rolCreador == "4")
+				if ($rootScope.user.rol_id_rol == "4")
 				{
 					$scope.seatsForm.rDoc = null;
 					$scope.seatsForm.rUser = null;
@@ -763,7 +754,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 			}
 			else
 			{				
-				localStorage.setItem("userTickets", JSON.stringify($scope.seatsForm));
+				//localStorage.setItem("userTickets", JSON.stringify($scope.seatsForm));
 				$scope.seatsForm.seleccionados = [];
 				for(var i = 0; i < $scope.reservados.length; i++) 
 				{
@@ -777,7 +768,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 				{
 					$scope.seatsForm.rUser = null;
 				}	
-				if ($scope.rolCreador == "4")
+				if ($rootScope.user.rol_id_rol == "4")
 				{
 					$scope.seatsForm.rDoc = null;
 					$scope.seatsForm.rUser = null;
@@ -817,7 +808,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 			}
 			else
 			{				
-				localStorage.setItem("userTickets", JSON.stringify($scope.seatsForm));
+				//localStorage.setItem("userTickets", JSON.stringify($scope.seatsForm));
 				$scope.seatsForm.seleccionados = [];
 				for(var i = 0; i < $scope.reservados.length; i++) 
 				{
@@ -831,7 +822,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 				{
 					$scope.seatsForm.rUser = null;
 				}	
-				if ($scope.rolCreador == "4")
+				if ($rootScope.user.rol_id_rol == "4")
 				{
 					$scope.seatsForm.rDoc = null;
 					$scope.seatsForm.rUser = null;

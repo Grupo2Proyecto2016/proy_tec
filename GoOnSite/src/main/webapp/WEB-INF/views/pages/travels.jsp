@@ -376,7 +376,7 @@
 			<div>Total:<b>$<span>{{precio_total}}</span></b></div>
 			<form class="form-horizontal" name="pForm" role="form" ng-submit="travelSubmit()" >
 <!-- 			ng-submit="reserveTicket()" -->
-				<div class="form-group" ng-show="rolCreador == 2">			    	
+				<div class="form-group" ng-show="$root.user.rol_id_rol == 2">			    	
 			    	<div class="col-sm-6">
 				    	<label class="control-label col-sm-5" for="receptorOpt">Receptor registrado?:</label>
 					    <div class="col-sm-7">
@@ -387,18 +387,18 @@
 				    	</div>
 			    	</div>
 		    	</div>
-		    	<div class="form-group" ng-show="rolCreador == 2">				    
+		    	<div class="form-group" ng-show="$root.user.rol_id_rol == 2">				    
 					<div class="col-sm-6">
 						<div ng-show="rOption == 2">
 							<label class="control-label col-sm-5" for="receptorDoc">CI Receptor:</label>
 							<div class="col-sm-7">
-								<input type="text" pattern="^[0-9]{6,7}$" title="Ingrese solo números sin el dígito verificador" class="form-control" name="receptorDoc" ng-model="seatsForm.rDoc" ng-required="(rOption == 2) && (rolCreador == 2)">
+								<input type="text" pattern="^[0-9]{6,7}$" title="Ingrese solo números sin el dígito verificador" class="form-control" name="receptorDoc" ng-model="seatsForm.rDoc" ng-required="(rOption == 2) && ($root.user.rol_id_rol == 2)">
 						    </div>
 					    </div>
 					    <div ng-show="rOption == 1">
 					    	<label class="control-label col-sm-5" for="receptorUser">Usuario receptor:</label>
 							<div class="col-sm-7">
-								<input type="text" class="form-control" placeholder="username" name="receptorUser" ng-model="seatsForm.rUser" ng-required="rOption == 1 && rolCreador == 2" clientexists>
+								<input type="text" class="form-control" placeholder="username" name="receptorUser" ng-model="seatsForm.rUser" ng-required="rOption == 1 && $root.user.rol_id_rol == 2" clientexists>
 						    </div>
 						    <div class="form-group has-error">
 								<div ng-messages="pForm.receptorUser.$error" role="alert" class="col-sm-12 text-center">
@@ -408,7 +408,7 @@
 				    	</div>			
 					</div>    
 				</div>	
-				<div class="form-group"  ng-show="rolCreador == 2"> 
+				<div class="form-group"  ng-show="$root.user.rol_id_rol == 2"> 
 					<div class="col-sm-6">
 				 		<button style="float: right; margin-top: 10px;" class="btn btn-info" ng-click="frmOpt=1">Reservar</button>
 					</div>					
@@ -416,7 +416,7 @@
 				 		<button style="float: right; margin-top: 10px;" class="btn btn-info" ng-click="frmOpt=2">Comprar</button>
 					</div>
 				</div>
-				<div class="form-group"  ng-show="rolCreador == 4"> 
+				<div class="form-group"  ng-show="$root.user.rol_id_rol == 4"> 
 					<div class="col-sm-12">
 				 		<input type='image' name='paypal_pay' id='paypal_pay' ng-click="frmOpt=3" style="float: right; margin-top: 10px;" src='https://www.paypal.com/es_ES/i/btn/btn_dg_pay_w_paypal.gif' border='0' align='top' alt='Pagar con Paypal'/>
 					</div>					
