@@ -18,13 +18,14 @@ public class Viaje {
     private int origen;
     private String origen_description;
     private int destino;
+    private int vehiculo_id;
     private String destino_description;
-
+    private double valor;
 
     public Viaje() {
     }
 
-    public Viaje(int id_viaje, int lugares, long inicio, int numero, int linea_id_linea, int origen, String origen_description, int destino, String destino_description) {
+    public Viaje(int id_viaje, int lugares, long inicio, int numero, int linea_id_linea, int origen, String origen_description, int destino, String destino_description, int vehiculo_id, double valor) {
         this.id_viaje = id_viaje;
         this.lugares = lugares;
         this.inicio = inicio;
@@ -34,6 +35,24 @@ public class Viaje {
         this.origen_description = origen_description;
         this.destino = destino;
         this.destino_description = destino_description;
+        this.vehiculo_id = vehiculo_id;
+        this.valor = valor;
+    }
+
+    public double getValor() {
+        return valor;
+    }
+
+    public void setValor(double valor) {
+        this.valor = valor;
+    }
+
+    public int getVehiculo_id() {
+        return vehiculo_id;
+    }
+
+    public void setVehiculo_id(int vehiculo_id) {
+        this.vehiculo_id = vehiculo_id;
     }
 
     public int getId_viaje() {

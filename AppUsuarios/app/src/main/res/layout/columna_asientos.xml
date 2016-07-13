@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/columna"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/asiento1"
+            android:layout_width="37dp"
+            android:layout_height="37dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="9dp"
+            android:layout_marginTop = "5dp"
+            android:id="@+id/numero1"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/asiento2"
+            android:layout_width="37dp"
+            android:layout_height="37dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="9dp"
+            android:layout_marginTop = "5dp"
+            android:id="@+id/numero2"/>
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="37dp"
+        android:layout_height="match_parent"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/asiento3"
+                android:layout_width="37dp"
+                android:layout_height="37dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="9dp"
+            android:layout_marginTop = "5dp"
+            android:id="@+id/numero3"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/asiento4"
+            android:layout_width="37dp"
+            android:layout_height="37dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="9dp"
+            android:layout_marginTop = "5dp"
+            android:id="@+id/numero4"/>
+    </RelativeLayout>
+
+</LinearLayout>

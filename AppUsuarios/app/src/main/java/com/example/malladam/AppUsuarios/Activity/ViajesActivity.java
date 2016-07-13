@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -41,6 +42,7 @@ public class ViajesActivity extends AppCompatActivity {
     private List<Viaje> viajesEncontrados = new ArrayList<Viaje>();
     private JSONArray viajesEncontradosJsonArray;
 
+    List<Viaje> viajes = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,8 +98,8 @@ public class ViajesActivity extends AppCompatActivity {
 
         viajesEncontrados.clear();
         viajesEncontrados = armarListaByJSONArray(viajesEncontradosJsonArray);
-
-        cargarGrillaViajes(viajesEncontrados);
+        viajes = viajesEncontrados;
+        cargarGrillaViajes();
 
     }
 
@@ -125,10 +127,12 @@ public class ViajesActivity extends AppCompatActivity {
     }
 
 
-    private void cargarGrillaViajes(List<Viaje> viajes){
-
+    private void cargarGrillaViajes(){
+        int index = 0;
         for (Viaje item: viajes) {
             mTableRow = new TableRow(this);
+            mTableRow.setId(index);
+
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
                 mTiempoViaAUX = new TextView(this);
 
@@ -138,7 +142,7 @@ public class ViajesActivity extends AppCompatActivity {
             }
 
             mLineaViaAUX = new TextView(this);
-            mOrigenViaAUX = new TextView(this);
+                mOrigenViaAUX = new TextView(this);
             mDestinoViaAUX = new TextView(this);
             mSalidaViaAUX = new TextView(this);
 
@@ -162,13 +166,33 @@ public class ViajesActivity extends AppCompatActivity {
             mTableRow.addView(mOrigenViaAUX);
             mTableRow.addView(mDestinoViaAUX);
             mTableRow.addView(mSalidaViaAUX);
+
+            mTableRow.setOnClickListener(rowClick);
+
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
                 mTableRow.addView(mTiempoViaAUX);
             }
 
             mTableLayout.addView(mTableRow);
+            index++;
         }
     }
+
+    private View.OnClickListener rowClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v)
+        {
+            Viaje selectedTravel = viajes.get(v.getId());
+            Intent intent = new Intent(ViajesActivity.this, SelectAsientosActivity.class);
+            intent.putExtra("Id_viaje", selectedTravel.getId_viaje());
+            intent.putExtra("Id_linea", selectedTravel.getLinea_id_linea());
+            intent.putExtra("origin", selectedTravel.getOrigen());
+            intent.putExtra("destination", selectedTravel.getDestino());
+            intent.putExtra("id_vehiculo", selectedTravel.getVehiculo_id());
+            intent.putExtra("valor", selectedTravel.getValor());
+            ViajesActivity.this.startActivity(intent);
+        }
+    };
 
     private String convertirTimestampADateLocal(long timestamp){
 
@@ -199,8 +223,10 @@ public class ViajesActivity extends AppCompatActivity {
                 viaje.setLinea_id_linea(jsonObject.getInt("linea_id_linea"));
                 viaje.setLugares(jsonObject.getInt("lugares"));
                 viaje.setNumero(jsonObject.getInt("numero"));
+                viaje.setVehiculo_id(jsonObject.getInt("id_vehiculo"));
                 viaje.setOrigen(jsonObject.getInt("origen"));
                 viaje.setOrigen_description(jsonObject.getString("origen_description"));
+                viaje.setValor(jsonObject.getDouble("valor"));
                 viajes.add(viaje);
             }
         } catch (JSONException e) {

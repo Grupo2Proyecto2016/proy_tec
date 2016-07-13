@@ -103,20 +103,6 @@
                         android:hint="@string/fechaIda"/>
                 </android.support.design.widget.TextInputLayout>
 
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_weight="1"
-                    android:id="@+id/view2">
-                    <EditText
-                        android:id="@+id/cantidadAsientos"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_person_black_24dp"
-                        android:hint="@string/cantAsientos"/>
-                </android.support.design.widget.TextInputLayout>
-
             </LinearLayout>
 
 
