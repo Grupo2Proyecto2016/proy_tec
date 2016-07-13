@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Spinner;
@@ -47,6 +49,10 @@ import com.example.malladam.AppUsuarios.models.Pasaje;
 import com.example.malladam.AppUsuarios.models.Terminal;
 import com.example.malladam.AppUsuarios.utils.MenuTintUtils;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -197,6 +203,7 @@ public class PasajesActivity extends AppCompatActivity {
                             pasaje.setDestino(paradaBaja.getString("descripcion"));
                             JSONObject asiento = jsonObject.getJSONObject("asiento");
                             pasaje.setAsiento(asiento.getString("numero"));
+                            pasaje.setNumero(jsonObject.getString("numero"));
                             pasajes.add(pasaje);
                         }
                         if(pasajes.isEmpty()){
@@ -301,6 +308,17 @@ public class PasajesActivity extends AppCompatActivity {
                 mTableRow.addView(mPrecioPasAUX);
             }
             mTableRow.addView(mEstadoPasAUX);
+
+            mTableRow.setTag(item.getNumero());
+            mTableRow.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    String numpasaje =  (String)v.getTag();
+                    showPopup(PasajesActivity.this,numpasaje);
+                }
+            });
 
             mTableLayout.addView(mTableRow);
         }
@@ -418,6 +436,61 @@ public class PasajesActivity extends AppCompatActivity {
         return  localTime;
     }
 
+
+    private void showPopup(final Activity context, String numpasaje)
+    {
+        // Inflate the popup_layout.xml
+        LinearLayout viewGroup = (LinearLayout) context.findViewById(R.id.popup_qr);
+        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = layoutInflater.inflate(R.layout.popup_qr, viewGroup);
+
+        // Creating the PopupWindow
+        final PopupWindow popup = new PopupWindow(layout, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        ImageView imagen_qr = (ImageView) layout.findViewById(R.id.img_qr_pasaje);
+        try {
+            Bitmap bitmap = encodeAsBitmap(numpasaje);
+            imagen_qr.setImageBitmap(bitmap);
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
+        Button btn_qr = (Button) layout.findViewById(R.id.close);
+        btn_qr.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                popup.dismiss();
+            }
+        });
+        popup.showAtLocation(layout, Gravity.CENTER, 0, 0);
+    }
+
+    Bitmap encodeAsBitmap(String str) throws WriterException {
+        int WHITE = 0xFFFFFFFF;
+        int BLACK = 0xFF000000;
+        int WIDTH = 400;
+        int HEIGHT = 400;
+
+        BitMatrix result;
+        try {
+            result = new MultiFormatWriter().encode(str,
+                    BarcodeFormat.QR_CODE, WIDTH, HEIGHT, null);
+        } catch (IllegalArgumentException iae) {
+            // Unsupported format
+            return null;
+        }
+        int w = result.getWidth();
+        int h = result.getHeight();
+        int[] pixels = new int[w * h];
+        for (int y = 0; y < h; y++) {
+            int offset = y * w;
+            for (int x = 0; x < w; x++) {
+                pixels[offset + x] = result.get(x, y) ? BLACK : WHITE;
+            }
+        }
+        Bitmap bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        bitmap.setPixels(pixels, 0, w, 0, 0, w, h);
+        return bitmap;
+    }
 
 
 }

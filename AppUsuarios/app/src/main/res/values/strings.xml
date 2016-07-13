@@ -1,5 +1,9 @@
 <resources>
+<<<<<<< HEAD
     <string name="app_name">undiaantes</string>
+=======
+    <string name="app_name">dac</string>
+>>>>>>> origin/master
     <string name="WSServer">http://10.0.3.2:8080/GoOnServices/</string>
     <string name="action_settings">Configuración</string>
     <string name="action_viajes">Mis Viajes</string>
@@ -63,6 +67,7 @@
     <string name="dondequieresir">"¿Dónde quieres ir?"</string>
     <string name="dondesubes">"¿Dónde subes?"</string>
     <string name="calculo_encomienda">"Cálculo de Encomienda"</string>
+    <string name="qr_pasaje">"Pasaje"</string>
     <string name="calcular">"Calcular"</string>
     <string name="alto">"Alto(cm) "</string>
     <string name="largo">"Largo(cm)"</string>
@@ -88,6 +93,6 @@
     <string name="auth">"/auth"</string>
     <string name="getFilteredStations">"/getFilteredStations"</string>
     <string name="searchTravels">"/searchTravels"</string>
-
-
+    <string name="preBuyTickets">"/preBuyTicket"</string>
+    <string name="appConfirmTickets">"/appConfirmTicket"</string>
 </resources>

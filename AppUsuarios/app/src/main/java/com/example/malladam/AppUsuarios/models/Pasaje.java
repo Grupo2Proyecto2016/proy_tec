@@ -12,6 +12,7 @@ public class Pasaje {
     private String Asiento;
     private float Precio;
     private String Estado;
+    private String Numero;
 
     public Pasaje() {
     }
@@ -81,4 +82,10 @@ public class Pasaje {
     public void setEstado(String estado) {
         Estado = estado;
     }
+
+    public String getNumero() {
+        return Numero;
+    }
+
+    public void setNumero(String numero) { Numero = numero; }
 }

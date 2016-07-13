@@ -1,6 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: lightcoral">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3 class="modal-title" id="myModalLabel">Error</h3>
+      </div>
+      <div class="modal-body">
+      	{{ error_message }}        
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="row">
 
 </div>
@@ -43,16 +58,3 @@
 	</div>
 	<div class="col-xs-2"></div>
 </div>	
-<script>
-window.onload = function(){
-	if(window.opener){
-		window.close();
-	} 
-	else{
-		if(top.dg.isOpen() == true){
-			top.dg.closeFlow();
-			return true;
-		}
-	}                              
-};                             
-</script>

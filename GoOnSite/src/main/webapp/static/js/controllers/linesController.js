@@ -304,7 +304,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
 		}
 		else
 		{
-			$scope.persistLine();
+			$scope.persistLine();		
 		}
 		
     };
@@ -348,6 +348,10 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     			newP.id_parada   = $scope.markers[i].id_parada;
     			newP.descripcion = $scope.markers[i].descripcion;
     			newP.direccion   = $scope.markers[i].direccion;
+    			if(newP.direccion == undefined)
+    			{
+    				newP.direccion = newP.descripcion;
+    			}
     			$scope.lineForm.paradas.push(newP);
     		}
     		
@@ -361,6 +365,10 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     			newP.id_parada   = $scope.markersV[i].id_parada;
     			newP.descripcion = $scope.markersV[i].descripcion;
     			newP.direccion   = $scope.markersV[i].direccion;
+    			if(newP.direccion == undefined)
+    			{
+    				newP.direccion = newP.descripcion;
+    			}
     			$scope.lineForm.paradasV.push(newP);
     		}
     		
@@ -499,7 +507,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
 	  	    reajusta: false,
 	  	    reajuste: 0,
 	  	    km: 0,
-	  	    id_parada:$scope.lineForm.origen
+	  	    id_parada:$scope.lineForm.destino
 	  	});
 		
 		if($scope.markersV.length == 0)
@@ -534,7 +542,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     	{
     		position: myLatlng,
 	  	    map: $scope.map,
-	  	    animation: google.maps.Animation.DROP, //just for fun
+	  	    animation: google.maps.Animation.DROP,
 	  	    es_terminal: true,
 	  	    es_peaje: false,
 	  	    es_origen: true,
@@ -582,7 +590,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
 	  	    reajusta: false,
 	  	    reajuste: 0,
 	  	    km: 0,
-	  	    id_parada:$scope.lineForm.destino
+	  	    id_parada:$scope.lineForm.origen
 	  	});
     	
     	if($scope.markersV.length == 0)
@@ -737,9 +745,43 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     var searchBox = new google.maps.places.SearchBox(input);
     $scope.map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
     
+    searchBox.addListener('places_changed', function() 
+    {
+    	var places = searchBox.getPlaces();
+    	
+        if (places.length == 0) 
+        {
+        	return;
+        }
+        
+        var bounds = new google.maps.LatLngBounds();
+        //hacer for each porque puede devolver mas de un lugar       
+        places.forEach(function(place) 
+        {        	        
+        	$scope.placeMarkerAndPanTo(place.geometry.location, $scope.map, false);        	
+        });    
+    });
+    
     var inputV = document.getElementById('pac-inputV');
     var searchBoxV = new google.maps.places.SearchBox(inputV);
     $scope.mapV.controls[google.maps.ControlPosition.TOP_LEFT].push(inputV);
+    
+    searchBoxV.addListener('places_changed', function() 
+    {
+    	var places = searchBoxV.getPlaces();
+    	
+        if (places.length == 0) 
+        {
+        	return;
+        }
+        
+        var bounds = new google.maps.LatLngBounds();
+        //hacer for each porque puede devolver mas de un lugar       
+        places.forEach(function(place) 
+        {        	        
+        	$scope.placeMarkerAndPanTo(place.geometry.location, $scope.mapV, true);        	
+        });    
+    });
     
     //Bias the SearchBox results towards current map's viewport.
     $scope.map.addListener('bounds_changed', function() 
@@ -820,24 +862,25 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
    	}//fin de placemarker
     
     $scope.deleteMarker = function(indice, vuelta)
-    {
+    {    	
     	if (vuelta)
-    	{
+    	{	
     		if ($scope.markersV[indice].es_terminal)
         	{
         		return;
         	}
-        	$scope.markersV[indice].map = null;
+        	$scope.markersV[indice].setMap(null);
         	$scope.markersV.splice(indice, 1);    	
         	$scope.createRouteV();
     	}
     	else
     	{
+    		
     		if ($scope.markers[indice].es_terminal)
         	{
         		return;
         	}
-        	$scope.markers[indice].map = null;
+        	$scope.markers[indice].setMap(null);
         	$scope.markers.splice(indice, 1);    	
         	$scope.createRoute();
     	}    	

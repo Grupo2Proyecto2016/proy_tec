@@ -24,7 +24,20 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     $scope.frmOpt = "0";    
 	$scope.custom_response = null;    
     i18nService.setCurrentLang('es');
+    
+    if($rootScope.user !== null)
+    {
+    	localStorage.removeItem($scope.$parent.getTicketStorageKey());
+    }
       
+    $scope.limpioOrigenes = function()
+    {
+    	$scope.origenMarkers.forEach(function(marker) 
+        {
+          marker.setMap(null);
+        });
+    	$scope.origenMarkers = [];  
+    }
     //DESTINATION MAP
     $scope.destinationMap = new google.maps.Map(document.getElementById('destinationMap'), 
     {
@@ -56,10 +69,18 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
         
         var bounds = new google.maps.LatLngBounds();
         //hacer for each porque puede devolver mas de un lugar
+        $scope.userMarkers.forEach(function(marker) 
+        {
+        	marker.setMap(null);
+        });
+        if ($scope.circle !== null)
+  	  	{
+  	  		$scope.circle.setMap(null);
+  	  	}
         places.forEach(function(place) 
         {
         	$scope.userMarkers = [];        
-        	$scope.placeMarkerAndPanTo(place.geometry.location, $scope.destinationMap, false);
+        	$scope.placeMarkerAndPanTo(place.geometry.location, $scope.destinationMap, true);
         });         	        
     });
     
@@ -71,6 +92,11 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
         {
         	marker.setMap(null);
         });
+        
+        if ($scope.circle !== null)
+  	  	{
+  	  		$scope.circle.setMap(null);
+  	  	}
         
         $scope.userMarkers = [];        
     	$scope.placeMarkerAndPanTo(e.latLng, $scope.destinationMap, true);    	    	
@@ -210,6 +236,38 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     $scope.originMap.controls[google.maps.ControlPosition.TOP_LEFT].push(originInput);
     //
     
+    originSearchBox.addListener('places_changed', function() 
+    {
+    	
+    	$scope.userMarkersOrigin.forEach(function(marker) 
+        {
+          marker.setMap(null);
+        });
+    	
+    	var places = originSearchBox.getPlaces();
+
+        if (places.length == 0) 
+        {
+        	return;
+        }
+        
+        var bounds = new google.maps.LatLngBounds();
+        //hacer for each porque puede devolver mas de un lugar
+        $scope.userMarkersOrigin.forEach(function(marker) 
+        {
+        	marker.setMap(null);
+        });
+        if ($scope.circleOrigin !== null)
+  	  	{
+  	  		$scope.circleOrigin.setMap(null);
+  	  	}
+        places.forEach(function(place) 
+        {
+        	$scope.userMarkersOrigin = [];        
+        	$scope.placeMarkerAndPanTo(place.geometry.location, $scope.originMap, false);
+        });         	        
+    });
+    
     $scope.originMap.addListener('click', function(e) 
     {
     	//Borra los anteriores, en este caso es uno solo, pero eventualmente podrian ser mas
@@ -218,7 +276,10 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
         {
           marker.setMap(null);
         });
-        
+        if ($scope.circleOrigin !== null)
+  	  	{
+  	  		$scope.circleOrigin.setMap(null);
+  	  	}
         $scope.userMarkersOrigin = [];        
     	$scope.placeMarkerAndPanTo(e.latLng, $scope.originMap);    	    	
     	//$scope.$digest();
@@ -249,8 +310,8 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     					
     					marker.addListener('click', function() 
     					{
-    						infowindow.setContent('<p>' + station.descripcion + '</p><p><button class="btn btn-sm btn-primary" ng-click=""><i class="fa fa-check-square fa-lg pull-left"></i>Seleccionar</button></p>');   						
-    						
+    						//infowindow.setContent('<p>' + station.descripcion + '</p><p><button class="btn btn-sm btn-primary"><i class="fa fa-check-square fa-lg pull-left"></i>Seleccionar</button></p>');						
+    						infowindow.setContent('<p>' + station.descripcion + '</p>');    						
     						infowindow.open($scope.destinationMap, marker);
     					});
     					
@@ -259,6 +320,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 				}
 		});
     };
+
     
     $scope.getFilteredOrigins = function()
     {
@@ -370,6 +432,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     {
     	$("#destinationModal").modal('hide');
     	$.blockUI();
+    	$scope.limpioOrigenes();
     	$http.post(servicesUrl +'getFilteredStations', JSON.stringify($scope.listaIDSeleccionados))
     	.then(function(response)
     			{
@@ -596,30 +659,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 
     
     $scope.confirmSeats = function()
-    {
-    	/*sel_seat.txt = this.settings.label;
-		sel_seat.price = this.data().price;
-		sel_seat.id = this.settings.id;
-		$scope.reservados.push(sel_seat);*/
-    	if($rootScope.user == null)
-    	{
-    		$scope.rolCreador = 0;
-    	}
-    	else
-    	{
-    		$scope.rolCreador = $rootScope.user.rol_id_rol;
-    	}
-    	$("#selectTicketsModal").modal('hide');
-    	$("#divTravelForm").addClass('hidden');
-    	$("#travelsSearchGrid").addClass('hidden');
-    	$("#seatsConfirmForm").removeClass('hidden');
-    	
-    	$scope.seatsForm.seleccionados = [];
-		for(var i = 0; i < $scope.reservados.length; i++) 
-		{
-			$scope.seatsForm.seleccionados.push($scope.reservados[i].id);			
-		} 
-		
+    {	
 		$http.get(servicesUrl + 'getUserInfo')
 		.then(function(response) 
 		{
@@ -629,11 +669,20 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 				$.unblockUI();
 			}
 			else
-			{		
-				localStorage.setItem(/*getJwtToken() + */"userTickets", JSON.stringify($scope.seatsForm));
+			{
+				$scope.seatsForm.seleccionados = [];
+				for(var i = 0; i < $scope.reservados.length; i++) 
+				{
+					$scope.seatsForm.seleccionados.push($scope.reservados[i].id);			
+				}
+				localStorage.setItem($scope.$parent.getTicketStorageKey(), JSON.stringify($scope.seatsForm));				
+				$("#selectTicketsModal").modal('hide');
+		    	$("#divTravelForm").addClass('hidden');
+		    	$("#travelsSearchGrid").addClass('hidden');
+		    	$("#seatsConfirmForm").removeClass('hidden');	    
+				
 			}
-		});
-    	
+		});    	
     }
     
     $scope.payTicket = function()
@@ -644,12 +693,12 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 		{
 			if(response.status == 404)
 			{
-				$("#loginModal").modal("show");
+				$("#loginModal").modal("show");		
 				$.unblockUI();
 			}
 			else
 			{				
-				localStorage.setItem("userTickets", JSON.stringify($scope.seatsForm));
+				//localStorage.setItem("userTickets", JSON.stringify($scope.seatsForm));
 				$scope.seatsForm.seleccionados = [];
 				for(var i = 0; i < $scope.reservados.length; i++) 
 				{
@@ -663,7 +712,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 				{
 					$scope.seatsForm.rUser = null;
 				}	
-				if ($scope.rolCreador == "4")
+				if ($rootScope.user.rol_id_rol == "4")
 				{
 					$scope.seatsForm.rDoc = null;
 					$scope.seatsForm.rUser = null;
@@ -715,7 +764,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 			}
 			else
 			{				
-				localStorage.setItem("userTickets", JSON.stringify($scope.seatsForm));
+				//localStorage.setItem("userTickets", JSON.stringify($scope.seatsForm));
 				$scope.seatsForm.seleccionados = [];
 				for(var i = 0; i < $scope.reservados.length; i++) 
 				{
@@ -729,7 +778,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 				{
 					$scope.seatsForm.rUser = null;
 				}	
-				if ($scope.rolCreador == "4")
+				if ($rootScope.user.rol_id_rol == "4")
 				{
 					$scope.seatsForm.rDoc = null;
 					$scope.seatsForm.rUser = null;
@@ -769,7 +818,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 			}
 			else
 			{				
-				localStorage.setItem("userTickets", JSON.stringify($scope.seatsForm));
+				//localStorage.setItem("userTickets", JSON.stringify($scope.seatsForm));
 				$scope.seatsForm.seleccionados = [];
 				for(var i = 0; i < $scope.reservados.length; i++) 
 				{
@@ -783,7 +832,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 				{
 					$scope.seatsForm.rUser = null;
 				}	
-				if ($scope.rolCreador == "4")
+				if ($rootScope.user.rol_id_rol == "4")
 				{
 					$scope.seatsForm.rDoc = null;
 					$scope.seatsForm.rUser = null;

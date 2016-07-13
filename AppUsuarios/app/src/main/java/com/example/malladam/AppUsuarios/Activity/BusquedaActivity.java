@@ -78,7 +78,6 @@ public class BusquedaActivity extends AppCompatActivity implements NumberPicker.
     private String urlgetCompany, urlgetStations,urlGetFilteredStations, urlSearchTravels;
     private VolleyS volley;
     private Empresa empresa;
-    private TextView mCantAsientos;
     private GoogleMap mMap;
     private PopupWindow pw;
     private List<Parada> paradas = new ArrayList<Parada>();
@@ -100,14 +99,12 @@ public class BusquedaActivity extends AppCompatActivity implements NumberPicker.
         mOrigen = (Button) findViewById(R.id.origenBusqueda);
         mDestino = (Button) findViewById(R.id.destinoBusqueda);
         mButtonBuscar = (Button) findViewById(R.id.buscarButton);
-        mCantAsientos = (TextView) findViewById(R.id.cantidadAsientos);
         empresa = empresa.getInstance();
         mOrigen.setTextColor(Color.parseColor(empresa.getColorBack()));
         mDestino.setTextColor(Color.parseColor(empresa.getColorBack()));
         mOrigen.setBackgroundColor(Color.parseColor(empresa.getColorText()));
         mDestino.setBackgroundColor(Color.parseColor(empresa.getColorText()));
         mFechaIda.setTextColor(Color.parseColor(empresa.getColorText()));
-        mCantAsientos.setTextColor(Color.parseColor(empresa.getColorText()));
 
         urlSearchTravels = getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)+getResources().getString(R.string.searchTravels);
         urlgetStations = getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)+getResources().getString(R.string.getStations);
@@ -160,7 +157,7 @@ public class BusquedaActivity extends AppCompatActivity implements NumberPicker.
                 //VALIDAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!VALIDAR
                 try {
-                    WSbuscarViajes(currentDate,currentDate,paradasOrigen, paradasDestino,Integer.parseInt(mCantAsientos.getText().toString()));
+                    WSbuscarViajes(currentDate,currentDate,paradasOrigen, paradasDestino);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } catch (TimeoutException e) {
@@ -230,45 +227,10 @@ public class BusquedaActivity extends AppCompatActivity implements NumberPicker.
         getSupportActionBar().setTitle(empresa.getNombre());
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         ///////////ACTIONBAR+NAVIGATION////////////
-
-        //numberPcker//
-        mCantAsientos.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                show();
-            }
-        });
     }
     @Override
     public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
         Log.i("value is",""+newVal);
-    }
-
-    public void show(){
-        final Dialog d = new Dialog(BusquedaActivity.this);
-        d.setTitle(getResources().getString(R.string.cantAsientos));
-        d.setContentView(R.layout.dialog_number_picker);
-        Button b1 = (Button) d.findViewById(R.id.button1);
-        Button b2 = (Button) d.findViewById(R.id.button2);
-        final NumberPicker np = (NumberPicker) d.findViewById(R.id.numberPicker1);
-        np.setMaxValue(50);
-        np.setMinValue(1);
-        np.setWrapSelectorWheel(false);
-        np.setOnValueChangedListener(this);
-        b1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCantAsientos.setText(String.valueOf(np.getValue())); //set the value to textview
-                d.dismiss();
-            }
-        });
-        b2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                d.dismiss(); // dismiss the dialog
-            }
-        });
-        d.show();
     }
 
     ///////////ACTIONBAR+NAVIGATION////////////////
@@ -443,7 +405,7 @@ public class BusquedaActivity extends AppCompatActivity implements NumberPicker.
             }
         }
 
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(-34.83346,-56.16735), 10.0f));//montevideo
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(-34.83346,-56.16735), 13.0f));//montevideo
         mMap.setOnInfoWindowClickListener(this);
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
@@ -598,8 +560,7 @@ public class BusquedaActivity extends AppCompatActivity implements NumberPicker.
     }
 
 
-    private void WSbuscarViajes(String dateFrom, String dateTo, List<Parada> origins, List<Parada> destinations,
-                                int ticketsCount) throws JSONException, TimeoutException, ExecutionException {
+    private void WSbuscarViajes(String dateFrom, String dateTo, List<Parada> origins, List<Parada> destinations) throws JSONException, TimeoutException, ExecutionException {
 
         JSONArray jsonArrayOrigenes = getIdByParadas(origins);
         JSONArray jsonArrayDestinos = getIdByParadas(destinations);
@@ -609,7 +570,6 @@ public class BusquedaActivity extends AppCompatActivity implements NumberPicker.
         jsonBody.put("dateTo",dateTo);
         jsonBody.put("origins",jsonArrayOrigenes);
         jsonBody.put("destinations",jsonArrayDestinos);
-        jsonBody.put("ticketsCount",ticketsCount);
 
         try {
             volley.llamarWSCustomArray(Request.Method.POST,urlSearchTravels, jsonBody,new Response.Listener<JSONArray>(){

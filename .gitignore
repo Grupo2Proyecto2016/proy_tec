@@ -1,0 +1,13 @@
+AppUsuarios/app/src/main/AndroidManifest.xml
+AppUsuarios/app/src/main/AndroidManifest.xml
+AppUsuarios/app/src/main/java/com/example/malladam/AppUsuarios/Activity/BusquedaActivity.java
+AppUsuarios/app/src/main/java/com/example/malladam/AppUsuarios/models/Asiento.java
+AppUsuarios/app/src/main/java/com/example/malladam/AppUsuarios/adapters/PasajeArrayAdapter.java
+AppUsuarios/app/src/main/java/com/example/malladam/AppUsuarios/adapters/PasajeArrayAdapter.java
+AppUsuarios/app/src/main/java/com/example/malladam/AppUsuarios/Activity/ViajesActivity.java
+*.jsp
+GoOnSite/src/main/webapp/WEB-INF/views/pages/mantenimientos.jsp
+*.less
+*.otf
+*.eot
+*.js

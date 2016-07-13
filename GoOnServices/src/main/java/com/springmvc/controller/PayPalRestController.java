@@ -165,6 +165,7 @@ public class PayPalRestController
 				//Rolbackear todos los pasajes
 				e.printStackTrace();
 				respuesta.setSuccess(false);
+				respuesta.setMsg(e.getMessage());
 			}
 			
 		}

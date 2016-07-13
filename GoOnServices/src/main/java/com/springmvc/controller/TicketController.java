@@ -1,5 +1,6 @@
 	package com.springmvc.controller;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -32,11 +33,14 @@ import com.springmvc.exceptions.CollectTicketException;
 import com.springmvc.logic.implementations.LinesLogic;
 import com.springmvc.logic.implementations.PackageLogic;
 import com.springmvc.logic.implementations.UsersLogic;
+import com.springmvc.requestWrappers.AppTicketWrapper;
 import com.springmvc.requestWrappers.AvailableSeatsWrapper;
 import com.springmvc.requestWrappers.BuyTicketWrapper;
 import com.springmvc.requestWrappers.CollectCustomResponseWrapper;
 import com.springmvc.requestWrappers.CollectTicketWrapper;
+import com.springmvc.requestWrappers.CustomPayPalResponseWrapper;
 import com.springmvc.requestWrappers.CustomResponseWrapper;
+import com.springmvc.requestWrappers.PayPalWrapper;
 import com.springmvc.requestWrappers.TravelSearchWrapper;
 import com.springmvc.requestWrappers.seatsFormWrapper;
 import com.springmvc.utils.UserContext;
@@ -215,6 +219,31 @@ public class TicketController
 		return new ResponseEntity<List<Pasaje>>(tickets, HttpStatus.OK);
 	}
 	
+	@Secured({"ROLE_CLIENT"})
+	@RequestMapping(value = "/preBuyTicket", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
+	public ResponseEntity<List<Pasaje>> preBuyTicket(@RequestBody PayPalWrapper paypal, @PathVariable String tenantid, HttpServletRequest request)
+	{
+		Usuario currentUser = context.GetUser(request, tenantid);		
+		LinesLogic ll = new LinesLogic(tenantid);
+		List<Pasaje> tickets = null;
+		tickets = ll.ClientReserveTickets(currentUser, paypal.id_viaje, paypal.origen, paypal.destino, paypal.valor, paypal.seleccionados);				
+		return new ResponseEntity<List<Pasaje>>(tickets, HttpStatus.OK);
+	}
+	
+	@Secured({"ROLE_CLIENT"})
+	@RequestMapping(value = "/appConfirmTicket", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
+	public ResponseEntity<Void> appConfirmTicket(@RequestBody AppTicketWrapper atw, @PathVariable String tenantid, HttpServletRequest request)
+	{
+		LinesLogic ll = new LinesLogic(tenantid);
+		List<Pasaje> lst_tickets = new ArrayList<>();
+		for(int x=0; x < atw.tickets.size(); x++)
+		{
+			Pasaje pasaje = ll.findTicketByID(atw.tickets.get(x));
+			lst_tickets.add(pasaje);
+		}
+		ll.ClientConfirmTickets(lst_tickets, atw.id_Pago); 		
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
 	
 	@Secured({"ROLE_SALES"})
 	@RequestMapping(value = "/getActiveTickets", method = RequestMethod.GET, produces = "application/json")
@@ -264,7 +293,7 @@ public class TicketController
 	{
 		LinesLogic ll = new LinesLogic(tenantid);
 		ll.SalesConfirmTicket(ticket);
-		return new ResponseEntity(HttpStatus.OK);
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
 }

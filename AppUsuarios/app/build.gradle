@@ -6,10 +6,11 @@ android {
 
     defaultConfig {
         applicationId "com.example.malladam.AppUsuarios"
-        minSdkVersion 15
+        minSdkVersion 21
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -28,6 +29,8 @@ dependencies {
     compile 'com.android.support:support-v4:23.2.1'
     compile 'com.android.volley:volley:1.0.0'
     compile 'com.google.android.gms:play-services:8.4.0'
+    compile 'com.google.zxing:core:3.2.1'
+    compile 'com.paypal.sdk:paypal-android-sdk:2.14.4'
 }
 
 

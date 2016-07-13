@@ -5,27 +5,28 @@
       <meta charset=UTF-8">
       <!-- STYLES -->
 	  <link rel="stylesheet" href="<c:url value='/static/css/custom.css' />" />
-      <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.css" />
+      <link rel="stylesheet" href="<c:url value='/static/css/font-awesome.min.css'/>" />
       
       <!-- SCRIPTS -->
 	  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXLMRyM-qhBcFx4Lvv6XxACYvWYY8ey-U&libraries=places,geometry" async defer></script>
       <script src="<c:url value='/static/js/tokenLogic.js' />"></script>
-      <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+      <script src="<c:url value='/static/js/jquery/jquery-1.11.1.min.js' />"></script>      
       <script src="<c:url value='/static/js/jquery/jquery.blockUI.js' />"></script>
-      <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
-	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-route.js"></script>
-	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.js"></script>
-	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.js"></script>
-	  
-	  <script src="<c:url value='/static/js/qr/qrcode.js' />"></script>
+      <script src="<c:url value='/static/js/bootstrap/bootstrap.min.js' />"></script>
+      
+      <script src="<c:url value='/static/js/angularjs/angular.min.js' />"></script>
+      <script src="<c:url value='/static/js/angularjs/angular-route.js' />"></script>
+      <script src="<c:url value='/static/js/angularjs/angular-animate.js' />"></script>
+      <script src="<c:url value='/static/js/angularjs/angular-messages.js' />"></script>
+            
+      <script src="<c:url value='/static/js/qr/qrcode.js' />"></script>
 	  <script src="<c:url value='/static/js/qr/angular-qrcode.js' />"></script>
       <script src="<c:url value='/static/js/app.js' />"></script>
       
       <!-- PAYPAL -->
-      <script src='https://www.paypalobjects.com/js/external/dg.js' type='text/javascript'></script>
+      <script src="<c:url value='/static/js/paypal/dg.js' />"></script>      
       
-	  <!--ESTILO CUSTOM -->
+	  <!--ESTILO CUSTOM-->
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.6/{{company.css}}/bootstrap.min.css" />
       
 	  <link rel="stylesheet" href="<c:url value='/static/css/ui-grid.min.css' />" />

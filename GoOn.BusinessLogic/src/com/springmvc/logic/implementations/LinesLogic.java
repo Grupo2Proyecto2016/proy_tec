@@ -642,4 +642,9 @@ public class LinesLogic implements ILinesLogic
 		travelLoc.setViaje(travel);
 		TenantContext.ViajeUbicacionRepository.InsertTravelLoc(travelLoc);
 	}
+
+	public Pasaje findTicketByID(Long id_ticket) 
+	{
+		return TenantContext.PasajeRepository.findByID(id_ticket);
+	}
 }
