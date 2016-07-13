@@ -145,18 +145,30 @@ public class ViajeRepository {
 	public List<Viaje> GetPackageTravels(long origin, long destination, Calendar tomorrow, Calendar limit) 
 	{
 		List<Viaje> travels = null;
-		Query q = entityManager.createQuery(
-				"FROM Viaje v "
-				//+"LEFT JOIN v.encomiendas e " 
-				+ "WHERE v.linea.habilitado = TRUE "
-				+ "AND v.terminado = FALSE "
-				+ "AND v.linea.origen.id_parada = :origin "
-				+ "AND v.linea.destino.id_parada = :destination "
-				+ "AND v.inicio >= :tomorrow "
-				+ "AND v.inicio <= :limit "
-				//+ "GROUP BY v " 
-				+ "AND v.vehiculo.cantEncomiendas > 0 AND size(v.encomiendas) < v.vehiculo.cantEncomiendas "
-				+ "ORDER BY v.inicio ASC"
+
+		Query q = entityManager.createNativeQuery(
+				"SELECT v.* FROM viaje v "
+				+ " WHERE v.id_viaje IN "
+				+"( "
+					+"SELECT v.id_viaje "
+					+"FROM viaje v "
+					+"INNER JOIN linea l "
+					+"ON l.id_linea = v.linea_id_linea "
+					+"INNER JOIN vehiculo ve "
+					+"ON ve.id_vehiculo = v.vehiculo_id_vehiculo "
+					+"LEFT outer JOIN encomienda e "
+					+"ON e.viaje_id_viaje = v.id_viaje  "
+					+"WHERE l.habilitado = TRUE "
+					+"AND v.terminado = FALSE "
+					+"AND l.id_parada_origen = :origin "
+					+"AND l.id_parada_destino = :destination "
+					+"AND v.inicio >= :tomorrow "
+					+"AND v.inicio <= :limit "
+					+"AND ve.cantencomiendas > 0 "
+					+"GROUP BY v.id_viaje, ve.cantencomiendas "
+					+"HAVING COUNT(*) < ve.cantencomiendas "
+				+")"
+				, Viaje.class
 		);
 		q.setParameter("origin", origin);
 		q.setParameter("destination", destination);
@@ -165,6 +177,7 @@ public class ViajeRepository {
 		travels = (List<Viaje>)q.getResultList();
 		return travels;	
 	}
+
 
 	public List<Viaje> GetLineTravels(List<Long> id_lineas, Calendar dateFrom) 
 	{
