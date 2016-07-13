@@ -89,6 +89,6 @@
     <string name="auth">"/auth"</string>
     <string name="getFilteredStations">"/getFilteredStations"</string>
     <string name="searchTravels">"/searchTravels"</string>
-
-
+    <string name="preBuyTickets">"/preBuyTicket"</string>
+    <string name="appConfirmTickets">"/appConfirmTicket"</string>
 </resources>

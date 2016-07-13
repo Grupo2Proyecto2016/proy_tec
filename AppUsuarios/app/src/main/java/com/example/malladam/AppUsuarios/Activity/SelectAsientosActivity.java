@@ -1,7 +1,9 @@
 package com.example.malladam.AppUsuarios.Activity;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,15 +14,21 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.example.malladam.AppUsuarios.DataBaseManager;
 import com.example.malladam.AppUsuarios.R;
 import com.example.malladam.AppUsuarios.adapters.PasajeArrayAdapter;
 import com.example.malladam.AppUsuarios.adapters.VolleyS;
 import com.example.malladam.AppUsuarios.models.Asiento;
 import com.example.malladam.AppUsuarios.models.GroupPasajeDT;
+import com.example.malladam.AppUsuarios.models.Parada;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalPayment;
 import com.paypal.android.sdk.payments.PayPalService;
@@ -33,22 +41,27 @@ import org.json.JSONObject;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 public class SelectAsientosActivity extends AppCompatActivity {
 
+    String urlPreBuyTickets;
+    String urlAppConfirmTickets;
+
     private static PayPalConfiguration config = new PayPalConfiguration()
         .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
         .clientId("AcYJ0yuY-V2vxt6XETFzitK6qBADBO9_XEiXZov3iCv-4S4RnCAywVBIAcPfRLsMghjPDz-bZASB_Efz")
     ;
-
+    List<Integer> reservedTickets = new ArrayList<>();
     private VolleyS volley;
     private DataBaseManager dbManager;
     ListView lista;
     PasajeArrayAdapter<GroupPasajeDT> seatsArray;
-    int asientosBus = 44;
     static TextView infoAsiento;
 
     int idViaje;
@@ -65,7 +78,9 @@ public class SelectAsientosActivity extends AppCompatActivity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_asientos);
-        dbManager = new DataBaseManager(this)
+        dbManager = new DataBaseManager(this);
+        urlPreBuyTickets = getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)+getResources().getString(R.string.preBuyTickets);
+        urlAppConfirmTickets = getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)+getResources().getString(R.string.appConfirmTickets);
 
         Button btn_buy = (Button)findViewById(R.id.btn_buy);
         btn_buy.setOnClickListener(new View.OnClickListener() {
@@ -76,7 +91,11 @@ public class SelectAsientosActivity extends AppCompatActivity {
                 {
                     Toast.makeText(SelectAsientosActivity.this, "Debe loguearse para poder comprar pasajes.", Toast.LENGTH_LONG).show();
                 }
-                onBuyPressed(v);
+                else
+                {
+                    onBuyPressed(v);
+                }
+
             }
         });
 
@@ -216,24 +235,20 @@ public class SelectAsientosActivity extends AppCompatActivity {
 
     public void onBuyPressed(View pressed)
     {
-        ReservTickets();
-
-
-        // PAYMENT_INTENT_SALE will cause the payment to complete immediately.
-        // Change PAYMENT_INTENT_SALE to
-        //   - PAYMENT_INTENT_AUTHORIZE to only authorize payment and capture funds later.
-        //   - PAYMENT_INTENT_ORDER to create a payment for authorization and capture
-        //     later via calls from your server.
-        PayPalPayment payment = new PayPalPayment(new BigDecimal(seatsArray.totalValue), "USD", "Compra de pasajes", PayPalPayment.PAYMENT_INTENT_SALE);
-
-        Intent intent = new Intent(this, PaymentActivity.class);
-
-        // send the same configuration for restart resiliency
-        intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
-
-        intent.putExtra(PaymentActivity.EXTRA_PAYMENT, payment);
-
-        startActivityForResult(intent, 0);
+        try
+        {
+            ReservTickets();
+            PayPalPayment payment = new PayPalPayment(new BigDecimal(seatsArray.totalValue / 30), "USD", "Compra de pasajes", PayPalPayment.PAYMENT_INTENT_SALE);
+            Intent intent = new Intent(this, PaymentActivity.class);
+            intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
+            intent.putExtra(PaymentActivity.EXTRA_PAYMENT, payment);
+            startActivityForResult(intent, 0);
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(SelectAsientosActivity.this, "Ha ocurrido un error al adquirir el pasaje. Intenta de nuevo en unos instantes", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -260,17 +275,98 @@ public class SelectAsientosActivity extends AppCompatActivity {
         }
     }
 
-    void ReservTickets()
+    void ReservTickets() throws JSONException, TimeoutException, ExecutionException
     {
-        
+        JSONObject jsonBody = new JSONObject();
+        try
+        {
+            JSONArray seatsJSON = getSeatsJSON(seatsArray.selectedSeats);
+            jsonBody.put("id_viaje", idViaje);
+            jsonBody.put("origen", origin);
+            jsonBody.put("destino",destination);
+            jsonBody.put("valor", seatsArray.totalValue);
+            jsonBody.put("seleccionados", seatsJSON);
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+        try
+        {
+            volley.llamarWSCustomArray(Request.Method.POST, urlPreBuyTickets, jsonBody, new Response.Listener<JSONArray>(){
+                @Override
+                public void onResponse(JSONArray response) {
+                    for (int i = 0; i < response.length(); i++)
+                    {
+                        Integer ticketId = null;
+                        try
+                        {
+                            JSONObject ticket = (JSONObject)response.get(i);
+                            ticketId = ticket.getInt("id_pasaje");
+                        }
+                        catch (JSONException e)
+                        {
+                            e.printStackTrace();
+                        }
+                        reservedTickets.add(ticketId);
+                    }
+                }
+            }, new Response.ErrorListener(){
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    Log.d("el ERROR ",volleyError.toString());
+                }
+            }, dbManager.getTokenLogueado());
+        }
+        catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    private void WSbuscarViajes(String dateFrom, String dateTo, List<Parada> origins, List<Parada> destinations) throws JSONException, TimeoutException, ExecutionException {
+
+
     }
 
     void ConfirmTickets(String paymentId)
     {
-        //CONFIRMAR PASAJES
-        Intent intent = new Intent(SelectAsientosActivity.this, PasajesActivity.class);
-        Toast.makeText(SelectAsientosActivity.this, "Los pasajes han sido acreditados a su cuenta", Toast.LENGTH_LONG).show();
-        SelectAsientosActivity.this.startActivity(intent);
+        String token = dbManager.getTokenLogueado();
+        JSONArray ticketJSON = getSeatsJSON(reservedTickets);
+        JSONObject jsonBody = new JSONObject();
+        try
+        {
+            jsonBody.put("id_Pago", paymentId);
+            jsonBody.put("tickets", ticketJSON);
+
+            volley.llamarWS(Request.Method.POST, urlAppConfirmTickets, jsonBody, new Response.Listener<JSONObject>()
+            {
+                @Override
+                public void onResponse(JSONObject response)
+                {
+                }
+            }, new Response.ErrorListener(){
+                @Override
+                public void onErrorResponse(VolleyError volleyError)
+                {
+                    if( volleyError instanceof ParseError)
+                    {
+                        Intent intent = new Intent(SelectAsientosActivity.this, PasajesActivity.class);
+                        Toast.makeText(SelectAsientosActivity.this, "Los pasajes han sido acreditados a su cuenta", Toast.LENGTH_LONG).show();
+                        SelectAsientosActivity.this.startActivity(intent);
+                    }
+                    else
+                    {
+                        Toast.makeText(SelectAsientosActivity.this, "Lo sentimos. Hubo un problema concretando la compra. Pongase en contacto con la sucursal mas cercana", Toast.LENGTH_LONG).show();
+                        Log.d("el ERROR ",volleyError.toString());
+                    }
+                }
+            }, token);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -278,5 +374,15 @@ public class SelectAsientosActivity extends AppCompatActivity {
     {
         stopService(new Intent(this, PayPalService.class));
         super.onDestroy();
+    }
+
+    private JSONArray getSeatsJSON(List<Integer> seats)
+    {
+        JSONArray jsonArray = new JSONArray();
+        for (Integer seat: seats)
+        {
+            jsonArray.put(seat);
+        }
+        return jsonArray;
     }
 }
