@@ -310,8 +310,8 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     					
     					marker.addListener('click', function() 
     					{
-    						infowindow.setContent('<p>' + station.descripcion + '</p><p><button class="btn btn-sm btn-primary" ng-click=""><i class="fa fa-check-square fa-lg pull-left"></i>Seleccionar</button></p>');   						
-    						
+    						//infowindow.setContent('<p>' + station.descripcion + '</p><p><button class="btn btn-sm btn-primary"><i class="fa fa-check-square fa-lg pull-left"></i>Seleccionar</button></p>');						
+    						infowindow.setContent('<p>' + station.descripcion + '</p>');    						
     						infowindow.open($scope.destinationMap, marker);
     					});
     					
@@ -320,6 +320,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 				}
 		});
     };
+
     
     $scope.getFilteredOrigins = function()
     {
