@@ -18,7 +18,7 @@ tools:context=".Activity.SelectAsientosActivity">
     android:layout_height="match_parent"
     android:layout_weight="1"
     android:layout_marginTop="50dp"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:weightSum="1">
 
     <TextView
@@ -29,6 +29,17 @@ tools:context=".Activity.SelectAsientosActivity">
         android:gravity="left"
         android:textColor="@color/negro"
         android:id="@+id/infoAsiento" />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="59dp"
+        android:text="Comprar"
+        android:id="@+id/btn_buy"
+        android:layout_gravity="bottom"
+        android:layout_marginTop="45dp"
+        android:onClick="onBuyPressed"
+        />
+
+
 </LinearLayout>
 
 </LinearLayout>
