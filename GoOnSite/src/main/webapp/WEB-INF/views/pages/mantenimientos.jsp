@@ -112,7 +112,7 @@
 							<div class="col-sm-8">
 							
 								<input type="text" pattern="[0-9]+" title="Solo se aceptan números" name="costo" class="form-control"
-									ng-model="mantenimientoToDelete.costo" >
+									ng-model="mantenimientoToDelete.costo" required>
 							</div>
 						</div>
 					  	<div class="form-group">
