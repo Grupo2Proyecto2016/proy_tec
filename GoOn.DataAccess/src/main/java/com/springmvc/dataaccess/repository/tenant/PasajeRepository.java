@@ -427,4 +427,20 @@ public class PasajeRepository {
 			throw ex;
 		}
 	}
+
+	public Pasaje findByID(Long id_ticket) 
+	{
+		Pasaje result = null;
+		Query q = entityManager.createQuery("SELECT p FROM Pasaje p WHERE p.id_pasaje = :idp");
+		q.setParameter("idp", id_ticket);		
+		try
+		{
+			result = (Pasaje) q.getSingleResult();
+		}
+		catch(NoResultException ex)
+		{
+			return null;
+		}
+		return result;		
+	}
 }

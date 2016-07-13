@@ -1,5 +1,6 @@
 	package com.springmvc.controller;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -234,7 +235,13 @@ public class TicketController
 	public ResponseEntity<Void> appConfirmTicket(@RequestBody AppTicketWrapper atw, @PathVariable String tenantid, HttpServletRequest request)
 	{
 		LinesLogic ll = new LinesLogic(tenantid);
-		ll.ClientConfirmTickets(atw.tickets, atw.id_Pago);
+		List<Pasaje> lst_tickets = new ArrayList<>();
+		for(int x=0; x < atw.tickets.size(); x++)
+		{
+			Pasaje pasaje = ll.findTicketByID(atw.tickets.get(x));
+			lst_tickets.add(pasaje);
+		}
+		ll.ClientConfirmTickets(lst_tickets, atw.id_Pago); 		
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
