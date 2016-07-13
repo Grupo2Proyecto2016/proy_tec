@@ -36,7 +36,9 @@ import com.springmvc.requestWrappers.AvailableSeatsWrapper;
 import com.springmvc.requestWrappers.BuyTicketWrapper;
 import com.springmvc.requestWrappers.CollectCustomResponseWrapper;
 import com.springmvc.requestWrappers.CollectTicketWrapper;
+import com.springmvc.requestWrappers.CustomPayPalResponseWrapper;
 import com.springmvc.requestWrappers.CustomResponseWrapper;
+import com.springmvc.requestWrappers.PayPalWrapper;
 import com.springmvc.requestWrappers.TravelSearchWrapper;
 import com.springmvc.requestWrappers.seatsFormWrapper;
 import com.springmvc.utils.UserContext;
@@ -215,6 +217,16 @@ public class TicketController
 		return new ResponseEntity<List<Pasaje>>(tickets, HttpStatus.OK);
 	}
 	
+	@Secured({"ROLE_CLIENT"})
+	@RequestMapping(value = "/preBuyTicket", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
+	public ResponseEntity<Void> preBuyTicket(@RequestBody PayPalWrapper paypal, @PathVariable String tenantid, HttpServletRequest request)
+	{
+		Usuario currentUser = context.GetUser(request, tenantid);		
+		LinesLogic ll = new LinesLogic(tenantid);
+		List<Pasaje> tickets = null;
+		tickets = ll.ClientReserveTickets(currentUser, paypal.id_viaje, paypal.origen, paypal.destino, paypal.valor, paypal.seleccionados);				
+		return new ResponseEntity(HttpStatus.OK);
+	}
 	
 	@Secured({"ROLE_SALES"})
 	@RequestMapping(value = "/getActiveTickets", method = RequestMethod.GET, produces = "application/json")
