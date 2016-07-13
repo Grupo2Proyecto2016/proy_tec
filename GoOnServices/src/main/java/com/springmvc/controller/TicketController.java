@@ -32,6 +32,7 @@ import com.springmvc.exceptions.CollectTicketException;
 import com.springmvc.logic.implementations.LinesLogic;
 import com.springmvc.logic.implementations.PackageLogic;
 import com.springmvc.logic.implementations.UsersLogic;
+import com.springmvc.requestWrappers.AppTicketWrapper;
 import com.springmvc.requestWrappers.AvailableSeatsWrapper;
 import com.springmvc.requestWrappers.BuyTicketWrapper;
 import com.springmvc.requestWrappers.CollectCustomResponseWrapper;
@@ -219,12 +220,21 @@ public class TicketController
 	
 	@Secured({"ROLE_CLIENT"})
 	@RequestMapping(value = "/preBuyTicket", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
-	public ResponseEntity<Void> preBuyTicket(@RequestBody PayPalWrapper paypal, @PathVariable String tenantid, HttpServletRequest request)
+	public ResponseEntity<List<Pasaje>> preBuyTicket(@RequestBody PayPalWrapper paypal, @PathVariable String tenantid, HttpServletRequest request)
 	{
 		Usuario currentUser = context.GetUser(request, tenantid);		
 		LinesLogic ll = new LinesLogic(tenantid);
 		List<Pasaje> tickets = null;
 		tickets = ll.ClientReserveTickets(currentUser, paypal.id_viaje, paypal.origen, paypal.destino, paypal.valor, paypal.seleccionados);				
+		return new ResponseEntity<List<Pasaje>>(tickets, HttpStatus.OK);
+	}
+	
+	@Secured({"ROLE_CLIENT"})
+	@RequestMapping(value = "/appConfirmTicket", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
+	public ResponseEntity<Void> appConfirmTicket(@RequestBody AppTicketWrapper atw, @PathVariable String tenantid, HttpServletRequest request)
+	{
+		LinesLogic ll = new LinesLogic(tenantid);
+		ll.ClientConfirmTickets(atw.tickets, atw.id_Pago);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
