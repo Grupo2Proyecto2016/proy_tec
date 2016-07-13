@@ -36,16 +36,20 @@ import com.example.malladam.AppGuarda.Activity.LoginActivity;
 import com.example.malladam.AppGuarda.Activity.MainActivity;
 import com.example.malladam.AppGuarda.adapters.VolleyS;
 import com.example.malladam.AppGuarda.models.Empresa;
+import com.example.malladam.AppGuarda.models.Parada;
 import com.example.malladam.AppGuarda.models.ViajeActual;
 import com.example.malladam.AppGuarda.utils.UbicacionService;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.ExecutionException;
@@ -62,6 +66,7 @@ public class FragmentIniciarViaje extends Fragment {
     private DataBaseManager dbManager;
     int intentosLogin = 0;
     private VolleyS volley;
+    private List<Parada> paradasDelViaje= new ArrayList<>();
     private String urlGetSigViaje, urlToken,urlStartTravel;
     private ViajeActual viajeActual;
 
@@ -128,7 +133,7 @@ public class FragmentIniciarViaje extends Fragment {
             volley.llamarWS(Request.Method.GET,urlGetSigViaje, null,new Response.Listener<JSONObject>(){
                 @Override
                 public void onResponse(JSONObject response) {
-                   viajeActual = new ViajeActual();
+                    viajeActual = new ViajeActual();
                     try {
                         viajeActual.setId_viaje(response.getInt("id_viaje"));
                         viajeActual.setInicio(response.getLong("inicio"));
@@ -149,18 +154,29 @@ public class FragmentIniciarViaje extends Fragment {
                         viajeActual.setCantParados_vehiculo(vehiculo.getInt("cantParados"));
                         viajeActual.setMarca_vehiculo(vehiculo.getString("marca"));
                         viajeActual.setModelo_vehiculo(vehiculo.getString("modelo"));
-
-                        if(viajeActual.getId_viaje()!= null){
-                            mostrarDialogo(viajeActual);
-                        }else{
-                            Toast.makeText(getActivity(), "Error al obtener el sigueinte viaje ", Toast.LENGTH_LONG).show();
+                        JSONArray paradas = linea.getJSONArray("paradas");
+                        for (int p = 0; p < paradas.length(); p++) {
+                            Parada parada = new Parada();
+                            JSONObject jsonObject = (JSONObject) paradas.get(p);
+                            parada.setDescripcion(jsonObject.getString("descripcion"));
+                            parada.setEs_terminal(jsonObject.getBoolean("es_terminal"));
+                            parada.setDireccion(jsonObject.getString("direccion"));
+                            parada.setId_parada(jsonObject.getInt("id_parada"));
+                            parada.setLatitud(jsonObject.getDouble("latitud"));
+                            parada.setLongitud(jsonObject.getDouble("longitud"));
+                            paradasDelViaje.add(parada);
                         }
 
+                        if (viajeActual.getId_viaje() != null) {
+                            mostrarDialogo(viajeActual, paradasDelViaje);
+                        } else {
+                            Toast.makeText(getActivity(), "Error al obtener el sigueinte viaje ", Toast.LENGTH_LONG).show();
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
-            }, new Response.ErrorListener() {
+                }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
                     if( volleyError instanceof AuthFailureError) {
@@ -184,7 +200,7 @@ public class FragmentIniciarViaje extends Fragment {
         }
     }
 
-    private void mostrarDialogo(final ViajeActual viajeActual) {
+    private void mostrarDialogo(final ViajeActual viajeActual, final List<Parada> paradasDelViaje) {
 
         new AlertDialog.Builder(getActivity())
                 .setTitle(getResources().getString(R.string.iniciarViaje)+" "+viajeActual.getId_viaje())
@@ -193,8 +209,6 @@ public class FragmentIniciarViaje extends Fragment {
                         " previsto para la fecha "+convertirTimestampADateLocal(viajeActual.getInicio())+" ?")
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        dbManager.eliminarViaje();
-                        dbManager.guardarViajeActual(viajeActual);
 
                         try {
                             WScomunicarInicioDeViaje(viajeActual.getId_viaje(), dbManager.getTokenLogueado());
@@ -287,6 +301,11 @@ public class FragmentIniciarViaje extends Fragment {
                     public void onResponse(String response) {
                         Log.d("WSInicioDeViaje OK", response.toString());
 
+                        dbManager.eliminarViaje();
+                        dbManager.guardarViajeActual(viajeActual);
+                        dbManager.eliminarParadasDelViaje();
+                        dbManager.insertarParadasDelViaje(paradasDelViaje);
+
                         Toast.makeText(getActivity(), "Viaje iniciado con éxito", Toast.LENGTH_LONG).show();
 
                         //////////LANZO SERVICIO//////////////
@@ -306,10 +325,8 @@ public class FragmentIniciarViaje extends Fragment {
                 Log.d("WSInicioDeViaje ERROR ",volleyError.toString());
                 if (volleyError instanceof TimeoutError || volleyError instanceof NoConnectionError) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.error_timeout),Toast.LENGTH_LONG).show();
-                    dbManager.eliminarViaje();
                 } else{
                     Toast.makeText(getActivity(), "Error al iniciar el viaje",Toast.LENGTH_LONG).show();
-                    dbManager.eliminarViaje();
                 }
             }
         }){
@@ -331,6 +348,7 @@ public class FragmentIniciarViaje extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
         super.onCreateOptionsMenu(menu,inflater);
     }
 

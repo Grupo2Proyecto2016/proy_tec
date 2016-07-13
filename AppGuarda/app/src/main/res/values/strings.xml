@@ -21,7 +21,6 @@
     <string name="destino">Destino</string>
 
 
-
     <!-- Strings related to login -->
     <string name="prompt_user">Usuario</string>
     <string name="prompt_password">Contraseña</string>
@@ -46,6 +45,7 @@
     <string name="auth">"/auth"</string>
     <string name="getSiguienteViaje">/getLastTravelByDriver</string>
     <string name="startTravel">/startTravel</string>
+    <string name="finishTravel">/finishTravel</string>
     <string name="collectTicket">/collectTicket</string>
     <string name="findNextStationsByOrigin">/FindNextStationsByOrigin</string>
     <string name="setTravelLocation">/setTravelLocation</string>

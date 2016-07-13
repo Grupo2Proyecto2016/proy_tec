@@ -4,11 +4,19 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.Location;
 
+import com.example.malladam.AppGuarda.models.AsientoActivo;
+import com.example.malladam.AppGuarda.models.Parada;
 import com.example.malladam.AppGuarda.models.Pasaje;
 import com.example.malladam.AppGuarda.models.ViajeActual;
+import com.google.android.gms.maps.model.LatLng;
 
+import java.security.Provider;
 import java.util.ArrayList;
+import java.util.List;
+
+import static com.example.malladam.AppGuarda.DataBaseManager.TABLE_NAME_ASIENTOS;
 
 /**
  * Created by malladam on 01/05/2016.
@@ -19,6 +27,9 @@ public class DataBaseManager {
     public static final String TABLE_NAME_USUARIOS = "usuarios";
     public static final String TABLE_NAME_SESION = "sesion";
     public static final String TABLE_NAME_VIAJE = "viaje";
+    public static final String TABLE_NAME_ASIENTOS = "asientos";
+    public static final String TABLE_NAME_PARADAS = "paradas";
+    public static final String TABLE_NAME_UBICACION = "ubicacion";
 
     public static final String CN_ID_PASAJE = "id";
     public static final String CN_ID_VIAJE = "viaje";
@@ -38,9 +49,47 @@ public class DataBaseManager {
     public static final String CN_NOM_USUARIO = "nombre";
     public static final String CN_EMAIL = "email";
 
+    public static final String CN_LAT_UBI = "latitud";
+    public static final String CN_LON_UBI = "longitud";
+
     public static final String CN_TOKEN_SESION = "token";
     public static final String CN_USUARIO_SESION = "usuario";
     public static final String CN_PASS_SESION = "password";
+
+    public static final String CN_IDPASAJE_ASIENTO = "id_pasaje";
+    public static final String CN_COSTO_ASIENTO = "costo";
+    public static final String CN_USERNAMEUSUARIO_ASIENTO = "username_usuario";
+    public static final String CN_NOMBREUSUARIO_ASIENTO = "nombre_usuario";
+    public static final String CN_APELLIDOUSUARIO_ASIENTO = "apellido_usuario";
+    public static final String CN_IDVIAJE_ASIENTO = "id_viaje";
+    public static final String CN_IDASIENTO_ASIENTO = "id_asiento";
+    public static final String CN_NUMEROASIENTO_ASIENTO = "numero_asiento";
+    public static final String CN_IDPARADASUBE_ASIENTO = "id_paradaSube";
+    public static final String CN_IDPARADABAJA_ASIENTO = "id_paradaBaja";
+
+    public static final String CN_IDPARADA_PARADAS = "id_parada";
+    public static final String CN_DESCRIPCION_PARADAS = "descripcion";
+    public static final String CN_DIRECCION_PARADAS = "direccion";
+    public static final String CN_LATITUD_PARADAS = "latitud";
+    public static final String CN_LONGITUD_PARADAS = "longitud";
+    public static final String CN_ESTERMINAL_PARADAS = "es_terminal";
+
+
+    public static final String CREATE_TABLE_ASIENTOS = "create table " +TABLE_NAME_ASIENTOS+ " ("
+            + CN_IDPASAJE_ASIENTO + " integer primary key ,"
+            + CN_COSTO_ASIENTO + " integer not null,"
+            + CN_USERNAMEUSUARIO_ASIENTO + " text not null,"
+            + CN_NOMBREUSUARIO_ASIENTO + " text not null,"
+            + CN_APELLIDOUSUARIO_ASIENTO + " text not null,"
+            + CN_IDVIAJE_ASIENTO + " integer not null,"
+            + CN_IDASIENTO_ASIENTO + " integer not null,"
+            + CN_NUMEROASIENTO_ASIENTO + " integer not null,"
+            + CN_IDPARADASUBE_ASIENTO + " integer not null,"
+            + CN_IDPARADABAJA_ASIENTO + " integer not null);";
+
+    public static final String CREATE_TABLE_UBICACION = "create table " +TABLE_NAME_UBICACION+ " ("
+            + CN_LAT_UBI + " real,"
+            + CN_LON_UBI + " real);";
 
 
 
@@ -116,6 +165,16 @@ public class DataBaseManager {
             + CN_CANTASIENTOS_VEHICULO + " integer not null,"
             + CN_CANTPARADOS_VEHICULO + " integer not null);";
 
+
+    public static final String CREATE_TABLE_PARADAS = "create table " +TABLE_NAME_PARADAS+ " ("
+            + CN_IDPARADA_PARADAS + " integer not null,"
+            + CN_DESCRIPCION_PARADAS + " text not null,"
+            + CN_DIRECCION_PARADAS + " text not null,"
+            + CN_LATITUD_PARADAS + " real not null,"
+            + CN_LONGITUD_PARADAS + " real not null,"
+            + CN_ESTERMINAL_PARADAS + " integer not null);";
+
+
     private SQLiteDatabase db;
 
     public DataBaseManager(Context context) {
@@ -156,24 +215,6 @@ public class DataBaseManager {
         db.insert(TABLE_NAME_USUARIOS,null,valores1);
         db.insert(TABLE_NAME_USUARIOS,null,valores2);
     }*/
-
-    public ArrayList<Pasaje> obtenerPasajesActivos(String idViaje){
-        ArrayList<Pasaje> pasajesActivos = new ArrayList<Pasaje>();
-        //CONSULTA SQL
-        return  pasajesActivos;
-    }
-
-    public ArrayList<Pasaje> obtenerPasajesInactivos(String idViaje, String asiento){
-        ArrayList<Pasaje> pasajesInactivos = new ArrayList<Pasaje>();
-        //CONSULTA SQL
-        return  pasajesInactivos;
-    }
-
-    public ArrayList<Pasaje> obtenerTodosLosPasajes(String idViaje){
-        ArrayList<Pasaje> pasajes = new ArrayList<Pasaje>();
-        //CONSULTA SQL
-        return  pasajes;
-    }
 
     public Boolean validarUsuario(String usuario, String pass){
         String [] columnas = new String[]{CN_ID_USUARIO};
@@ -307,20 +348,151 @@ public class DataBaseManager {
 
         db.insert(TABLE_NAME_VIAJE,null,valores);
     }
-}
 
 
+    public void insertarAsientoActivo(AsientoActivo asiento){
+        ContentValues valores = new ContentValues();
+        valores.put(CN_IDPASAJE_ASIENTO,asiento.getId_pasaje());
+        valores.put(CN_COSTO_ASIENTO,asiento.getCosto());
+        valores.put(CN_USERNAMEUSUARIO_ASIENTO,asiento.getUsername_usuario());
+        valores.put(CN_NOMBREUSUARIO_ASIENTO,asiento.getNombre_usuario());
+        valores.put(CN_APELLIDOUSUARIO_ASIENTO,asiento.getApellido_usuario());
+        valores.put(CN_IDVIAJE_ASIENTO,asiento.getId_viaje());
+        valores.put(CN_IDASIENTO_ASIENTO,asiento.getId_asiento());
+        valores.put(CN_NUMEROASIENTO_ASIENTO,asiento.getNumero_asiento());
+        valores.put(CN_IDPARADASUBE_ASIENTO,asiento.getId_paradaSube());
+        valores.put(CN_IDPARADABAJA_ASIENTO,asiento.getId_paradaBaja());
 
-
-    /*public String[] getContacts(){
-    Cursor cursor = getReadableDatabase().rawQuery("SELECT name FROM contacts", null);
-    cursor.moveToFirst();
-    ArrayList<String> names = new ArrayList<String>();
-    while(!cursor.isAfterLast()) {
-        names.add(cursor.getString(cursor.getColumnIndex("name")));
-        cursor.moveToNext();
+        db.insert(TABLE_NAME_ASIENTOS,null,valores);
     }
-    cursor.close();
-    return names.toArray(new String[names.size()]);
+
+
+    public AsientoActivo getAsiento(int id_pasaje){
+
+        String whereClause = CN_IDPASAJE_ASIENTO+" = ? ";
+        String[] whereArgs = new String[] { String.valueOf(id_pasaje) };
+        Cursor resultado = db.query(TABLE_NAME_ASIENTOS, null, whereClause, whereArgs, null, null, null);
+
+        resultado.close();
+        return null;
+    }
+
+
+    public List<AsientoActivo> getAsientosActivos(){
+        Cursor resultado = db.query(TABLE_NAME_ASIENTOS, null, null, null, null, null, null);
+        List<AsientoActivo> asientos = new ArrayList<AsientoActivo>();
+
+        if (resultado.moveToFirst()) {
+            //Recorremos el cursor hasta que no haya más registros
+            do {
+                AsientoActivo asiento = new AsientoActivo();
+                asiento.setApellido_usuario(resultado.getString(resultado.getColumnIndex(CN_APELLIDOUSUARIO_ASIENTO)));
+                asiento.setCosto(Float.parseFloat(resultado.getString(resultado.getColumnIndex(CN_COSTO_ASIENTO))));
+                asiento.setId_asiento(resultado.getInt(resultado.getColumnIndex(CN_IDASIENTO_ASIENTO)));
+                asiento.setId_paradaSube(resultado.getInt(resultado.getColumnIndex(CN_IDPARADABAJA_ASIENTO)));
+                asiento.setId_paradaBaja(resultado.getInt(resultado.getColumnIndex(CN_IDPARADASUBE_ASIENTO)));
+                asiento.setId_pasaje(resultado.getInt(resultado.getColumnIndex(CN_IDPASAJE_ASIENTO)));
+                asiento.setId_viaje(resultado.getInt(resultado.getColumnIndex(CN_IDVIAJE_ASIENTO)));
+                asiento.setNombre_usuario(resultado.getString(resultado.getColumnIndex(CN_NOMBREUSUARIO_ASIENTO)));
+                asiento.setNumero_asiento(resultado.getInt(resultado.getColumnIndex(CN_NUMEROASIENTO_ASIENTO)));
+                asiento.setUsername_usuario(resultado.getString(resultado.getColumnIndex(CN_USERNAMEUSUARIO_ASIENTO)));
+                asientos.add(asiento);
+            } while(resultado.moveToNext());
+        }
+        resultado.close();
+
+        return asientos;
+    }
+
+
+    public void eliminarAsiento (int id_pasaje){
+        db.delete(TABLE_NAME_ASIENTOS, CN_IDPASAJE_ASIENTO+"="+String.valueOf(id_pasaje), null);
+    }
+
+
+
+
+    public void insertarParadasDelViaje(List<Parada> paradas){
+
+        for (Parada parada: paradas ) {
+
+            ContentValues valores = new ContentValues();
+            valores.put(CN_DESCRIPCION_PARADAS, parada.getDescripcion());
+            valores.put(CN_DIRECCION_PARADAS, parada.getDireccion());
+            valores.put(CN_ESTERMINAL_PARADAS, parada.getEs_terminal());
+            valores.put(CN_IDPARADA_PARADAS, parada.getId_parada());
+            valores.put(CN_LATITUD_PARADAS, parada.getLatitud());
+            valores.put(CN_LONGITUD_PARADAS, parada.getLongitud());
+
+            db.insert(TABLE_NAME_PARADAS, null, valores);
+        }
+    }
+
+
+    public List<Parada> getParadasDelViaje(){
+        Cursor resultado = db.query(TABLE_NAME_PARADAS, null, null, null, null, null, null);
+        List<Parada> paradas = new ArrayList<Parada>();
+
+        if (resultado.moveToFirst()) {
+            //Recorremos el cursor hasta que no haya más registros
+            do {
+                Parada parada = new Parada();
+                parada.setDescripcion(resultado.getString(resultado.getColumnIndex(CN_DESCRIPCION_PARADAS)));
+                parada.setDireccion(resultado.getString(resultado.getColumnIndex(CN_DIRECCION_PARADAS)));
+                if(resultado.getInt(resultado.getColumnIndex(CN_ESTERMINAL_PARADAS))==0){
+                    parada.setEs_terminal(false);
+                }else{
+                    parada.setEs_terminal(true);
+                }
+                parada.setId_parada(resultado.getInt(resultado.getColumnIndex(CN_IDPARADA_PARADAS)));
+                parada.setLatitud(resultado.getDouble(resultado.getColumnIndex(CN_LATITUD_PARADAS)));
+                parada.setLongitud(resultado.getDouble(resultado.getColumnIndex(CN_LONGITUD_PARADAS)));
+
+                paradas.add(parada);
+            } while(resultado.moveToNext());
+        }
+        resultado.close();
+
+        return paradas;
+    }
+
+
+    public void eliminarParadasDelViaje(){
+        db.delete(TABLE_NAME_PARADAS,null,null);
+    }
+
+
+    public void insertarUbicacion(LatLng ubicacion){
+
+        eliminarUbicacion();
+
+        ContentValues valores = new ContentValues();
+        valores.put(CN_LAT_UBI, ubicacion.latitude);
+        valores.put(CN_LON_UBI, ubicacion.longitude);
+
+        db.insert(TABLE_NAME_UBICACION, null, valores);
+
+    }
+
+
+    public double getLatitud(){
+        Cursor resultado = db.query(TABLE_NAME_UBICACION, null, null, null, null, null, null);
+        if (resultado.moveToFirst()){
+            return resultado.getDouble(resultado.getColumnIndex(CN_LAT_UBI));
+        }else return 0;
+
+    }
+
+    public double getLongitud(){
+
+        Cursor resultado = db.query(TABLE_NAME_UBICACION, null, null, null, null, null, null);
+        if (resultado.moveToFirst()){
+            return resultado.getDouble(resultado.getColumnIndex(CN_LON_UBI));
+        }else return 0;
+    }
+
+
+    public void eliminarUbicacion(){
+        db.delete(TABLE_NAME_UBICACION,null,null);
+    }
 }
-*/

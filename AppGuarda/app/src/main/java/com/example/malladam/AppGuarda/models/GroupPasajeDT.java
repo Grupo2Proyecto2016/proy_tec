@@ -5,43 +5,43 @@ package com.example.malladam.AppGuarda.models;
  */
 public class GroupPasajeDT {
 
-    private PasajeDataType pasaje1;
-    private PasajeDataType pasaje2;
-    private PasajeDataType pasaje3;
-    private PasajeDataType pasaje4;
+    private AsientoActivo pasaje1;
+    private AsientoActivo pasaje2;
+    private AsientoActivo pasaje3;
+    private AsientoActivo pasaje4;
 
     public GroupPasajeDT() {
     }
 
-    public PasajeDataType getPasaje1() {
+    public AsientoActivo getPasaje1() {
         return pasaje1;
     }
 
-    public void setPasaje1(PasajeDataType pasaje1) {
+    public void setPasaje1(AsientoActivo pasaje1) {
         this.pasaje1 = pasaje1;
     }
 
-    public PasajeDataType getPasaje2() {
+    public AsientoActivo getPasaje2() {
         return pasaje2;
     }
 
-    public void setPasaje2(PasajeDataType pasaje2) {
+    public void setPasaje2(AsientoActivo pasaje2) {
         this.pasaje2 = pasaje2;
     }
 
-    public PasajeDataType getPasaje3() {
+    public AsientoActivo getPasaje3() {
         return pasaje3;
     }
 
-    public void setPasaje3(PasajeDataType pasaje3) {
+    public void setPasaje3(AsientoActivo pasaje3) {
         this.pasaje3 = pasaje3;
     }
 
-    public PasajeDataType getPasaje4() {
+    public AsientoActivo getPasaje4() {
         return pasaje4;
     }
 
-    public void setPasaje4(PasajeDataType pasaje4) {
+    public void setPasaje4(AsientoActivo pasaje4) {
         this.pasaje4 = pasaje4;
     }
 }

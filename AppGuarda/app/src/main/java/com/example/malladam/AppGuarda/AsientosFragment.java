@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.malladam.AppGuarda.Activity.QrActivity;
 import com.example.malladam.AppGuarda.adapters.PasajeArrayAdapter;
+import com.example.malladam.AppGuarda.models.AsientoActivo;
 import com.example.malladam.AppGuarda.models.Empresa;
 import com.example.malladam.AppGuarda.models.GroupPasajeDT;
 import com.example.malladam.AppGuarda.models.PasajeDataType;
@@ -58,27 +59,16 @@ public class AsientosFragment extends Fragment {
 
         /////JUEGO DE DATOS///
 
-        PasajeDataType[] pasajes = new PasajeDataType[asientosBus];//obtener los pasajes activos
-        /*PasajeDataType pasaje3 = new PasajeDataType("41", "001",R.drawable.gps,"Misa", "La PAz", "LAs Peidras", "01-01-01", "500", "A");
-        PasajeDataType pasaje6 = new PasajeDataType("02", "001",R.drawable.gps,"Misa", "La PAz", "LAs Peidras", "01-01-01", "500", "A");
-        PasajeDataType pasaje5 = new PasajeDataType("04", "001",R.drawable.gps,"Misa", "La PAz", "LAs Peidras", "01-01-01", "500", "A");
-        PasajeDataType pasaje4 = new PasajeDataType("01", "001",R.drawable.gps,"Misa", "La PAz", "LAs Peidras", "01-01-01", "500", "A");
-        PasajeDataType pasaje2 = new PasajeDataType("23", "001",R.drawable.gps,"Misa", "La PAz", "LAs Peidras", "01-01-01", "500", "A");
-        PasajeDataType pasaje7 = new PasajeDataType("07", "001",R.drawable.gps,"Misa", "La PAz", "LAs Peidras", "01-01-01", "500", "A");
-        pasajes[22]=pasaje2;
-        pasajes[0]=pasaje4;
-        pasajes[40]=pasaje3;
-        pasajes[1]=pasaje6;
-        pasajes[3]=pasaje5;
-        pasajes[6]=pasaje7;*/
+        List<AsientoActivo> asientosActivos =dbManager.getAsientosActivos();
 
-        PasajeDataType[] pasajesTodos = new PasajeDataType[asientosBus];
+        AsientoActivo[] asientosTodos = new AsientoActivo[asientosBus];
 
-        for (int item = 0; item < asientosBus; item++) {
-            if (pasajes[item] != null) {
-                pasajesTodos[item] = pasajes[item];
-            } else {
-                pasajesTodos[item] = new PasajeDataType();
+        for (int i = 0 ; i<asientosBus; i++) {
+            if (buscarByNroAsiento(asientosActivos, i + 1) == null){
+                asientosTodos[i] = new AsientoActivo();
+            }
+            else{
+                asientosTodos[i]=buscarByNroAsiento(asientosActivos, i + 1);
             }
         }
 
@@ -89,23 +79,23 @@ public class AsientosFragment extends Fragment {
             for (int itemInterno = 0; itemInterno < 4; itemInterno++) {
                 switch (itemInterno) {
                     case 0:
-                        if (item >= 0 && item < pasajesTodos.length){
-                            grupoPasajes.setPasaje1(pasajesTodos[item]);
+                        if (item >= 0 && item < asientosTodos.length){
+                            grupoPasajes.setPasaje1(asientosTodos[item]);
                         }
                         break;
                     case 1:
-                        if (item >= 0 && item < pasajesTodos.length){
-                            grupoPasajes.setPasaje2(pasajesTodos[item]);
+                        if (item >= 0 && item < asientosTodos.length){
+                            grupoPasajes.setPasaje2(asientosTodos[item]);
                         }
                         break;
                     case 2:
-                        if (item >= 0 && item < pasajesTodos.length){
-                            grupoPasajes.setPasaje3(pasajesTodos[item]);
+                        if (item >= 0 && item < asientosTodos.length){
+                            grupoPasajes.setPasaje3(asientosTodos[item]);
                         }
                         break;
                     case 3:
-                        if (item >= 0 && item < pasajesTodos.length){
-                            grupoPasajes.setPasaje4(pasajesTodos[item]);
+                        if (item >= 0 && item < asientosTodos.length){
+                            grupoPasajes.setPasaje4(asientosTodos[item]);
                         }
                         break;
                 }
@@ -122,6 +112,15 @@ public class AsientosFragment extends Fragment {
         lista.addHeaderView(header, null, false);
 
         lista.setAdapter(adaptador);
+    }
+
+    private AsientoActivo buscarByNroAsiento(List<AsientoActivo> asientosActivos, int numero_asiento) {
+        for (AsientoActivo item: asientosActivos ) {
+            if(item.getNumero_asiento()==numero_asiento){
+                return item;
+            }
+        }
+        return null;
     }
 
     public void desplegarInfo(int asiento) {

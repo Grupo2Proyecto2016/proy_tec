@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">perrito</string>
+    <string name="app_name">undiaantes</string>
     <string name="WSServer">http://10.0.3.2:8080/GoOnServices/</string>
     <string name="action_settings">Configuración</string>
     <string name="action_viajes">Mis Viajes</string>

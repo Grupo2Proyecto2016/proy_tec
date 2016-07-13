@@ -1,5 +1,6 @@
 package com.example.malladam.AppGuarda.Activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,22 +15,20 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.malladam.AppGuarda.DataBaseManager;
-import com.example.malladam.AppGuarda.ManejadorInicio;
 import com.example.malladam.AppGuarda.R;
 import com.example.malladam.AppGuarda.adapters.VolleyS;
+import com.example.malladam.AppGuarda.models.AsientoActivo;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
-public class QrActivity extends AppCompatActivity {
+public class QrActivity extends Activity {
 
     private DataBaseManager dbManager;
     private String urlCobrarPasajeLeido, urlToken;
@@ -68,17 +67,17 @@ public class QrActivity extends AppCompatActivity {
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 }
-
-
             }
         } else {
             Toast.makeText(getApplicationContext(), "Error al leer el QR", Toast.LENGTH_LONG).show();
+            Intent intentError = new Intent(QrActivity.this, MainActivity.class);
+            QrActivity.this.startActivity(intentError);
         }
     }
 
     private void WScobrarPasajeLeido(String ticketNumber, String travelId) throws JSONException, TimeoutException, ExecutionException {
 
-        JSONObject jsonBody  = new JSONObject();
+        final JSONObject jsonBody  = new JSONObject();
         jsonBody.put("ticketNumber",ticketNumber);
         jsonBody.put("travelId",travelId);
 
@@ -92,6 +91,28 @@ public class QrActivity extends AppCompatActivity {
                         Boolean exito = response.getBoolean("success");
                         String msg = response.getString("msg");
                         Toast.makeText(QrActivity.this, msg, Toast.LENGTH_LONG).show();
+
+                        if(exito){//guardo local el pasaje cobrado
+                            AsientoActivo asientoActivo = new AsientoActivo();
+                            JSONObject jsonObject = response.getJSONObject("ticket");
+                            asientoActivo.setId_pasaje(jsonObject.getInt("id_pasaje"));
+                            asientoActivo.setCosto(Float.parseFloat(jsonObject.getString("costo")));
+                            JSONObject user_cmpra = jsonObject.getJSONObject("user_compra");
+                            asientoActivo.setUsername_usuario(user_cmpra.getString("usrname"));
+                            asientoActivo.setNombre_usuario(user_cmpra.getString("nombre"));
+                            asientoActivo.setApellido_usuario(user_cmpra.getString("apellido"));
+                            JSONObject viaje = jsonObject.getJSONObject("viaje");
+                            asientoActivo.setId_viaje(viaje.getInt("id_viaje"));
+                            JSONObject asiento = jsonObject.getJSONObject("asiento");
+                            asientoActivo.setId_asiento(asiento.getInt("id_asiento"));
+                            asientoActivo.setNumero_asiento(asiento.getInt("numero"));
+                            JSONObject paradaSube = jsonObject.getJSONObject("parada_sube");
+                            asientoActivo.setId_paradaSube(paradaSube.getInt("id_parada"));
+                            JSONObject paradaBaja = jsonObject.getJSONObject("parada_baja");
+                            asientoActivo.setId_paradaBaja(paradaBaja.getInt("id_parada"));
+
+                            dbManager.insertarAsientoActivo(asientoActivo);
+                        }
 
                         Intent intent = new Intent(QrActivity.this, MainActivity.class);
                         QrActivity.this.startActivity(intent);

@@ -28,6 +28,7 @@ import com.example.malladam.AppGuarda.Activity.LoginActivity;
 import com.example.malladam.AppGuarda.DataBaseManager;
 import com.example.malladam.AppGuarda.R;
 import com.example.malladam.AppGuarda.adapters.VolleyS;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -87,6 +88,7 @@ public class UbicacionService extends Service {
             public void onLocationChanged(Location location) {
 
                 locationActual = location;
+                dbManager.insertarUbicacion(new LatLng(location.getLatitude(), location.getLongitude()));
                 try {
                     WScomunicarLocationChanged(locationActual, id_viaje, urlUbic, token, urlToken);
                 } catch (JSONException e) {

@@ -9,6 +9,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -34,6 +36,7 @@ public class ViajesActivity extends AppCompatActivity {
 
     private TextView mLineaVia,mOrigenVia,mDestinoVia, mSalidaVia;
     private TextView mLineaViaAUX,mOrigenViaAUX,mDestinoViaAUX, mSalidaViaAUX, mTiempoViaAUX;
+    private Button mSeleccionarAUX;
     private ImageView mTiempoVia;
     private TableLayout mTableLayout;
     private TableRow mTableRow;
@@ -156,7 +159,17 @@ public class ViajesActivity extends AppCompatActivity {
             mOrigenViaAUX.setTextColor(Color.parseColor(empresa.getColorText()));
             mDestinoViaAUX.setTextColor(Color.parseColor(empresa.getColorText()));
             mSalidaViaAUX.setTextColor(Color.parseColor(empresa.getColorText()));
-
+            /*mSeleccionarAUX.setBackgroundColor(Color.parseColor(empresa.getColorText()));
+            mSeleccionarAUX.setTextColor(Color.parseColor(empresa.getColorBack()));
+            mLineaViaAUX.setId(item.getId_viaje());
+            mSeleccionarAUX.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int id_viaje = view.getId();
+                    id_viaje=0;
+                }
+            });*/
+            mTableRow.setId(item.getId_viaje());
 
             mTableRow.addView(mLineaViaAUX);
             mTableRow.addView(mOrigenViaAUX);
@@ -165,6 +178,15 @@ public class ViajesActivity extends AppCompatActivity {
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
                 mTableRow.addView(mTiempoViaAUX);
             }
+            mTableRow.setId(item.getNumero());
+            mTableRow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int id_viaje = view.getId();
+                    id_viaje=0;
+                }
+            });
+
 
             mTableLayout.addView(mTableRow);
         }
@@ -175,8 +197,9 @@ public class ViajesActivity extends AppCompatActivity {
         Calendar cal = Calendar.getInstance();
         TimeZone tz = cal.getTimeZone();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        SimpleDateFormat soloHora = new SimpleDateFormat("HH:mm");
         sdf.setTimeZone(tz);
-        String localTime = sdf.format(new Date(timestamp ));
+        String localTime = soloHora.format(new Date(timestamp ));
         /*CharSequence relTime = DateUtils.getRelativeTimeSpanString(
                 timestamp ,
                 System.currentTimeMillis(),

@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.malladam.AppGuarda.AsientosFragment;
 import com.example.malladam.AppGuarda.R;
+import com.example.malladam.AppGuarda.models.AsientoActivo;
 import com.example.malladam.AppGuarda.models.GroupPasajeDT;
 import com.example.malladam.AppGuarda.models.PasajeDataType;
 
@@ -56,10 +57,10 @@ public class PasajeArrayAdapter<T> extends ArrayAdapter<T> {
         //Obteniendo instancia de la Tarea en la posición actual
         T item = (T)getItem(position);
         GroupPasajeDT grupo = ((GroupPasajeDT) item);
-        PasajeDataType pasaje1 = grupo.getPasaje1();
-        PasajeDataType pasaje2 = grupo.getPasaje2();
-        PasajeDataType pasaje3 = grupo.getPasaje3();
-        PasajeDataType pasaje4 = grupo.getPasaje4();
+        AsientoActivo pasaje1 = grupo.getPasaje1();
+        AsientoActivo pasaje2 = grupo.getPasaje2();
+        AsientoActivo pasaje3 = grupo.getPasaje3();
+        AsientoActivo pasaje4 = grupo.getPasaje4();
 
         if(pasaje1 !=null) {
             if(pasaje1.getId_pasaje() == null){
