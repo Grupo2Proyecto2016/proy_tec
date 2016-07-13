@@ -30,6 +30,14 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     	localStorage.removeItem($scope.$parent.getTicketStorageKey());
     }
       
+    $scope.limpioOrigenes = function()
+    {
+    	$scope.origenMarkers.forEach(function(marker) 
+        {
+          marker.setMap(null);
+        });
+    	$scope.origenMarkers = [];  
+    }
     //DESTINATION MAP
     $scope.destinationMap = new google.maps.Map(document.getElementById('destinationMap'), 
     {
@@ -423,6 +431,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     {
     	$("#destinationModal").modal('hide');
     	$.blockUI();
+    	$scope.limpioOrigenes();
     	$http.post(servicesUrl +'getFilteredStations', JSON.stringify($scope.listaIDSeleccionados))
     	.then(function(response)
     			{

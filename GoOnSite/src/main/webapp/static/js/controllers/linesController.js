@@ -304,7 +304,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
 		}
 		else
 		{
-			$scope.persistLine();
+			$scope.persistLine();		
 		}
 		
     };
@@ -737,9 +737,43 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     var searchBox = new google.maps.places.SearchBox(input);
     $scope.map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
     
+    searchBox.addListener('places_changed', function() 
+    {
+    	var places = searchBox.getPlaces();
+    	
+        if (places.length == 0) 
+        {
+        	return;
+        }
+        
+        var bounds = new google.maps.LatLngBounds();
+        //hacer for each porque puede devolver mas de un lugar       
+        places.forEach(function(place) 
+        {        	        
+        	$scope.placeMarkerAndPanTo(place.geometry.location, $scope.map, false);        	
+        });    
+    });
+    
     var inputV = document.getElementById('pac-inputV');
     var searchBoxV = new google.maps.places.SearchBox(inputV);
     $scope.mapV.controls[google.maps.ControlPosition.TOP_LEFT].push(inputV);
+    
+    searchBoxV.addListener('places_changed', function() 
+    {
+    	var places = searchBoxV.getPlaces();
+    	
+        if (places.length == 0) 
+        {
+        	return;
+        }
+        
+        var bounds = new google.maps.LatLngBounds();
+        //hacer for each porque puede devolver mas de un lugar       
+        places.forEach(function(place) 
+        {        	        
+        	$scope.placeMarkerAndPanTo(place.geometry.location, $scope.mapV, true);        	
+        });    
+    });
     
     //Bias the SearchBox results towards current map's viewport.
     $scope.map.addListener('bounds_changed', function() 
