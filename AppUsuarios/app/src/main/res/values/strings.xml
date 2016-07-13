@@ -63,6 +63,7 @@
     <string name="dondequieresir">"¿Dónde quieres ir?"</string>
     <string name="dondesubes">"¿Dónde subes?"</string>
     <string name="calculo_encomienda">"Cálculo de Encomienda"</string>
+    <string name="qr_pasaje">"Pasaje"</string>
     <string name="calcular">"Calcular"</string>
     <string name="alto">"Alto(cm) "</string>
     <string name="largo">"Largo(cm)"</string>

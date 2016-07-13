@@ -1,5 +1,6 @@
 goOnApp.controller('payPalCheckoutController', function($scope, $http, uiGridConstants, i18nService, $timeout, $rootScope, $routeParams) 
 {
+	$scope.error_message="";
 	$scope.pagar = function()
 	{		
 		//sacar del storage los pasajes y mandarlos en el json
@@ -12,13 +13,26 @@ goOnApp.controller('payPalCheckoutController', function($scope, $http, uiGridCon
 		{
 			$.unblockUI();		
         	if(response.status == 200)
-        	{		
-    			$scope.payPalInfo = response.data;  
-    			$scope.confirmedSeats = $scope.payPalInfo.tickets; 
-    			//$scope.$digest();
-    			localStorage.removeItem($scope.$parent.getTicketStorageKey());
+        	{	        		
+    			$scope.payPalInfo = response.data;
+    			if($scope.payPalInfo.success == true)
+    			{
+    				$scope.confirmedSeats = $scope.payPalInfo.tickets; 
+    				//$scope.$digest();
+    				localStorage.removeItem($scope.$parent.getTicketStorageKey());
+    			}
+    			else
+    			{
+    				$scope.error_message = $scope.payPalInfo.msg; 
+    				$("#errorModal").modal("toggle");
+    			}
     			$scope.$apply();
     			
+        	}
+        	else
+        	{
+        		$scope.error_message = 'Ha ocurrido un error al realizar el pago.'; 
+				$("#errorModal").modal("toggle");
         	}
 		}
 		);

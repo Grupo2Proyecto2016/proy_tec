@@ -348,6 +348,10 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     			newP.id_parada   = $scope.markers[i].id_parada;
     			newP.descripcion = $scope.markers[i].descripcion;
     			newP.direccion   = $scope.markers[i].direccion;
+    			if(newP.direccion == undefined)
+    			{
+    				newP.direccion = newP.descripcion;
+    			}
     			$scope.lineForm.paradas.push(newP);
     		}
     		
@@ -361,6 +365,10 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     			newP.id_parada   = $scope.markersV[i].id_parada;
     			newP.descripcion = $scope.markersV[i].descripcion;
     			newP.direccion   = $scope.markersV[i].direccion;
+    			if(newP.direccion == undefined)
+    			{
+    				newP.direccion = newP.descripcion;
+    			}
     			$scope.lineForm.paradasV.push(newP);
     		}
     		
