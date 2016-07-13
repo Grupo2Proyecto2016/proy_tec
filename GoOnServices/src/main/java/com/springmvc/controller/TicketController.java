@@ -225,7 +225,7 @@ public class TicketController
 		LinesLogic ll = new LinesLogic(tenantid);
 		List<Pasaje> tickets = null;
 		tickets = ll.ClientReserveTickets(currentUser, paypal.id_viaje, paypal.origen, paypal.destino, paypal.valor, paypal.seleccionados);				
-		return new ResponseEntity(HttpStatus.OK);
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
 	@Secured({"ROLE_SALES"})
@@ -276,7 +276,7 @@ public class TicketController
 	{
 		LinesLogic ll = new LinesLogic(tenantid);
 		ll.SalesConfirmTicket(ticket);
-		return new ResponseEntity(HttpStatus.OK);
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
 }
