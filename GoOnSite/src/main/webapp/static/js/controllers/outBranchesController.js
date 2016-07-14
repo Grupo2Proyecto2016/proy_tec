@@ -17,13 +17,7 @@ goOnApp.controller('outBranchesController', function($scope, $http, uiGridConsta
         	$scope.cargoMarkers();
     	});
     };
-    
-    $http.post(servicesUrl + 'appConfirmTicket', JSON.stringify({}))
-    .then(function(result) 
-	{
-    	var a = 1;
-	});
-    
+      
     $scope.getBranches();
     
     //MAPA\\    
