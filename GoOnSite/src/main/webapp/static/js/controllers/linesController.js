@@ -76,7 +76,9 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     	$scope.lineForm = {};
     	$scope.lineForm.generaVuelta = true;
     	$scope.inicializoMarkers();
-    	$scope.inicializoMarkersV();    	
+    	$scope.inicializoMarkersV();
+    	directionsDisplay.setMap(null);
+        directionsDisplayV.setMap(null);
     	$("#divLineForm").removeClass('hidden');
     	$timeout(function () {            
     		google.maps.event.trigger($scope.map, 'resize');	//refresh map            
@@ -620,7 +622,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     
     /*Mapa*/
     var directionsService = new google.maps.DirectionsService;
-    
+        
     $scope.map = new google.maps.Map(document.getElementById('map'), 
     {
       zoom: 12,
@@ -635,8 +637,12 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     
     
     //Create a renderer for directions and bind it to the map.    
-    var directionsDisplay = new google.maps.DirectionsRenderer({map: $scope.map});
-    var directionsDisplayV = new google.maps.DirectionsRenderer({map: $scope.mapV});
+    //var directionsDisplay = new google.maps.DirectionsRenderer({map: $scope.map});
+    //var directionsDisplayV = new google.maps.DirectionsRenderer({map: $scope.mapV});
+    var directionsDisplay = new google.maps.DirectionsRenderer;    
+    var directionsDisplayV = new google.maps.DirectionsRenderer;
+    
+    
     //directionsDisplay.setMap($scope.map);
     
     //Instantiate an info window to hold step text.
@@ -728,14 +734,16 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     	  });
     };
     
-    $scope.createRoute = function()
+    $scope.createRoute = function()    
     {
+    	directionsDisplay.setMap($scope.map);
     	$scope.calculateAndDisplayRoute(directionsDisplay, directionsService, $scope.markers, stepDisplay, $scope.map, false);
     	$scope.rutaTrazada = true;
     }
     
     $scope.createRouteV = function()
     {
+    	directionsDisplayV.setMap($scope.mapV);
     	$scope.calculateAndDisplayRoute(directionsDisplayV, directionsService, $scope.markersV, stepDisplay, $scope.mapV, true);
     	$scope.rutaTrazadaV = true;
     }
