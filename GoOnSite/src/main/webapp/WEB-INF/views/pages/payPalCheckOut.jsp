@@ -23,12 +23,12 @@
 <div class="row">
 	<div class="col-xs-2"></div>
 	<div class="col-xs-8">
-		<div class="panel panel-default" id="seatsInfo">
+		<div class="panel panel-default"  id="seatsInfo">
 			<div class="panel-heading">
 				<h4 class="modal-title">Asientos Confirmados</h4>
 				<p ng-click="printDiv('forPrint')"> &nbsp;<i class="fa fa-print" aria-hidden="true"></i> Imprimir</p>
 			</div>
-			<div class="panel-body">	
+			<div class="panel-body" id="printSection">	
 				<div class="container" id="forPrint">
 				    <div class="row" ng-repeat="cs in confirmedSeats track by $index">
 				        <div class="col-xs-8">

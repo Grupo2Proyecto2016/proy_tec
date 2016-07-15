@@ -57,7 +57,7 @@ public class MantenimientoLogic implements IMantenimientoLogic {
 			inicio.getTimeZone();
 			fin.getTimeZone();
 			
-			inicio.add((Calendar.DATE), 1);
+			inicio.add((Calendar.DATE), 0);
 			inicio.set(Calendar.MILLISECOND, 0);
 			inicio.set(Calendar.HOUR , 0);
 			inicio.set(Calendar.MINUTE , 0);

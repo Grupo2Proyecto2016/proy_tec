@@ -143,7 +143,7 @@
     	});
     });
 
-    goOnApp.service('authInterceptor', function($q, $location, $rootScope, $timeout) {
+    goOnApp.service('authInterceptor', function($q, $location, $rootScope, $timeout, $templateCache) {
         var service = this;
         
         service.responseError = function(response) {
@@ -155,21 +155,24 @@
             	if(!$('#loginModal').hasClass('in') && !$rootScope.showingError)
             	{
             		$rootScope.showingError = true;
-            		$timeout(function () {            
+            		$(window).on("load", function() {           
             			$("#loginModal").modal("show");
             			$rootScope.showingError = false;
-            		}, 500);
+            		
+            		});
             	}
+            	$templateCache.removeAll();
             }
             else if(response.status == 500)
             {
             	if(!$('#errorModal').hasClass('in') && !$rootScope.showingError)
             	{
             		$rootScope.showingError = true;
-            		$timeout(function () { 
+            		$(window).on("load", function() {
             			$("#genericErrorModal").modal("show");
             			$rootScope.showingError = false;
-            		}, 500);
+            		
+            		});
             	}
             }
             else if(response.status == -1)
@@ -177,18 +180,20 @@
             	if(!$('#connectErrorModal').hasClass('in') && !$rootScope.showingError)
             	{
             		$rootScope.showingError = true;
-            		$timeout(function () {
+            		$(window).on("load", function() {
             			$("#connectErrorModal").modal("show");
             			$rootScope.showingError = false;
-            		}, 500);
+            		
+            		});
             	}
             }
             else if(response.status == 403)
             {
-            	$timeout(function () {
-            		$location.path('home');
+            	$location.path('home');
+            	$(window).on("load", function() {
             		$("div.modal-backdrop").remove();
-            	}, 800);
+            	
+            	});
             }
             return $q.resolve(response);
         };

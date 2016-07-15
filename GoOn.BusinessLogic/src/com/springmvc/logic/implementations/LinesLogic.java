@@ -99,6 +99,12 @@ public class LinesLogic implements ILinesLogic
 				travelDate.setHours(time.getHours());
 				travelDate.setMinutes(time.getMinutes());
 				
+				Calendar endTravel = Calendar.getInstance();
+				endTravel.setTime(travelDate);
+				endTravel.set(GregorianCalendar.HOUR_OF_DAY, travelDate.getHours()); 
+				endTravel.set(GregorianCalendar.MINUTE, travelDate.getMinutes());
+				endTravel.add(GregorianCalendar.MINUTE, travel.getLinea().getTiempo_estimado());
+				
 				CheckBusAvailability(travel, travelDate);
 				CheckDriverAvailability(travel, travelDate);
 				
@@ -108,6 +114,7 @@ public class LinesLogic implements ILinesLogic
 				travelToPersist.setLinea(travel.getLinea());
 				travelToPersist.setVehiculo(travel.getVehiculo());
 				travelToPersist.setInicio(travelDate);	
+				travelToPersist.setFin(endTravel.getTime());
 				travelsToPersist.add(travelToPersist);
 			}
 			dayFrom.add((Calendar.DATE), 1);

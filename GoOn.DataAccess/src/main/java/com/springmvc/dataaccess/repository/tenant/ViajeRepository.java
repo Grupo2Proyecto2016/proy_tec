@@ -299,8 +299,8 @@ public class ViajeRepository {
 				"FROM Viaje v "
 				+ "WHERE v.linea.habilitado = TRUE "
 				+ "AND v.vehiculo.id_vehiculo = :idBus "
-				+ "AND v.inicio >= :from "
-				+ "AND v.inicio <= :to "
+				+ "AND ((v.inicio <= :from AND v.fin >= :from ) "
+				+ "OR (v.inicio <= :to AND v.fin >= :to)) "
 				+ "AND v.terminado = FALSE "
 		);
 		q.setParameter("idBus", idBus); 

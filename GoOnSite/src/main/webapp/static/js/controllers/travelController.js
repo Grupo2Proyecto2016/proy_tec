@@ -18,6 +18,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     $scope.circleOrigin = null;
     $scope.listaIDSeleccionados = [];
     $scope.listaIDSeleccionadosOrigin = [];
+    $scope.routeLine = {};
     
     $scope.seatsForm = {};
     $scope.rOption = "1";    
@@ -25,10 +26,12 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 	$scope.custom_response = null;    
     i18nService.setCurrentLang('es');
     
-    if($rootScope.user !== null)
-    {
-    	localStorage.removeItem($scope.$parent.getTicketStorageKey());
-    }
+    $(window).on("load", function() {
+	    if($rootScope.user !== null)
+	    {
+	    	localStorage.removeItem($scope.$parent.getTicketStorageKey());
+	    }
+    });
       
     $scope.limpioOrigenes = function()
     {
@@ -408,7 +411,8 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
           	enableFiltering: false,
           	enableSorting: false,
               cellTemplate:'<button style="width: 50%" class="btn-xs btn-primary" ng-click="grid.appScope.selectSeats(row.entity.id_viaje, row.entity.origen, row.entity.destino, row.entity.linea_id_linea, row.entity.id_vehiculo, row.entity.valor)">Comprar</button>'
-      	  }
+            	  			+  '<button style="width: 50%" class="btn-xs btn-primary" ng-click="grid.appScope.showRoute(row.entity.linea_id_linea, row.entity.origen, row.entity.destino)">Ver Ruta</button>'
+      	  }	
         ]
      };
     
@@ -917,4 +921,171 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     }
     
     $scope.getStations();
+    
+    $scope.routeMap = new google.maps.Map(document.getElementById('rutaMap'), 
+    {
+      zoom: 12,
+      center: {lat: -34.894418, lng: -56.165775}
+    });
+    
+    $scope.showRoute = function(line, origen, destino)
+    {
+    	$.blockUI();
+    	$http.get(servicesUrl + 'getLine?id_linea=' +line)
+		.success(function(data, status, headers, config) 
+		{
+			
+			$scope.routeLine = data;
+			
+	    	$http.get(servicesUrl + 'FindNextStationsByOrigin?line=' + line+'&origin=' +$scope.routeLine.origen.id_parada)
+			.success(function(data, status, headers, config) 
+			{
+				$scope.routeLine.paradas = data;
+				$scope.routeLine.selorigen = origen;
+				$scope.routeLine.seldestino = destino;
+				$timeout(function () 
+				{            
+					google.maps.event.trigger($scope.routeMap, 'resize');
+		        }, 400);
+		    	
+		    	var directionsService = new google.maps.DirectionsService;
+		    	var directionsDisplay = new google.maps.DirectionsRenderer({
+		    	    														suppressPolylines: true,
+		    	    														infoWindow: infowindow
+		    	  															});
+		    	directionsDisplay.setMap($scope.routeMap);
+		   	    $scope.calculateAndDisplayRoute(directionsService, directionsDisplay);
+		   	    
+				$("#rutaModal").modal('show');
+			})
+			.error(function()
+			{
+							
+			});
+		});
+    	$.unblockUI();    	
+    	
+    }
+    
+    $scope.calculateAndDisplayRoute = function(directionsService, directionsDisplay)
+    {
+    	/*var waypts = [{location: '41.062317, 28.899756',stopover: true }, 
+    	              {location: '41.062276, 28.898866',  stopover: true }, 
+    	              { location: '41.061993, 28.8982', stopover: true }];
+    	*/
+    	var waypts = [];
+    	for (var i = 0; i < $scope.routeLine.paradas.length-1; i++) 
+    	{
+    		position = new google.maps.LatLng($scope.routeLine.paradas[i].latitud,$scope.routeLine.paradas[i].longitud);
+    	    waypts.push({location: position, stopover: true});    	    
+    	}
+    	
+    	$scope.routeLine.indOr = 0;
+    	$scope.routeLine.indDe = 0;
+    	
+    	for (var i = 0; i < $scope.routeLine.paradas.length; i++) 
+    	{
+    		if($scope.routeLine.paradas[i].id_parada == $scope.routeLine.selorigen)
+    		{
+    			$scope.routeLine.indOr = i;
+    		}
+    		if($scope.routeLine.paradas[i].id_parada == $scope.routeLine.seldestino)
+    		{
+    			$scope.routeLine.indDe = i;
+    		}
+    	}
+    	
+    	 directionsService.route({ origin: {lat: $scope.routeLine.origen.latitud, lng: $scope.routeLine.origen.longitud}, 
+    		 					   destination: {lat: $scope.routeLine.destino.latitud, lng: $scope.routeLine.destino.longitud},
+    		 					waypoints: waypts,
+    		 					optimizeWaypoints: false,
+    		 					travelMode: google.maps.TravelMode.DRIVING}, 
+    		 					function(response, status) {
+    		 						if (status === google.maps.DirectionsStatus.OK) {
+    		 							directionsDisplay.setOptions({directions: response,})
+    		 							var route = response.routes[0];
+    		 							$scope.renderDirectionsPolylines(response, $scope.routeMap);
+    		 						} else {
+    		 							window.alert('Directions request failed due to ' + status);
+    		 							}
+    		 						});
+    }
+    
+    var polylineOptions = {
+    		  strokeColor: '#C83939',
+    		  strokeOpacity: 1,
+    		  strokeWeight: 4
+    		};
+	var colors = ["#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#FF00FF", "#00FFFF"];
+	var polylines = [];
+	
+	$scope.renderDirectionsPolylines = function (response) 
+	{
+		  var bounds = new google.maps.LatLngBounds();
+		  var color = "#00FF00";
+		  for (var i = 0; i < polylines.length; i++) 
+		  {
+		    polylines[i].setMap(null);
+		  }
+		  
+		  		  
+		  var legs = response.routes[0].legs;
+		  for (i = 0; i < legs.length; i++) 
+		  {
+		    var steps = legs[i].steps;		    
+		    if(i == $scope.routeLine.indOr+1)
+		    {
+		    	color = "#FF0000";
+		    }
+		    if(i == $scope.routeLine.indDe+1)
+		    {
+		    	color = "#00FF00";
+		    }
+		    for (j = 0; j < steps.length; j++) {
+		      var nextSegment = steps[j].path;
+		      var stepPolyline = new google.maps.Polyline(polylineOptions);
+		      stepPolyline.setOptions({
+		        strokeColor: color
+		      })
+		      for (k = 0; k < nextSegment.length; k++) {
+		        stepPolyline.getPath().push(nextSegment[k]);
+		        bounds.extend(nextSegment[k]);
+		      }
+		      polylines.push(stepPolyline);
+		      stepPolyline.setMap($scope.routeMap);
+		      // route click listeners, different one on each step
+		      google.maps.event.addListener(stepPolyline, 'click', function(evt) 
+		      {
+		    	 /*infowindow.setContent("you clicked on the route<br>" + evt.latLng.toUrlValue(6));
+		        infowindow.setPosition(evt.latLng);
+		        infowindow.open($scope.routeMap);*/
+		      })
+		    }
+		  }
+		  $scope.routeMap.fitBounds(bounds);		  
+		  
+	}
+	
+	/*$marcadorCerca = function(lat, lng) 
+	{
+	    var R = 6371; // radius of earth in km
+	    var distances = [];
+	    var closest = -1;
+	    for(i=0;i<map.markers.length; i++ ) 
+	    {
+	        var mlat = map.markers[i].position.lat();
+	        var mlng = map.markers[i].position.lng();
+	        var dLat  = rad(mlat - lat);
+	        var dLong = rad(mlng - lng);
+	        var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+	            Math.cos(rad(lat)) * Math.cos(rad(lat)) * Math.sin(dLong/2) * Math.sin(dLong/2);
+	        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+	        var d = R * c;
+	        distances[i] = d;
+	        if ( closest == -1 || d < distances[closest] ) {
+	            closest = i;
+	        }
+	    }    
+	}*/
+    
 }); 	
