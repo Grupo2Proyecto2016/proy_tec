@@ -27,7 +27,7 @@
       <script src="<c:url value='/static/js/paypal/dg.js' />"></script>      
       
 	  <!--ESTILO CUSTOM-->
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.6/{{company.css}}/bootstrap.min.css" />
+      <link rel="stylesheet" href="<c:url value='/static/css/bootswatch/{{company.css}}.css'/>" />
       
 	  <link rel="stylesheet" href="<c:url value='/static/css/ui-grid.min.css' />" />
       <script src="<c:url value='/static/js/ui-grid/ui-grid.min.js' />"></script>

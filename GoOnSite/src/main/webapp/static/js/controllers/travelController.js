@@ -25,10 +25,12 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 	$scope.custom_response = null;    
     i18nService.setCurrentLang('es');
     
-    if($rootScope.user !== null)
-    {
-    	localStorage.removeItem($scope.$parent.getTicketStorageKey());
-    }
+    $(window).on("load", function() {
+	    if($rootScope.user !== null)
+	    {
+	    	localStorage.removeItem($scope.$parent.getTicketStorageKey());
+	    }
+    });
       
     $scope.limpioOrigenes = function()
     {
