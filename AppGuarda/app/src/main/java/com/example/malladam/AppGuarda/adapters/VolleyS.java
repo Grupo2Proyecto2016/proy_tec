@@ -11,6 +11,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.malladam.AppGuarda.models.CustomRequest;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -106,7 +107,7 @@ public class VolleyS {
         }
     }
 
-/*
+
     public void llamarWSCustomArray(int metodo, String url, JSONObject jsonBody, Response.Listener<JSONArray> response, Response.ErrorListener errorListener, final String token) throws TimeoutException, ExecutionException, InterruptedException {
 
         CustomRequest request = new CustomRequest(metodo, url, jsonBody, response, errorListener) {
@@ -122,7 +123,6 @@ public class VolleyS {
         };
         addToQueue(request);
     }
-*/
 }
 
 

@@ -57,6 +57,7 @@ public class DataBaseManager {
     public static final String CN_PASS_SESION = "password";
 
     public static final String CN_IDPASAJE_ASIENTO = "id_pasaje";
+    public static final String CN_NROPASAJE_ASIENTO = "nro_pasaje";
     public static final String CN_COSTO_ASIENTO = "costo";
     public static final String CN_USERNAMEUSUARIO_ASIENTO = "username_usuario";
     public static final String CN_NOMBREUSUARIO_ASIENTO = "nombre_usuario";
@@ -77,6 +78,7 @@ public class DataBaseManager {
 
     public static final String CREATE_TABLE_ASIENTOS = "create table " +TABLE_NAME_ASIENTOS+ " ("
             + CN_IDPASAJE_ASIENTO + " integer primary key ,"
+            + CN_NROPASAJE_ASIENTO + " text not null ,"
             + CN_COSTO_ASIENTO + " integer not null,"
             + CN_USERNAMEUSUARIO_ASIENTO + " text not null,"
             + CN_NOMBREUSUARIO_ASIENTO + " text not null,"
@@ -86,6 +88,9 @@ public class DataBaseManager {
             + CN_NUMEROASIENTO_ASIENTO + " integer not null,"
             + CN_IDPARADASUBE_ASIENTO + " integer not null,"
             + CN_IDPARADABAJA_ASIENTO + " integer not null);";
+
+    public static final String ALTER_TABLE_ASIENTOS = "ALTER TABLE "+TABLE_NAME_ASIENTOS+ " ADD COLUMN "+CN_NROPASAJE_ASIENTO+ " text;";
+
 
     public static final String CREATE_TABLE_UBICACION = "create table " +TABLE_NAME_UBICACION+ " ("
             + CN_LAT_UBI + " real,"
@@ -273,6 +278,7 @@ public class DataBaseManager {
     }
 
     public void registrarLogin(String token, String usuario, String pass){
+        eliminarLogin();
         ContentValues valores = new ContentValues();
         valores.put(CN_USUARIO_SESION,usuario);
         valores.put(CN_PASS_SESION,pass);
@@ -353,6 +359,7 @@ public class DataBaseManager {
     public void insertarAsientoActivo(AsientoActivo asiento){
         ContentValues valores = new ContentValues();
         valores.put(CN_IDPASAJE_ASIENTO,asiento.getId_pasaje());
+        valores.put(CN_NROPASAJE_ASIENTO,asiento.getNumero_pasaje());
         valores.put(CN_COSTO_ASIENTO,asiento.getCosto());
         valores.put(CN_USERNAMEUSUARIO_ASIENTO,asiento.getUsername_usuario());
         valores.put(CN_NOMBREUSUARIO_ASIENTO,asiento.getNombre_usuario());
@@ -392,6 +399,7 @@ public class DataBaseManager {
                 asiento.setId_paradaSube(resultado.getInt(resultado.getColumnIndex(CN_IDPARADABAJA_ASIENTO)));
                 asiento.setId_paradaBaja(resultado.getInt(resultado.getColumnIndex(CN_IDPARADASUBE_ASIENTO)));
                 asiento.setId_pasaje(resultado.getInt(resultado.getColumnIndex(CN_IDPASAJE_ASIENTO)));
+                asiento.setNumero_pasaje(resultado.getString(resultado.getColumnIndex(CN_NROPASAJE_ASIENTO)));
                 asiento.setId_viaje(resultado.getInt(resultado.getColumnIndex(CN_IDVIAJE_ASIENTO)));
                 asiento.setNombre_usuario(resultado.getString(resultado.getColumnIndex(CN_NOMBREUSUARIO_ASIENTO)));
                 asiento.setNumero_asiento(resultado.getInt(resultado.getColumnIndex(CN_NUMEROASIENTO_ASIENTO)));
@@ -407,6 +415,10 @@ public class DataBaseManager {
 
     public void eliminarAsiento (int id_pasaje){
         db.delete(TABLE_NAME_ASIENTOS, CN_IDPASAJE_ASIENTO+"="+String.valueOf(id_pasaje), null);
+    }
+
+    public void eliminarTodosAsientos(){
+        db.delete(TABLE_NAME_ASIENTOS,null,null);
     }
 
 

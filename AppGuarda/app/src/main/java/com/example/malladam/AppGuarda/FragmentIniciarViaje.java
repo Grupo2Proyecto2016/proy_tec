@@ -301,9 +301,7 @@ public class FragmentIniciarViaje extends Fragment {
                     public void onResponse(String response) {
                         Log.d("WSInicioDeViaje OK", response.toString());
 
-                        dbManager.eliminarViaje();
                         dbManager.guardarViajeActual(viajeActual);
-                        dbManager.eliminarParadasDelViaje();
                         dbManager.insertarParadasDelViaje(paradasDelViaje);
 
                         Toast.makeText(getActivity(), "Viaje iniciado con éxito", Toast.LENGTH_LONG).show();

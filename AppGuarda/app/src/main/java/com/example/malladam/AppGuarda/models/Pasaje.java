@@ -16,6 +16,10 @@ public class Pasaje {
     public String medioPago;
     public String estado;
 
+
+    public Pasaje(){}
+
+
     public Pasaje(String asiento, String idViaje, String idCliente, String idOrigen, String idDestino, String fecha, String valor, String tipoVenta, String medioPago) {
         this.asiento = asiento;
         this.idViaje = idViaje;

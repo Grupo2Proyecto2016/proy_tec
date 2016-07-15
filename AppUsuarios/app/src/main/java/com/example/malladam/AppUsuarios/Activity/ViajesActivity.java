@@ -10,10 +10,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-<<<<<<< HEAD
 import android.widget.Button;
-=======
->>>>>>> origin/master
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;

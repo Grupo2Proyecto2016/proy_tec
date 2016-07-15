@@ -26,8 +26,8 @@
                 android:id="@+id/popupLogo"
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/add_ticket_icon"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:padding="0dip"/>
             <TextView
                 android:id="@+id/textView1"
@@ -56,20 +56,15 @@
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-
-                    <TextView
+                    <AutoCompleteTextView
                         android:id="@+id/textViewOrigen"
-                        android:text=""
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:layout_gravity="center_horizontal"
                         android:gravity="left"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:inputType="textPersonName"
+                        android:textSize="15dp"
                         android:hint="@string/grilla_origen" />
-
                 </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
@@ -78,29 +73,48 @@
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
+            android:layout_marginTop="5dp"
             android:layout_weight="1">
 
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="5dp">
+                android:text="@string/destino"
+                android:textColor="@color/colorAccent"
+                android:layout_gravity="left"
+                android:textSize="12dp"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
 
-                <android.support.design.widget.TextInputLayout
+            <Spinner
+                    android:id="@+id/spinnerDestino"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <Spinner
-                        android:id="@+id/spinnerDestino"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        android:spinnerMode="dialog"
-                        android:singleLine="true"
-                        android:inputType="textPersonName"
-                        android:prompt="@string/destino" />
-                </android.support.design.widget.TextInputLayout>
-            </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:hint="@string/destino"
+                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                    android:spinnerMode="dialog"/>
+        </LinearLayout>
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="5dp">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <AutoCompleteTextView
+                    android:id="@+id/textViewNroAsi"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="left"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15dp"
+                    android:hint="@string/nro_asiento" />
+            </android.support.design.widget.TextInputLayout>
+
         </LinearLayout>
 
 
@@ -169,8 +183,19 @@
             android:layout_height="wrap_content"
             android:text="@string/button_aceptar"
             android:layout_alignTop="@+id/close"
+            android:visibility="gone"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
+        <ProgressBar
+            android:id="@+id/vender_progress"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/close"
+            android:layout_gravity="center_horizontal"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:visibility="gone" />
     </RelativeLayout>
 
 </LinearLayout>

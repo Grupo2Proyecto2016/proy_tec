@@ -15,7 +15,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static DataBaseHelper sInstance;
 
     //private static final String DB_NAME = "AppGuarda"+R.string.app_name+".sqlite";
-    private static final int DB_SCHEME_VERSION = 6;
+    private static final int DB_SCHEME_VERSION = 7;
 
     public DataBaseHelper(Context context,String DB_NAME){
         super(context, DB_NAME, null, DB_SCHEME_VERSION);
@@ -33,7 +33,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(DataBaseManager.CREATE_TABLE_UBICACION);
+        db.execSQL(DataBaseManager.ALTER_TABLE_ASIENTOS);
         
     }
 

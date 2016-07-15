@@ -6,6 +6,7 @@ package com.example.malladam.AppGuarda.models;
 public class AsientoActivo {
 
     private Integer id_pasaje;
+    private String numero_pasaje;
     private float costo;
     private String username_usuario;
     private String nombre_usuario;
@@ -21,10 +22,11 @@ public class AsientoActivo {
     }
 
 
-    public AsientoActivo(Integer id_pasaje, float costo, String username_usuario, String nombre_usuario,
+    public AsientoActivo(Integer id_pasaje, String numero_pasaje, float costo, String username_usuario, String nombre_usuario,
                          String apellido_usuario, int id_viaje, int id_asiento, int numero_asiento,
                          int id_paradaSube, int id_paradaBaja) {
         this.id_pasaje = id_pasaje;
+        this.numero_pasaje = numero_pasaje;
         this.costo = costo;
         this.username_usuario = username_usuario;
         this.nombre_usuario = nombre_usuario;
@@ -115,5 +117,13 @@ public class AsientoActivo {
 
     public void setId_paradaBaja(int id_paradaBaja) {
         this.id_paradaBaja = id_paradaBaja;
+    }
+
+    public String getNumero_pasaje() {
+        return numero_pasaje;
+    }
+
+    public void setNumero_pasaje(String numero_pasaje) {
+        this.numero_pasaje = numero_pasaje;
     }
 }

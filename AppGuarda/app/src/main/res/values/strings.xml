@@ -19,6 +19,7 @@
     <string name="precio">Precio</string>
     <string name="origen">Origen</string>
     <string name="destino">Destino</string>
+    <string name="nro_asiento">Nro. Asiento</string>
 
 
     <!-- Strings related to login -->
@@ -41,6 +42,7 @@
     <string name="iniciarViaje">Iniciar Viaje</string>
     <string name="tokenInvalido">"Credenciales Inválidas, favor inicie sesión"</string>
     <string name="error_invalid_role">Usuario sin permiso</string>
+    <string name="qr_pasaje">"Pasaje"</string>
 
     <string name="auth">"/auth"</string>
     <string name="getSiguienteViaje">/getLastTravelByDriver</string>
@@ -49,6 +51,8 @@
     <string name="collectTicket">/collectTicket</string>
     <string name="findNextStationsByOrigin">/FindNextStationsByOrigin</string>
     <string name="setTravelLocation">/setTravelLocation</string>
+    <string name="getTicketValue">/getTicketValue</string>
+    <string name="buyTicket">/buyTicket</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

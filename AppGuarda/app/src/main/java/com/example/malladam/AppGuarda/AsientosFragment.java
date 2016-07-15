@@ -133,6 +133,7 @@ public class AsientosFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
         inflater.inflate(R.menu.menu_asientos_en_viaje, menu);
         MenuTintUtils menuTintUtils = new MenuTintUtils();
         menuTintUtils.tintAllIcons(menu, Color.parseColor(empresa.getColorHeader()));
