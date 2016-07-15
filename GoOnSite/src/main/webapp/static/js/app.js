@@ -143,7 +143,7 @@
     	});
     });
 
-    goOnApp.service('authInterceptor', function($q, $location, $rootScope, $timeout) {
+    goOnApp.service('authInterceptor', function($q, $location, $rootScope, $timeout, $templateCache) {
         var service = this;
         
         service.responseError = function(response) {
@@ -161,6 +161,7 @@
             		
             		});
             	}
+            	$templateCache.removeAll();
             }
             else if(response.status == 500)
             {
@@ -188,8 +189,8 @@
             }
             else if(response.status == 403)
             {
+            	$location.path('home');
             	$(window).on("load", function() {
-            		$location.path('home');
             		$("div.modal-backdrop").remove();
             	
             	});
