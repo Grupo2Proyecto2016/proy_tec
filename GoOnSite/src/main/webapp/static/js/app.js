@@ -155,10 +155,11 @@
             	if(!$('#loginModal').hasClass('in') && !$rootScope.showingError)
             	{
             		$rootScope.showingError = true;
-            		$timeout(function () {            
+            		$(window).on("load", function() {           
             			$("#loginModal").modal("show");
             			$rootScope.showingError = false;
-            		}, 500);
+            		
+            		});
             	}
             }
             else if(response.status == 500)
@@ -166,10 +167,11 @@
             	if(!$('#errorModal').hasClass('in') && !$rootScope.showingError)
             	{
             		$rootScope.showingError = true;
-            		$timeout(function () { 
+            		$(window).on("load", function() {
             			$("#genericErrorModal").modal("show");
             			$rootScope.showingError = false;
-            		}, 500);
+            		
+            		});
             	}
             }
             else if(response.status == -1)
@@ -177,18 +179,20 @@
             	if(!$('#connectErrorModal').hasClass('in') && !$rootScope.showingError)
             	{
             		$rootScope.showingError = true;
-            		$timeout(function () {
+            		$(window).on("load", function() {
             			$("#connectErrorModal").modal("show");
             			$rootScope.showingError = false;
-            		}, 500);
+            		
+            		});
             	}
             }
             else if(response.status == 403)
             {
-            	$timeout(function () {
+            	$(window).on("load", function() {
             		$location.path('home');
             		$("div.modal-backdrop").remove();
-            	}, 800);
+            	
+            	});
             }
             return $q.resolve(response);
         };
