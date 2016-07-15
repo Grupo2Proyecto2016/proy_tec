@@ -7,17 +7,17 @@
 <div class="row">
     <div class="col-sm-4">
         <img class="img-circle img-responsive img-center" src="static/images/bus.jpg" alt="">
-        <h3 class="marketing-title">Marketing Box #1</h3>
-        <p class="text-center">These marketing boxes are a great place to put some information. These can contain summaries of what the company does, promotional information, or anything else that is relevant to the company. These will usually be below-the-fold.</p>
+        <h3 class="marketing-title">¿Dónde quiéres ir?</h3>
+        <p class="text-center" style="font-size: 20px;">Disponemos de una gran flota de vehículos y amplia diversidad de horarios para llevarte a donde quiéras y cuando quiéras.</p>
     </div>
     <div class="col-sm-4">
         <img class="img-circle img-responsive img-center" src="static/images/mobile-track.jpg" alt="">
-        <h3 class="marketing-title">Marketing Box #2</h3>
-        <p class="text-center">The images are set to be circular and responsive. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.</p>
+        <h3 class="marketing-title">Siempre contigo</h3>
+        <p class="text-center" style="font-size: 20px;">Accede a nuestros servicios dende cualquier lugar por medio de nuestra aplicación para móviles. Podras comprar tus pasajes y monitorear tus vehículos y servicios de encomiendas contratados.</p>
     </div>
     <div class="col-sm-4">
         <img class="img-circle img-responsive img-center" src="static/images/packages.jpg" alt="">
-        <h3 class="marketing-title">Marketing Box #3</h3>
-        <p class="text-center">Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.</p>
+        <h3 class="marketing-title">Envíalo ya!</h3>
+        <p class="text-center" style="font-size: 20px;">Envía tus paquetes desde y hacia cualquiera de nuestras sucursales. Puedes monitorear el estado y ubicación de tus encomiendas desde tu panel personal.</p>
     </div>
 </div>
