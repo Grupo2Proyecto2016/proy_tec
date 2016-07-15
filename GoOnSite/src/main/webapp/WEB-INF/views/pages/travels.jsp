@@ -430,6 +430,23 @@
 
 
 
-
+<div class="modal fade" id="rutaModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content" style="width: 650px;">
+      <div class="modal-header" style="background-color: cornflowerblue;">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3 class="text-center modal-title">Recorrido</h3>
+      </div>
+      <div class="modal-body">
+      	<div id="rutaMap" style="height: 50%">
+		</div>
+		<div class="referencias">
+			<p><div id="caja_verde"></div> Recorrido de la linea</p>
+			<p><div id="caja_roja"></div> Recorrido de su viaje</p>
+		</div>
+      </div>
+    </div>
+  </div>
+</div>
 
 

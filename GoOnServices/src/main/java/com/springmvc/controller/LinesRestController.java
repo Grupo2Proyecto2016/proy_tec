@@ -328,4 +328,12 @@ public class LinesRestController{
 		ll.InsertTravelLocation(travelLoc.travelId, travelLoc.lat, travelLoc.lng);
 		return new ResponseEntity(HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/getLine", method = RequestMethod.GET)
+    public ResponseEntity<Linea> getLine(@RequestParam long id_linea, @PathVariable String tenantid)
+    {
+		LinesLogic ll = new LinesLogic(tenantid);
+		Linea linea = ll.findByID(id_linea);
+		return new ResponseEntity<Linea>(linea, HttpStatus.OK);
+    }
 }

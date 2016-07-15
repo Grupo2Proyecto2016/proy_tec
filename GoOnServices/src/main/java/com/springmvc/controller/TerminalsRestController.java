@@ -83,13 +83,14 @@ public class TerminalsRestController {
 		}
     }
 	
-	@Secured({"ROLE_DRIVER"})
+	
 	@RequestMapping(value = "/FindNextStationsByOrigin", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<List<Parada>> FindNextStationsByOrigin(@RequestParam long origin, @RequestParam long line, @PathVariable String tenantid, HttpServletRequest request)
     {
 		List<Parada> stations = new LinesLogic(tenantid).FindNextStationsByOrigin(origin, line);
 		return new ResponseEntity<List<Parada>>(stations, HttpStatus.OK);
     }
+	
 	
 	@Secured({"ROLE_SALES"})
 	@RequestMapping(value = "/getPackageOrigin", method = RequestMethod.GET)
