@@ -185,7 +185,7 @@
                 android:text="@string/okRegistro"
                 android:id="@+id/buttonRegistro"
                 android:layout_gravity="right"
-                android:background="@color/detalles"
+                android:background="@drawable/buttonshape"
                 android:textStyle="bold" />
 
         </LinearLayout>

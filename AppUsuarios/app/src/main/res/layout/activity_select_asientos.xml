@@ -3,43 +3,69 @@
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-android:orientation="horizontal"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:id="@+id/linear_select"
 tools:context=".Activity.SelectAsientosActivity">
 
-<ListView
-    android:id="@+id/list_asientos"
-    android:layout_weight="1"
-    android:layout_width="match_parent"
-    android:layout_height="fill_parent">
-</ListView>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_weight="1"
-    android:layout_marginTop="50dp"
-    android:orientation="vertical"
-    android:weightSum="1">
-
-    <TextView
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="80dp"
-        android:textSize="40dp"
-        android:gravity="left"
-        android:textColor="@color/negro"
-        android:id="@+id/infoAsiento" />
-    <Button
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:windowNoTitle="true"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <LinearLayout
+        android:id="@+id/select_form"
         android:layout_width="match_parent"
-        android:layout_height="59dp"
-        android:text="Comprar"
-        android:id="@+id/btn_buy"
-        android:layout_gravity="bottom"
-        android:layout_marginTop="45dp"
-        android:onClick="onBuyPressed"
-        />
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:orientation="horizontal">
 
+            <ListView
+                android:id="@+id/list_asientos"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent">
+            </ListView>
 
-</LinearLayout>
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginTop="50dp"
+                android:orientation="vertical"
+                android:weightSum="1">
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="80dp"
+                    android:textSize="40dp"
+                    android:gravity="left"
+                    android:textColor="@color/negro"
+                    android:id="@+id/infoAsiento" />
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="59dp"
+                    android:text="Comprar"
+                    android:background="@drawable/buttonshape"
+                    android:id="@+id/btn_buy"
+                    android:layout_gravity="bottom"
+                    android:layout_marginTop="45dp"
+                    android:onClick="onBuyPressed"
+                    />
+            </LinearLayout>
+        </LinearLayout>
 </LinearLayout>

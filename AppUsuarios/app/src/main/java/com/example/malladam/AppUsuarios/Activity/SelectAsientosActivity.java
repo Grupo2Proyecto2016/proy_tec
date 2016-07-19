@@ -3,13 +3,18 @@ package com.example.malladam.AppUsuarios.Activity;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +32,7 @@ import com.example.malladam.AppUsuarios.R;
 import com.example.malladam.AppUsuarios.adapters.PasajeArrayAdapter;
 import com.example.malladam.AppUsuarios.adapters.VolleyS;
 import com.example.malladam.AppUsuarios.models.Asiento;
+import com.example.malladam.AppUsuarios.models.Empresa;
 import com.example.malladam.AppUsuarios.models.GroupPasajeDT;
 import com.example.malladam.AppUsuarios.models.Parada;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
@@ -71,6 +77,8 @@ public class SelectAsientosActivity extends AppCompatActivity {
     int idVehiculo;
     double valor;
 
+    private Empresa empresa;
+
     List<Asiento> seats = new ArrayList<>();
 
     @Override
@@ -79,10 +87,28 @@ public class SelectAsientosActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_asientos);
         dbManager = new DataBaseManager(this);
+        empresa = empresa.getInstance();
+
+        LinearLayout mealLayout = (LinearLayout) findViewById(R.id.linear_select);
+        mealLayout.setBackgroundColor(Color.parseColor(empresa.getColorBack()));
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setBackgroundColor(Color.parseColor(empresa.getColorHeader()));
+        toolbar.setTitleTextColor(Color.parseColor(empresa.getColorTextHeader()));
+        setSupportActionBar(toolbar);
+
+        final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        upArrow.setColorFilter(Color.parseColor(empresa.getColorTextHeader()), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(empresa.getNombre());
+
         urlPreBuyTickets = getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)+getResources().getString(R.string.preBuyTickets);
         urlAppConfirmTickets = getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)+getResources().getString(R.string.appConfirmTickets);
 
         Button btn_buy = (Button)findViewById(R.id.btn_buy);
+        btn_buy.setTextColor(Color.parseColor(empresa.getColorBack()));
         btn_buy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)

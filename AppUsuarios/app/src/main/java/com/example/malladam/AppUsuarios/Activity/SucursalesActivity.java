@@ -4,6 +4,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.support.design.widget.NavigationView;
 import com.example.malladam.AppUsuarios.adapters.PopupAdapter;
 import android.os.Bundle;
@@ -89,6 +91,10 @@ public class SucursalesActivity extends AppCompatActivity implements OnMapReadyC
         toolbar.setBackgroundColor(Color.parseColor(empresa.getColorHeader()));
         toolbar.setTitleTextColor(Color.parseColor(empresa.getColorTextHeader()));
         setSupportActionBar(toolbar);
+
+        final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        upArrow.setColorFilter(Color.parseColor(empresa.getColorTextHeader()), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
 
         // Set the drawer toggle as the DrawerListener
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

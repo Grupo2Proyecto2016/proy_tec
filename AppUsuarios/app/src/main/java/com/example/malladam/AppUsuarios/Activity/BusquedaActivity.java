@@ -7,8 +7,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
@@ -151,6 +155,7 @@ public class BusquedaActivity extends AppCompatActivity implements NumberPicker.
             }
         });
 
+        mButtonBuscar.setTextColor(Color.parseColor(empresa.getColorBack()));
         mButtonBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -201,10 +206,18 @@ public class BusquedaActivity extends AppCompatActivity implements NumberPicker.
 
         setupNavigationDrawerContent(navigationView);
 
+        final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        upArrow.setColorFilter(Color.parseColor(empresa.getColorTextHeader()), PorterDuff.Mode.SRC_ATOP);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(Color.parseColor(empresa.getColorHeader()));
         toolbar.setTitleTextColor(Color.parseColor(empresa.getColorTextHeader()));
+        toolbar.setNavigationIcon(upArrow);
         setSupportActionBar(toolbar);
+
+
+
+
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name, R.string.app_name) {
@@ -220,6 +233,7 @@ public class BusquedaActivity extends AppCompatActivity implements NumberPicker.
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
+
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);

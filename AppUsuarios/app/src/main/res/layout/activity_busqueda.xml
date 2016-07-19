@@ -14,8 +14,7 @@
 
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay">
+            android:layout_height="wrap_content">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -111,7 +110,7 @@
                 android:layout_height="wrap_content"
                 android:text="Buscar"
                 android:id="@+id/buscarButton"
-                android:background="@color/detalles"
+                android:background="@drawable/buttonshape"
                 android:layout_weight="1"
                 android:layout_gravity="center_horizontal"
                 android:textColor="@color/wallet_bright_foreground_holo_dark"
