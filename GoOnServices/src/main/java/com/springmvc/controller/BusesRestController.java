@@ -40,22 +40,24 @@ public class BusesRestController {
 	@RequestMapping(value = "/createBus", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
     public ResponseEntity<Void> CreateBus(@RequestBody Vehiculo vehiculo, @PathVariable String tenantid)
     {
+    	int number = 0;
 		VehiculosLogic vl = new VehiculosLogic(tenantid);
+		
 		for (int i = 0; i < vehiculo.getCantAccesibles(); i++) 
 		{
-	    	int number = i+1;
+	    	number++;
 			Asiento auxAsiento = new Asiento();
 			auxAsiento.setId_asiento(0);
 			auxAsiento.setNumero(number);
 			auxAsiento.setEs_ventana(true);
-			auxAsiento.setHabilitado(true);	
+			auxAsiento.setHabilitado(true);
 			auxAsiento.setEs_accesible(true);
-			vehiculo.getAsientos().add(auxAsiento);			
+			vehiculo.getAsientos().add(auxAsiento);
 		}
 		
 		for (int i = 0; i < vehiculo.getCantAsientos(); i++) 
 		{
-	    	int number = i+1;
+			number++;
 	    	boolean isWindow = number % 4 == 0 || number % 4 == 1;
 			Asiento auxAsiento = new Asiento();
 			auxAsiento.setId_asiento(0);

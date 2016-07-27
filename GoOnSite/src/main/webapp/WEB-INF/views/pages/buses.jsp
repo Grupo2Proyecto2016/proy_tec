@@ -50,12 +50,6 @@
 				    	<input type="number" class="form-control" name="cantAsientos" ng-model="busForm.cantAsientos" min="1" max="150" required>
 			    	</div>
 			  	</div>
-			  	<div class="form-group">
-			    	<label class="control-label col-sm-4" for="cantParados">Cant.Parados:</label>
-			    	<div class="col-sm-6">
-			    		<input type="number" class="form-control" name="cantParados" ng-model="busForm.cantParados" min="0" max ="20" value="0" required>
-		    		</div>
-		    	</div>
 		    	<div class="form-group">
 		    	<label class="control-label col-sm-4" for="cantAccesibles">Tiene Baño:</label>
 				  <div class="col-sm-6">
@@ -73,7 +67,7 @@
 		    		</div>
 		  		</div>
 		  		<div class="form-group">
-			    	<label class="control-label col-sm-4" for="cantEncomiendas">Lugares Encomienda:</label>
+			    	<label class="control-label col-sm-4" for="cantEncomiendas">Capacidad de Encomiendas (m3):</label>
 			    	<div class="col-sm-6">
 			    		<input type="number" class="form-control" name="cantEncomiendas" ng-model="busForm.cantEncomiendas" min="0" value="0" required>
 		    		</div>

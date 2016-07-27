@@ -15,8 +15,7 @@ goOnApp.controller('busController', function($scope, $http, uiGridConstants, i18
 	    $scope.busForm.marca = null;
 	    $scope.busForm.modelo = null;
 	    $scope.busForm.ano = null;
-	    $scope.busForm.cantAsientos = null;
-	    $scope.busForm.cantParados = 0;
+	    $scope.busForm.cantAsientos = null;;
 	    $scope.busForm.tieneBano = false;
 	    $scope.busForm.cantAccesibles = 0;
 	    $scope.busForm.cantEncomiendas = 0;
@@ -122,7 +121,6 @@ goOnApp.controller('busController', function($scope, $http, uiGridConstants, i18
           { name:'Modelo', field: 'modelo'},
           { name:'Año', field: 'ano' },
           { name: 'Asientos', field: 'cantAsientos' },
-          { name: 'Lug. Parados', field: 'cantParados' },
           
           { name: 'Acciones',
         	enableFiltering: false,

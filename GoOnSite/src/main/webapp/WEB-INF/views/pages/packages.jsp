@@ -16,7 +16,7 @@
 	<div class="col-xs-1"></div>
 </div>
 
-<div id="divPackageForm" class="hidden" ng-show="packageOrigin != null">
+<div id="divPackageForm" class="hidden" ng-if="packageOrigin != null">
 	<div class="row">
 		<div class="col-xs-2"></div>
 		<div class="col-xs-8">

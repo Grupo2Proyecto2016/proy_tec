@@ -25,7 +25,6 @@ public class Vehiculo {
 	private int ano;
 	private Boolean tieneBano;
 	private int cantAsientos;
-	private int cantParados;
 	private int cantAccesibles;
 	private int cantEncomiendas; //basados en bultos de 1 m cubico
 	
@@ -77,12 +76,6 @@ public class Vehiculo {
 	}
 	public void setCantAsientos(int cantAsientos) {
 		this.cantAsientos = cantAsientos;
-	}
-	public int getCantParados() {
-		return cantParados;
-	}
-	public void setCantParados(int cantParados) {
-		this.cantParados = cantParados;
 	}
 	public int getCantAccesibles() {
 		return cantAccesibles;

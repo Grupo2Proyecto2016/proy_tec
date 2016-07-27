@@ -166,7 +166,7 @@ public class ViajeRepository {
 					+"AND v.inicio <= :limit "
 					+"AND ve.cantencomiendas > 0 "
 					+"GROUP BY v.id_viaje, ve.cantencomiendas "
-					+"HAVING COUNT(*) < ve.cantencomiendas "
+					+"HAVING coalesce(SUM(e.volumen), 0) < (ve.cantencomiendas - 0.5) "
 				+")"
 				, Viaje.class
 		);
