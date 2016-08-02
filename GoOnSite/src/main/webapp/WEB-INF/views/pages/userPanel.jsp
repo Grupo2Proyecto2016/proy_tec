@@ -25,6 +25,7 @@
 												<th>Origen</th>
 												<th>Destino</th>
 												<th>Partida</th>
+												<th>Coche</th>
 												<th>Asiento</th>
 												<th>Precio</th>
 												<th>Estado</th>
@@ -37,6 +38,7 @@
 												<td>{{ticket.parada_sube.descripcion}}</td>
 												<td>{{ticket.parada_baja.descripcion}}</td>
 												<td>{{ticket.viaje.inicio | date:'dd-MM-yyyy HH:mm'}}</td>
+												<td>{{ticket.viaje.vehiculo.numerov}}</td>
 												<td>{{ticket.asiento.numero}}</td>
 												<td>$ {{ticket.costo}}</td>
 												<td>{{ getTicketStatus(ticket.estado)}}</td>
@@ -339,7 +341,7 @@
 					                    	<qrcode version="3" error-correction-level="M" size="150" data="{{ticketToShow.numero}}"></qrcode>
 					                    </div>
 					                    <div class="col-sm-6 col-md-8">
-					                    	<h4><i class="fa fa-bus" aria-hidden="true"></i> Línea {{ticketToShow.viaje.linea.id_linea}} - Coche: {{ticketToShow.viaje.vehiculo.id_vehiculo}} - <i class="fa fa-hashtag" aria-hidden="true"> Asiento</i> {{ticketToShow.asiento.numero}}</h4>
+					                    	<h4><i class="fa fa-bus" aria-hidden="true"></i> Línea {{ticketToShow.viaje.linea.id_linea}} - Coche: {{ticketToShow.viaje.vehiculo.numerov}} - <i class="fa fa-hashtag" aria-hidden="true"> Asiento</i> {{ticketToShow.asiento.numero}}</h4>
 					                        <small> <i class="fa fa-map-marker"></i>&nbsp;Desde:<cite title="Montevideo">{{ticketToShow.parada_sube.descripcion}}</cite></small>
 					                        <small> <i class="fa fa-map-marker"></i>&nbsp;Hasta:<cite title="Piriapolis">{{ticketToShow.parada_baja.descripcion}}</cite></small>
 					                        <p>
