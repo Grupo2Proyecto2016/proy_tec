@@ -32,6 +32,12 @@
 				    	<input type="text" class="form-control" name="marca" ng-model="busForm.marca" required>
 			    	</div>
 			    </div>
+			    <div class="form-group">		  		
+				    <label class="control-label col-sm-4" for="numero">Nº de coche:</label>
+				    <div class="col-sm-6">
+				    	<input type="text" class="form-control" name="numero" ng-model="busForm.numerov" required>
+			    	</div>
+			    </div>
 				<div class="form-group">				    
 			  	    <label class="control-label col-sm-4" for="modelo">Modelo:</label>
 				    <div class="col-sm-6">

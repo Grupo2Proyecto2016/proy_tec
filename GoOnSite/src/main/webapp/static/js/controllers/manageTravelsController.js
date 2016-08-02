@@ -47,7 +47,7 @@ goOnApp.controller('manageTravelsController', function($scope, $http, uiGridCons
     	{
         	$scope.buses = data;
         	angular.forEach($scope.buses, function(b){
-    			b.customDes = b.id_vehiculo + ": " + b.matricula;
+    			b.customDes = b.numerov + ": " + b.matricula;
     		});
     	});
     };
@@ -143,7 +143,7 @@ goOnApp.controller('manageTravelsController', function($scope, $http, uiGridCons
         	  name: 'Pasajeros Parados', 
         	  cellTemplate: '<div class="text-center ngCellText">{{row.entity.linea.viaja_parado | SiNo}}</div>'
           },
-          { name:'Nº Coche', field: 'vehiculo.id_vehiculo' },
+          { name:'Nº Coche', field: 'vehiculo.numerov' },
           { name:'Conductor', field: 'getDriverName()' },
           { name: 'Acciones',
         	enableFiltering: false,

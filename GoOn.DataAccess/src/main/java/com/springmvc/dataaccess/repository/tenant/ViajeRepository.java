@@ -241,9 +241,7 @@ public class ViajeRepository {
 		}
 		
 		Query q = entityManager.createNativeQuery("SELECT 	v.id_viaje, " +
-														"CASE WHEN l.viaja_parado is true THEN ve.cantasientos + ve.cantparados " +
-														"ELSE ve.cantasientos " +
-														"END AS lugares, " +														
+														"ve.cantasientos AS lugares, " +														
 														"v.inicio, " +
 														"l.numero, " +
 														"lpo.linea_id_linea, " +
@@ -251,6 +249,7 @@ public class ViajeRepository {
 														"po.descripcion origen_descripcion, " +
 														"lpd.destino, " +
 														"pd.descripcion destino_descripcion, " +
+														"ve.numerov, " +
 														"ve.id_vehiculo, " +
 														"ve.cantasientos " +
 													"FROM " +

@@ -240,7 +240,7 @@
 	    <div class="form-group row">
 			<label class="control-label col-sm-9" for="name">Número:</label>
 			<div class="col-sm-3">
-				<p>{{travelForm.bus.id_vehiculo}}</p>
+				<p>{{travelForm.bus.numerov}}</p>
 			</div>
 		</div>
 		<div class="form-group row">

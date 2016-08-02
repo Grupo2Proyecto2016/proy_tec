@@ -116,6 +116,7 @@ goOnApp.controller('busController', function($scope, $http, uiGridConstants, i18
 		enableFiltering: true,
         columnDefs:
     	[
+          { name:'Nº', field: 'numerov' },
           { name:'Matricula', field: 'matricula' },
           { name:'Marca', field: 'marca' },
           { name:'Modelo', field: 'modelo'},

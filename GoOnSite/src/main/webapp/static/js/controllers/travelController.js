@@ -404,7 +404,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
         	  name: 'Pasajeros Parados', 
         	  cellTemplate: '<div class="text-center ngCellText">{{row.entity.linea.viaja_parado | SiNo}}</div>'
           },*/
-          { name:'Nº Coche', field: 'id_vehiculo' },
+          { name:'Nº Coche', field: 'numerov' },
           { name:'Asientos Disp.', field: 'cantasientos' },
           { name:'Costo', field: 'valor' },
           { name: 'Acciones',

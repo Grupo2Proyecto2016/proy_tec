@@ -18,12 +18,13 @@ public class ViajesBuscados {
 	private String origen_description; 
 	private long destino;
 	private String destino_description;
+	private long numerov;
 	private long id_vehiculo;
 	private int cantasientos;
 	private Double valor;
 	
 	public ViajesBuscados(BigInteger id_viaje, Integer lugares, Timestamp inicio, Integer numero, BigInteger linea_id_linea, BigInteger origen,
-			String origen_description, BigInteger destino, String destino_description, BigInteger id_vehiculo, Integer cantasientos) 
+			String origen_description, BigInteger destino, String destino_description, BigInteger numerov, BigInteger id_vehiculo, Integer cantasientos) 
 	{
 		super();
 		this.id_viaje = id_viaje.longValue();
@@ -35,10 +36,19 @@ public class ViajesBuscados {
 		this.origen_description = origen_description;
 		this.destino = destino.longValue();
 		this.destino_description = destino_description;
+		this.numerov = numerov.longValue();
 		this.id_vehiculo = id_vehiculo.longValue();
 		this.cantasientos = cantasientos;
 	}
 	
+	public long getId_vehiculo() {
+		return id_vehiculo;
+	}
+
+	public void setId_vehiculo(long id_vehiculo) {
+		this.id_vehiculo = id_vehiculo;
+	}
+
 	public long getId_viaje() {
 		return id_viaje;
 	}
@@ -94,12 +104,12 @@ public class ViajesBuscados {
 		this.destino_description = destino_description;
 	}
 
-	public long getId_vehiculo() {
-		return id_vehiculo;
+	public long getNumerov() {
+		return numerov;
 	}
 
-	public void setId_vehiculo(long id_vehiculo) {
-		this.id_vehiculo = id_vehiculo;
+	public void setNumerov(long numerov) {
+		this.numerov = numerov;
 	}
 
 	public int getCantasientos() {

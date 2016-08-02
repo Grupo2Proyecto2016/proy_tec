@@ -19,6 +19,7 @@ public class Vehiculo {
 	
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long id_vehiculo;
+	private long numerov;
 	private String marca;
 	private String modelo;
 	private String matricula;
@@ -40,6 +41,12 @@ public class Vehiculo {
 	}
 	public void setAsientos(List<Asiento> asientos) {
 		this.asientos = asientos;
+	}
+	public long getNumerov() {
+		return numerov;
+	}
+	public void setNumerov(long numerov) {
+		this.numerov = numerov;
 	}
 	public long getId_vehiculo() {
 		return id_vehiculo;
