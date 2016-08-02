@@ -37,4 +37,9 @@ public class VehiculosLogic implements IVehiculosLogic{
 		TenantContext.VehiculoRepository.deleteBus(id_vehiculo);
 	}
 
+	public Vehiculo GetBusByNumber(long numerov)
+	{
+		return TenantContext.VehiculoRepository.getByNumber(numerov);
+	}
+
 }

@@ -9,15 +9,18 @@ import java.util.ListIterator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springmvc.entities.tenant.Vehiculo;
 import com.springmvc.entities.tenant.Asiento;
+import com.springmvc.logic.implementations.UsersLogic;
 import com.springmvc.logic.implementations.VehiculosLogic;
 import com.springmvc.logic.interfaces.IVehiculosLogic;
 import com.springmvc.requestWrappers.CustomResponseWrapper;
@@ -88,5 +91,19 @@ public class BusesRestController {
 			respuesta.setSuccess(true);
 		}
 		return new ResponseEntity<CustomResponseWrapper>(respuesta, HttpStatus.OK);
+    }
+    
+    @RequestMapping(value = "/busExists", method = RequestMethod.GET)
+    public ResponseEntity<Void> userExists(@PathVariable String tenantid, @RequestParam(value="numerov") long numerov) throws AuthenticationException 
+    { 
+    	boolean busExists = new VehiculosLogic(tenantid).GetBusByNumber(numerov) != null;
+    	if(busExists)
+    	{
+    		return new ResponseEntity<Void>(HttpStatus.OK);   		
+    	}
+    	else
+    	{
+    		return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+    	}
     }
 }

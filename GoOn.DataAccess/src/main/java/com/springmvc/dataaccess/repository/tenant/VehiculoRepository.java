@@ -101,4 +101,20 @@ EntityManager entityManager;
 		return vehiculo;
 	}
 
+	public Vehiculo getByNumber(long numerov)
+	{
+		Vehiculo vehiculo = null;
+		Query q = entityManager.createQuery("FROM Vehiculo WHERE numerov = :n");
+		q.setParameter("n", numerov);
+		try
+		{
+			vehiculo = (Vehiculo)q.getSingleResult();
+		}
+		catch(NoResultException ex)
+		{
+			return null;
+		}
+		return vehiculo;
+	}
+
 }

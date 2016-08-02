@@ -9,7 +9,7 @@
 	<div class="row">
 		<div class="col-xs-3"></div>
 		<div class="col-xs-6">
-			<form class="form-horizontal" role="form" name="form" ng-submit="createBus()">
+			<form class="form-horizontal" role="form" name="busf" ng-submit="createBus()">
 				<div class="panel panel-default">				
 				<div class="panel-heading">
 					<div> 
@@ -20,6 +20,17 @@
 					</div>
 				</div>
 				<div class="panel-body">
+			    <div class="form-group">		  		
+				    <label class="control-label col-sm-4" for="numero">Nº de coche:</label>
+				    <div class="col-sm-6">
+				    	<input type="number" class="form-control" name="num" ng-model="busForm.numerov" required busexists>
+			    	</div>
+			    </div>
+		     	<div class="form-group has-error">
+					<div ng-messages="busf.num.$error" role="alert" class="col-sm-offset-4 col-sm-6 text-center">
+						<span ng-message="busexists" class="help-block">El Número de coche ya está en uso</span>
+			    	</div>
+		    	</div>
 				<div class="form-group">
 				    <label class="control-label col-sm-4" for="matricula">Matricula:</label>
 				    <div class="col-sm-6">
@@ -30,12 +41,6 @@
 				    <label class="control-label col-sm-4" for="marca">Marca:</label>
 				    <div class="col-sm-6">
 				    	<input type="text" class="form-control" name="marca" ng-model="busForm.marca" required>
-			    	</div>
-			    </div>
-			    <div class="form-group">		  		
-				    <label class="control-label col-sm-4" for="numero">Nº de coche:</label>
-				    <div class="col-sm-6">
-				    	<input type="text" class="form-control" name="numero" ng-model="busForm.numerov" required>
 			    	</div>
 			    </div>
 				<div class="form-group">				    

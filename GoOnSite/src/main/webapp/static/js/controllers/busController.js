@@ -51,7 +51,7 @@ goOnApp.controller('busController', function($scope, $http, uiGridConstants, i18
     
     $scope.createBus = function()
 	{		
-		if(!$scope.form.$invalid)
+		if(!$scope.busf.$invalid)
 		{
 			$.blockUI();			
 			$http.post(servicesUrl +'createBus', JSON.stringify($scope.busForm))
