@@ -105,7 +105,7 @@ public class LinesRestController{
 		tl.insertLine(linea);	
 		
 		/*Insercion de vuelta*/
-		if (linesWrapper.getGeneraVuelta())
+		if (linesWrapper.getGeneraVuelta() == true)
 		{
 			Linea vuelta = new Linea();	
 			
