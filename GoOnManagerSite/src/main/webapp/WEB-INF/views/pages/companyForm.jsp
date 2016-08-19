@@ -130,7 +130,7 @@
 						<label class="control-label col-sm-4" for="birth">Fecha
 							de nacimiento:</label>
 						<div class="col-sm-8">
-							<input type="date" name="birth" class="form-control"
+							<input type="date" name="birth" class="form-control" max="{{maxBirth | date:'yyyy-MM-dd'}}"
 								ng-model="companyForm.user.fch_nacimiento" required>
 						</div>
 					</div>

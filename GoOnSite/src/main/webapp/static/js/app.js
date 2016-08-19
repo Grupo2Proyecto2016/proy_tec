@@ -232,6 +232,9 @@
     // create the controller and inject Angular's $scope
     goOnApp.controller('mainController', function($scope, $http, $location, $rootScope)
 	{
+    	$scope.maxBirth = new Date();
+        $scope.maxBirth.setDate($scope.maxBirth.getDate() - 6570);
+        
     	$scope.userInfoReady = false;
     	$scope.companyInfoReady = false;
     	$scope.user = null;

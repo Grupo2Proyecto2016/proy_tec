@@ -66,6 +66,9 @@
         $scope.message = 'Ingrese los siguientes datos para completar el registro de una nueva empresa';
         $scope.error_message = '';
         
+        $scope.maxBirth = new Date();
+        $scope.maxBirth.setDate($scope.maxBirth.getDate() - 6570);
+        
         $scope.companyForm = {};
         $scope.companyForm.name = null;
         $scope.companyForm.trueName = null;
