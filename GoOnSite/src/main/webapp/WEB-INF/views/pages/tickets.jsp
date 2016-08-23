@@ -35,7 +35,7 @@
 				<div class="col-sm-3">
 					<label class="control-label col-sm-3">Desde:</label>
 					<div class="col-sm-9">
-						<input type="date" min="{{minDate | date:'yyyy-MM-dd'}}" class="form-control"  ng-model="filterMinDate" required>
+						<input type="date" class="form-control"  ng-model="filterMinDate" required>
 				    </div>
 				</div>
 	    		<div class="col-sm-3">

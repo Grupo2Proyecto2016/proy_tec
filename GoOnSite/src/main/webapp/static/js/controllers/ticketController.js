@@ -3,7 +3,7 @@ goOnApp.controller('ticketController', function($scope, $http, uiGridConstants, 
     $scope.message = 'Desde este panel puedes cancelar pasajes y confirmar reservas';
     
     $scope.minDate = new Date();
-	$scope.minDate.setDate($scope.minDate.getDate() + 1);
+	$scope.minDate.setDate($scope.minDate.getDate() -10);
 	$scope.filterMinDate = angular.copy($scope.minDate);
 	
 	$scope.custom_response = null;    
