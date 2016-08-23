@@ -64,7 +64,7 @@
 							    </div>
 							</div>
 							<div class="col-sm-6">
-								<label class="control-label col-sm-3" for="tiempo_estimado" title="Se le suma la demora preconfigurada" >Duración por parada (Minutos):</label>
+								<label class="control-label col-sm-3" for="tiempo_estimado" title="Se le suma la demora preconfigurada" >Tiempo estimado (Minutos):</label>
 								<div class="col-sm-9">
 									<input type="text" pattern="[0-9]+" title="Solo se aceptan números" class="form-control" name="tiempo_estimado" ng-model="lineForm.tiempo_estimado" required>
 							    </div>				
