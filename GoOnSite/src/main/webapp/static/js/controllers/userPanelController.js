@@ -205,14 +205,25 @@ goOnApp.controller('userPanelController', function($scope, $http, $location, uiG
 		icon: "static/images/busMarker.png",
 		zIndex: 1000
 	});
+    $scope.packMarker = new google.maps.Marker({
+		map: $scope.travelMap,
+		position: null,
+		icon: "static/images/packMarker.png",
+		zIndex: 1000
+	});
+    
+    
     var directionsService = new google.maps.DirectionsService;
     
     var directionsDisplay = new google.maps.DirectionsRenderer({map: $scope.travelMap});
     
-    $scope.showTravelLocationModal = function(travel)
+    $scope.showTravelLocationModal = function(travel, type)
     {
-    	$scope.busMarker.setPosition(null);
+    	var isPackage = type == 'p';
+		$scope.packMarker.setPosition(null);
+		$scope.busMarker.setPosition(null);
     	$scope.travelToWatch = travel.id_viaje;
+    	$scope.isPackage = isPackage;
     	$("#travelLocationModal").modal('show');	
     	$timeout(function () {            
     		google.maps.event.trigger($scope.travelMap, 'resize');
@@ -280,8 +291,15 @@ goOnApp.controller('userPanelController', function($scope, $http, $location, uiG
 	    	{
     			if(result.status == 200 && result.data != null)
     			{
-    				var busPosition = new google.maps.LatLng(result.data.latitud, result.data.longitud);
-    				$scope.busMarker.setPosition(busPosition);
+    				var position = new google.maps.LatLng(result.data.latitud, result.data.longitud);
+    				if($scope.isPackage)
+    				{
+    					$scope.packMarker.setPosition(position);
+    				}
+    				else
+    				{
+    					$scope.busMarker.setPosition(position);
+    				}
     			}
 	    	});
     	}

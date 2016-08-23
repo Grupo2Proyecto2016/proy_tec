@@ -49,7 +49,7 @@
 													</a>
 												</td>
 												<td>
-													<a ng-show="ticket.estado == 3" ng-click="showTravelLocationModal(ticket.viaje)" class="btn btn-sm btn-success" style="float: right;">
+													<a ng-show="ticket.estado == 3" ng-click="showTravelLocationModal(ticket.viaje, 't')" class="btn btn-sm btn-success" style="float: right;">
 														<i class="fa fa-map-marker fa-lg " style="margin-right: 5px;"></i>Seguir
 													</a>
 												</td>
@@ -99,7 +99,7 @@
 												<td>$ {{pack.precio}}</td>
 												<td>{{ getPackageStatus(pack.status)}}</td>
 												<td>
-													<a ng-show="pack.status == 2" ng-click="showTravelLocationModal(pack.viaje)" class="btn btn-sm btn-success" style="float: right;">
+													<a ng-show="pack.status == 2" ng-click="showTravelLocationModal(pack.viaje, 'p')" class="btn btn-sm btn-success" style="float: right;">
 														<i class="fa fa-map-marker fa-lg " style="margin-right: 5px;"></i>Seguir
 													</a>
 												</td>
