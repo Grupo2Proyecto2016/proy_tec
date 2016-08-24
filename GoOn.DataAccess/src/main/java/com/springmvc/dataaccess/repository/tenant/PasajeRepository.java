@@ -208,50 +208,51 @@ public class PasajeRepository {
 
 	public Double getValorPasaje(long origen, long destino, long id_linea)
 	{
-		Query q = entityManager.createNativeQuery("SELECT " + 
-													"	CASE WHEN r.costo_minimo IS NULL OR r.all_travel THEN r.costo_maximo " +
-													"	ELSE SUM(r.reajuste) + r.costo_minimo " +
-													"	END AS costo " +
-													"FROM " +
-													"( " +
-													"	SELECT " + 
-													"		CASE WHEN p.id_parada = "+ origen +" THEN 0 " +
-													"		ELSE p.reajuste " +
-													"		END AS reajuste, " +
-													" " +		
-													"		l.costo_minimo, " +
-													"		l.costo_maximo, " +
-													" " +		
-													"		CASE WHEN lp.paradas_id_parada = l.id_parada_destino THEN 1000 " +
-													"		WHEN lp.paradas_id_parada = l.id_parada_origen THEN -1 " +
-													"		ELSE lp.paradas_id_parada " +
-													"		END AS id_parada, " +
-													" " +
-													"		CASE WHEN "+ origen +" = l.id_parada_destino THEN 1000 " +
-													"		WHEN "+ origen +" = l.id_parada_origen THEN -1 " +
-													"		ELSE "+ origen +
-													"		END AS origen, " +
-													" " +
-													"		CASE WHEN "+ destino +" = l.id_parada_destino THEN 1000 " +
-													"		WHEN "+ destino +" = l.id_parada_origen THEN -1 " +
-													"		ELSE "+ destino +
-													"		END AS destino, " +
-													" " +
-													"		CASE WHEN " + 
-													"			("+ destino +" = l.id_parada_destino OR "+ destino +" = l.id_parada_origen) " +
-													"			AND  ("+ origen +" = l.id_parada_destino OR "+ origen +" = l.id_parada_origen) THEN TRUE " +
-													"		ELSE FALSE " +
-													"		END AS all_travel " +
-													" " +		
-													"	FROM linea_parada lp " +
-													"	INNER JOIN linea l " +
-													"		ON l.id_linea = lp.linea_id_linea " +
-													"	INNER JOIN parada p " +
-													"		ON p.id_parada = lp.paradas_id_parada " +
-													"	WHERE lp.linea_id_linea = " + id_linea +
-													" ) AS r " +
-													" WHERE r.id_parada >= r.origen AND r.id_parada <= r.destino " +  
-													" GROUP BY r.costo_minimo, r.all_travel, r.costo_maximo");
+		Query q = entityManager.createNativeQuery(
+			"SELECT " + 
+			"	CASE WHEN r.costo_minimo IS NULL OR r.all_travel THEN r.costo_maximo " +
+			"	ELSE SUM(r.reajuste) + r.costo_minimo " +
+			"	END AS costo " +
+			"FROM " +
+			"( " +
+			"	SELECT " + 
+			"		CASE WHEN p.id_parada = "+ origen +" THEN 0 " +
+			"		ELSE p.reajuste " +
+			"		END AS reajuste, " +
+			" " +		
+			"		l.costo_minimo, " +
+			"		l.costo_maximo, " +
+			" " +		
+			"		CASE WHEN lp.paradas_id_parada = l.id_parada_destino THEN 1000 " +
+			"		WHEN lp.paradas_id_parada = l.id_parada_origen THEN -1 " +
+			"		ELSE lp.paradas_id_parada " +
+			"		END AS id_parada, " +
+			" " +
+			"		CASE WHEN "+ origen +" = l.id_parada_destino THEN 1000 " +
+			"		WHEN "+ origen +" = l.id_parada_origen THEN -1 " +
+			"		ELSE "+ origen +
+			"		END AS origen, " +
+			" " +
+			"		CASE WHEN "+ destino +" = l.id_parada_destino THEN 1000 " +
+			"		WHEN "+ destino +" = l.id_parada_origen THEN -1 " +
+			"		ELSE "+ destino +
+			"		END AS destino, " +
+			" " +
+			"		CASE WHEN " + 
+			"			("+ destino +" = l.id_parada_destino OR "+ destino +" = l.id_parada_origen) " +
+			"			AND  ("+ origen +" = l.id_parada_destino OR "+ origen +" = l.id_parada_origen) THEN TRUE " +
+			"		ELSE FALSE " +
+			"		END AS all_travel " +
+			" " +		
+			"	FROM linea_parada lp " +
+			"	INNER JOIN linea l " +
+			"		ON l.id_linea = lp.linea_id_linea " +
+			"	INNER JOIN parada p " +
+			"		ON p.id_parada = lp.paradas_id_parada " +
+			"	WHERE lp.linea_id_linea = " + id_linea +
+			" ) AS r " +
+			" WHERE r.id_parada >= r.origen AND r.id_parada <= r.destino " +  
+			" GROUP BY r.costo_minimo, r.all_travel, r.costo_maximo");
 		return (Double) q.getSingleResult();		
 	}
 

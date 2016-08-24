@@ -119,12 +119,24 @@ goOnApp.controller('employeesController', function($scope, $http, $filter, uiGri
 		enableFiltering: true,
         columnDefs:
     	[
-          { name:'Nombre', field: 'nombre' },
-          { name:'Apellido', field: 'apellido' },
+          { 
+        	  name:'Nombre',
+    		  cellTemplate:'<p align="center" title="{{row.entity.nombre}}">{{row.entity.nombre}}</p>'
+		  },
+          { 
+			  name:'Apellido', 
+			  cellTemplate:'<p align="center" title="{{row.entity.apellido}}">{{row.entity.apellido}}</p>'
+		  },
           { name:'CI', field: 'ci' },
           { name:'Nombre de Usuario', field: 'usrname'},
-          { name:'Correo', field: 'email' },
-          { name: 'Dirección', field: 'direccion' },
+          {
+        	  name:'Correo', 
+        	  cellTemplate:'<p align="center" title="{{row.entity.email}}">{{row.entity.email}}</p>'
+		  },
+          {
+			  name: 'Dirección', 
+			  cellTemplate:'<p align="center" title="{{row.entity.direccion}}">{{row.entity.direccion}}</p>'
+		  },
           { name: 'Rol', field: 'getRole()'
         	  , filter: {
               type: uiGridConstants.filter.SELECT,

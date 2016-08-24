@@ -278,7 +278,11 @@
     		enableFiltering: true,
             columnDefs:
         	[
-              { name:'Nombre', field: 'nombre' },
+              { 
+            	  name:'Nombre',
+            	  width: '150',
+            	  cellTemplate:'<p align="center" title="{{row.entity.nombre}}">{{row.entity.nombre}}</p>'
+    		  },
               { name:'Razón Social', field: 'razonSocial' },
               { name:'Url', field: 'nombreTenant'},
               { name:'Teléfono', field: 'telefono' },

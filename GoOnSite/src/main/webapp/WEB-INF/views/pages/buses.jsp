@@ -58,7 +58,7 @@
 			  	<div class="form-group">
 				    <label class="control-label col-sm-4" for="cantAsientos">Cant.Asientos:</label>
 				    <div class="col-sm-6">
-				    	<input type="number" class="form-control" name="cantAsientos" ng-model="busForm.cantAsientos" min="1" max="150" required>
+				    	<input type="number" class="form-control" name="cantAsientos" ng-model="busForm.cantAsientos" min="1" max="100" required>
 			    	</div>
 			  	</div>
 		    	<div class="form-group">
@@ -74,7 +74,7 @@
 		  		<div class="form-group">
 			    	<label class="control-label col-sm-4" for="cantAccesibles">Asientos Accesibles:</label>
 			    	<div class="col-sm-6">
-			    		<input type="number" class="form-control" name="cantAccesibles" ng-model="busForm.cantAccesibles"  min="0" value="0" max="150" required>
+			    		<input type="number" class="form-control" name="cantAccesibles" ng-model="busForm.cantAccesibles"  min="0" value="0" max="10" required>
 		    		</div>
 		  		</div>
 		  		<div class="form-group">

@@ -254,18 +254,28 @@ public class ViajeRepository {
 														"ve.cantasientos " +
 													"FROM " +
 													"( " +
-														"SELECT lp.linea_id_linea, lp.paradas_id_parada AS origen FROM " + 
+														"SELECT l.id_parada_origen, l.id_parada_destino, lp.linea_id_linea, lp.paradas_id_parada AS origen FROM " + 
 														"linea_parada lp " +
+														"INNER JOIN linea l " +
+														"ON l.id_linea = lp.linea_id_linea " +
 														"WHERE lp.paradas_id_parada IN (" + lstOrigins + ") " +
+														"AND lp.paradas_id_parada <> l.id_parada_destino " +
 													") AS lpo " +
 													"INNER JOIN " +
 													"( " +
-														"SELECT lp.linea_id_linea, lp.paradas_id_parada AS destino FROM " + 
+														"SELECT l.id_parada_origen, l.id_parada_destino, lp.linea_id_linea, lp.paradas_id_parada AS destino FROM " + 
 														"linea_parada lp " +
+														"INNER JOIN linea l " +
+														"ON l.id_linea = lp.linea_id_linea " +
 														"WHERE lp.paradas_id_parada IN (" + lstDestinatios + ") " +
+														"AND lp.paradas_id_parada <> l.id_parada_origen " +
 													") AS lpd " +
 													"ON lpo.linea_id_linea = lpd.linea_id_linea " +
-													" " +
+													"AND " +
+													"( " +
+														"(lpd.destino <> lpd.id_parada_destino AND lpo.origen < lpd.destino) " +
+														"OR lpd.destino = lpd.id_parada_destino " +
+													") " +
 													"INNER JOIN linea l " +
 													"ON l.id_linea = lpo.linea_id_linea " +
 													" " +

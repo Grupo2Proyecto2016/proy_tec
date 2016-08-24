@@ -55,7 +55,7 @@
 					</div>
 	
 					<div class="form-group">
-						<label class="control-label col-sm-4" for="country">País:</label>
+						<label class="control-label col-sm-4" for="country">País de origen:</label>
 						<div class="col-sm-8">
 							<select name="country" class="form-control"
 								ng-model="companyForm.countryId"
