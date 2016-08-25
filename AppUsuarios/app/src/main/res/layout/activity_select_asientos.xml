@@ -35,7 +35,7 @@ tools:context=".Activity.SelectAsientosActivity">
 
             <ListView
                 android:id="@+id/list_asientos"
-                android:layout_weight="1"
+                android:layout_weight="0.5"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent">
             </ListView>
@@ -45,15 +45,13 @@ tools:context=".Activity.SelectAsientosActivity">
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_marginTop="50dp"
-                android:orientation="vertical"
-                android:weightSum="1">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="80dp"
-                    android:textSize="40dp"
-                    android:gravity="left"
+                    android:layout_height="wrap_content"
+                    android:textSize="30dp"
+                    android:gravity="right"
                     android:textColor="@color/negro"
                     android:id="@+id/infoAsiento" />
                 <Button

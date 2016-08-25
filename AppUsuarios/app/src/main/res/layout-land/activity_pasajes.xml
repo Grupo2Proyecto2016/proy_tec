@@ -60,6 +60,7 @@
                         android:lines="2"
                         android:maxLines="2"
                         android:text="@string/origenBusqueda"
+                        android:textSize="11dp"
                         android:gravity="center"/>
 
                     <TextView
@@ -71,6 +72,7 @@
                         android:lines="2"
                         android:maxLines="2"
                         android:text="@string/destinoBusqueda"
+                        android:textSize="11dp"
                         android:gravity="center"/>
 
                     <TextView
@@ -82,6 +84,7 @@
                         android:lines="2"
                         android:maxLines="2"
                         android:text="@string/fechaPartida"
+                        android:textSize="11dp"
                         android:gravity="center"/>
 
                     <TextView
@@ -93,6 +96,7 @@
                         android:lines="2"
                         android:maxLines="2"
                         android:text="@string/asiento"
+                        android:textSize="11dp"
                         android:gravity="center"/>
 
                     <TextView
@@ -104,6 +108,7 @@
                         android:maxLines="2"
                         android:textStyle="bold"
                         android:text="@string/precio"
+                        android:textSize="11dp"
                         android:gravity="center"/>
 
                     <TextView
@@ -115,6 +120,7 @@
                         android:maxLines="2"
                         android:textStyle="bold"
                         android:text="@string/estado"
+                        android:textSize="11dp"
                         android:gravity="center"/>
 
                 </TableRow>

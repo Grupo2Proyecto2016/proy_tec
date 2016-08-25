@@ -1,6 +1,9 @@
 <resources>
-    <string name="app_name">undiaantes</string>
-    <string name="WSServer">http://10.0.3.2:8080/GoOnServices/</string>
+    <string name="app_name">jjoo</string>
+    <!--<string name="app_name">palacio</string>-->
+    <!--<string name="WSServer">http://10.0.3.2:8080/GoOnServices/</string>-->
+    <string name="WSServer">http://proyecto.onmypc.org:8080/GoOnServices/</string>
+    <string name="app_label">GoOnUsuarios JJOO</string>
     <string name="action_settings">Configuración</string>
     <string name="action_viajes">Mis Viajes</string>
     <string name="action_gps">Gps</string>
@@ -8,8 +11,6 @@
     <string name="action_sucursales">Sucursales</string>
     <string name="action_info">Info</string>
     <string name="action_calcular">Calcular</string>
-    <string name="action_opcion2">Opcion 2</string>
-    <string name="rockBla">rockB</string>
     <string name="error_timeout">Tiempo de espera agotado, Intente nuevamente</string>
     <string name="error_conexion">Error en la conexión, Intente nuevamente</string>
     <string name="title_activity_login">Login</string>
@@ -38,6 +39,7 @@
     <string name="mensajeRegistro">"Registro de usuarios"</string>
     <string name="nombreRegistro">"Nombre"</string>
     <string name="apellidoRegistro">"Apellido"</string>
+    <string name="ciRegistro">"Cédula"</string>
     <string name="fecNacRegistro">"Fecha de Nacimiento"</string>
     <string name="correoRegistro">"Correo</string>
     <string name="direccionRegistro">"Dirección"</string>
@@ -91,4 +93,6 @@
     <string name="searchTravels">"/searchTravels"</string>
     <string name="preBuyTickets">"/preBuyTicket"</string>
     <string name="appConfirmTickets">"/appConfirmTicket"</string>
+    <string name="getLastTravelLocation">"/getLastTravelLocation"</string>
+    <string name="title_activity_maps">Map</string>
 </resources>

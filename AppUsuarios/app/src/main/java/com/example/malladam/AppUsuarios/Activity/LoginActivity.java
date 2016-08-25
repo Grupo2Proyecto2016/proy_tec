@@ -190,10 +190,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
     }
-    private Boolean isCredencialesValidas(String user, String pass) {
-        return dbManager.validarUsuario(user, pass);
-    }
-
 
 
     private void WSconsultarValidezCredenciales(final String user, final String pass) throws JSONException, TimeoutException, ExecutionException{
@@ -223,7 +219,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             Log.d("el ERROR del token es ",volleyError.toString());
                         }
                     }, null);
-            Thread.sleep(10000);
+            Thread.sleep(8000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -360,6 +356,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            startActivityAfterCleanup(BusquedaActivity.class);
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 
     private void startActivityAfterCleanup(Class<?> cls) {
         Intent intent = new Intent(getApplicationContext(), cls);

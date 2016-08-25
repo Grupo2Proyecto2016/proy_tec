@@ -1,7 +1,6 @@
 package com.example.malladam.AppGuarda;
 
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,12 +13,11 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.malladam.AppGuarda.Activity.QrActivity;
 import com.example.malladam.AppGuarda.adapters.PasajeArrayAdapter;
 import com.example.malladam.AppGuarda.models.AsientoActivo;
 import com.example.malladam.AppGuarda.models.Empresa;
 import com.example.malladam.AppGuarda.models.GroupPasajeDT;
-import com.example.malladam.AppGuarda.models.PasajeDataType;
+import com.example.malladam.AppGuarda.utils.DataBaseManager;
 import com.example.malladam.AppGuarda.utils.MenuTintUtils;
 
 import java.util.ArrayList;
@@ -43,8 +41,6 @@ public class AsientosFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_asientos, container, false);
-
-
     }
 
     @Override

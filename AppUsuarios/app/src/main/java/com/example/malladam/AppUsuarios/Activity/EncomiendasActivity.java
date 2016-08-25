@@ -17,7 +17,9 @@ import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,8 +39,10 @@ import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.malladam.AppUsuarios.DataBaseManager;
@@ -47,8 +51,17 @@ import com.example.malladam.AppUsuarios.adapters.VolleyS;
 import com.example.malladam.AppUsuarios.models.Empresa;
 import com.example.malladam.AppUsuarios.models.Encomienda;
 import com.example.malladam.AppUsuarios.models.Terminal;
+import com.example.malladam.AppUsuarios.utils.DirectionsJSONParser;
 import com.example.malladam.AppUsuarios.utils.MenuTintUtils;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -72,30 +85,36 @@ import java.util.TimeZone;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
-public class EncomiendasActivity extends AppCompatActivity {
+public class EncomiendasActivity extends AppCompatActivity  implements OnMapReadyCallback {
 
-    int intentosLogin = 0;
+    private int intentosLogin = 0;
     private Empresa empresa;
-    Spinner spinnerOrigen, spinnerDestino;
-    EditText mAlto, mLargo, mAncho, mPeso;
-    TextView mPrecio, mTextPrecio;
-    List listTerminales;
-    ArrayAdapter arrayAdapter;
+    private Spinner spinnerOrigen, spinnerDestino;
+    private EditText mAlto, mLargo, mAncho, mPeso;
+    private TextView mPrecio, mTextPrecio;
+    private List listTerminales;
+    private ArrayAdapter arrayAdapter;
     private VolleyS volley;
-    private String urlgetTerminales,urlCalcPackage,urlUserPackages, urlToken;
-    List<Terminal> terminales = new ArrayList<Terminal>();
-    LatLng latLngOrigen, latLngDestino;
-    Integer distanceEnc;
-    float volumeEnc;
-    String alto, largo, ancho, peso;
+    private String urlgetTerminales,urlCalcPackage,urlUserPackages, urlToken, urlGetUbicacionViaje;
+    private List<Terminal> terminales = new ArrayList<Terminal>();
+    private LatLng latLngOrigen, latLngDestino;
+    private Integer distanceEnc;
+    private float volumeEnc;
+    private String alto, largo, ancho, peso;
     //View focusView = mPeso;
-    TextView mOrigenEnc,mDestinoEnc, mFechaEnc, mCiEmiEnc, mCiRecEnc, mPrecioEnc, mEstadoEnc;
-    TextView mOrigenEncAUX,mDestinoEncAUX, mFechaEncAUX, mCiEmiEncAUX, mCiRecEncAUX, mPrecioEncAUX, mEstadoEncAUX;
-    TableLayout mTableLayout;
-    TableRow mTableRow;
-    DataBaseManager dbManager;
+    private TextView mOrigenEnc,mDestinoEnc, mFechaEnc, mCiEmiEnc, mCiRecEnc, mPrecioEnc, mEstadoEnc;
+    private TextView mOrigenEncAUX,mDestinoEncAUX, mFechaEncAUX, mCiEmiEncAUX, mCiRecEncAUX, mPrecioEncAUX, mEstadoEncAUX;
+    private TableLayout mTableLayout;
+    private TableRow mTableRow;
+    private DataBaseManager dbManager;
     private View mProgressView;
-    Handler mHandler;
+    private Handler mHandler;
+    private String idViajeActual;
+    private LatLng ubicacion = new LatLng(0,0);
+    private PopupWindow pw;
+    private GoogleMap mMap;
+    private Marker mActualMarker;
+    private List<LatLng> ubicParadas = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +142,7 @@ public class EncomiendasActivity extends AppCompatActivity {
         urlCalcPackage = getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)+getResources().getString(R.string.calcPackage);
         urlUserPackages = getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)+getResources().getString(R.string.userPackages);
         urlToken = getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)+getResources().getString(R.string.auth);
+        urlGetUbicacionViaje = getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)+getResources().getString(R.string.getLastTravelLocation);
         volley = volley.getInstance(this);
         ///////WS///////
 
@@ -177,7 +197,7 @@ public class EncomiendasActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_encomiendas, menu);
         MenuTintUtils menuTintUtils = new MenuTintUtils();
-        menuTintUtils.tintAllIcons(menu,Color.parseColor(empresa.getColorHeader()));
+        menuTintUtils.tintAllIcons(menu,Color.parseColor(empresa.getColorTextHeader()));
         return true;
     }
 
@@ -194,6 +214,16 @@ public class EncomiendasActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            startActivityAfterCleanup(BusquedaActivity.class);
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 
     private void startActivityAfterCleanup(Class<?> cls) {
         Intent intent = new Intent(getApplicationContext(), cls);
@@ -330,11 +360,12 @@ public class EncomiendasActivity extends AppCompatActivity {
                             terminal.setEs_peaje(false);
                             terminales.add(terminal);
                         }
+
+                        mProgressView.setVisibility(View.GONE);
                         if(terminales.isEmpty()){
                             Toast.makeText(EncomiendasActivity.this, "Error al obtener las terminales desponibles", Toast.LENGTH_LONG).show();
                         }else{
                             listTerminales=covertirTerminalesAlistaSpinner(terminales);
-                            mProgressView.setVisibility(View.GONE);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -449,33 +480,25 @@ public class EncomiendasActivity extends AppCompatActivity {
                 //Parse data
                 response += temp;
             }
-
             //Close the reader, stream & connection
             bReader.close();
             inStream.close();
             urlConnection.disconnect();
-
             //Sortout JSONresponse
             JSONObject object = (JSONObject) new JSONTokener(response).nextValue();
             JSONArray array = object.getJSONArray("routes");
             //Log.d("JSON","array: "+array.toString());
-
             //Routes is a combination of objects and arrays
             JSONObject routes = array.getJSONObject(0);
             //Log.d("JSON","routes: "+routes.toString());
-
             //String summary = routes.getString("summary");
             //Log.d("JSON","summary: "+summary);
-
             JSONArray legs = routes.getJSONArray("legs");
             //Log.d("JSON","legs: "+legs.toString());
-
             JSONObject steps = legs.getJSONObject(0);
             //Log.d("JSON","steps: "+steps.toString());
-
             JSONObject distance = steps.getJSONObject("distance");
             //Log.d("JSON","distance: "+distance.toString());
-
             //String sDistance = distance.getString("text");
             int iDistance = distance.getInt("value")/1000;
 
@@ -554,6 +577,8 @@ public class EncomiendasActivity extends AppCompatActivity {
                 mCiEmiEncAUX = new TextView(this);
                 mCiRecEncAUX = new TextView(this);
                 mPrecioEncAUX = new TextView(this);
+                mOrigenEncAUX = new TextView(this);
+                mDestinoEncAUX = new TextView(this);
 
                 mCiEmiEncAUX.setText(String.valueOf(item.getCiEmisor()));
                 mCiRecEncAUX.setText(String.valueOf(item.getCiReceptor()));
@@ -566,15 +591,22 @@ public class EncomiendasActivity extends AppCompatActivity {
                 mCiEmiEncAUX.setGravity(Gravity.CENTER);
                 mCiRecEncAUX.setGravity(Gravity.CENTER);
                 mPrecioEncAUX.setGravity(Gravity.RIGHT);
+
+                mCiEmiEncAUX.setTextSize(10);
+                mCiRecEncAUX.setTextSize(10);
+                mPrecioEncAUX.setTextSize(10);
+
+                mOrigenEncAUX.setText(reducir(item.getOrigen(), 30));
+                mDestinoEncAUX.setText(reducir(item.getDestino(), 30));
+
+            }else{
+                mOrigenEncAUX.setText(reducir(item.getOrigen(), 20));
+                mDestinoEncAUX.setText(reducir(item.getDestino(), 20));
             }
 
-            mOrigenEncAUX = new TextView(this);
-            mDestinoEncAUX = new TextView(this);
             mFechaEncAUX = new TextView(this);
             mEstadoEncAUX = new TextView(this);
 
-            mOrigenEncAUX.setText(item.getOrigen());
-            mDestinoEncAUX.setText(item.getDestino());
             mFechaEncAUX.setText(convertirTimestampADateLocal(item.getFecha()));
 
             switch (item.getEstado()){
@@ -582,7 +614,7 @@ public class EncomiendasActivity extends AppCompatActivity {
                     mEstadoEncAUX.setText("Ingresada");
                 break;
                 case "2":
-                    mEstadoEncAUX.setText("En camino");
+                    mEstadoEncAUX.setText("En viaje");
                 break;
                 case "3":
                     mEstadoEncAUX.setText("Transportada");
@@ -595,6 +627,11 @@ public class EncomiendasActivity extends AppCompatActivity {
                 break;
             }
 
+            mOrigenEncAUX.setTextSize(10);
+            mDestinoEncAUX.setTextSize(10);
+            mFechaEncAUX.setTextSize(10);
+            mEstadoEncAUX.setTextSize(10);
+
             mOrigenEncAUX.setGravity(Gravity.LEFT);
             mDestinoEncAUX.setGravity(Gravity.LEFT);
             mFechaEncAUX.setGravity(Gravity.CENTER);
@@ -604,6 +641,29 @@ public class EncomiendasActivity extends AppCompatActivity {
             mDestinoEncAUX.setTextColor(Color.parseColor(empresa.getColorText()));
             mFechaEncAUX.setTextColor(Color.parseColor(empresa.getColorText()));
             mEstadoEncAUX.setTextColor(Color.parseColor(empresa.getColorText()));
+
+
+            if(item.getEstado()=="2") {
+                mEstadoEncAUX.setTextColor(Color.BLUE);
+                mEstadoEncAUX.setTag(item.getIdViaje());
+                mEstadoEncAUX.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        String idViaje = (String) v.getTag();
+                        try {
+                            idViajeActual = idViaje;
+                            WSgetUbicacionDelViaje(idViaje, dbManager.getTokenLogueado(), true);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (TimeoutException e) {
+                            e.printStackTrace();
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
 
 
             mTableRow.addView(mOrigenEncAUX);
@@ -633,6 +693,15 @@ public class EncomiendasActivity extends AppCompatActivity {
                 System.currentTimeMillis(),
                 DateUtils.MINUTE_IN_MILLIS); DIFERENCIA DE DIAS ENTRE HOY Y TIMESTAMP*/
         return  localTime;
+    }
+
+
+    private String reducir(String cadena, int tamanio){
+        String retorno=cadena;
+        if (cadena.length() > tamanio){
+            retorno = cadena.substring(0,tamanio-3).concat("...");
+        }
+        return retorno;
     }
 
 
@@ -679,6 +748,369 @@ public class EncomiendasActivity extends AppCompatActivity {
             }
         };
         volley.addToQueue(request);
+    }
+
+
+private void WSgetUbicacionDelViaje(final String idViaje, final String token, final Boolean todo) throws JSONException, TimeoutException, ExecutionException {
+
+    JsonObjectRequest jsonReq = new JsonObjectRequest(Request.Method.GET, urlGetUbicacionViaje + "?travelId=" + String.valueOf(idViaje),null,
+            new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Log.d("WSubicacionDelViaje OK", response.toString());
+                    if(todo) {
+                        List<LatLng> ubicParadas = new ArrayList<LatLng>();
+                        try {
+                            JSONObject viaje = response.getJSONObject("viaje");
+                            JSONObject linea = viaje.getJSONObject("linea");
+                            JSONArray paradas = linea.getJSONArray("paradas");
+
+                            for (int i = 0; i < paradas.length(); i++) {
+                                JSONObject jsonObject = (JSONObject) paradas.get(i);
+                                LatLng ubicParada = new LatLng(jsonObject.getDouble("latitud"), jsonObject.getDouble("longitud"));
+                                ubicParadas.add(ubicParada);
+                            }
+
+                            ubicacion = new LatLng(response.getDouble("latitud"), response.getDouble("longitud"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        showPopupUbicacion(ubicParadas);
+                    }
+                    else{
+                        try {
+                            ubicacion = new LatLng(response.getDouble("latitud"), response.getDouble("longitud"));
+                            actualizarUbicacionMapa();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+            }, new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError volleyError) {
+            try {
+                Log.d("UbicacionViaje ERROR ", volleyError.toString());
+                if( volleyError instanceof AuthFailureError) {
+                    refrescarLoginGetUbicacionDelViaje(dbManager.getUserLogueado(), dbManager.getPassLogueado(), idViaje, todo);
+                } else if (volleyError instanceof TimeoutError || volleyError instanceof NoConnectionError) {
+                    Toast.makeText(EncomiendasActivity.this, getResources().getString(R.string.error_timeout), Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(EncomiendasActivity.this, "Error al obtener la ubicacion del bus", Toast.LENGTH_LONG).show();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (TimeoutException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+    }) {
+        @Override
+        public Map<String, String> getHeaders() throws AuthFailureError {
+            HashMap<String, String> headers = new HashMap<String, String>();
+            headers.put("Content-Type", "application/json; charset=utf-8");
+            if (token != null) {
+                headers.put("Authorization", token);
+            }
+            return headers;
+        }
+    };
+    // Adding request to request queue
+    volley.addToQueue(jsonReq);
+    }
+
+
+    private void showPopupUbicacion(List<LatLng> ubicParadas) {
+
+        LayoutInflater inflater = (LayoutInflater) EncomiendasActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.popup_maps, (ViewGroup) findViewById(R.id.popupMaps));
+        Display display = getWindowManager().getDefaultDisplay();
+
+        pw = new PopupWindow(layout, display.getWidth() - 120, display.getHeight() - 120);
+        pw.showAtLocation(layout, Gravity.CENTER, 0, 0);
+
+        ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapPopup)).getMapAsync(this);
+
+        this.ubicParadas = ubicParadas;
+
+        Button buttonOk=(Button)layout.findViewById(R.id.maps_ok);
+        buttonOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SupportMapFragment f = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapPopup);
+                if (f != null)
+                    getSupportFragmentManager().beginTransaction().remove(f).commit();
+                pw.dismiss();
+            }
+        });
+        //////////////////
+        pw.showAtLocation(layout, Gravity.CENTER, 0, 0);
+    }
+
+
+    private void refrescarLoginGetUbicacionDelViaje(final String user, final String pass, final String idViaje, final Boolean todo) throws JSONException, TimeoutException, ExecutionException {
+
+        JSONObject jsonBody = new JSONObject();
+        jsonBody.put("username", user);
+        jsonBody.put("password", pass);
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, urlToken, jsonBody, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    intentosLogin = 0;
+                    dbManager.registrarLogin(response.getString("token"), user, pass);
+                    WSgetUbicacionDelViaje(idViaje, response.getString("token"), todo);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (TimeoutException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Log.d("el ERROR del token es ", volleyError.toString());
+                if (intentosLogin >= 2) {
+                    Intent intent = new Intent(EncomiendasActivity.this, LoginActivity.class);
+                    Toast.makeText(EncomiendasActivity.this, getResources().getString(R.string.tokenInvalido), Toast.LENGTH_LONG).show();
+                    startActivity(intent);
+                } else intentosLogin++;
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
+        volley.addToQueue(request);
+    }
+
+
+    public void actualizarUbicacionMapa() {
+
+        if(mActualMarker != null){
+            mActualMarker.remove();
+        }
+        mActualMarker = mMap.addMarker(new MarkerOptions()
+                .position(ubicacion)
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.position_indicator)));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(ubicacion, mMap.getCameraPosition().zoom));
+    }
+
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        if(mActualMarker != null){
+            mActualMarker.remove();
+        }
+        mActualMarker = mMap.addMarker(new MarkerOptions()
+                .position(ubicacion)
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.position_indicator)));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(ubicacion, 13.0f));
+
+        if(ubicParadas.size() >= 2) {
+            LatLng origin = ubicParadas.get(0);
+            LatLng dest = ubicParadas.get(ubicParadas.size() - 1);
+
+            // Getting URL to the Google Directions API
+            String url = getDirectionsUrl(origin, dest);
+
+            DownloadTask downloadTask = new DownloadTask();
+
+            // Start downloading json data from Google Directions API
+            downloadTask.execute(url);
+        }
+
+        ActualizarUbicacion actualizarUbicacion = new ActualizarUbicacion();
+        actualizarUbicacion.execute();
+    }
+
+    //comienza auxiliares dibujar ruta
+    private String getDirectionsUrl(LatLng origin,LatLng dest){
+
+        // Origin of route
+        String str_origin = "origin="+origin.latitude+","+origin.longitude;
+
+        // Destination of route
+        String str_dest = "destination="+dest.latitude+","+dest.longitude;
+
+        // Sensor enabled
+        String sensor = "sensor=false";
+
+        // Waypoints
+        String waypoints = "";
+        for(int i=1;i<ubicParadas.size()-1;i++){
+            LatLng point  = ubicParadas.get(i);
+            if(i==1)
+                waypoints = "waypoints=";
+            waypoints += point.latitude + "," + point.longitude + "|";
+        }
+
+        // Building the parameters to the web service
+        String parameters = str_origin+"&"+str_dest+"&"+sensor+"&"+waypoints;
+
+        // Output format
+        String output = "json";
+
+        // Building the url to the web service
+        String url = "https://maps.googleapis.com/maps/api/directions/"+output+"?"+parameters;
+
+        return url;
+    }
+
+    private String downloadUrl(String strUrl) throws IOException{
+        String data = "";
+        InputStream iStream = null;
+        HttpURLConnection urlConnection = null;
+        try{
+            URL url = new URL(strUrl);
+
+            // Creating an http connection to communicate with url
+            urlConnection = (HttpURLConnection) url.openConnection();
+
+            // Connecting to url
+            urlConnection.connect();
+
+            // Reading data from url
+            iStream = urlConnection.getInputStream();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
+
+            StringBuffer sb  = new StringBuffer();
+
+            String line = "";
+            while( ( line = br.readLine())  != null){
+                sb.append(line);
+            }
+
+            data = sb.toString();
+
+            br.close();
+
+        }catch(Exception e){
+
+        }finally{
+            iStream.close();
+            urlConnection.disconnect();
+        }
+        return data;
+    }
+
+
+    // Fetches data from url passed
+    private class DownloadTask extends AsyncTask<String, Void, String>{
+
+        // Downloading data in non-ui thread
+        @Override
+        protected String doInBackground(String... url) {
+
+            // For storing data from web service
+
+            String data = "";
+
+            try{
+                // Fetching the data from web service
+                data = downloadUrl(url[0]);
+            }catch(Exception e){
+                Log.d("Background Task",e.toString());
+            }
+            return data;
+        }
+
+        // Executes in UI thread, after the execution of
+        // doInBackground()
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            ParserTask parserTask = new ParserTask();
+
+            // Invokes the thread for parsing the JSON data
+            parserTask.execute(result);
+        }
+    }
+
+    /** A class to parse the Google Places in JSON format */
+    private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String,String>>> > {
+
+        @Override
+        protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
+
+            JSONObject jObject;
+            List<List<HashMap<String, String>>> routes = null;
+
+            try{
+                jObject = new JSONObject(jsonData[0]);
+                DirectionsJSONParser parser = new DirectionsJSONParser();
+
+                // Starts parsing data
+                routes = parser.parse(jObject);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+            return routes;
+        }
+
+
+        @Override
+        protected void onPostExecute(List<List<HashMap<String, String>>> result) {
+
+            ArrayList<LatLng> points = null;
+            PolylineOptions lineOptions = null;
+
+            for(int i=0;i<result.size();i++){
+                points = new ArrayList<LatLng>();
+                lineOptions = new PolylineOptions();
+
+                List<HashMap<String, String>> path = result.get(i);
+
+                for(int j=0;j<path.size();j++){
+                    HashMap<String,String> point = path.get(j);
+
+                    double lat = Double.parseDouble(point.get("lat"));
+                    double lng = Double.parseDouble(point.get("lng"));
+                    LatLng position = new LatLng(lat, lng);
+
+                    points.add(position);
+                }
+
+                lineOptions.addAll(points);
+                lineOptions.width(12);
+                lineOptions.color(Color.parseColor("#05b1fb"));
+                lineOptions.geodesic(true);
+            }
+
+            mMap.addPolyline(lineOptions);
+        }
+    }
+    //fin auxiliares dibijar ruta
+
+
+    private class ActualizarUbicacion extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... url) {
+
+            try{
+                while(true) {
+                    WSgetUbicacionDelViaje(idViajeActual, dbManager.getTokenLogueado(), false);
+                    Thread.sleep(5000);
+                }
+            }catch(Exception e){
+            }
+            return "";
+        }
     }
 
 }

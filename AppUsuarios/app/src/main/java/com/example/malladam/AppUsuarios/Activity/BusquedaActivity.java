@@ -79,7 +79,7 @@ public class BusquedaActivity extends AppCompatActivity implements NumberPicker.
     private Button mDestino;
     private Button mOrigen;
     private Button mButtonBuscar;
-    private String urlgetCompany, urlgetStations,urlGetFilteredStations, urlSearchTravels;
+    private String urlgetStations,urlGetFilteredStations, urlSearchTravels;
     private VolleyS volley;
     private Empresa empresa;
     private GoogleMap mMap;
@@ -159,16 +159,22 @@ public class BusquedaActivity extends AppCompatActivity implements NumberPicker.
         mButtonBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //VALIDAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!VALIDAR
-                try {
-                    WSbuscarViajes(currentDate,currentDate,paradasOrigen, paradasDestino);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (TimeoutException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
+                if(currentDate == null)
+                    Toast.makeText(BusquedaActivity.this, "Ingrese la fecha de viaje", Toast.LENGTH_LONG).show();
+                else if(paradasDestino == null || paradasDestino.isEmpty())
+                    Toast.makeText(BusquedaActivity.this, "Ingrese el destino del viaje", Toast.LENGTH_LONG).show();
+                else if(paradasOrigen == null || paradasOrigen.isEmpty())
+                    Toast.makeText(BusquedaActivity.this, "Ingrese el origen del viaje", Toast.LENGTH_LONG).show();
+                else {
+                    try {
+                        WSbuscarViajes(currentDate, currentDate, paradasOrigen, paradasDestino);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (TimeoutException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -214,9 +220,6 @@ public class BusquedaActivity extends AppCompatActivity implements NumberPicker.
         toolbar.setTitleTextColor(Color.parseColor(empresa.getColorTextHeader()));
         toolbar.setNavigationIcon(upArrow);
         setSupportActionBar(toolbar);
-
-
-
 
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
@@ -419,7 +422,18 @@ public class BusquedaActivity extends AppCompatActivity implements NumberPicker.
             }
         }
 
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(-34.83346,-56.16735), 13.0f));//montevideo
+        LatLng centroMapa = new LatLng(-34.83346,-56.16735);//montevideo
+        if(origenPress) {
+            if(!paradasByDestino.isEmpty()) {
+                centroMapa = new LatLng(paradasByDestino.get(0).getLatitud(), paradasByDestino.get(0).getLongitud());
+            }
+        }else{
+            if(!paradas.isEmpty()) {
+                centroMapa = new LatLng(paradas.get(0).getLatitud(), paradas.get(0).getLongitud());
+            }
+        }
+
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(centroMapa, 13.0f));
         mMap.setOnInfoWindowClickListener(this);
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
@@ -459,10 +473,12 @@ public class BusquedaActivity extends AppCompatActivity implements NumberPicker.
         buttonOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(origenPress){
-                    paradasOrigen = obtenerParadasCercanasApunto(radiusInMeters, puntoSeleccionado, paradasByDestino);
-                }else{
-                    paradasDestino = obtenerParadasCercanasApunto(radiusInMeters, puntoSeleccionado, paradas);
+                if(puntoSeleccionado!=null){
+                    if(origenPress){
+                        paradasOrigen = obtenerParadasCercanasApunto(radiusInMeters, puntoSeleccionado, paradasByDestino);
+                    }else{
+                        paradasDestino = obtenerParadasCercanasApunto(radiusInMeters, puntoSeleccionado, paradas);
+                    }
                 }
                 SupportMapFragment f = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapPopup);
                 if (f != null)
@@ -632,6 +648,7 @@ public class BusquedaActivity extends AppCompatActivity implements NumberPicker.
         }
         return paradasCercanas;
     }
+
 
     private JSONArray getIdByParadas (List<Parada> paradas) throws JSONException {
         JSONArray jsonArray = new JSONArray();

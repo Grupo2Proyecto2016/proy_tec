@@ -18,7 +18,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.malladam.AppGuarda.adapters.PageAdapter;
 import com.example.malladam.AppGuarda.models.Empresa;
+import com.example.malladam.AppGuarda.utils.DataBaseManager;
 import com.example.malladam.AppGuarda.utils.MenuTintUtils;
 
 

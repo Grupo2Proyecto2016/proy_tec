@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.example.malladam.AppGuarda.Activity.LoginActivity;
 import com.example.malladam.AppGuarda.Activity.MainActivity;
+import com.example.malladam.AppGuarda.utils.DataBaseManager;
 
 public class ManejadorInicio extends AppCompatActivity {
 

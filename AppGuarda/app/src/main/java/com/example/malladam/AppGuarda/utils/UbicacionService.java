@@ -14,6 +14,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Vibrator;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -25,15 +26,25 @@ import com.android.volley.VolleyError;
 
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.malladam.AppGuarda.Activity.LoginActivity;
-import com.example.malladam.AppGuarda.DataBaseManager;
 import com.example.malladam.AppGuarda.R;
 import com.example.malladam.AppGuarda.adapters.VolleyS;
+import com.example.malladam.AppGuarda.models.Parada;
 import com.google.android.gms.maps.model.LatLng;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
@@ -47,8 +58,7 @@ public class UbicacionService extends Service {
     private int intentosLogin = 0;
     private DataBaseManager dbManager;
     private Location locationActual;
-    private boolean status;
-
+    private List<Parada> paradasDelViaje = new ArrayList<>();
     private static UbicacionService sInstance;
 
 
@@ -76,6 +86,7 @@ public class UbicacionService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         //Log.d(TAG, "Servicio iniciado...");
         dbManager = new DataBaseManager(getApplicationContext());
+        paradasDelViaje = dbManager.getParadasDelViaje();
 
         final String id_viaje = String.valueOf(dbManager.getViajeActual().getId_viaje());
         final String urlUbic = intent.getStringExtra("urlUbic");
@@ -87,16 +98,19 @@ public class UbicacionService extends Service {
         locListener = new LocationListener() {
             public void onLocationChanged(Location location) {
 
-                locationActual = location;
-                dbManager.insertarUbicacion(new LatLng(location.getLatitude(), location.getLongitude()));
-                try {
-                    WScomunicarLocationChanged(locationActual, id_viaje, urlUbic, token, urlToken);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (TimeoutException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
+                if(dbManager.getViajeActual()!=null){
+                    locationActual = location;
+                    dbManager.insertarUbicacion(new LatLng(location.getLatitude(), location.getLongitude()));
+                    try {
+                        WScomunicarLocationChanged(locationActual, id_viaje, urlUbic, token, urlToken);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (TimeoutException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                    logicaDeParadas(location);
                 }
             }
 
@@ -127,6 +141,7 @@ public class UbicacionService extends Service {
 
         return START_REDELIVER_INTENT;
     }
+
 
 
     private void WScomunicarLocationChanged(Location location, String id_viaje, final String urlUbic, final String token, final String urlToken) throws JSONException, TimeoutException, ExecutionException {
@@ -220,4 +235,123 @@ public class UbicacionService extends Service {
         volley.addToQueue(request);
     }
 
+    private void logicaDeParadas(Location ubicacionActual) {
+        int id_proxParada = dbManager.getIdProxParada();
+        Parada proximaParada = getParadaById(paradasDelViaje, id_proxParada);
+        if(proximaParada != null){
+            LatLng latlngProxParada = new LatLng(proximaParada.getLatitud(), proximaParada.getLongitud());
+            int distanciaActual_ProxParada = GetDistance(new LatLng(ubicacionActual.getLatitude(), ubicacionActual.getLongitude()),
+                    latlngProxParada);
+            if(distanciaActual_ProxParada <100){
+                if(dbManager.liberanAsientosByParadaDestino(id_proxParada))
+                    Toast.makeText(UbicacionService.this, "Parar en "+distanciaActual_ProxParada +" mts", Toast.LENGTH_SHORT).show();
+            }
+            if(distanciaActual_ProxParada <= dbManager.getDistProxParada() ){ //me sigo acercando a prox parada
+                dbManager.setDistProxParada(distanciaActual_ProxParada);
+            }
+            else if(distanciaActual_ProxParada > dbManager.getDistProxParada()*1.5){
+                dbManager.setIdUltParada(id_proxParada);
+                proximaParada = getSiguienteParadaById(paradasDelViaje, id_proxParada);
+                latlngProxParada = new LatLng(proximaParada.getLatitud(), proximaParada.getLongitud());
+                distanciaActual_ProxParada = GetDistance(new LatLng(ubicacionActual.getLatitude(), ubicacionActual.getLongitude()),
+                        latlngProxParada);
+
+                dbManager.setIdProxParada(proximaParada.getId_parada());
+                dbManager.setDistProxParada(distanciaActual_ProxParada);
+                dbManager.eliminarAsientosByParadaDestino(id_proxParada);
+            }
+        }
+
+    }
+
+    private int GetDistance(LatLng src, LatLng dest) {
+
+        StringBuilder urlString = new StringBuilder();
+        urlString.append("http://maps.google.com/maps/api/directions/json?");
+        urlString.append("origin=");//from
+        urlString.append( Double.toString(src.latitude));
+        urlString.append(",");
+        urlString.append( Double.toString(src.longitude));
+        urlString.append("&destination=");//to
+        urlString.append( Double.toString(dest.latitude));
+        urlString.append(",");
+        urlString.append( Double.toString(dest.longitude));
+        urlString.append("&mode=driving&sensor=true");
+        Log.d("xxx","URL="+urlString.toString());
+
+        // get the JSON And parse it to get the directions data.
+        HttpURLConnection urlConnection= null;
+        URL url = null;
+
+        try {
+            url = new URL(urlString.toString());
+
+            urlConnection=(HttpURLConnection)url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setDoOutput(true);
+            urlConnection.setDoInput(true);
+            urlConnection.connect();
+
+            InputStream inStream = urlConnection.getInputStream();
+            BufferedReader bReader = new BufferedReader(new InputStreamReader(inStream));
+
+            String temp, response = "";
+            while((temp = bReader.readLine()) != null){
+                //Parse data
+                response += temp;
+            }
+
+            //Close the reader, stream & connection
+            bReader.close();
+            inStream.close();
+            urlConnection.disconnect();
+
+            //Sortout JSONresponse
+            JSONObject object = (JSONObject) new JSONTokener(response).nextValue();
+            JSONArray array = object.getJSONArray("routes");
+            //Log.d("JSON","array: "+array.toString());
+            //Routes is a combination of objects and arrays
+            JSONObject routes = array.getJSONObject(0);
+            //Log.d("JSON","routes: "+routes.toString());
+            //String summary = routes.getString("summary");
+            //Log.d("JSON","summary: "+summary);
+            JSONArray legs = routes.getJSONArray("legs");
+            //Log.d("JSON","legs: "+legs.toString());
+            JSONObject steps = legs.getJSONObject(0);
+            //Log.d("JSON","steps: "+steps.toString());
+            JSONObject distance = steps.getJSONObject("distance");
+            //Log.d("JSON","distance: "+distance.toString());
+            //String sDistance = distance.getString("text");
+            int iDistance = distance.getInt("value");// /1000
+
+            return iDistance;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    private Parada getParadaById(List<Parada> paradas, int id){
+        for (Parada item: paradas) {
+            if(id == item.getId_parada())
+                return  item;
+        }
+        return null;
+    }
+
+
+    private Parada getSiguienteParadaById(List<Parada> paradas, int id){
+        for (int item = 0; item<=paradas.size()-1;item++ ) {
+            if(id == paradas.get(item).getId_parada()){
+                if(item == paradas.size()-1){
+                    return  paradas.get(item);
+                }
+                return  paradas.get(item+1);
+            }
+        }
+        return paradas.get(paradas.size()-1);//ultima
+    }
 }

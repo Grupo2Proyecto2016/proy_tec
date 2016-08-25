@@ -9,7 +9,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="110dp"
         android:layout_height="110dp"
-        android:src="@drawable/icon"
+        android:src="@mipmap/icon"
         android:layout_marginLeft="24dp"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"

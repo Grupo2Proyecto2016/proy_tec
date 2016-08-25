@@ -104,7 +104,7 @@ public class DataBaseManager {
         db.insert(TABLE_NAME_USUARIOS,null,valores2);
     }
 
-    public ArrayList<Pasaje> obtenerPasajesActivos(String idViaje){
+    /*public ArrayList<Pasaje> obtenerPasajesActivos(String idViaje){
         ArrayList<Pasaje> pasajesActivos = new ArrayList<Pasaje>();
         //CONSULTA SQL
         return  pasajesActivos;
@@ -120,7 +120,7 @@ public class DataBaseManager {
         ArrayList<Pasaje> pasajes = new ArrayList<Pasaje>();
         //CONSULTA SQL
         return  pasajes;
-    }
+    }*/
 
     public Boolean validarUsuario(String usuario, String pass){
         String [] columnas = new String[]{CN_ID_USUARIO};
@@ -138,7 +138,7 @@ public class DataBaseManager {
         String [] columnas = new String[]{CN_USUARIO_SESION};
         Cursor resultado = db.query(TABLE_NAME_SESION, columnas, null,null, null, null, null);
         resultado.moveToFirst();
-        if(!resultado.isAfterLast()) {
+        if(!resultado.isBeforeFirst()) {
             logueado = resultado.getString(resultado.getColumnIndex(CN_USUARIO_SESION));
         }
         return logueado;
@@ -167,7 +167,7 @@ public class DataBaseManager {
         Cursor resultado = db.query(TABLE_NAME_SESION, columnas, CN_USUARIO_SESION+" = ?",
                 new String[]{user}, null, null, null);
         resultado.moveToFirst();
-        if(!resultado.isAfterLast()) {
+        if(!resultado.isBeforeFirst()) {
             token = resultado.getString(resultado.getColumnIndex(CN_TOKEN_SESION));
         }else{
             token = "Sin Determinar";
@@ -177,6 +177,7 @@ public class DataBaseManager {
     }
 
     public void registrarLogin(String token, String usuario, String pass){
+        eliminarLogin();
         ContentValues valores = new ContentValues();
         valores.put(CN_USUARIO_SESION,usuario);
         valores.put(CN_PASS_SESION,pass);

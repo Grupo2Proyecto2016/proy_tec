@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class Viaje {
 
     private int id_viaje;
-    private int lugares;
+    private String lugares;
     private long inicio;
     private int numero;
     private int linea_id_linea;
@@ -25,7 +25,7 @@ public class Viaje {
     public Viaje() {
     }
 
-    public Viaje(int id_viaje, int lugares, long inicio, int numero, int linea_id_linea, int origen, String origen_description, int destino, String destino_description, int vehiculo_id, double valor) {
+    public Viaje(int id_viaje, String lugares, long inicio, int numero, int linea_id_linea, int origen, String origen_description, int destino, String destino_description, int vehiculo_id, double valor) {
         this.id_viaje = id_viaje;
         this.lugares = lugares;
         this.inicio = inicio;
@@ -63,11 +63,11 @@ public class Viaje {
         this.id_viaje = id_viaje;
     }
 
-    public int getLugares() {
+    public String getLugares() {
         return lugares;
     }
 
-    public void setLugares(int lugares) {
+    public void setLugares(String lugares) {
         this.lugares = lugares;
     }
 

@@ -51,7 +51,7 @@ public class StartActivity extends AppCompatActivity {
         refresh = (ImageButton) findViewById(R.id.start_refresh);
         refresh.setVisibility(View.GONE);
 
-        Bitmap icon = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.icon);
+        Bitmap icon = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.mipmap.icon);
         imagen.setImageBitmap(icon);
 
         showProgress(true);
@@ -98,8 +98,8 @@ public class StartActivity extends AppCompatActivity {
                 public void onResponse(JSONObject response) {
                     try {
                         empresa.setNombre(response.getString("nombre"));
-                        empresa.setRut(response.getDouble("rut"));
-                        empresa.setTelefono(response.getDouble("telefono"));
+                        empresa.setRut(response.getString("rut"));
+                        empresa.setTelefono(response.getString("telefono"));
                         empresa.setDireccion(response.getString("direccion"));
                         empresa.setLogo(response.getString("logo").getBytes());
                         JSONObject pais = response.getJSONObject("pais");

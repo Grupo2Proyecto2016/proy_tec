@@ -1,19 +1,13 @@
 package com.example.malladam.AppGuarda;
 
-import android.app.Activity;
-import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
-import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.text.GetChars;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -38,12 +32,20 @@ import com.example.malladam.AppGuarda.adapters.VolleyS;
 import com.example.malladam.AppGuarda.models.Empresa;
 import com.example.malladam.AppGuarda.models.Parada;
 import com.example.malladam.AppGuarda.models.ViajeActual;
-import com.example.malladam.AppGuarda.utils.UbicacionService;
+import com.example.malladam.AppGuarda.utils.DataBaseManager;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -74,6 +76,9 @@ public class FragmentIniciarViaje extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_iniciarviaje, container, false);
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         setHasOptionsMenu(true);
 
@@ -151,7 +156,7 @@ public class FragmentIniciarViaje extends Fragment {
                         viajeActual.setId_vehiculo(vehiculo.getInt("id_vehiculo"));
                         viajeActual.setMatricula_vehiculo(vehiculo.getString("matricula"));
                         viajeActual.setCantAsientos_vehiculo(vehiculo.getInt("cantAsientos"));
-                        viajeActual.setCantParados_vehiculo(vehiculo.getInt("cantParados"));
+                        viajeActual.setCantParados_vehiculo(0);//viajeActual.setCantParados_vehiculo(vehiculo.getInt("cantParados"));
                         viajeActual.setMarca_vehiculo(vehiculo.getString("marca"));
                         viajeActual.setModelo_vehiculo(vehiculo.getString("modelo"));
                         JSONArray paradas = linea.getJSONArray("paradas");
@@ -303,7 +308,14 @@ public class FragmentIniciarViaje extends Fragment {
 
                         dbManager.guardarViajeActual(viajeActual);
                         dbManager.insertarParadasDelViaje(paradasDelViaje);
+                        dbManager.insertarLogicaParadas(paradasDelViaje.get(0).getId_parada(), paradasDelViaje.get(1).getId_parada(),
+                                GetDistance(new LatLng(paradasDelViaje.get(0).getLatitud(), paradasDelViaje.get(0).getLongitud()),
+                                        new LatLng(paradasDelViaje.get(1).getLatitud(), paradasDelViaje.get(1).getLongitud())));
 
+                        //debug
+                        int ult = dbManager.getIdUltParada();
+                        int prox = dbManager.getIdProxParada();
+                        double dist= dbManager.getDistProxParada();
                         Toast.makeText(getActivity(), "Viaje iniciado con éxito", Toast.LENGTH_LONG).show();
 
                         //////////LANZO SERVICIO//////////////
@@ -353,6 +365,83 @@ public class FragmentIniciarViaje extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return false;
+    }
+
+
+    private int GetDistance(LatLng src, LatLng dest) {
+
+        StringBuilder urlString = new StringBuilder();
+        urlString.append("http://maps.google.com/maps/api/directions/json?");
+        urlString.append("origin=");//from
+        urlString.append( Double.toString(src.latitude));
+        urlString.append(",");
+        urlString.append( Double.toString(src.longitude));
+        urlString.append("&destination=");//to
+        urlString.append( Double.toString(dest.latitude));
+        urlString.append(",");
+        urlString.append( Double.toString(dest.longitude));
+        urlString.append("&mode=driving&sensor=true");
+        Log.d("xxx","URL="+urlString.toString());
+
+        // get the JSON And parse it to get the directions data.
+        HttpURLConnection urlConnection= null;
+        URL url = null;
+
+        try {
+            url = new URL(urlString.toString());
+
+            urlConnection=(HttpURLConnection)url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setDoOutput(true);
+            urlConnection.setDoInput(true);
+            urlConnection.connect();
+
+            InputStream inStream = urlConnection.getInputStream();
+            BufferedReader bReader = new BufferedReader(new InputStreamReader(inStream));
+
+            String temp, response = "";
+            while((temp = bReader.readLine()) != null){
+                //Parse data
+                response += temp;
+            }
+
+            //Close the reader, stream & connection
+            bReader.close();
+            inStream.close();
+            urlConnection.disconnect();
+
+            //Sortout JSONresponse
+            JSONObject object = (JSONObject) new JSONTokener(response).nextValue();
+            JSONArray array = object.getJSONArray("routes");
+            //Log.d("JSON","array: "+array.toString());
+
+            //Routes is a combination of objects and arrays
+            JSONObject routes = array.getJSONObject(0);
+            //Log.d("JSON","routes: "+routes.toString());
+
+            //String summary = routes.getString("summary");
+            //Log.d("JSON","summary: "+summary);
+
+            JSONArray legs = routes.getJSONArray("legs");
+            //Log.d("JSON","legs: "+legs.toString());
+
+            JSONObject steps = legs.getJSONObject(0);
+            //Log.d("JSON","steps: "+steps.toString());
+
+            JSONObject distance = steps.getJSONObject("distance");
+            //Log.d("JSON","distance: "+distance.toString());
+
+            //String sDistance = distance.getString("text");
+            int iDistance = distance.getInt("value");
+
+            return iDistance;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
     }
 
 }

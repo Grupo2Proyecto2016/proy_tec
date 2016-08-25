@@ -257,6 +257,7 @@
             android:id="@+id/close"
             android:layout_gravity="center_horizontal"
             android:layout_width="wrap_content"
+            android:background="@color/wallet_bright_foreground_holo_dark"
             android:layout_height="wrap_content"
             android:text="@string/cancelar" />
 
@@ -267,6 +268,7 @@
             android:layout_height="wrap_content"
             android:text="@string/calcular"
             android:layout_alignTop="@+id/close"
+            android:background="@color/wallet_bright_foreground_holo_dark"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
     </RelativeLayout>

@@ -32,7 +32,7 @@
             android:id="@+id/nosotros"
             android:checkable="false"
             android:title="Nosotros"
-            android:icon="@drawable/icon"
+            android:icon="@mipmap/icon"
             >
         </item>
 

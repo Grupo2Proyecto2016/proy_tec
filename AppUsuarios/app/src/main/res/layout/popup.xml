@@ -10,7 +10,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:padding="0dip"
-        android:src="@drawable/icon"
+        android:src="@mipmap/icon"
         android:contentDescription="@string/app_name"/>
 
     <LinearLayout

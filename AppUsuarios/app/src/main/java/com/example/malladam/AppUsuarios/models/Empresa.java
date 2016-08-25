@@ -6,8 +6,8 @@ package com.example.malladam.AppUsuarios.models;
 public class Empresa {
 
     private String nombre;
-    private double rut;
-    private double telefono;
+    private String rut;
+    private String telefono;
     private String direccion;
     private byte[] logo;
     private String logoS;
@@ -38,19 +38,19 @@ public class Empresa {
         this.nombre = nombre;
     }
 
-    public double getRut() {
+    public String getRut() {
         return rut;
     }
 
-    public void setRut(double rut) {
+    public void setRut(String rut) {
         this.rut = rut;
     }
 
-    public double getTelefono() {
+    public String getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(double telefono) {
+    public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
 

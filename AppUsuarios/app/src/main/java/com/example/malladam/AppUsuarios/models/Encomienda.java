@@ -8,6 +8,7 @@ import java.util.Date;
 public class Encomienda {
 
     private String idEncomeinda;
+    private String idViaje;
     private String Origen;
     private String Destino;
     private long Fecha;
@@ -19,8 +20,9 @@ public class Encomienda {
     public Encomienda() {
     }
 
-    public Encomienda(String id, String origen, String destino, long fecha, String ciEmisor, String ciReceptor, float precio, String estado) {
+    public Encomienda(String id, String idViaje, String origen, String destino, long fecha, String ciEmisor, String ciReceptor, float precio, String estado) {
         idEncomeinda = id;
+        this.idViaje=idViaje;
         Origen = origen;
         Destino = destino;
         Fecha = fecha;
@@ -36,6 +38,14 @@ public class Encomienda {
 
     public void setIdEncomeinda(String idEncomeinda) {
         this.idEncomeinda = idEncomeinda;
+    }
+
+    public String getIdViaje() {
+        return idViaje;
+    }
+
+    public void setIdViaje(String idViaje) {
+        this.idViaje = idViaje;
     }
 
     public String getOrigen() {

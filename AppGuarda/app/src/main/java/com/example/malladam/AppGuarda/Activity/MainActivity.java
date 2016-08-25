@@ -40,7 +40,7 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.example.malladam.AppGuarda.DataBaseManager;
+import com.example.malladam.AppGuarda.utils.DataBaseManager;
 import com.example.malladam.AppGuarda.FragmentIniciarViaje;
 import com.example.malladam.AppGuarda.FragmentMain;
 import com.example.malladam.AppGuarda.ManejadorInicio;
@@ -73,8 +73,6 @@ public class MainActivity extends AppCompatActivity {
 
     private Parada paradaOrigen;
     private DataBaseManager dbManager;
-    final Context context = this;
-    public ArrayList<Pasaje> pasajes;
     private VolleyS volley;
     Intent intent;
     private NavigationView navigationView;
@@ -86,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
     private Spinner spinnerDestino;
     private ArrayAdapter arrayAdapter;
     private View mProgressView;
-    private LatLng latLngOrigen, latLngDestino;
     private String urlGetSigPradas, urlFinViaje, urlToken,urlGetTicketValue, urlBuyTicket;
     public Intent intentUbicacion;
     int intentosLogin = 0;
@@ -828,5 +825,8 @@ public class MainActivity extends AppCompatActivity {
         bitmap.setPixels(pixels, 0, w, 0, 0, w, h);
         return bitmap;
     }
+
+
+
 
 }

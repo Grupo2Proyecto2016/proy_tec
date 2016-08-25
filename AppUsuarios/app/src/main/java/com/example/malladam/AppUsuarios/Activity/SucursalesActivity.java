@@ -14,6 +14,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -102,6 +103,7 @@ public class SucursalesActivity extends AppCompatActivity implements OnMapReadyC
         ///////////ACTIONBAR////////////////
     }
 
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -117,6 +119,7 @@ public class SucursalesActivity extends AppCompatActivity implements OnMapReadyC
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(sucursales.get(0).getLatitud(),sucursales.get(0).getLongitud()), 10.0f));
         mMap.setOnInfoWindowClickListener(this);
     }
+
 
     private void WSgetSucursales() throws JSONException, TimeoutException, ExecutionException {
         try {
@@ -167,6 +170,7 @@ public class SucursalesActivity extends AppCompatActivity implements OnMapReadyC
         }
     }
 
+
     ///////////ACTIONBAR////////////////
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -190,6 +194,16 @@ public class SucursalesActivity extends AppCompatActivity implements OnMapReadyC
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            startActivityAfterCleanup(NosotrosActivity.class);
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 
     private void startActivityAfterCleanup(Class<?> cls) {
         Intent intent = new Intent(getApplicationContext(), cls);

@@ -31,6 +31,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -108,6 +109,16 @@ public class NosotrosActivity extends AppCompatActivity {
         }
     }
 
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            startActivityAfterCleanup(BusquedaActivity.class);
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+
     private void startActivityAfterCleanup(Class<?> cls) {
         Intent intent = new Intent(getApplicationContext(), cls);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -134,11 +145,11 @@ public class NosotrosActivity extends AppCompatActivity {
         TextView pais = (TextView) layout.findViewById(R.id.popupPais);
         ImageView logo = (ImageView) layout.findViewById(R.id.popupLogo);
 
-        rut.setText(Double.toString(empresa.getRut()));
+        rut.setText(empresa.getRut());
         nombre.setText(empresa.getNombre());
         razonSocial.setText(empresa.getRazonSocial());
         direccion.setText(empresa.getDireccion());
-        telefono.setText(Double.toString(empresa.getTelefono()));
+        telefono.setText(empresa.getTelefono());
         pais.setText(empresa.getPais());
 
         // Clear the default translucent background

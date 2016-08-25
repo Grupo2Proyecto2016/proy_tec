@@ -6,6 +6,7 @@ package com.example.malladam.AppUsuarios.models;
 public class Pasaje {
 
     private String idPasaje;
+    private String idViaje;
     private String Origen;
     private String Destino;
     private long Fecha;
@@ -17,8 +18,10 @@ public class Pasaje {
     public Pasaje() {
     }
 
-    public Pasaje(String idPasaje, String origen, String destino, long fecha, String asiento, float precio, String estado) {
+    public Pasaje(String idPasaje, String idViaje, String origen, String destino, long fecha, String asiento,
+                  float precio, String estado) {
         this.idPasaje = idPasaje;
+        this.idViaje = idViaje;
         Origen = origen;
         Destino = destino;
         Fecha = fecha;
@@ -33,6 +36,14 @@ public class Pasaje {
 
     public void setIdPasaje(String idPasaje) {
         this.idPasaje = idPasaje;
+    }
+
+    public String getIdViaje() {
+        return idViaje;
+    }
+
+    public void setIdViaje(String idViaje) {
+        this.idViaje = idViaje;
     }
 
     public String getOrigen() {

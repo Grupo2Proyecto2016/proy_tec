@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -54,6 +55,7 @@ public class RegisterActivity extends AppCompatActivity  {
     private EditText mApellidoView;
     private EditText mCorreoView;
     private EditText mDireccionView;
+    private EditText mCiView;
     private EditText mFechaNacView;
     private EditText mUsuarioView;
     private EditText mContraseñaView;
@@ -72,6 +74,7 @@ public class RegisterActivity extends AppCompatActivity  {
     private String confirmacion;
     private String telefono;
     private String fechaNac;
+    private String ci;
     Pattern pattern;
     private VolleyS volley;
     private String urlregisterUser,urlUserExist;
@@ -102,6 +105,7 @@ public class RegisterActivity extends AppCompatActivity  {
         mTelefonoView = (EditText) findViewById(R.id.telefonoRegistro);
         mRegistroButton = (Button) findViewById(R.id.buttonRegistro);
         mFechaNacView = (EditText) findViewById(R.id.fecNacRegistro);
+        mCiView = (EditText) findViewById(R.id.ciRegistro);
         mNombreView.setTextColor(Color.parseColor(empresa.getColorText()));
         mApellidoView.setTextColor(Color.parseColor(empresa.getColorText()));
         mCorreoView.setTextColor(Color.parseColor(empresa.getColorText()));
@@ -137,10 +141,8 @@ public class RegisterActivity extends AppCompatActivity  {
 
 
         View.OnClickListener listenerDate = new View.OnClickListener() {
-
             @Override
             public void onClick(View arg0) {
-
                 final Calendar c = Calendar.getInstance();
                 year = c.get(Calendar.YEAR);
                 month = c.get(Calendar.MONTH);
@@ -156,6 +158,7 @@ public class RegisterActivity extends AppCompatActivity  {
             public void onClick(View view) {
                 nombre = mNombreView.getText().toString();
                 apellido = mApellidoView.getText().toString();
+                ci = mCiView.getText().toString();
                 correo = mCorreoView.getText().toString();
                 direccion = mDireccionView.getText().toString();
                 usuario = mUsuarioView.getText().toString();
@@ -164,9 +167,9 @@ public class RegisterActivity extends AppCompatActivity  {
                 telefono = mTelefonoView.getText().toString();
                 fechaNac = mFechaNacView.getText().toString();
 
-                if(validarDatosRegistro(nombre, apellido, correo, direccion, usuario, contraseña , confirmacion, telefono,fechaNac)){
+                if(validarDatosRegistro(nombre, apellido, ci, correo, direccion, usuario, contraseña , confirmacion, telefono,fechaNac)){
                     try {
-                        WSregistarUsuario(nombre, apellido, correo, direccion, usuario, contraseña , telefono,day, month, year);
+                        WSregistarUsuario(nombre, apellido, ci, correo, direccion, usuario, contraseña , telefono,day, month, year);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     } catch (TimeoutException e) {
@@ -224,7 +227,7 @@ public class RegisterActivity extends AppCompatActivity  {
         return null;
     }
 
-    private Boolean validarDatosRegistro(String nombre,String apellido,String correo,String direccion,String usuario,String contraseña ,String confirmacion,
+    private Boolean validarDatosRegistro(String nombre,String apellido, String ci, String correo,String direccion,String usuario,String contraseña ,String confirmacion,
                                          String telefono,String fechaNac){
         Boolean valido = true;
         Matcher matcher = pattern.matcher(correo);
@@ -239,6 +242,11 @@ public class RegisterActivity extends AppCompatActivity  {
         if(TextUtils.isEmpty(apellido)){
             mApellidoView.setError(getString(R.string.error_field_required));
             focusView = mApellidoView;
+            valido = false;
+        }
+        if(TextUtils.isEmpty(ci)){
+            mCiView.setError(getString(R.string.error_field_required));
+            focusView = mCiView;
             valido = false;
         }
         if(TextUtils.isEmpty(correo)){
@@ -299,13 +307,14 @@ public class RegisterActivity extends AppCompatActivity  {
         return valido;
     }
 
-    private void WSregistarUsuario(final String nombre, final String apellido, final String correo, final String direccion, final String usuario,
+    private void WSregistarUsuario(final String nombre, final String apellido, final String ci, final String correo, final String direccion, final String usuario,
                                    final String contraseña , final String telefono,final int fecNacDia,final int fecNacMes,final int fecNacAnio)
             throws JSONException, TimeoutException, ExecutionException {
         jsonBody  = new JSONObject();
         jsonBody.put("nombre",nombre);
         jsonBody.put("apellido",apellido);
         jsonBody.put("usrname",usuario);
+        jsonBody.put("ci",ci);
         jsonBody.put("email",correo);
         jsonBody.put("telefono",telefono);
         jsonBody.put("direccion",direccion);
@@ -401,6 +410,16 @@ public class RegisterActivity extends AppCompatActivity  {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            startActivityAfterCleanup(BusquedaActivity.class);
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 
     private void startActivityAfterCleanup(Class<?> cls) {
         Intent intent = new Intent(getApplicationContext(), cls);
