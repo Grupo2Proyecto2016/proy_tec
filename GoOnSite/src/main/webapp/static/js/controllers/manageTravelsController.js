@@ -137,7 +137,7 @@ goOnApp.controller('manageTravelsController', function($scope, $http, uiGridCons
           { name:'Linea', field: 'linea.numero' },
           { name:'Origen', field: 'linea.origen.descripcion' },
           { name:'Destino', field: 'linea.destino.descripcion'},
-          { name:'Salida', cellTemplate: '<div class="text-center ngCellText">{{ row.entity.inicio | date:"dd/MM/yyyy @ h:mma"}}</div>' },
+          { name:'Salida', cellTemplate: '<div class="text-center ngCellText" style="width: 180px">{{ row.entity.inicio | date:"dd/MM/yyyy @ h:mma"}}</div>', width: 180 },
           { name:'Tiempo Estimado (min)', field: 'linea.tiempo_estimado' },
           { 
         	  name: 'Pasajeros Parados', 

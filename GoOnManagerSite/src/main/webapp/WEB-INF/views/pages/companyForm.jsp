@@ -87,7 +87,7 @@
 					<div class="form-group">
 						<label class="control-label col-sm-4" for="url">Url del sitio:</label>
 						<div class="col-sm-8">
-							<input type="text" autocomplete="off" name="url" pattern="[a-zA-Z]+" title="Solo se aceptan letras." class="form-control" ng-model="companyForm.tenantName" tenantexists>
+							<input type="text" autocomplete="off" name="url" pattern="[a-zA-Z]+" title="Solo se aceptan letras." class="form-control" ng-model="companyForm.tenantName" tenantexists required>
 							<img src="<c:url value='/static/images/loader.gif' />" style="margin-top: -25px; margin-left: 80;" ng-show="form.url.$pending.tenantexists" /> 
 							<span class="label label-danger" ng-show="form.url.$error.tenantexists">La Url está en uso</span>
 						</div>
