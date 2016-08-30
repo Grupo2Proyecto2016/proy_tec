@@ -508,6 +508,15 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 			$scope.noDisponibles = [];
 			for (var i=0; i <$scope.seats.length; i++)
 			{
+				var accesibleKey = '';
+				if($scope.seats[i].es_accesible == true)
+				{
+					accesibleKey = 'A';
+				}
+				else
+				{
+					accesibleKey = 'a';
+				}
 				if($scope.seats[i].reservado == true)
 				{
 					$scope.noDisponibles.push($scope.seats[i].id_asiento);
@@ -515,19 +524,19 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 				switch(lugares) 
 				{
 					case 0:
-							txt_map = txt_map + "a[" + $scope.seats[i].id_asiento + "]";
+							txt_map = txt_map + accesibleKey + "[" + $scope.seats[i].id_asiento + "]";
 							lugares++;
 							break;
 					case 1: 
-							txt_map = txt_map + "a[" + $scope.seats[i].id_asiento + "]_";
+							txt_map = txt_map + accesibleKey + "[" + $scope.seats[i].id_asiento +"]_";
 							lugares++;
 							break;
 					case 2:
-							txt_map = txt_map + "a[" + $scope.seats[i].id_asiento + "]";
+							txt_map = txt_map + accesibleKey + "[" + $scope.seats[i].id_asiento + "]";
 							lugares++;
 							break;
 					case 3:
-							txt_map = txt_map + "a[" + $scope.seats[i].id_asiento + "]";
+							txt_map = txt_map + accesibleKey + "[" + $scope.seats[i].id_asiento + "]";
 							array_asientos.push(txt_map);
 							txt_map = '';
 							lugares = 0;
@@ -558,7 +567,13 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 						price   : valor,
 						classes : 'first-class', //your custom CSS class
 						category: 'First Class'
-					}/*,
+					},
+					A: {
+						price   : valor,
+						classes : 'first-class', //your custom CSS class
+						category: 'First Class'
+					},
+					/*,
 					e: {
 						price   : 40,
 						classes : 'economy-class', //your custom CSS class
@@ -568,14 +583,23 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 				},
 				naming : {
 					top : false,
-					getLabel : function (character, row, column) {
-						return firstSeatLabel++;
+					getLabel : function (character, row, column) 
+					{
+						if(character == 'A')
+						{
+							return character + firstSeatLabel++;
+						}
+						else
+						{
+							return firstSeatLabel++;							
+						}
 					},
 				},
 				legend : {
 					node : $('#legend'),
 				    items : [
 						[ 'a', 'available',   'Asiento Libre' ],
+						[ 'a', 'available',   'Asiento Accesible (A)' ],
 						/*[ 'e', 'available',   'Economy Class'],*/
 						[ 'a', 'unavailable', 'Asiento Ocupado']
 				    ]					

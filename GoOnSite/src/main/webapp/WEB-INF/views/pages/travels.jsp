@@ -93,12 +93,6 @@
 							    </div>
 					    	</div>
 					    	<div class="col-sm-6">
-							    <label class="control-label col-sm-6" for="ticketsCount">
-							    	Cantidad de asientos:
-							    </label>
-							    <div class="col-sm-6">
-									<input type="number" class="form-control" min="0" max="10" name="ticketsCount" ng-model="travelSearch.ticketsCount">
-							    </div>
 					    	</div>
 				    	</div>
 						<div class="form-group"> 

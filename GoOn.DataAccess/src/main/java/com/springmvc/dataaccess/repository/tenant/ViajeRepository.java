@@ -240,58 +240,60 @@ public class ViajeRepository {
 			}
 		}
 		
-		Query q = entityManager.createNativeQuery("SELECT 	v.id_viaje, " +
-														"ve.cantasientos AS lugares, " +														
-														"v.inicio, " +
-														"l.numero, " +
-														"lpo.linea_id_linea, " +
-														"lpo.origen, " +
-														"po.descripcion origen_descripcion, " +
-														"lpd.destino, " +
-														"pd.descripcion destino_descripcion, " +
-														"ve.numerov, " +
-														"ve.id_vehiculo, " +
-														"ve.cantasientos " +
-													"FROM " +
-													"( " +
-														"SELECT l.id_parada_origen, l.id_parada_destino, lp.linea_id_linea, lp.paradas_id_parada AS origen FROM " + 
-														"linea_parada lp " +
-														"INNER JOIN linea l " +
-														"ON l.id_linea = lp.linea_id_linea " +
-														"WHERE lp.paradas_id_parada IN (" + lstOrigins + ") " +
-														"AND lp.paradas_id_parada <> l.id_parada_destino " +
-													") AS lpo " +
-													"INNER JOIN " +
-													"( " +
-														"SELECT l.id_parada_origen, l.id_parada_destino, lp.linea_id_linea, lp.paradas_id_parada AS destino FROM " + 
-														"linea_parada lp " +
-														"INNER JOIN linea l " +
-														"ON l.id_linea = lp.linea_id_linea " +
-														"WHERE lp.paradas_id_parada IN (" + lstDestinatios + ") " +
-														"AND lp.paradas_id_parada <> l.id_parada_origen " +
-													") AS lpd " +
-													"ON lpo.linea_id_linea = lpd.linea_id_linea " +
-													"AND " +
-													"( " +
-														"(lpd.destino <> lpd.id_parada_destino AND lpo.origen < lpd.destino) " +
-														"OR lpd.destino = lpd.id_parada_destino " +
-													") " +
-													"INNER JOIN linea l " +
-													"ON l.id_linea = lpo.linea_id_linea " +
-													" " +
-													"INNER JOIN parada po " +
-													"ON po.id_parada = lpo.origen " +
-													" " +
-													"INNER JOIN parada pd " +
-													"ON pd.id_parada = lpd.destino " +
-													" " +
-													"INNER JOIN viaje v " +
-													"ON v.linea_id_linea = lpo.linea_id_linea " +
-													" " + 													
-													"INNER JOIN vehiculo ve " +
-													"ON ve.id_vehiculo = v.vehiculo_id_vehiculo " +
-													"WHERE v.inicio > :dateFrom AND v.inicio < :dateTo "
-													+ "AND v.terminado = FALSE ");		
+		Query q = entityManager.createNativeQuery(
+			"SELECT 	v.id_viaje, " +
+				"ve.cantasientos + ve.cantaccesibles AS lugares, " +														
+				"v.inicio, " +
+				"l.numero, " +
+				"lpo.linea_id_linea, " +
+				"lpo.origen, " +
+				"po.descripcion origen_descripcion, " +
+				"lpd.destino, " +
+				"pd.descripcion destino_descripcion, " +
+				"ve.numerov, " +
+				"ve.id_vehiculo, " +
+				"ve.cantasientos + ve.cantaccesibles AS cantasientos " +
+			"FROM " +
+			"( " +
+				"SELECT l.id_parada_origen, l.id_parada_destino, lp.linea_id_linea, lp.paradas_id_parada AS origen FROM " + 
+				"linea_parada lp " +
+				"INNER JOIN linea l " +
+				"ON l.id_linea = lp.linea_id_linea " +
+				"WHERE lp.paradas_id_parada IN (" + lstOrigins + ") " +
+				"AND lp.paradas_id_parada <> l.id_parada_destino " +
+			") AS lpo " +
+			"INNER JOIN " +
+			"( " +
+				"SELECT l.id_parada_origen, l.id_parada_destino, lp.linea_id_linea, lp.paradas_id_parada AS destino FROM " + 
+				"linea_parada lp " +
+				"INNER JOIN linea l " +
+				"ON l.id_linea = lp.linea_id_linea " +
+				"WHERE lp.paradas_id_parada IN (" + lstDestinatios + ") " +
+				"AND lp.paradas_id_parada <> l.id_parada_origen " +
+			") AS lpd " +
+			"ON lpo.linea_id_linea = lpd.linea_id_linea " +
+			"AND " +
+			"( " +
+				"(lpd.destino <> lpd.id_parada_destino AND lpo.origen < lpd.destino) " +
+				"OR lpd.destino = lpd.id_parada_destino " +
+			") " +
+			"INNER JOIN linea l " +
+			"ON l.id_linea = lpo.linea_id_linea " +
+			" " +
+			"INNER JOIN parada po " +
+			"ON po.id_parada = lpo.origen " +
+			" " +
+			"INNER JOIN parada pd " +
+			"ON pd.id_parada = lpd.destino " +
+			" " +
+			"INNER JOIN viaje v " +
+			"ON v.linea_id_linea = lpo.linea_id_linea " +
+			" " + 													
+			"INNER JOIN vehiculo ve " +
+			"ON ve.id_vehiculo = v.vehiculo_id_vehiculo " +
+			"WHERE v.inicio > :dateFrom AND v.inicio < :dateTo "
+			+ "AND v.terminado = FALSE "
+		);		
 		
 		q.setParameter("dateFrom", dateFrom.getTime());
 		dateFrom.add(Calendar.DAY_OF_YEAR, 1);
