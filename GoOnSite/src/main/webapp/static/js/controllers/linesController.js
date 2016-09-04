@@ -291,12 +291,14 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
 					preguntaReajuste = true;
 				}
 			}    			
-			
-			for (var i = 0; i < $scope.markersV.length; i++)
+			if ($scope.lineForm.generaVuelta == true)
 			{
-				if ($scope.reajustesV[i] != $scope.markersV[i].reajuste)
+				for (var i = 0; i < $scope.markersV.length; i++)
 				{
-					preguntaReajuste = true;
+					if ($scope.reajustesV[i] != $scope.markersV[i].reajuste)
+					{
+						preguntaReajuste = true;
+					}
 				}
 			}
 		}		    	
