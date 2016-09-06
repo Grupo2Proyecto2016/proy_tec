@@ -66,6 +66,20 @@ public class UserRestController
     	}
     }
 	
+	@RequestMapping(value = "/emailExists", method = RequestMethod.GET)
+    public ResponseEntity<Void> emailExists(@PathVariable String tenantid, @RequestParam(value="email") String email) throws AuthenticationException 
+    {
+    	boolean mailinuse = new UsersLogic(tenantid).IsMailInUse(email);
+    	if(mailinuse)
+    	{
+    		return new ResponseEntity<Void>(HttpStatus.OK);   		
+    	}
+    	else
+    	{
+    		return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+    	}
+    }
+	
 	@Secured({"ROLE_SALES"})
 	@RequestMapping(value = "/clientExists", method = RequestMethod.GET)
     public ResponseEntity<Void> clientExists(@PathVariable String tenantid, @RequestParam(value="username") String username) throws AuthenticationException 
@@ -158,7 +172,6 @@ public class UserRestController
 		userUpdateData.setUsrname(user.usrname);
 		userUpdateData.setNombre(user.nombre);
 		userUpdateData.setApellido(user.apellido);
-		userUpdateData.setEmail(user.email);
 		userUpdateData.setCi(user.ci);
 		userUpdateData.setTelefono(user.telefono);
 		userUpdateData.setDireccion(user.direccion);
@@ -188,7 +201,6 @@ public class UserRestController
 		{
 			userUpdateData.setNombre(user.nombre);
 			userUpdateData.setApellido(user.apellido);
-			userUpdateData.setEmail(user.email);
 			userUpdateData.setCi(user.ci);
 			userUpdateData.setTelefono(user.telefono);
 			userUpdateData.setDireccion(user.direccion);

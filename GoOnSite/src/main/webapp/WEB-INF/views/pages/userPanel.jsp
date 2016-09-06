@@ -297,13 +297,6 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="control-label col-sm-4" for="mail">Correo:</label>
-							<div class="col-sm-6">
-								<input type="email" placeholder="Email" name="mail"
-									class="form-control" ng-model="userModel.email" required>
-							</div>
-						</div>
-						<div class="form-group">
 							<label class="control-label col-sm-4" for="address">Dirección:</label>
 							<div class="col-sm-6">
 								<input type="text" name="address" class="form-control"

@@ -23,20 +23,23 @@ goOnApp.controller('registerController', function($scope, $location, $rootScope,
      
     $scope.registerUser = function()
     {
-    	$.blockUI();
-    	$http.post(servicesUrl + 'registerUser', JSON.stringify($scope.userModel))
-    		.then(function(response) {
-	        	if(response.status == 201)
-	        	{
-	        		$scope.signIn($scope.userModel.usrname, $scope.userModel.passwd);
-	        		$scope.userModel = {};
-	        		//$location.path('home');
-	        		$scope.hideUserForm();
-	        		$scope.showSuccessAlert("Tu usuario ha sido creado. Ya puedes hacer uso de nuestros servicios");
-	        	}
-    		})
-		;
-    	$.unblockUI();
+    	if(!$scope.userForm.$invalid)
+    	{
+	    	$.blockUI();
+	    	$http.post(servicesUrl + 'registerUser', JSON.stringify($scope.userModel))
+	    		.then(function(response) {
+		        	if(response.status == 201)
+		        	{
+		        		$scope.signIn($scope.userModel.usrname, $scope.userModel.passwd);
+		        		$scope.userModel = {};
+		        		//$location.path('home');
+		        		$scope.hideUserForm();
+		        		$scope.showSuccessAlert("Tu usuario ha sido creado. Ya puedes hacer uso de nuestros servicios");
+		        	}
+	    		})
+			;
+	    	$.unblockUI();
+    	}
     };
     
     $scope.signIn = function(username, password)

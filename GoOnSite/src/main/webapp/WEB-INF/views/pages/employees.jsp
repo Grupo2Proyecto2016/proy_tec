@@ -47,8 +47,13 @@
 				  <div class="form-group">
 				    <label class="control-label col-sm-4" for="mail">Correo:</label>
 				    <div class="col-sm-6">
-				    	<input type="email" placeholder="Email" name="mail" class="form-control" ng-model="userModel.email" required>
+				    	<input type="email" placeholder="Email" name="mail" class="form-control" ng-model="userModel.email" required emailexists>
 			    	</div>
+				  </div>
+				  <div class="form-group has-error">
+					<div ng-messages="userForm.mail.$error" role="alert" class="col-sm-offset-4 col-sm-6 text-center">
+						<span ng-message="emailexists" class="help-block">La dirección de correo ya está en uso</span>
+				    </div>
 				  </div>
 				  <div class="form-group">
 				    <label class="control-label col-sm-4" for="address">Dirección:</label>
@@ -164,12 +169,6 @@
 				    <label class="control-label col-sm-4" for="birth">Fecha de nacimiento:</label>
 				    <div class="col-sm-6">
 				    	<input type="date" max="{{$parent.maxBirth | date:'yyyy-MM-dd'}}" name="birth" class="form-control" ng-model="userModel.fch_nacimiento" required>
-			    	</div>
-				  </div>
-				  <div class="form-group">
-				    <label class="control-label col-sm-4" for="mail">Correo:</label>
-				    <div class="col-sm-6">
-				    	<input type="email" placeholder="Email" name="mail" class="form-control" ng-model="userModel.email" required>
 			    	</div>
 				  </div>
 				  <div class="form-group">

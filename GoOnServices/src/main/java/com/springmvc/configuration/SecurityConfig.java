@@ -80,6 +80,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	                .antMatchers("/*/auth/**").permitAll()
 	                .antMatchers("/tenantExist").permitAll()
 	                .antMatchers("/*/userExists").permitAll()
+	                .antMatchers("/*/emailExists").permitAll()
 	                .antMatchers("/*/registerUser").permitAll()
 	                .antMatchers("/*/getCompany").permitAll()
 	                .antMatchers("/*/getUserInfo").permitAll()
