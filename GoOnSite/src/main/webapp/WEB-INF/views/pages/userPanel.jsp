@@ -14,10 +14,13 @@
 						<div class="panel panel-default">
 							<div class="panel-heading">
 								<h5 class="panel-title text-center">
-									<a data-toggle="collapse" data-target="#myTravelsPanel"><b>Pasajes</b></a>
+									<a data-toggle="collapse" data-target="#myTravelsPanel">
+										<b>Pasajes  </b>
+										<i class="fa fa-caret-down" aria-hidden="true">  </i>
+									</a>
 								</h5>
 							</div>
-							<div id="myTravelsPanel" class="panel-collapse collapse">
+							<div id="myTravelsPanel" class="panel-collapse collapse in" style="overflow-y: auto; max-height: 300px;">
 								<div class="panel-body">
 									<table ng-show="myTickets.length > 0" style="width: 100%;" class="panelTable">
 										<thead> 
@@ -71,10 +74,13 @@
 						<div class="panel panel-default">
 							<div class="panel-heading">
 								<h5 class="panel-title text-center">
-									<a data-toggle="collapse" data-target="#myTicketsPanel"><b>Encomiendas</b></a>
+									<a data-toggle="collapse" data-target="#myTicketsPanel">
+										<b>Encomiendas  </b>
+										<i class="fa fa-caret-down" aria-hidden="true">  </i>	
+									</a>
 								</h5>
 							</div>
-							<div id="myTicketsPanel" class="panel-collapse collapse">
+							<div id="myTicketsPanel" class="panel-collapse collapse in" style="overflow-y: auto; max-height: 300px;">
 								<div class="panel-body">
 									<table ng-show="myPackages.length > 0" style="width: 100%;" class="panelTable">
 										<thead> 
