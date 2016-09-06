@@ -252,7 +252,8 @@ public class ViajeRepository {
 				"pd.descripcion destino_descripcion, " +
 				"ve.numerov, " +
 				"ve.id_vehiculo, " +
-				"ve.cantasientos + ve.cantaccesibles AS cantasientos " +
+				"ve.cantasientos + ve.cantaccesibles AS cantasientos, "+ 
+				"l.tiempo_estimado " +
 			"FROM " +
 			"( " +
 				"SELECT l.id_parada_origen, l.id_parada_destino, lp.linea_id_linea, lp.paradas_id_parada AS origen FROM " + 
