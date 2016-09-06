@@ -1,4 +1,4 @@
-goOnApp.controller('registerController', function($scope, $http) 
+goOnApp.controller('registerController', function($scope, $location, $rootScope, $http) 
 {
 	$scope.message = 'Regístrate para hacer uso de nuestros servicios de la forma más eficiente';
 	$scope.userModel = {};
@@ -28,12 +28,36 @@ goOnApp.controller('registerController', function($scope, $http)
     		.then(function(response) {
 	        	if(response.status == 201)
 	        	{
+	        		$scope.signIn($scope.userModel.usrname, $scope.userModel.passwd);
 	        		$scope.userModel = {};
+	        		//$location.path('home');
 	        		$scope.hideUserForm();
-	        		$scope.showSuccessAlert("Tu usuario ha sido creado. Ya puedes ingresar haciendo uso de tus credenciales");
+	        		$scope.showSuccessAlert("Tu usuario ha sido creado. Ya puedes hacer uso de nuestros servicios");
 	        	}
     		})
 		;
     	$.unblockUI();
+    };
+    
+    $scope.signIn = function(username, password)
+    {
+    	$http.post(servicesUrl + 'auth', JSON.stringify({ 'username' : username, 'password' : password }))
+        	.then(function(response) 
+			{
+        		if(response.status == 200)
+        		{
+        			$rootScope.user = response.data.user;
+        			setJwtToken(response.data.token);
+        			//$scope.loginForm = null;
+        			//$("#loginModal").modal("toggle");
+        		}
+//        		else
+//        		{
+//        			$scope.loginForm = null;
+//        			$("#loginAlert").show();
+//        			$('#username').focus();
+//        		}
+        	}
+    	);
     };
 });
