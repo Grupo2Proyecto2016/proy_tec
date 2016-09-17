@@ -351,6 +351,18 @@ div.row
     
 }
 
+@media screen and (max-width: 768px) 
+{
+	header, footer { position: relative; }
+	div.viewContainer { padding-top: 0px; }
+}
+
+@media screen and (max-width: 992px) and (min-width: 769px) 
+{
+	div.viewContainer { padding-top: 125px; }
+}
+
+
 #caja_verde{
 	float: left;
   width: 20px;

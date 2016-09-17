@@ -4,7 +4,7 @@
 </div>
 
 <div class="row">
-	<div class="col-xs-7">
+	<div class="col-sm-12 col-md-7">
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<div><h4 class="modal-title">Ubicaciones</h4></div>
@@ -17,7 +17,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-xs-5">
+	<div class="col-sm-12 col-md-5">
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<div><h4 class="modal-title">Lista de Sucursales</h4></div>

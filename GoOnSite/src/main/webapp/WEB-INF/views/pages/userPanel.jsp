@@ -188,7 +188,7 @@
 	<div class="modal fade" id="passwordModal" tabindex="-1" role="dialog"
 		aria-labelledby="myModalLabel">
 		<div class="modal-dialog" role="document">
-			<div class="modal-content" style="width: 400px">
+			<div class="modal-content" style="max-width: 400px">
 				<div class="modal-header warning">
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
@@ -231,7 +231,7 @@
 
 	<div class="modal fade" id="deleteUserModal" tabindex="-1"
 		role="dialog">
-		<div class="modal-dialog" style="width: 465px">
+		<div class="modal-dialog" style="max-width: 465px">
 			<div class="modal-content">
 				<div class="modal-header danger">
 					<button type="button" class="close" data-dismiss="modal"
