@@ -69,8 +69,9 @@ public class FragmentIniciarViaje extends Fragment {
     int intentosLogin = 0;
     private VolleyS volley;
     private List<Parada> paradasDelViaje= new ArrayList<>();
-    private String urlGetSigViaje, urlToken,urlStartTravel;
+    private String urlGetSigViaje, urlToken,urlStartTravel, urlGetSigPradas;
     private ViajeActual viajeActual;
+    private Parada primerParada;
 
     @Nullable
     @Override
@@ -84,9 +85,14 @@ public class FragmentIniciarViaje extends Fragment {
 
         dbManager = new DataBaseManager(getActivity().getApplicationContext());
         empresa = empresa.getInstance();
-        urlToken = getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)+getResources().getString(R.string.auth);
-        urlGetSigViaje = getResources().getString(R.string.WSServer) + getResources().getString(R.string.app_name) + getResources().getString(R.string.getSiguienteViaje);
-        urlStartTravel = getResources().getString(R.string.WSServer) + getResources().getString(R.string.app_name) + getResources().getString(R.string.startTravel);
+        urlToken = getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)
+                + getResources().getString(R.string.auth);
+        urlGetSigViaje = getResources().getString(R.string.WSServer) + getResources().getString(R.string.app_name)
+                + getResources().getString(R.string.getSiguienteViaje);
+        urlStartTravel = getResources().getString(R.string.WSServer) + getResources().getString(R.string.app_name)
+                + getResources().getString(R.string.startTravel);
+        urlGetSigPradas = getResources().getString(R.string.WSServer) + getResources().getString(R.string.app_name)
+                + getResources().getString(R.string.findNextStationsByOrigin);
         volley = volley.getInstance(getActivity().getApplicationContext());
 
 
@@ -149,6 +155,15 @@ public class FragmentIniciarViaje extends Fragment {
                         viajeActual.setId_linea(linea.getInt("id_linea"));
                         viajeActual.setNumero_linea(linea.getInt("numero"));
                         JSONObject origen_linea = linea.getJSONObject("origen");
+
+                        primerParada = new Parada();
+                        primerParada.setDescripcion(origen_linea.getString("descripcion"));
+                        primerParada.setEs_terminal(origen_linea.getBoolean("es_terminal"));
+                        primerParada.setDireccion(origen_linea.getString("direccion"));
+                        primerParada.setId_parada(origen_linea.getInt("id_parada"));
+                        primerParada.setLatitud(origen_linea.getDouble("latitud"));
+                        primerParada.setLongitud(origen_linea.getDouble("longitud"));
+
                         viajeActual.setOrigen_linea(origen_linea.getString("descripcion"));
                         JSONObject destino_linea = linea.getJSONObject("destino");
                         viajeActual.setDestino_linea(destino_linea.getString("descripcion"));
@@ -159,25 +174,17 @@ public class FragmentIniciarViaje extends Fragment {
                         viajeActual.setCantParados_vehiculo(0);//viajeActual.setCantParados_vehiculo(vehiculo.getInt("cantParados"));
                         viajeActual.setMarca_vehiculo(vehiculo.getString("marca"));
                         viajeActual.setModelo_vehiculo(vehiculo.getString("modelo"));
-                        JSONArray paradas = linea.getJSONArray("paradas");
-                        for (int p = 0; p < paradas.length(); p++) {
-                            Parada parada = new Parada();
-                            JSONObject jsonObject = (JSONObject) paradas.get(p);
-                            parada.setDescripcion(jsonObject.getString("descripcion"));
-                            parada.setEs_terminal(jsonObject.getBoolean("es_terminal"));
-                            parada.setDireccion(jsonObject.getString("direccion"));
-                            parada.setId_parada(jsonObject.getInt("id_parada"));
-                            parada.setLatitud(jsonObject.getDouble("latitud"));
-                            parada.setLongitud(jsonObject.getDouble("longitud"));
-                            paradasDelViaje.add(parada);
-                        }
 
-                        if (viajeActual.getId_viaje() != null) {
-                            mostrarDialogo(viajeActual, paradasDelViaje);
-                        } else {
+                        if (viajeActual.getId_viaje() == null) {
                             Toast.makeText(getActivity(), "Error al obtener el sigueinte viaje ", Toast.LENGTH_LONG).show();
+                        } else {
+                            WSgetSigParadasParadasByOrigen(primerParada.getId_parada(),viajeActual.getId_linea(), dbManager.getTokenLogueado());
                         }
                     } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (TimeoutException e) {
                         e.printStackTrace();
                     }
                 }
@@ -205,7 +212,105 @@ public class FragmentIniciarViaje extends Fragment {
         }
     }
 
-    private void mostrarDialogo(final ViajeActual viajeActual, final List<Parada> paradasDelViaje) {
+
+    private void refrescarLoginSigPAradas(final String user, final String pass, final int id_parada_origen, final int id_linea) throws JSONException, TimeoutException, ExecutionException {
+
+        JSONObject jsonBody = new JSONObject();
+        jsonBody.put("username", user);
+        jsonBody.put("password", pass);
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, urlToken, jsonBody, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    intentosLogin = 0;
+                    dbManager.registrarLogin(response.getString("token"), user, pass);
+                    WSgetSigParadasParadasByOrigen(id_parada_origen,id_linea,response.getString("token"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (TimeoutException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Log.d("el ERROR del token es ", volleyError.toString());
+                if (intentosLogin >= 2) {
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    Toast.makeText(getActivity(), getResources().getString(R.string.tokenInvalido), Toast.LENGTH_LONG).show();
+                    startActivity(intent);
+                } else intentosLogin++;
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
+        volley.addToQueue(request);
+    }
+
+
+    private void WSgetSigParadasParadasByOrigen(final int id_parada_origen,final int id_linea, String token) throws JSONException, TimeoutException, ExecutionException {
+        try {
+            volley.llamarWSarray(Request.Method.GET, urlGetSigPradas+ "?origin=" + String.valueOf(id_parada_origen)
+                    + "&line=" + String.valueOf(id_linea), null, new Response.Listener<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray response) {
+                    paradasDelViaje.clear();
+                    paradasDelViaje.add(primerParada);
+                    try {
+                        for (int i = 0; i < response.length(); i++) {
+                            Parada parada = new Parada();
+                            JSONObject jsonObject = (JSONObject) response.get(i);
+                            parada.setDescripcion(jsonObject.getString("descripcion"));
+                            parada.setEs_terminal(jsonObject.getBoolean("es_terminal"));
+                            parada.setDireccion(jsonObject.getString("direccion"));
+                            parada.setId_parada(jsonObject.getInt("id_parada"));
+                            parada.setLatitud(jsonObject.getDouble("latitud"));
+                            parada.setLongitud(jsonObject.getDouble("longitud"));
+                            paradasDelViaje.add(parada);
+                        }
+                        if (paradasDelViaje.isEmpty()) {
+                            Toast.makeText(getActivity(), "Error al obtener las paradas del sigueinte viaje ", Toast.LENGTH_LONG).show();
+                        } else {
+                            mostrarDialogo(viajeActual);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    Log.d("el ERROR ", volleyError.toString());
+                    if( volleyError instanceof AuthFailureError) {
+                        try {
+                            refrescarLoginSigPAradas(dbManager.getUserLogueado(), dbManager.getPassLogueado(), id_parada_origen, id_linea);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (TimeoutException e) {
+                            e.printStackTrace();
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        }
+                    } else{
+                        Toast.makeText(getActivity(), "Error al obtener las próximas paradas", Toast.LENGTH_LONG).show();
+                    }
+                }
+            }, token);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void mostrarDialogo(final ViajeActual viajeActual) {
 
         new AlertDialog.Builder(getActivity())
                 .setTitle(getResources().getString(R.string.iniciarViaje)+" "+viajeActual.getId_viaje())
@@ -239,8 +344,6 @@ public class FragmentIniciarViaje extends Fragment {
     }
 
     private void refrescarLogin(final String user, final String pass)throws JSONException, TimeoutException, ExecutionException {
-
-        dbManager.eliminarLogin();
 
         JSONObject jsonBody = new JSONObject();
         jsonBody.put("username", user);
@@ -313,9 +416,9 @@ public class FragmentIniciarViaje extends Fragment {
                                         new LatLng(paradasDelViaje.get(1).getLatitud(), paradasDelViaje.get(1).getLongitud())));
 
                         //debug
-                        int ult = dbManager.getIdUltParada();
-                        int prox = dbManager.getIdProxParada();
-                        double dist= dbManager.getDistProxParada();
+                        //int ult = dbManager.getIdUltParada();
+                        //int prox = dbManager.getIdProxParada();
+                        //double dist= dbManager.getDistProxParada();
                         Toast.makeText(getActivity(), "Viaje iniciado con éxito", Toast.LENGTH_LONG).show();
 
                         //////////LANZO SERVICIO//////////////

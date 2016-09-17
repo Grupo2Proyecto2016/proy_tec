@@ -5,6 +5,8 @@ package com.example.malladam.AppGuarda.utils;
  */
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +16,9 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.NetworkOnMainThreadException;
+import android.os.StrictMode;
+import android.os.SystemClock;
 import android.os.Vibrator;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
@@ -59,15 +64,6 @@ public class UbicacionService extends Service {
     private DataBaseManager dbManager;
     private Location locationActual;
     private List<Parada> paradasDelViaje = new ArrayList<>();
-    private static UbicacionService sInstance;
-
-
-    public static synchronized UbicacionService getInstance() {
-        if (sInstance == null) {
-            sInstance = new UbicacionService();
-        }
-        return sInstance;
-    }
 
 
     @Override
@@ -81,12 +77,33 @@ public class UbicacionService extends Service {
         Log.d("Servicio creado...", "asd");
     }
 
+/*
+    @Override public void onTaskRemoved(Intent rootIntent){
+        Intent restartServiceIntent = new Intent(getApplicationContext(), this.getClass());
+        restartServiceIntent.setPackage(getPackageName());
+
+        PendingIntent restartServicePendingIntent = PendingIntent.getService(getApplicationContext(), 1,
+                restartServiceIntent, PendingIntent.FLAG_ONE_SHOT);
+        AlarmManager alarmService = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        alarmService.set(
+                AlarmManager.ELAPSED_REALTIME,
+                SystemClock.elapsedRealtime() + 1000,
+                restartServicePendingIntent);
+
+        super.onTaskRemoved(rootIntent);
+    }
+*/
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        //Log.d(TAG, "Servicio iniciado...");
+        Log.d("Servicio ", "iniciado...");
         dbManager = new DataBaseManager(getApplicationContext());
         paradasDelViaje = dbManager.getParadasDelViaje();
+
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
 
         final String id_viaje = String.valueOf(dbManager.getViajeActual().getId_viaje());
         final String urlUbic = intent.getStringExtra("urlUbic");
@@ -136,12 +153,11 @@ public class UbicacionService extends Service {
             return START_REDELIVER_INTENT;
         }
         locMgr.requestLocationUpdates(LocationManager.GPS_PROVIDER, 15000, // minTime in ms
-                10, // minDistance in meters
+                1, // minDistance in meters
                 locListener);
 
         return START_REDELIVER_INTENT;
     }
-
 
 
     private void WScomunicarLocationChanged(Location location, String id_viaje, final String urlUbic, final String token, final String urlToken) throws JSONException, TimeoutException, ExecutionException {
@@ -242,9 +258,9 @@ public class UbicacionService extends Service {
             LatLng latlngProxParada = new LatLng(proximaParada.getLatitud(), proximaParada.getLongitud());
             int distanciaActual_ProxParada = GetDistance(new LatLng(ubicacionActual.getLatitude(), ubicacionActual.getLongitude()),
                     latlngProxParada);
-            if(distanciaActual_ProxParada <100){
-                if(dbManager.liberanAsientosByParadaDestino(id_proxParada))
-                    Toast.makeText(UbicacionService.this, "Parar en "+distanciaActual_ProxParada +" mts", Toast.LENGTH_SHORT).show();
+            if(distanciaActual_ProxParada <100 && distanciaActual_ProxParada > 0){
+                if(dbManager.liberanAsientosByParadaDestino(id_proxParada) )
+                    Toast.makeText(UbicacionService.this, "Descienden pasajeros en "+distanciaActual_ProxParada +" mts", Toast.LENGTH_SHORT).show();
             }
             if(distanciaActual_ProxParada <= dbManager.getDistProxParada() ){ //me sigo acercando a prox parada
                 dbManager.setDistProxParada(distanciaActual_ProxParada);
@@ -328,6 +344,8 @@ public class UbicacionService extends Service {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
+            e.printStackTrace();
+        }catch (NetworkOnMainThreadException e) {
             e.printStackTrace();
         }
 

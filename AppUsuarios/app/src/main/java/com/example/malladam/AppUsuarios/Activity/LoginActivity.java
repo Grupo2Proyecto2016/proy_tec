@@ -291,7 +291,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         } else {
             dbManager.registrarLogin(nuevoToken,user, password);
-            //dbManager.registrarLogin(user, password);/////guardo el usuario logueado en la base
             showProgress(true);
             intent = new Intent(LoginActivity.this, BusquedaActivity.class);
             startActivity(intent);

@@ -37,7 +37,9 @@ tools:context=".Activity.SelectAsientosActivity">
                 android:id="@+id/list_asientos"
                 android:layout_weight="0.5"
                 android:layout_width="match_parent"
-                android:layout_height="fill_parent">
+                android:layout_height="fill_parent"
+                android:divider="@null"
+                android:dividerHeight="0dp">
             </ListView>
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

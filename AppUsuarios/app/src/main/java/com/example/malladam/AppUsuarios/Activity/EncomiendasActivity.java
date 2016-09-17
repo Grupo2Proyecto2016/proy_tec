@@ -845,6 +845,7 @@ private void WSgetUbicacionDelViaje(final String idViaje, final String token, fi
                 if (f != null)
                     getSupportFragmentManager().beginTransaction().remove(f).commit();
                 pw.dismiss();
+                mMap = null;
             }
         });
         //////////////////
@@ -895,18 +896,6 @@ private void WSgetUbicacionDelViaje(final String idViaje, final String token, fi
     }
 
 
-    public void actualizarUbicacionMapa() {
-
-        if(mActualMarker != null){
-            mActualMarker.remove();
-        }
-        mActualMarker = mMap.addMarker(new MarkerOptions()
-                .position(ubicacion)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.position_indicator)));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(ubicacion, mMap.getCameraPosition().zoom));
-    }
-
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -917,7 +906,8 @@ private void WSgetUbicacionDelViaje(final String idViaje, final String token, fi
         mActualMarker = mMap.addMarker(new MarkerOptions()
                 .position(ubicacion)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.position_indicator)));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(ubicacion, 13.0f));
+        mMap.animateCamera(CameraUpdateFactory.newLatLng(ubicacion));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(13.0f));
 
         if(ubicParadas.size() >= 2) {
             LatLng origin = ubicParadas.get(0);
@@ -932,9 +922,34 @@ private void WSgetUbicacionDelViaje(final String idViaje, final String token, fi
             downloadTask.execute(url);
         }
 
-        ActualizarUbicacion actualizarUbicacion = new ActualizarUbicacion();
-        actualizarUbicacion.execute();
+        if(!actualizarUbic.isAlive())
+            actualizarUbic.start();
+
     }
+
+
+    Thread actualizarUbic = new Thread(new Runnable() {
+        public void run() {
+            while (true) {
+                try {
+                    Thread.sleep(20000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (mMap != null){
+                    try {
+                        WSgetUbicacionDelViaje(idViajeActual, dbManager.getTokenLogueado(), false);
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (TimeoutException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    });
 
     //comienza auxiliares dibujar ruta
     private String getDirectionsUrl(LatLng origin,LatLng dest){
@@ -1097,20 +1112,17 @@ private void WSgetUbicacionDelViaje(final String idViaje, final String token, fi
     //fin auxiliares dibijar ruta
 
 
-    private class ActualizarUbicacion extends AsyncTask<String, Void, String> {
+    public void actualizarUbicacionMapa() {
 
-        @Override
-        protected String doInBackground(String... url) {
-
-            try{
-                while(true) {
-                    WSgetUbicacionDelViaje(idViajeActual, dbManager.getTokenLogueado(), false);
-                    Thread.sleep(5000);
-                }
-            }catch(Exception e){
-            }
-            return "";
+        if(mActualMarker != null){
+            mActualMarker.remove();
         }
+        if(mMap !=null)
+            mActualMarker = mMap.addMarker(new MarkerOptions()
+                    .position(ubicacion)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.position_indicator)));
     }
+
+
 
 }

@@ -241,6 +241,7 @@ public class SelectAsientosActivity extends AppCompatActivity {
         startService(intent);
     }
 
+
     private void PedirFafa(String url) throws JSONException, TimeoutException, ExecutionException {
 
         JSONObject jsonBody = new JSONObject();
@@ -281,7 +282,6 @@ public class SelectAsientosActivity extends AppCompatActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
-                    //Toast.makeText(LoginActivity.this, volleyError.toString(), Toast.LENGTH_LONG).show();
                     Log.d("el ERROR del token es ",volleyError.toString());
                 }
             }, null);
@@ -290,12 +290,6 @@ public class SelectAsientosActivity extends AppCompatActivity {
         }
     }
 
-    public void desplegarInfo(int asiento){
-
-        //obtener los datos segun el asiento
-        infoAsiento.setBackgroundResource(R.color.backMenu);
-        infoAsiento.setText(String.valueOf(asiento));
-    }
 
     public void onBuyPressed(View pressed)
     {

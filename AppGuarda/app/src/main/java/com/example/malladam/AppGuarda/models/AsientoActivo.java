@@ -1,5 +1,7 @@
 package com.example.malladam.AppGuarda.models;
 
+import android.text.BoringLayout;
+
 /**
  * Created by malladam on 13/07/2016.
  */
@@ -16,6 +18,7 @@ public class AsientoActivo {
     private int numero_asiento;
     private int id_paradaSube;
     private int id_paradaBaja;
+    private Boolean esAccesible, reservado, habilitado, esVentana;
 
 
     public AsientoActivo() {
@@ -125,5 +128,37 @@ public class AsientoActivo {
 
     public void setNumero_pasaje(String numero_pasaje) {
         this.numero_pasaje = numero_pasaje;
+    }
+
+    public Boolean getEsAccesible() {
+        return esAccesible;
+    }
+
+    public void setEsAccesible(Boolean esAccesible) {
+        this.esAccesible = esAccesible;
+    }
+
+    public Boolean getReservado() {
+        return reservado;
+    }
+
+    public void setReservado(Boolean reservado) {
+        this.reservado = reservado;
+    }
+
+    public Boolean getHabilitado() {
+        return habilitado;
+    }
+
+    public void setHabilitado(Boolean habilitado) {
+        this.habilitado = habilitado;
+    }
+
+    public Boolean getEsVentana() {
+        return esVentana;
+    }
+
+    public void setEsVentana(Boolean esVentana) {
+        this.esVentana = esVentana;
     }
 }

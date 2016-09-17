@@ -12,5 +12,6 @@
     <color name="fondoActivity">#B0C4C6</color>
     <color name="detalles">#A47BFD</color>
     <color name="fondoList">#262A34</color>
+    <color name="fondoAsientos">#C2C2C2</color>
 
 </resources>

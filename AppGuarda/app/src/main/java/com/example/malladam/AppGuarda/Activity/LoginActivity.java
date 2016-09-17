@@ -218,7 +218,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     Log.d("el ERROR del token es ",volleyError.toString());
                 }
             }, null);
-            Thread.sleep(10000);
+            Thread.sleep(7000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
