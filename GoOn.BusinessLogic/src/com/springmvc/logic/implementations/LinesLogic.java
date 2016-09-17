@@ -227,7 +227,7 @@ public class LinesLogic implements ILinesLogic
 		return viajes;
 	}
 	
-	public List<ViajesBuscados> SearchTravelsAdvanced(Calendar dateFrom, Calendar dateTo, List<Integer> origins, List<Integer> destinations)
+	public List<ViajesBuscados> SearchTravelsAdvanced(Date dateFrom, List<Integer> origins, List<Integer> destinations)
 	{		
 		List<ViajesBuscados> viajes = TenantContext.ViajeRepository.getTravelsAdvanced(origins, destinations, dateFrom);
 		for(int x = 0; x < viajes.size(); x ++)
