@@ -1,7 +1,9 @@
 package com.example.malladam.AppGuarda.Activity;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -12,6 +14,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -27,6 +30,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -40,6 +44,8 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.example.malladam.AppGuarda.adapters.PasajeArrayAdapterSelect;
+import com.example.malladam.AppGuarda.models.GroupPasajeDT;
 import com.example.malladam.AppGuarda.utils.DataBaseManager;
 import com.example.malladam.AppGuarda.FragmentIniciarViaje;
 import com.example.malladam.AppGuarda.FragmentMain;
@@ -49,7 +55,6 @@ import com.example.malladam.AppGuarda.adapters.VolleyS;
 import com.example.malladam.AppGuarda.models.AsientoActivo;
 import com.example.malladam.AppGuarda.models.Empresa;
 import com.example.malladam.AppGuarda.models.Parada;
-import com.example.malladam.AppGuarda.models.Pasaje;
 import com.example.malladam.AppGuarda.models.ViajeActual;
 import com.example.malladam.AppGuarda.utils.UbicacionService;
 import com.google.android.gms.maps.model.LatLng;
@@ -84,12 +89,13 @@ public class MainActivity extends AppCompatActivity {
     private Spinner spinnerDestino;
     private ArrayAdapter arrayAdapter;
     private View mProgressView;
-    private String urlGetSigPradas, urlFinViaje, urlToken,urlGetTicketValue, urlBuyTicket;
+    private String urlGetSigPradas, urlFinViaje, urlToken, urlGetTicketValue, urlBuyTicket, urlGetSeats;
     public Intent intentUbicacion;
     int intentosLogin = 0;
     private List<Parada> posiblesDestinos = new ArrayList<>();
     private Parada paradaDestino;
-    private Double valorPasaje;
+    private double valorPasaje;
+    public List<AsientoActivo> seats = new ArrayList<>();
     public List<Integer> selectedSeats = new ArrayList<>();
     private PopupWindow popup = new PopupWindow();
 
@@ -113,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
                 getResources().getString(R.string.getTicketValue);
         urlBuyTicket = getResources().getString(R.string.WSServer) + getResources().getString(R.string.app_name) +
                 getResources().getString(R.string.buyTicket);
+        urlGetSeats=getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)+"/getSeats";
 
 
         ///////////ACTIONBAR+NAVIGATION////////////////
@@ -166,6 +173,15 @@ public class MainActivity extends AppCompatActivity {
             fragmentTransaction.replace(R.id.frameMain, fragmentIniciarViaje);
             fragmentTransaction.commit();
         } else {
+            //////////LANZO SERVICIO//////////////
+            if(!isMyServiceRunning(UbicacionService.class)){
+                Intent mServiceIntent = MainActivity.this.intentUbicacion;
+                mServiceIntent.putExtra("urlToken", getResources().getString(R.string.WSServer) + getResources().getString(R.string.app_name) + "/auth");
+                mServiceIntent.putExtra("urlUbic", getResources().getString(R.string.WSServer) + getResources().getString(R.string.app_name) + getResources().getString(R.string.setTravelLocation));
+                MainActivity.this.startService(mServiceIntent);
+            }
+            //////////LANZO SERVICIO//////////////
+
             FragmentMain fragmentMain = new FragmentMain();
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.frameMain, fragmentMain);
@@ -181,16 +197,31 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         switch (menuItem.getItemId()) {
                             case R.id.cerrarSesion:
-                                menuItem.setChecked(true);
-                                dbManager.eliminarLogin();
-                                intent = new Intent(getApplicationContext(), ManejadorInicio.class);
-                                startActivity(intent);
-                                finish();
+                                cerrarSesion(menuItem);
                                 return true;
                         }
                         return true;
                     }
                 });
+    }
+
+
+    private void cerrarSesion(MenuItem menuItem){
+        Integer idViaje = dbManager.getViajeActual().getId_viaje();
+        if (idViaje == null) {
+            cerrar(menuItem);
+        }else{
+            mostrarDialogoCerrarYFinalizar(idViaje, menuItem);
+        }
+
+    }
+
+    private void cerrar(MenuItem menuItem){
+        menuItem.setChecked(true);
+        dbManager.eliminarLogin();
+        intent = new Intent(getApplicationContext(), ManejadorInicio.class);
+        startActivity(intent);
+        finish();
     }
 
 
@@ -257,7 +288,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 case R.id.action_finish_viaje: {
-                    finalizarViajeActual();
+                    mostrarDialogoFinalizar();
                     return true;
                 }
             }
@@ -268,10 +299,57 @@ public class MainActivity extends AppCompatActivity {
     ///////////ACTIONBAR+NAVIGATION////////////////
 
 
-    private void finalizarViajeActual() {
+    private void mostrarDialogoCerrarYFinalizar(final int idViajeActual, final MenuItem menuItem) {
+
+        new AlertDialog.Builder(MainActivity.this)
+                .setTitle(getResources().getString(R.string.finViaje)+" "+idViajeActual)
+                .setMessage("El viaje no ha finalizado, que desea hacer?")
+                .setPositiveButton(R.string.cerrarsesionyviaje, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        finalizarViajeActual(idViajeActual);
+                        cerrar(menuItem);
+                    }
+                })
+
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int whitch){
+                        //NOT
+                    }
+                })
+                .setNeutralButton(R.string.relevo, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        cerrar(menuItem);
+                    }
+                })
+                .setIcon(R.drawable.bus_icon)
+                .show();
+    }
+
+    private void mostrarDialogoFinalizar() {
+        final int idViajeActual = dbManager.getViajeActual().getId_viaje();
+
+        new AlertDialog.Builder(MainActivity.this)
+                .setTitle(getResources().getString(R.string.finViaje)+" "+idViajeActual)
+                .setMessage("Desea finalizar el viaje actual?")
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        finalizarViajeActual(idViajeActual);
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int whitch){
+                        //NOT
+                    }
+                })
+                .setIcon(R.drawable.bus_icon)
+                .show();
+    }
+
+
+    private void finalizarViajeActual(int idViajeActual) {
 
         try {
-            WScomunicarFinViaje(dbManager.getViajeActual().getId_viaje(), dbManager.getTokenLogueado());
+            WScomunicarFinViaje(idViajeActual, dbManager.getTokenLogueado());
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (TimeoutException e) {
@@ -328,7 +406,6 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-
             }
 
             @Override
@@ -377,13 +454,14 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         Log.d("WSFinDeViaje OK", response.toString());
 
+                        stopService(intentUbicacion);
                         dbManager.eliminarUbicacion();
                         dbManager.eliminarParadasDelViaje();
                         dbManager.eliminarTodosAsientos();
                         dbManager.eliminarViaje();
-                        stopService(intentUbicacion);
 
-                        Toast.makeText(MainActivity.this, "Viaje finalizado con éxito", Toast.LENGTH_LONG).show();
+                        //GET INFO PASAJE FINALIZADO//////////////////////////////////////////
+                        showPopupFinViaje(idViaje, MainActivity.this);
                         iniciarSigFragment();
                     }
                 }, new Response.ErrorListener() {
@@ -420,6 +498,48 @@ public class MainActivity extends AppCompatActivity {
         // Adding request to request queue
         volley.addToQueue(strReq);
 
+    }
+
+
+    private void showPopupFinViaje(Integer id_viaje, Activity context) {
+
+        if(id_viaje != null) {
+            // Inflate the popup_layout.xml
+            LinearLayout viewGroup = (LinearLayout) context.findViewById(R.id.popupInfoPasajero);
+            LayoutInflater layoutInflater = (LayoutInflater) context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View layout = layoutInflater.inflate(R.layout.popup_fin_viaje, viewGroup);
+
+            // Creating the PopupWindow
+            final PopupWindow popup = new PopupWindow(layout, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+
+            TextView origen = (TextView) layout.findViewById(R.id.popupFinViajeOrigen);
+            TextView destino = (TextView) layout.findViewById(R.id.popupFinViajeDestino);
+            TextView viaje = (TextView) layout.findViewById(R.id.popupFinViajeNroViaje);
+            TextView vendidos = (TextView) layout.findViewById(R.id.popupFinViajePasajesVendidos);
+            TextView cobrados = (TextView) layout.findViewById(R.id.popupFinViajePasajesCobrados);
+            TextView recaudacion = (TextView) layout.findViewById(R.id.popupFinViajeRecaudacion);
+
+            //origen.setText(dbManager.getParadaDelViajeById(pasaje.getId_paradaSube()).getDescripcion());
+            //destino.setText(dbManager.getParadaDelViajeById(pasaje.getId_paradaBaja()).getDescripcion());
+            //asiento.setText(String.valueOf(pasaje.getNumero_asiento()));
+            //vendidos.setText(String.valueOf(pasaje.getNumero_asiento()));
+            //cobrados.setText(String.valueOf(pasaje.getNumero_asiento()));
+            //recaudacion.setText(String.valueOf(pasaje.getNumero_asiento()));
+
+            // Clear the default translucent background
+            popup.setBackgroundDrawable(new BitmapDrawable());
+            popup.showAtLocation(layout, Gravity.CENTER, 0, 0);
+
+            // Getting a reference to Close button, and close the popup when clicked.
+            Button close = (Button) layout.findViewById(R.id.close);
+            close.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    popup.dismiss();
+                }
+            });
+        }
     }
 
 
@@ -598,7 +718,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void WSobtenerValorPasaje(int id_parada_origen, int id_parada_destino, int id_linea, int id_viaje, int id_vehi) throws JSONException, TimeoutException, ExecutionException {
+    private void WSobtenerValorPasaje(final int id_parada_origen, final int id_parada_destino, final int id_linea, final int id_viaje, final int id_vehi) throws JSONException, TimeoutException, ExecutionException {
 
         JSONObject jsonBody = new JSONObject();
         jsonBody.put("id_viaje", id_viaje);
@@ -616,8 +736,17 @@ public class MainActivity extends AppCompatActivity {
                     calcular.setVisibility(View.VISIBLE);
                     mTextPrecio.setVisibility(View.VISIBLE);
                     mPrecio.setVisibility(View.VISIBLE);
-                    mPrecio.setText(response.toString());
+                    //mPrecio.setText(response.toString());
                     valorPasaje=Double.parseDouble(response.toString());
+                    try {
+                        PedirFafa(urlGetSeats,id_viaje, id_linea, id_parada_origen, id_parada_destino,id_vehi);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (TimeoutException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    }
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -670,9 +799,14 @@ public class MainActivity extends AppCompatActivity {
                             asientoActivo.setApellido_usuario("Genérico");
                             JSONObject viaje = jsonObject.getJSONObject("viaje");
                             asientoActivo.setId_viaje(viaje.getInt("id_viaje"));
-                            JSONObject asiento = jsonObject.getJSONObject("asiento");
-                            asientoActivo.setId_asiento(asiento.getInt("id_asiento"));
-                            asientoActivo.setNumero_asiento(asiento.getInt("numero"));
+                            try{
+                                JSONObject asiento = jsonObject.getJSONObject("asiento");
+                                asientoActivo.setId_asiento(asiento.getInt("id_asiento"));
+                                asientoActivo.setNumero_asiento(asiento.getInt("numero"));
+                            } catch (JSONException e) {
+                                asientoActivo.setId_asiento(0);
+                                asientoActivo.setNumero_asiento(0);
+                            }
                             JSONObject paradaSube = jsonObject.getJSONObject("parada_sube");
                             asientoActivo.setId_paradaSube(paradaSube.getInt("id_parada"));
                             JSONObject paradaBaja = jsonObject.getJSONObject("parada_baja");
@@ -826,7 +960,135 @@ public class MainActivity extends AppCompatActivity {
         return bitmap;
     }
 
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 
+    private void PedirFafa(String url, int idViaje, int IdLinea, int origin, int destination,
+                           int idVehiculo) throws JSONException, TimeoutException, ExecutionException {
+
+        JSONObject jsonBody = new JSONObject();
+        jsonBody.put("id_viaje", idViaje);
+        jsonBody.put("id_linea",IdLinea);
+        jsonBody.put("origen", origin);
+        jsonBody.put("destino",destination);
+        jsonBody.put("id_vehiculo",idVehiculo);
+
+        try {
+            volley.llamarWSCustomArray(Request.Method.POST, url, jsonBody,new Response.Listener<JSONArray>(){
+                @Override
+                public void onResponse(JSONArray response)
+                {
+                    try {
+                        seats.clear();
+                        for(int i = 0; i < response.length(); i++)
+                        {
+                            AsientoActivo seat = new AsientoActivo();
+                            JSONObject seatJson = (JSONObject)response.get(i);
+
+                            seat.setId_asiento(seatJson.getInt("id_asiento"));
+                            seat.setNumero_asiento(seatJson.getInt("numero"));
+                            seat.setEsAccesible(seatJson.getBoolean("es_accesible"));
+                            seat.setEsVentana(seatJson.getBoolean("es_ventana"));
+                            seat.setHabilitado(seatJson.getBoolean("habilitado"));
+                            seat.setReservado(seatJson.getBoolean("reservado"));
+
+                            seats.add(seat);
+                        }
+                        if(!seats.isEmpty()){
+                            mostrarPopupSelectAsientos();
+                        }else{
+                            Toast.makeText(MainActivity.this, "No hay lugares disponibles", Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                    catch (JSONException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    Log.d("el ERROR es ",volleyError.toString());
+                }
+            }, null);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void mostrarPopupSelectAsientos(){
+
+        // Inflate the popup_layout.xml
+        LinearLayout viewGroup = (LinearLayout) findViewById(R.id.popupSelectAsientos);
+        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = layoutInflater.inflate(R.layout.popup_select_asiento, viewGroup);
+
+        // Creating the PopupWindow
+        final PopupWindow popup = new PopupWindow(layout, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+
+        Button btn_qr = (Button) layout.findViewById(R.id.btn_ok);
+        btn_qr.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                popup.dismiss();
+            }
+        });
+        popup.showAtLocation(layout, Gravity.CENTER, 0, 0);
+
+
+
+
+        List<GroupPasajeDT> pasajesAgrupados = new ArrayList<>();
+
+        for (int item = 0; item < seats.size();)
+        {
+            GroupPasajeDT grupoPasajes = new GroupPasajeDT();
+            for (int itemInterno = 0; itemInterno < 4; itemInterno++)
+            {
+                if(item < seats.size())
+                {
+                    switch (itemInterno) {
+                        case 0:
+                            grupoPasajes.setPasaje1(seats.get(item));
+                            break;
+                        case 1:
+                            grupoPasajes.setPasaje2(seats.get(item));
+                            break;
+                        case 2:
+                            grupoPasajes.setPasaje3(seats.get(item));
+                            break;
+                        case 3:
+                            grupoPasajes.setPasaje4(seats.get(item));
+                            break;
+                    }
+                }
+                item++;
+            }
+            pasajesAgrupados.add(grupoPasajes);
+        }
+
+        ListView lista = (ListView)findViewById(R.id.list_selectasientos);
+        PasajeArrayAdapterSelect<GroupPasajeDT> seatsArray;
+        seatsArray = new PasajeArrayAdapterSelect<GroupPasajeDT>(this,pasajesAgrupados, valorPasaje);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View header = inflater.inflate(R.layout.list_header_row, lista, false);
+        lista.addHeaderView(header, null, false);
+
+        lista.setAdapter(seatsArray);
+        List<Integer> seats = seatsArray.selectedSeats;
+        double totalValue = seatsArray.totalValue;
+
+    }
 
 }

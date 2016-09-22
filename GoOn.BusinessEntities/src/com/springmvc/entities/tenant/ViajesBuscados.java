@@ -22,9 +22,10 @@ public class ViajesBuscados {
 	private long id_vehiculo;
 	private int cantasientos;
 	private Double valor;
+	private int tiempo;
 	
 	public ViajesBuscados(BigInteger id_viaje, Integer lugares, Timestamp inicio, Integer numero, BigInteger linea_id_linea, BigInteger origen,
-			String origen_description, BigInteger destino, String destino_description, BigInteger numerov, BigInteger id_vehiculo, Integer cantasientos) 
+			String origen_description, BigInteger destino, String destino_description, BigInteger numerov, BigInteger id_vehiculo, Integer cantasientos, Integer tiempo_estimado) 
 	{
 		super();
 		this.id_viaje = id_viaje.longValue();
@@ -39,8 +40,17 @@ public class ViajesBuscados {
 		this.numerov = numerov.longValue();
 		this.id_vehiculo = id_vehiculo.longValue();
 		this.cantasientos = cantasientos;
+		this.tiempo = tiempo_estimado;
 	}
 	
+	public int getTiempo() {
+		return tiempo;
+	}
+
+	public void setTiempo(int tiempo) {
+		this.tiempo = tiempo;
+	}
+
 	public long getId_vehiculo() {
 		return id_vehiculo;
 	}

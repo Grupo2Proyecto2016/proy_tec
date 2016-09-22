@@ -33,6 +33,7 @@ import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.example.malladam.AppUsuarios.DataBaseManager;
 import com.example.malladam.AppUsuarios.R;
 import com.example.malladam.AppUsuarios.adapters.VolleyS;
 import com.example.malladam.AppUsuarios.models.Empresa;
@@ -62,7 +63,7 @@ public class RegisterActivity extends AppCompatActivity  {
     private EditText mConfirmacionView;
     private EditText mTelefonoView;
     private Button mRegistroButton;
-    View focusView;
+    private View focusView;
     private int year, month, day;
     private String currentDate;
     private String nombre;
@@ -75,13 +76,14 @@ public class RegisterActivity extends AppCompatActivity  {
     private String telefono;
     private String fechaNac;
     private String ci;
-    Pattern pattern;
+    private Pattern pattern;
     private VolleyS volley;
-    private String urlregisterUser,urlUserExist;
-    private JSONObject jsonBody;
+    private String urlregisterUser,urlUserExist, urlToken;
     private Boolean userDisponible = false;
-    Handler mHandler;
+    private Handler mHandler;
     private Empresa empresa;
+    private JSONObject jsonBody;
+    private DataBaseManager dbManager;
 
     private static final int DATE_DIALOG_ID = 1;
 
@@ -94,6 +96,7 @@ public class RegisterActivity extends AppCompatActivity  {
         String expressionEmail = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
         pattern = Pattern.compile(expressionEmail, Pattern.CASE_INSENSITIVE);
         empresa = empresa.getInstance();
+        dbManager = new DataBaseManager(this);
 
         mNombreView = (EditText) findViewById(R.id.nombreRegistro);
         mApellidoView = (EditText) findViewById(R.id.apellidoRegistro);
@@ -122,6 +125,7 @@ public class RegisterActivity extends AppCompatActivity  {
         urlregisterUser = getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)+"/registerUser";
         urlUserExist = getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)+"/userExists";
         volley = volley.getInstance(this);
+        urlToken = getResources().getString(R.string.WSServer)+getResources().getString(R.string.app_name)+"/auth";
         //////WS/////////////
 
         LinearLayout mealLayout = (LinearLayout) findViewById(R.id.linear_register);
@@ -332,7 +336,16 @@ public class RegisterActivity extends AppCompatActivity  {
                 public void onErrorResponse(VolleyError volleyError) {
                     Log.d("el ERROR ",volleyError.toString());
                     if (volleyError instanceof ParseError) {
-                        Intent registroIntent = new Intent(RegisterActivity.this, LoginActivity.class);
+                        try {
+                            WSiniciarSession(usuario, contraseña);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (TimeoutException e) {
+                            e.printStackTrace();
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        }
+                        Intent registroIntent = new Intent(RegisterActivity.this, BusquedaActivity.class);
                         RegisterActivity.this.startActivity(registroIntent);
                         Toast.makeText(RegisterActivity.this, getResources().getString(R.string.usuarioRegistro)+" "+usuario+" "+getResources().getString(R.string.creadoConExito), Toast.LENGTH_LONG).show();
                     } else{
@@ -426,4 +439,33 @@ public class RegisterActivity extends AppCompatActivity  {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
+
+
+    private void WSiniciarSession(final String user, final String pass) throws JSONException, TimeoutException, ExecutionException{
+
+        jsonBody  = new JSONObject();
+        jsonBody.put("username",user);
+        jsonBody.put("password",pass);
+
+        try {
+            volley.llamarWS(Request.Method.POST,urlToken, jsonBody,new Response.Listener<JSONObject>(){
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        dbManager.registrarLogin(response.getString("token"),user, pass);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    Log.d("el ERROR del token es ",volleyError.toString());
+                }
+            }, null);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

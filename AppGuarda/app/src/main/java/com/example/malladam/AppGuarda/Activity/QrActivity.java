@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.Toast;
 
 import com.android.IntentIntegrator;
@@ -53,7 +54,7 @@ public class QrActivity extends Activity {
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
 
-        if (scanningResult != null) {
+        if (scanningResult != null ) {
             scanContent = scanningResult.getContents();
             if (scanContent != null) {
                 try {
@@ -65,11 +66,11 @@ public class QrActivity extends Activity {
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 }
+            } else {
+                Toast.makeText(getApplicationContext(), "Sin lectura de pasaje", Toast.LENGTH_LONG).show();
+                Intent intentError = new Intent(QrActivity.this, MainActivity.class);
+                QrActivity.this.startActivity(intentError);
             }
-        } else {
-            Toast.makeText(getApplicationContext(), "Error al leer el QR", Toast.LENGTH_LONG).show();
-            Intent intentError = new Intent(QrActivity.this, MainActivity.class);
-            QrActivity.this.startActivity(intentError);
         }
     }
 
@@ -94,6 +95,7 @@ public class QrActivity extends Activity {
                             AsientoActivo asientoActivo = new AsientoActivo();
                             JSONObject jsonObject = response.getJSONObject("ticket");
                             asientoActivo.setId_pasaje(jsonObject.getInt("id_pasaje"));
+                            asientoActivo.setNumero_pasaje(jsonObject.getString("numero"));
                             asientoActivo.setCosto(Float.parseFloat(jsonObject.getString("costo")));
 
                             try{
@@ -192,5 +194,21 @@ public class QrActivity extends Activity {
             }
         };
         volley.addToQueue(request);
+    }
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            startActivityAfterCleanup(MainActivity.class);
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+
+    private void startActivityAfterCleanup(Class<?> cls) {
+        Intent intent = new Intent(getApplicationContext(), cls);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 }

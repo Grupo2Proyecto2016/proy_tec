@@ -14,10 +14,13 @@
 						<div class="panel panel-default">
 							<div class="panel-heading">
 								<h5 class="panel-title text-center">
-									<a data-toggle="collapse" data-target="#myTravelsPanel"><b>Pasajes</b></a>
+									<a data-toggle="collapse" data-target="#myTravelsPanel">
+										<b>Pasajes  </b>
+										<i class="fa fa-caret-down" aria-hidden="true">  </i>
+									</a>
 								</h5>
 							</div>
-							<div id="myTravelsPanel" class="panel-collapse collapse">
+							<div id="myTravelsPanel" class="panel-collapse collapse in" style="overflow-y: auto; max-height: 300px;">
 								<div class="panel-body">
 									<table ng-show="myTickets.length > 0" style="width: 100%;" class="panelTable">
 										<thead> 
@@ -76,10 +79,13 @@
 						<div class="panel panel-default">
 							<div class="panel-heading">
 								<h5 class="panel-title text-center">
-									<a data-toggle="collapse" data-target="#myTicketsPanel"><b>Encomiendas</b></a>
+									<a data-toggle="collapse" data-target="#myTicketsPanel">
+										<b>Encomiendas  </b>
+										<i class="fa fa-caret-down" aria-hidden="true">  </i>	
+									</a>
 								</h5>
 							</div>
-							<div id="myTicketsPanel" class="panel-collapse collapse">
+							<div id="myTicketsPanel" class="panel-collapse collapse in" style="overflow-y: auto; max-height: 300px;">
 								<div class="panel-body">
 									<table ng-show="myPackages.length > 0" style="width: 100%;" class="panelTable">
 										<thead> 
@@ -187,7 +193,7 @@
 	<div class="modal fade" id="passwordModal" tabindex="-1" role="dialog"
 		aria-labelledby="myModalLabel">
 		<div class="modal-dialog" role="document">
-			<div class="modal-content" style="width: 400px">
+			<div class="modal-content" style="max-width: 400px">
 				<div class="modal-header warning">
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
@@ -230,7 +236,7 @@
 
 	<div class="modal fade" id="deleteUserModal" tabindex="-1"
 		role="dialog">
-		<div class="modal-dialog" style="width: 465px">
+		<div class="modal-dialog" style="max-width: 465px">
 			<div class="modal-content">
 				<div class="modal-header danger">
 					<button type="button" class="close" data-dismiss="modal"
@@ -293,13 +299,6 @@
 							<div class="col-sm-6">
 								<input type="date" max="{{$parent.maxBirth | date:'yyyy-MM-dd'}}" name="birth" class="form-control"
 									ng-model="userModel.fch_nacimiento" required>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label col-sm-4" for="mail">Correo:</label>
-							<div class="col-sm-6">
-								<input type="email" placeholder="Email" name="mail"
-									class="form-control" ng-model="userModel.email" required>
 							</div>
 						</div>
 						<div class="form-group">

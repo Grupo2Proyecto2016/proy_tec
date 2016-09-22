@@ -71,6 +71,22 @@ public class UserRepository
 		return user;
 	}
 
+	public List<Usuario> FindByEmail(String email)
+	{
+		List<Usuario> result = new ArrayList<>();
+		Query q = entityManager.createQuery("FROM Usuario WHERE email = :mail AND enabled = TRUE");
+		q.setParameter("mail", email);
+		try
+		{
+			result = q.getResultList();
+		}
+		catch(NoResultException ex)
+		{
+			return null;
+		}
+		return result;
+	}
+	
 	public List<Usuario> GetEmployees() //ADMIN NO ES INCLUIDO EN EL RESULTADO
 	{
 		List<Usuario> result = new ArrayList<>();
@@ -99,7 +115,6 @@ public class UserRepository
 			user.setCi(userUpdateData.getCi());
 			user.setDireccion(userUpdateData.getDireccion());
 			user.setTelefono(userUpdateData.getTelefono());
-			user.setEmail(userUpdateData.getEmail());
 			user.setFch_nacimiento(userUpdateData.getFch_nacimiento());
 			user.setRol_id_rol(userUpdateData.getRol_id_rol());
 			user.setSucursal(userUpdateData.getSucursal());

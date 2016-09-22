@@ -1,5 +1,6 @@
 package com.example.malladam.AppGuarda.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -71,7 +72,7 @@ public class PasajeArrayAdapter<T> extends ArrayAdapter<T> {
                 asiento1.setImageResource(R.drawable.icon_seat_ocupado);
                 asiento1.setColorFilter(Color.RED);
             }
-            asiento1.setTag((position * 4) +1);
+            asiento1.setTag(pasaje1.getId_pasaje());
         }
 
 
@@ -84,7 +85,7 @@ public class PasajeArrayAdapter<T> extends ArrayAdapter<T> {
                 asiento2.setImageResource(R.drawable.icon_seat_ocupado);
                 asiento2.setColorFilter(Color.RED);
             }
-            asiento2.setTag((position * 4) +2);
+            asiento2.setTag(pasaje2.getId_pasaje());
         }
 
 
@@ -97,7 +98,7 @@ public class PasajeArrayAdapter<T> extends ArrayAdapter<T> {
                 asiento3.setImageResource(R.drawable.icon_seat_ocupado);
                 asiento3.setColorFilter(Color.RED);
             }
-            asiento3.setTag((position * 4) +3);
+            asiento3.setTag(pasaje3.getId_pasaje());
         }
 
         if(pasaje4 !=null) {
@@ -109,36 +110,22 @@ public class PasajeArrayAdapter<T> extends ArrayAdapter<T> {
                 asiento4.setImageResource(R.drawable.icon_seat_ocupado);
                 asiento4.setColorFilter(Color.RED);
             }
-            asiento4.setTag((position * 4) + 4);
+            asiento4.setTag(pasaje4.getId_pasaje());
             //Devolver al ListView la fila creada
         }
 
-        asiento1.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener onClickListener = new View.OnClickListener() {
             public void onClick(View v) {
-                int asiento = (Integer) v.getTag();
-                asientosFragment.desplegarInfo(asiento);
+                Integer id_pasaje = (Integer) v.getTag();
+                if(id_pasaje != null)
+                    asientosFragment.desplegarInfo(id_pasaje, (Activity) v.getContext());
             }
-        });
-        asiento2.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                int asiento = (Integer) v.getTag();
-                asientosFragment.desplegarInfo(asiento);
-            }
-        });
-        asiento3.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                int asiento = (Integer) v.getTag();
-                asientosFragment.desplegarInfo(asiento);
-            }
-        });
-        asiento4.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if(v.getTag() != null){
-                    int asiento = (Integer) v.getTag();
-                    asientosFragment.desplegarInfo(asiento);
-                }
-            }
-        });
+        };
+
+        asiento1.setOnClickListener(onClickListener);
+        asiento2.setOnClickListener(onClickListener);
+        asiento3.setOnClickListener(onClickListener);
+        asiento4.setOnClickListener(onClickListener);
 
         return listItemView;
 

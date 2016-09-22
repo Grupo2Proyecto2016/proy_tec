@@ -176,19 +176,22 @@ goOnApp.controller('employeesController', function($scope, $http, $filter, uiGri
     
     $scope.createUser = function()
     {
-    	$.blockUI();
-    	$http.post(servicesUrl + 'createUser', JSON.stringify($scope.userModel))
-    		.then(function(response) {
-	        	if(response.status == 201)
-	        	{
-	        		$scope.userModel = {};
-	        		$scope.hideUserForm();
-	        		$scope.getUsers();
-	        		$scope.showSuccessAlert("El usuario ha sido creado.");
-	        	}
-    		})
-		;
-    	$.unblockUI();
+    	if(!$scope.userForm.$invalid)
+    	{
+	    	$.blockUI();
+	    	$http.post(servicesUrl + 'createUser', JSON.stringify($scope.userModel))
+	    		.then(function(response) {
+		        	if(response.status == 201)
+		        	{
+		        		$scope.userModel = {};
+		        		$scope.hideUserForm();
+		        		$scope.getUsers();
+		        		$scope.showSuccessAlert("El usuario ha sido creado.");
+		        	}
+	    		})
+			;
+	    	$.unblockUI();
+    	}
     };
     
     $scope.updateUser = function()

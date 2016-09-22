@@ -1,6 +1,7 @@
 package com.springmvc.dataaccess.repository.tenant;
 
 import java.lang.reflect.Constructor;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -210,7 +211,7 @@ public class ViajeRepository {
 		return travels;
 	}
 
-	public List<ViajesBuscados> getTravelsAdvanced(List<Integer> origins, List<Integer> destinations,Calendar dateFrom) 
+	public List<ViajesBuscados> getTravelsAdvanced(List<Integer> origins, List<Integer> destinations, Date dateFrom) 
 	{
 		List<ViajesBuscados> viajes = null;
 		
@@ -252,7 +253,8 @@ public class ViajeRepository {
 				"pd.descripcion destino_descripcion, " +
 				"ve.numerov, " +
 				"ve.id_vehiculo, " +
-				"ve.cantasientos + ve.cantaccesibles AS cantasientos " +
+				"ve.cantasientos + ve.cantaccesibles AS cantasientos, "+ 
+				"l.tiempo_estimado " +
 			"FROM " +
 			"( " +
 				"SELECT l.id_parada_origen, l.id_parada_destino, lp.linea_id_linea, lp.paradas_id_parada AS origen FROM " + 
@@ -295,9 +297,22 @@ public class ViajeRepository {
 			+ "AND v.terminado = FALSE "
 		);		
 		
-		q.setParameter("dateFrom", dateFrom.getTime());
-		dateFrom.add(Calendar.DAY_OF_YEAR, 1);
-		q.setParameter("dateTo", dateFrom.getTime());
+		Date dateTo = new Date();
+		dateTo.setTime(dateFrom.getTime());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		if(sdf.format(new Date()).equals(sdf.format(dateFrom)))
+		{
+			dateFrom.setHours(dateFrom.getHours() + 3);
+		}
+		else
+		{
+			dateFrom.setHours(0);
+		}
+		
+		q.setParameter("dateFrom", dateFrom);
+		dateTo.setHours(23);
+		dateTo.setMinutes(59);
+		q.setParameter("dateTo", dateTo);
 		
 		viajes = EntityMapper.getResultList(q, ViajesBuscados.class);
 		return viajes;

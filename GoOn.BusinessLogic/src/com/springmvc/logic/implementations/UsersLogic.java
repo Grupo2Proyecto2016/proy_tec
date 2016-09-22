@@ -45,6 +45,12 @@ public class UsersLogic implements IUsersLogic {
     	return user;
 	}
 	
+	public Boolean IsMailInUse(String email)
+	{
+		List<com.springmvc.entities.tenant.Usuario> users = TenantContext.UserRepository.FindByEmail(email);
+		return users  != null && users.size() > 0;
+	}
+	
 	public Usuario GetMainUserByName(String userName)
 	{
 		Usuario user = dataContext.GetUserByName(userName);

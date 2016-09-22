@@ -7,7 +7,6 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,8 +14,6 @@ import android.os.Handler;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -26,14 +23,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -47,16 +40,11 @@ import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.example.malladam.AppUsuarios.DataBaseManager;
 import com.example.malladam.AppUsuarios.R;
 import com.example.malladam.AppUsuarios.adapters.VolleyS;
 import com.example.malladam.AppUsuarios.models.Empresa;
-import com.example.malladam.AppUsuarios.models.Encomienda;
-import com.example.malladam.AppUsuarios.models.Parada;
 import com.example.malladam.AppUsuarios.models.Pasaje;
-import com.example.malladam.AppUsuarios.models.Terminal;
 import com.example.malladam.AppUsuarios.utils.DirectionsJSONParser;
 import com.example.malladam.AppUsuarios.utils.MenuTintUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -64,7 +52,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -77,7 +64,6 @@ import com.google.zxing.common.BitMatrix;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -538,14 +524,6 @@ public class PasajesActivity extends AppCompatActivity implements OnMapReadyCall
 
     private void showPopupUbicacion(final Activity context, LatLng ubic, List<LatLng> ubicParadas)
     {
-        /*
-        LinearLayout viewGroup = (LinearLayout) context.findViewById(R.id.popupMaps);
-        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View layout = layoutInflater.inflate(R.layout.popup_maps, viewGroup);
-
-        // Creating the PopupWindow
-        final PopupWindow popup = new PopupWindow(layout, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        */
 
         LayoutInflater inflater = (LayoutInflater) PasajesActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.popup_maps, (ViewGroup) findViewById(R.id.popupMaps));
@@ -565,7 +543,9 @@ public class PasajesActivity extends AppCompatActivity implements OnMapReadyCall
                 SupportMapFragment f = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapPopup);
                 if (f != null)
                     getSupportFragmentManager().beginTransaction().remove(f).commit();
+                //banderaUbicacion=false;
                 pw.dismiss();
+                mMap = null;
             }
         });
         //////////////////
@@ -699,37 +679,55 @@ public class PasajesActivity extends AppCompatActivity implements OnMapReadyCall
         mActualMarker = mMap.addMarker(new MarkerOptions()
                 .position(ubicacion)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.position_indicator)));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(ubicacion, 13.0f));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(ubicacion,13.0f));
 
         if(ubicParadas.size() >= 2) {
             LatLng origin = ubicParadas.get(0);
             LatLng dest = ubicParadas.get(ubicParadas.size() - 1);
-
             // Getting URL to the Google Directions API
             String url = getDirectionsUrl(origin, dest);
 
             DownloadTask downloadTask = new DownloadTask();
-
             // Start downloading json data from Google Directions API
             downloadTask.execute(url);
-        }
 
-        ActualizarUbicacion actualizarUbicacion = new ActualizarUbicacion();
-        actualizarUbicacion.execute();
+            if(!actualizarUbic.isAlive())
+                actualizarUbic.start();
+        }
     }
+
+
+    Thread actualizarUbic = new Thread(new Runnable() {
+        public void run() {
+            while (true) {
+                try {
+                    Thread.sleep(20000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (mMap != null){
+                    try {
+                        WSgetUbicacionDelViaje(idViajeActual, dbManager.getTokenLogueado(), false);
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (TimeoutException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    });
 
         //comienza auxiliares dibujar ruta
     private String getDirectionsUrl(LatLng origin,LatLng dest){
-
         // Origin of route
         String str_origin = "origin="+origin.latitude+","+origin.longitude;
-
         // Destination of route
         String str_dest = "destination="+dest.latitude+","+dest.longitude;
-
         // Sensor enabled
         String sensor = "sensor=false";
-
         // Waypoints
         String waypoints = "";
         for(int i=1;i<ubicParadas.size()-1;i++){
@@ -741,10 +739,8 @@ public class PasajesActivity extends AppCompatActivity implements OnMapReadyCall
 
         // Building the parameters to the web service
         String parameters = str_origin+"&"+str_dest+"&"+sensor+"&"+waypoints;
-
         // Output format
         String output = "json";
-
         // Building the url to the web service
         String url = "https://maps.googleapis.com/maps/api/directions/"+output+"?"+parameters;
 
@@ -757,13 +753,10 @@ public class PasajesActivity extends AppCompatActivity implements OnMapReadyCall
         HttpURLConnection urlConnection = null;
         try{
             URL url = new URL(strUrl);
-
             // Creating an http connection to communicate with url
             urlConnection = (HttpURLConnection) url.openConnection();
-
             // Connecting to url
             urlConnection.connect();
-
             // Reading data from url
             iStream = urlConnection.getInputStream();
 
@@ -796,9 +789,7 @@ public class PasajesActivity extends AppCompatActivity implements OnMapReadyCall
         // Downloading data in non-ui thread
         @Override
         protected String doInBackground(String... url) {
-
             // For storing data from web service
-
             String data = "";
 
             try{
@@ -817,7 +808,6 @@ public class PasajesActivity extends AppCompatActivity implements OnMapReadyCall
             super.onPostExecute(result);
 
             ParserTask parserTask = new ParserTask();
-
             // Invokes the thread for parsing the JSON data
             parserTask.execute(result);
         }
@@ -835,7 +825,6 @@ public class PasajesActivity extends AppCompatActivity implements OnMapReadyCall
             try{
                 jObject = new JSONObject(jsonData[0]);
                 DirectionsJSONParser parser = new DirectionsJSONParser();
-
                 // Starts parsing data
                 routes = parser.parse(jObject);
             }catch(Exception e){
@@ -879,31 +868,14 @@ public class PasajesActivity extends AppCompatActivity implements OnMapReadyCall
     //fin auxiliares dibijar ruta
 
 
-    private class ActualizarUbicacion extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... url) {
-
-            try{
-                while(true) {
-                    WSgetUbicacionDelViaje(idViajeActual, dbManager.getTokenLogueado(), false);
-                    Thread.sleep(5000);
-                }
-            }catch(Exception e){
-            }
-            return "";
-        }
-    }
-
-
     public void actualizarUbicacionMapa() {
 
         if(mActualMarker != null){
             mActualMarker.remove();
         }
-        mActualMarker = mMap.addMarker(new MarkerOptions()
-                .position(ubicacion)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.position_indicator)));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(ubicacion, mMap.getCameraPosition().zoom));
+        if(mMap !=null)
+            mActualMarker = mMap.addMarker(new MarkerOptions()
+                    .position(ubicacion)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.position_indicator)));
     }
 }

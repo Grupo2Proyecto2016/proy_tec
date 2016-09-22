@@ -382,19 +382,10 @@ public class DataBaseManager {
     }
 
 
-    public AsientoActivo getAsiento(int id_pasaje){
-
-        String whereClause = CN_IDPASAJE_ASIENTO+" = ? ";
-        String[] whereArgs = new String[] { String.valueOf(id_pasaje) };
-        Cursor resultado = db.query(TABLE_NAME_ASIENTOS, null, whereClause, whereArgs, null, null, null);
-
-        resultado.close();
-        return null;
-    }
-
-
     public List<AsientoActivo> getAsientosActivos(){
-        Cursor resultado = db.query(TABLE_NAME_ASIENTOS, null, null, null, null, null, null);
+        String whereClause = CN_IDASIENTO_ASIENTO+" > ? ";
+        String[] whereArgs = new String[] { "0" };
+        Cursor resultado = db.query(TABLE_NAME_ASIENTOS, null,whereClause, whereArgs, null, null, null);
         List<AsientoActivo> asientos = new ArrayList<AsientoActivo>();
 
         if (resultado.moveToFirst()) {
@@ -419,6 +410,64 @@ public class DataBaseManager {
 
         return asientos;
     }
+
+
+    public List<AsientoActivo> getParadosActivos(){
+        String whereClause = CN_IDASIENTO_ASIENTO+" <= ? ";
+        String[] whereArgs = new String[] { "0" };
+        Cursor resultado = db.query(TABLE_NAME_ASIENTOS, null,whereClause, whereArgs, null, null, null);
+        List<AsientoActivo> asientos = new ArrayList<AsientoActivo>();
+
+        if (resultado.moveToFirst()) {
+            //Recorremos el cursor hasta que no haya más registros
+            do {
+                AsientoActivo asiento = new AsientoActivo();
+                asiento.setApellido_usuario(resultado.getString(resultado.getColumnIndex(CN_APELLIDOUSUARIO_ASIENTO)));
+                asiento.setCosto(Float.parseFloat(resultado.getString(resultado.getColumnIndex(CN_COSTO_ASIENTO))));
+                asiento.setId_asiento(resultado.getInt(resultado.getColumnIndex(CN_IDASIENTO_ASIENTO)));
+                asiento.setId_paradaSube(resultado.getInt(resultado.getColumnIndex(CN_IDPARADABAJA_ASIENTO)));
+                asiento.setId_paradaBaja(resultado.getInt(resultado.getColumnIndex(CN_IDPARADASUBE_ASIENTO)));
+                asiento.setId_pasaje(resultado.getInt(resultado.getColumnIndex(CN_IDPASAJE_ASIENTO)));
+                asiento.setNumero_pasaje(resultado.getString(resultado.getColumnIndex(CN_NROPASAJE_ASIENTO)));
+                asiento.setId_viaje(resultado.getInt(resultado.getColumnIndex(CN_IDVIAJE_ASIENTO)));
+                asiento.setNombre_usuario(resultado.getString(resultado.getColumnIndex(CN_NOMBREUSUARIO_ASIENTO)));
+                asiento.setNumero_asiento(resultado.getInt(resultado.getColumnIndex(CN_NUMEROASIENTO_ASIENTO)));
+                asiento.setUsername_usuario(resultado.getString(resultado.getColumnIndex(CN_USERNAMEUSUARIO_ASIENTO)));
+                asientos.add(asiento);
+            } while(resultado.moveToNext());
+        }
+        resultado.close();
+
+        return asientos;
+    }
+
+
+    public AsientoActivo getPasajeActivoById(int idPasaje){
+        String whereClause = CN_IDPASAJE_ASIENTO+" = ? ";
+        String[] whereArgs = new String[] { String.valueOf(idPasaje) };
+        Cursor resultado = db.query(TABLE_NAME_ASIENTOS, null,whereClause, whereArgs, null, null, null);
+        AsientoActivo asiento = new AsientoActivo();
+        resultado.moveToFirst();
+        int cant= resultado.getCount();
+        if(resultado.getCount()>0) {
+            asiento.setApellido_usuario(resultado.getString(resultado.getColumnIndex(CN_APELLIDOUSUARIO_ASIENTO)));
+            asiento.setCosto(Float.parseFloat(resultado.getString(resultado.getColumnIndex(CN_COSTO_ASIENTO))));
+            asiento.setId_asiento(resultado.getInt(resultado.getColumnIndex(CN_IDASIENTO_ASIENTO)));
+            asiento.setId_paradaBaja(resultado.getInt(resultado.getColumnIndex(CN_IDPARADABAJA_ASIENTO)));
+            asiento.setId_paradaSube(resultado.getInt(resultado.getColumnIndex(CN_IDPARADASUBE_ASIENTO)));
+            asiento.setId_pasaje(resultado.getInt(resultado.getColumnIndex(CN_IDPASAJE_ASIENTO)));
+            asiento.setNumero_pasaje(resultado.getString(resultado.getColumnIndex(CN_NROPASAJE_ASIENTO)));
+            asiento.setId_viaje(resultado.getInt(resultado.getColumnIndex(CN_IDVIAJE_ASIENTO)));
+            asiento.setNombre_usuario(resultado.getString(resultado.getColumnIndex(CN_NOMBREUSUARIO_ASIENTO)));
+            asiento.setNumero_asiento(resultado.getInt(resultado.getColumnIndex(CN_NUMEROASIENTO_ASIENTO)));
+            asiento.setUsername_usuario(resultado.getString(resultado.getColumnIndex(CN_USERNAMEUSUARIO_ASIENTO)));
+        }
+        resultado.close();
+
+        return asiento;
+    }
+
+
 
 
     public boolean liberanAsientosByParadaDestino(int id_paradaDestino){

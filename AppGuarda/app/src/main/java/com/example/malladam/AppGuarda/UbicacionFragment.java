@@ -86,10 +86,11 @@ public class UbicacionFragment extends Fragment implements OnMapReadyCallback, G
                 if(mActualMarker != null){
                     mActualMarker.remove();
                 }
-                mActualMarker = mMap.addMarker(new MarkerOptions()
-                        .position(local)
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.position_indicator)));
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(local, mMap.getCameraPosition().zoom));//actual
+                if(mMap!= null) {
+                    mActualMarker = mMap.addMarker(new MarkerOptions()
+                            .position(local)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.position_indicator)));
+                }
             }
 
             public void onProviderDisabled(String provider) {
@@ -155,31 +156,12 @@ public class UbicacionFragment extends Fragment implements OnMapReadyCallback, G
 
             // Start downloading json data from Google Directions API
             downloadTask.execute(url);
-        }
 
 
-        // fin trazar ruta
-
-        //comienza ubicacion actual
-/*
-        double latActual = dbManager.getLatitud();
-        double longActual = dbManager.getLongitud();
-        if (latActual != 0 && longActual !=0) {
-            LatLng posActual = new LatLng (latActual, longActual);
-            if(mActualMarker != null){
-                mActualMarker.remove();
-            }
-            mActualMarker = mMap.addMarker(new MarkerOptions()
-                    .position(posActual)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.position_indicator)));
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posActual, 13.0f));//actual
-        }
-        else{
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(-34.83346,-56.16735), 13.0f));//montevideo
-        }
-*/
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                 new LatLng(paradas.get(0).getLatitud(), paradas.get(0).getLongitud()), 13.0f));//actual
+
+        }
         mMap.setOnInfoWindowClickListener(this);
     }
 
@@ -349,7 +331,8 @@ public class UbicacionFragment extends Fragment implements OnMapReadyCallback, G
             }
 
             // Drawing polyline in the Google Map for the i-th route
-            mMap.addPolyline(lineOptions);
+            if(mMap != null)
+                mMap.addPolyline(lineOptions);
         }
     }
     //fin auxiliares dibijar ruta

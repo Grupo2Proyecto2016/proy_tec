@@ -14,6 +14,7 @@ import java.util.UUID;
 import com.springmvc.dataaccess.context.TenantDAContext;
 import com.springmvc.entities.tenant.Asiento;
 import com.springmvc.entities.tenant.Devolucion;
+import com.springmvc.entities.tenant.Encomienda;
 import com.springmvc.entities.tenant.Linea;
 import com.springmvc.entities.tenant.Mantenimiento;
 import com.springmvc.entities.tenant.Parada;
@@ -31,6 +32,8 @@ import com.springmvc.exceptions.BusTravelConcurrencyException;
 import com.springmvc.exceptions.BusyDriverException;
 import com.springmvc.exceptions.CollectTicketException;
 import com.springmvc.logic.interfaces.ILinesLogic;
+import com.springmvc.logic.utils.MailMessages;
+import com.springmvc.logic.utils.MailSender;
 
 public class LinesLogic implements ILinesLogic
 {
@@ -227,7 +230,7 @@ public class LinesLogic implements ILinesLogic
 		return viajes;
 	}
 	
-	public List<ViajesBuscados> SearchTravelsAdvanced(Calendar dateFrom, Calendar dateTo, List<Integer> origins, List<Integer> destinations)
+	public List<ViajesBuscados> SearchTravelsAdvanced(Date dateFrom, List<Integer> origins, List<Integer> destinations)
 	{		
 		List<ViajesBuscados> viajes = TenantContext.ViajeRepository.getTravelsAdvanced(origins, destinations, dateFrom);
 		for(int x = 0; x < viajes.size(); x ++)
@@ -370,6 +373,8 @@ public class LinesLogic implements ILinesLogic
 	public void ClientConfirmTickets(List<Pasaje> tickets, String paymentId) 
 	{
 		TenantContext.LineaRepository.ClientConfirmTickets(tickets, paymentId);
+		Pasaje ticket = tickets.get(0);
+		SendTicketMail(ticket, TicketStatus.Bought, false);
 	}
 	
 	public void SalesConfirmTicket(Pasaje ticket) 
@@ -377,6 +382,7 @@ public class LinesLogic implements ILinesLogic
 		List<Pasaje> tickets = new ArrayList<>();
 		tickets.add(ticket);
 		TenantContext.LineaRepository.ClientConfirmTickets(tickets, null);
+		SendTicketMail(ticket, TicketStatus.Bought, false);
 	}
 	
 	public List<Pasaje> ClientReserveTickets(Usuario currentUser, long id_viaje, int origen, int destino, Double valor,List<Long> reservados) 
@@ -402,6 +408,7 @@ public class LinesLogic implements ILinesLogic
 			ticketToPersist.setNumero(auxNum.toString());
 			ticketToPersist.setId_pasaje(0);
 			TenantContext.LineaRepository.InsertTicket(ticketToPersist);
+			SendTicketMail(ticketToPersist, TicketStatus.Reserved, false);
 			tickets.add(ticketToPersist);
 		}
 		return tickets;
@@ -430,6 +437,7 @@ public class LinesLogic implements ILinesLogic
 			ticketToPersist.setNumero(auxNum.toString());
 			ticketToPersist.setId_pasaje(0);
 			TenantContext.LineaRepository.InsertTicket(ticketToPersist);
+			SendTicketMail(ticketToPersist, TicketStatus.Bought, false);
 			tickets.add(ticketToPersist);
 		}
 		return tickets;
@@ -458,6 +466,7 @@ public class LinesLogic implements ILinesLogic
 			ticketToPersist.setNumero(auxNum.toString());
 			ticketToPersist.setId_pasaje(0);
 			TenantContext.LineaRepository.InsertTicket(ticketToPersist);
+			SendTicketMail(ticketToPersist, TicketStatus.Reserved, false);
 			tickets.add(ticketToPersist);
 		}
 		return tickets;
@@ -547,6 +556,7 @@ public class LinesLogic implements ILinesLogic
 
 	public void DeleteTicket(Pasaje ticket) 
 	{
+		SendTicketMail(ticket, null, true);
 		TenantContext.PasajeRepository.deleteTicket(ticket);
 	}	
 
@@ -559,6 +569,11 @@ public class LinesLogic implements ILinesLogic
 	{
 		TenantContext.PasajeRepository.updateByTravel(travelId, TicketStatus.InTravel);
 		TenantContext.EncomiendaRepository.updateByTravel(travelId, PackageStatus.Carring);
+		List<Encomienda> packages = TenantContext.EncomiendaRepository.GetByTravel(travelId);
+		for (Encomienda pack : packages) 
+		{
+			SendPackageMail(pack, PackageStatus.Carring);
+		}
 	}
 
 	public Pasaje CollectTicket(long travelId, String ticketNumber) throws CollectTicketException 
@@ -591,6 +606,79 @@ public class LinesLogic implements ILinesLogic
 			}
 		}
 		return ticket;
+	}
+	
+	private void  SendTicketMail(Pasaje ticket, TicketStatus newStatus, boolean isDelete)
+	{
+		if(ticket.getUser_compra() != null)
+		{
+			if(isDelete)
+			{
+				MailSender.Send(
+					ticket.getUser_compra().getEmail(),
+					MailMessages.TicketCancelationTitle,
+					String.format(MailMessages.TicketCancelationMsg, ticket.getUser_compra().getNombre())
+				);
+			}
+			else if(newStatus == TicketStatus.Bought)
+			{
+				MailSender.Send(
+					ticket.getUser_compra().getEmail(),
+					MailMessages.TicketBuyTitle,
+					String.format(MailMessages.TicketBuyMsg, ticket.getUser_compra().getNombre())
+				);
+			}
+			else if(newStatus == TicketStatus.Reserved)
+			{
+				MailSender.Send(
+					ticket.getUser_compra().getEmail(),
+					MailMessages.TicketReservationTitle,
+					String.format(MailMessages.TicketReservationMsg, ticket.getUser_compra().getNombre())
+				);
+			}
+		}
+	}
+	
+	private void  SendPackageMail(Encomienda pack, PackageStatus newStatus)
+	{
+		if(pack.getUsr_envia() != null)
+		{
+			if(newStatus == PackageStatus.Carring)
+			{
+				MailSender.Send(
+					pack.getUsr_envia().getEmail(),
+					MailMessages.PackageCarringTitle,
+					String.format(MailMessages.PackageCarringMsg, pack.getUsr_envia().getNombre())
+				);
+			}
+			else if(newStatus == PackageStatus.Transported)
+			{
+				MailSender.Send(
+					pack.getUsr_envia().getEmail(),
+					MailMessages.PackageArrivedSTitle,
+					String.format(MailMessages.PackageArrivedSMsg, pack.getUsr_envia().getNombre())
+				);
+			}
+		}
+		if(pack.getUsr_recibe() != null)
+		{
+			if(newStatus == PackageStatus.Carring)
+			{
+				MailSender.Send(
+					pack.getUsr_envia().getEmail(),
+					MailMessages.PackageCarringTitle,
+					String.format(MailMessages.PackageCarringMsg, pack.getUsr_envia().getNombre())
+				);
+			}
+			else if(newStatus == PackageStatus.Transported)
+			{
+				MailSender.Send(
+					pack.getUsr_recibe().getEmail(),
+					MailMessages.PackageArrivedRTitle,
+					String.format(MailMessages.PackageArrivedRMsg, pack.getUsr_recibe().getNombre())
+				);
+			}
+		}
 	}
 	
 	public List<Parada> FindNextStationsByOrigin(long id_parada, long id_linea)
@@ -632,6 +720,11 @@ public class LinesLogic implements ILinesLogic
 		TenantContext.PasajeRepository.updateByTravel(travelId, TicketStatus.cashed);
 		TenantContext.EncomiendaRepository.updateByTravel(travelId, PackageStatus.Transported);
 		TenantContext.ViajeRepository.finish(travelId);
+		List<Encomienda> packages = TenantContext.EncomiendaRepository.GetByTravel(travelId);
+		for (Encomienda pack : packages) 
+		{
+			SendPackageMail(pack, PackageStatus.Transported);
+		}
 	}
 	
 	public ViajeUbicacion GetLastTravelLocation(long travelId)

@@ -1,31 +1,40 @@
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-    <ListView
-        android:id="@+id/list_asientos"
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent">
-    </ListView>
+<android.support.v4.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipe_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:layout_marginTop="50dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@color/fondoAsientos"
+        android:weightSum="20">
 
-        <TextView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="80dp"
-            android:textSize="40dp"
-            android:gravity="left"
-            android:textColor="@color/negro"
-            android:id="@+id/infoAsiento"/>
+            <ListView
+                android:id="@+id/list_asientos"
+                android:layout_weight="9"
+                android:divider="@null"
+                android:dividerHeight="0dp"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent">
+            </ListView>
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="11"
+                android:layout_marginTop="50dp"
+                android:orientation="horizontal">
+
+            <ListView
+                android:id="@+id/list_parados"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:divider="@null"
+                android:dividerHeight="0dp">
+            </ListView>
+        </LinearLayout>
+
     </LinearLayout>
-
-</LinearLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

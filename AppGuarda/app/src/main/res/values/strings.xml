@@ -31,8 +31,6 @@
     <string name="error_invalid_password">Contraseña demasiado corta</string>
     <string name="error_incorrect_password">Contraseña incorrecta</string>
     <string name="error_field_required">Campo obligatorio</string>
-    <string name="primera">Primera"</string>
-    <string name="segunda">Segunda."</string>
     <string name="permission_rationale">"Permisos del contacto son necesarios para email noseque."</string>
     <string name="grilla_asiento">"Asiento"</string>
     <string name="grilla_usuario">"Usuario"</string>
@@ -40,9 +38,14 @@
     <string name="grilla_destino">"Destino"</string>
     <string name="error_conexion">Error en la conexión, Intente nuevamente</string>
     <string name="iniciarViaje">Iniciar Viaje</string>
+    <string name="finViaje">Finalizar Viaje</string>
     <string name="tokenInvalido">"Credenciales Inválidas, favor inicie sesión"</string>
     <string name="error_invalid_role">Usuario sin permiso</string>
     <string name="qr_pasaje">"Pasaje"</string>
+    <string name="cerrarsesionyviaje">"Finalizar viaje y cerrar sesión"</string>
+    <string name="nro_viaje">"Nro. Viaje"</string>
+    <string name="relevo">"Relevarme"</string>
+
 
     <string name="auth">"/auth"</string>
     <string name="getSiguienteViaje">/getLastTravelByDriver</string>
@@ -53,6 +56,7 @@
     <string name="setTravelLocation">/setTravelLocation</string>
     <string name="getTicketValue">/getTicketValue</string>
     <string name="buyTicket">/buyTicket</string>
+    <string name="preBuyTickets">"/preBuyTicket"</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

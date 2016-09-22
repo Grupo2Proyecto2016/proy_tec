@@ -450,6 +450,40 @@
   	  };
   	});
     
+    goOnApp.directive('emailexists', function($http, $q) {
+    	  return {
+    	    require: 'ngModel',
+    	    link: function(scope, elm, attrs, ctrl)
+    	    {
+    	    	ctrl.$asyncValidators.emailexists = function(modelValue, viewValue) 
+    	    	{
+    	    		if (ctrl.$isEmpty(modelValue)) 
+    	    		{
+    	  	          // consider empty model valid
+    	  	          return $q.when();
+    	    		}
+    	    		
+    	    		var def = $q.defer();
+    	    		
+    		    	$http.get(servicesUrl + 'emailExists?email='+ modelValue)
+  	  		    	.then(function(response) 
+  	    			{
+  	  		    		if(response.status == 200)
+  		        		{
+  	  		    			return def.reject();
+  		        		}
+  	  		    		else if (response.status == 404)
+  	  		    		{
+  	  		    			return def.resolve();
+  	  		    		}
+      			});
+    		    	
+    		    	return def.promise;
+    	    	};
+    	    }
+    	  };
+    	});
+    
     goOnApp.directive('busexists', function($http, $q) {
     	  return {
     	    require: 'ngModel',

@@ -454,171 +454,189 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     
     $scope.updateTerminalDestino = function ()   
     {
-    	var term = $scope.getTerminalById($scope.lineForm.destino);    	
-    	var myLatlng = new google.maps.LatLng(term.latitud, term.longitud);    	
-    	var esprimero = false;
-    	
-    	var marker = new google.maps.Marker(
+    	if($scope.lineForm.destino != null && $scope.lineForm.destino == $scope.lineForm.origen)
     	{
-    		position: myLatlng,
-	  	    map: $scope.map,
-	  	    animation: google.maps.Animation.DROP, //just for fun
-	  	    es_terminal: true,
-	  	    es_peaje: false,
-	  	    es_origen: false,
-	  	    descripcion: '',
-	  	    reajusta: false,
-	  	    reajuste: 0,
-	  	    km: 0,
-	  	    id_parada:$scope.lineForm.destino 
-	  	});
-    	
-    	if($scope.markers.length == 0)
-    	{
-    		$scope.markers.splice(1, 0, marker);
-    		esprimero = true;
-    	}
-    	
-    	var tope = $scope.markers.length;
-    	
-    	if (($scope.markers[tope-1].es_terminal) && ($scope.markers[tope-1].es_origen === false))
-    	{
-    		if (esprimero === false){$scope.markers[tope-1].setMap(null)};
-    		$scope.markers[tope-1] = marker;    
+    		$scope.lineForm.destino = null;
+    		$scope.error_message = 'La terminal de origen y destino no pueden ser la misma.'; 
+			$("#errorModal").modal("toggle");
     	}
     	else
-    	{
-    		$scope.markers.push(marker);
-    	}
-    	
-    	var l = myLatlng.lat();
-		var g = myLatlng.lng();
-		$scope.geocodePosition(marker);
-		$scope.map.panTo(myLatlng);
-		
-		//Viaje de vuelta
-		esprimero = false;
-		
-		var marker = new google.maps.Marker(
-    	{
-    		position: myLatlng,
-	  	    map: $scope.mapV,
-	  	    animation: google.maps.Animation.DROP, //just for fun
-	  	    es_terminal: true,
-	  	    es_peaje: false,
-	  	    es_origen: true,
-	  	    descripcion: '',
-	  	    reajusta: false,
-	  	    reajuste: 0,
-	  	    km: 0,
-	  	    id_parada:$scope.lineForm.destino
-	  	});
-		
-		if($scope.markersV.length == 0)
-    	{
-    		$scope.markersV.splice(1, 0, marker);
-    		esprimero = true;
-    	}
-		
-		if(($scope.markersV[0].es_terminal) && ($scope.markersV[0].es_origen))
-    	{  
-    		if (esprimero === false){$scope.markersV[0].setMap(null)};
-    		$scope.markersV[0] = marker;    		
-    	}
-    	else
-    	{
-    		$scope.markersV.splice(0, 0, marker);    		
-    	}
-    	
-    	var l = myLatlng.lat();
-		var g = myLatlng.lng();
-		$scope.geocodePosition(marker);
-		$scope.mapV.panTo(myLatlng);
+		{
+    		var term = $scope.getTerminalById($scope.lineForm.destino);    	
+    		var myLatlng = new google.maps.LatLng(term.latitud, term.longitud);    	
+    		var esprimero = false;
+    		
+    		var marker = new google.maps.Marker(
+    				{
+    					position: myLatlng,
+    					map: $scope.map,
+    					animation: google.maps.Animation.DROP, //just for fun
+    					es_terminal: true,
+    					es_peaje: false,
+    					es_origen: false,
+    					descripcion: '',
+    					reajusta: false,
+    					reajuste: 0,
+    					km: 0,
+    					id_parada:$scope.lineForm.destino 
+    				});
+    		
+    		if($scope.markers.length == 0)
+    		{
+    			$scope.markers.splice(1, 0, marker);
+    			esprimero = true;
+    		}
+    		
+    		var tope = $scope.markers.length;
+    		
+    		if (($scope.markers[tope-1].es_terminal) && ($scope.markers[tope-1].es_origen === false))
+    		{
+    			if (esprimero === false){$scope.markers[tope-1].setMap(null)};
+    			$scope.markers[tope-1] = marker;    
+    		}
+    		else
+    		{
+    			$scope.markers.push(marker);
+    		}
+    		
+    		var l = myLatlng.lat();
+    		var g = myLatlng.lng();
+    		$scope.geocodePosition(marker);
+    		$scope.map.panTo(myLatlng);
+    		
+    		//Viaje de vuelta
+    		esprimero = false;
+    		
+    		var marker = new google.maps.Marker(
+    				{
+    					position: myLatlng,
+    					map: $scope.mapV,
+    					animation: google.maps.Animation.DROP, //just for fun
+    					es_terminal: true,
+    					es_peaje: false,
+    					es_origen: true,
+    					descripcion: '',
+    					reajusta: false,
+    					reajuste: 0,
+    					km: 0,
+    					id_parada:$scope.lineForm.destino
+    				});
+    		
+    		if($scope.markersV.length == 0)
+    		{
+    			$scope.markersV.splice(1, 0, marker);
+    			esprimero = true;
+    		}
+    		
+    		if(($scope.markersV[0].es_terminal) && ($scope.markersV[0].es_origen))
+    		{  
+    			if (esprimero === false){$scope.markersV[0].setMap(null)};
+    			$scope.markersV[0] = marker;    		
+    		}
+    		else
+    		{
+    			$scope.markersV.splice(0, 0, marker);    		
+    		}
+    		
+    		var l = myLatlng.lat();
+    		var g = myLatlng.lng();
+    		$scope.geocodePosition(marker);
+    		$scope.mapV.panTo(myLatlng);
+		}
     }
     
     $scope.updateTerminalOrigen = function ()   
     {
-    	var term = $scope.getTerminalById($scope.lineForm.origen);    	
-    	var myLatlng = new google.maps.LatLng(term.latitud, term.longitud);    	
-    	var esprimero = false;
-    	
-    	var marker = new google.maps.Marker(
+    	if($scope.lineForm.destino != null && $scope.lineForm.destino == $scope.lineForm.origen)
     	{
-    		position: myLatlng,
-	  	    map: $scope.map,
-	  	    animation: google.maps.Animation.DROP,
-	  	    es_terminal: true,
-	  	    es_peaje: false,
-	  	    es_origen: true,
-	  	    descripcion: '',
-	  	    reajusta: false,
-	  	    reajuste: 0,
-	  	    km: 0,
-	  	    id_parada:$scope.lineForm.origen
-	  	});
-    	
-    	if($scope.markers.length == 0)
-    	{
-    		$scope.markers.splice(1, 0, marker);
-    		esprimero = true;
-    	}    	
-    	
-    	if(($scope.markers[0].es_terminal) && ($scope.markers[0].es_origen))
-    	{  
-    		if (esprimero === false){$scope.markers[0].setMap(null)};
-    		$scope.markers[0] = marker;    		
+    		$scope.lineForm.origen = null;
+    		$scope.error_message = 'La terminal de origen y destino no pueden ser la misma.'; 
+			$("#errorModal").modal("toggle");
     	}
     	else
     	{
-    		$scope.markers.splice(0, 0, marker);    		
-    	}
-    	
-    	var l = myLatlng.lat();
-		var g = myLatlng.lng();
-		$scope.geocodePosition(marker);
-		$scope.map.panTo(myLatlng);
-		
-		
-		//ViajeVuelta
-		esprimero = true;
-		
-		var marker = new google.maps.Marker(
-    	{
-    		position: myLatlng,
-	  	    map: $scope.mapV,
-	  	    animation: google.maps.Animation.DROP, //just for fun
-	  	    es_terminal: true,
-	  	    es_peaje: false,
-	  	    es_origen: false,
-	  	    descripcion: '',
-	  	    reajusta: false,
-	  	    reajuste: 0,
-	  	    km: 0,
-	  	    id_parada:$scope.lineForm.origen
-	  	});
-    	
-    	if($scope.markersV.length == 0)
-    	{
-    		$scope.markersV.splice(1, 0, marker);
+    		var term = $scope.getTerminalById($scope.lineForm.origen);    	
+    		var myLatlng = new google.maps.LatLng(term.latitud, term.longitud);    	
+    		var esprimero = false;
+    		
+    		var marker = new google.maps.Marker(
+    				{
+    					position: myLatlng,
+    					map: $scope.map,
+    					animation: google.maps.Animation.DROP,
+    					es_terminal: true,
+    					es_peaje: false,
+    					es_origen: true,
+    					descripcion: '',
+    					reajusta: false,
+    					reajuste: 0,
+    					km: 0,
+    					id_parada:$scope.lineForm.origen
+    				});
+    		
+    		if($scope.markers.length == 0)
+    		{
+    			$scope.markers.splice(1, 0, marker);
+    			esprimero = true;
+    		}    	
+    		
+    		if(($scope.markers[0].es_terminal) && ($scope.markers[0].es_origen))
+    		{  
+    			if (esprimero === false){$scope.markers[0].setMap(null)};
+    			$scope.markers[0] = marker;    		
+    		}
+    		else
+    		{
+    			$scope.markers.splice(0, 0, marker);    		
+    		}
+    		
+    		var l = myLatlng.lat();
+    		var g = myLatlng.lng();
+    		$scope.geocodePosition(marker);
+    		$scope.map.panTo(myLatlng);
+    		
+    		
+    		//ViajeVuelta
     		esprimero = true;
+    		
+    		var marker = new google.maps.Marker(
+    				{
+    					position: myLatlng,
+    					map: $scope.mapV,
+    					animation: google.maps.Animation.DROP, //just for fun
+    					es_terminal: true,
+    					es_peaje: false,
+    					es_origen: false,
+    					descripcion: '',
+    					reajusta: false,
+    					reajuste: 0,
+    					km: 0,
+    					id_parada:$scope.lineForm.origen
+    				});
+    		
+    		if($scope.markersV.length == 0)
+    		{
+    			$scope.markersV.splice(1, 0, marker);
+    			esprimero = true;
+    		}
+    		
+    		var tope = $scope.markersV.length;
+    		
+    		if (($scope.markersV[tope-1].es_terminal) && ($scope.markersV[tope-1].es_origen === false))
+    		{
+    			if (esprimero === false){$scope.markersV[tope-1].setMap(null)};
+    			$scope.markersV[tope-1] = marker;    
+    		}
+    		else
+    		{
+    			$scope.markersV.push(marker);
+    		}
+    		
+    		var l = myLatlng.lat();
+    		var g = myLatlng.lng();
+    		$scope.geocodePosition(marker);
+    		$scope.mapV.panTo(myLatlng);
     	}
-    	
-    	var tope = $scope.markersV.length;
-    	
-    	if (($scope.markersV[tope-1].es_terminal) && ($scope.markersV[tope-1].es_origen === false))
-    	{
-    		if (esprimero === false){$scope.markersV[tope-1].setMap(null)};
-    		$scope.markersV[tope-1] = marker;    
-    	}
-    	else
-    	{
-    		$scope.markersV.push(marker);
-    	}
-    	
-    	var l = myLatlng.lat();
-		var g = myLatlng.lng();
-		$scope.geocodePosition(marker);
-		$scope.mapV.panTo(myLatlng);
 		
     };
     
