@@ -87,7 +87,7 @@ public class MantenimientoRestController {
     	mantenimiento.dayFrom.setTimeZone(TimeZone.getDefault());
     	mantenimiento.dayTo.setTimeZone(TimeZone.getDefault());
     	
-
+    	mantenimientoToPersist.setDescripcion(mantenimiento.getDescripcion());
     	mantenimientoToPersist.setCosto(null);
     	mantenimientoToPersist.setTaller(mantenimiento.taller);
     	mantenimientoToPersist.setVehiculo(mantenimiento.vehiculo);

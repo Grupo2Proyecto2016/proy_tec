@@ -62,23 +62,19 @@ public class MantenimientoLogic implements IMantenimientoLogic {
 			inicio.set(Calendar.HOUR , 0);
 			inicio.set(Calendar.MINUTE , 0);
 			inicio.set(Calendar.SECOND , 0);
-			
-						
+									
 			Date mantenimientoInicio = inicio.getTime();
 			Date mantenimientoFin = fin.getTime();
-
-			
 			
 			Mantenimiento mantenimientoToPersist = new Mantenimiento();
 	    	mantenimientoToPersist.setCosto(null);
+	    	mantenimientoToPersist.setDescripcion(mantenimiento.getDescripcion());
 	    	mantenimientoToPersist.setTaller(mantenimiento.getTaller());
 	    	mantenimientoToPersist.setVehiculo(mantenimiento.getVehiculo());
 	    	mantenimientoToPersist.setInicio(mantenimientoInicio);
 	    	mantenimientoToPersist.setFin(mantenimientoFin);
 	    	mantenimientoToPersist.setUser_crea(mantenimiento.getUser_crea());
 	    	mantenimientoToPersist.setFacturaContent(null);
-
-			
 
 			TenantContext.MantenimientoRepository.InsertMantenimiento(mantenimientoToPersist);
 			deli = 1;
