@@ -324,4 +324,151 @@ goOnApp.controller('userPanelController', function($scope, $http, $location, uiG
     }
     
     locateBus();
+    
+    /*Pintado de ruta*/
+    var infowindow = new google.maps.InfoWindow;
+    $scope.routeLine = {};
+    
+    $scope.showRoute = function(line, origen, destino)
+    {
+    	$.blockUI();
+    	$http.get(servicesUrl + 'getLine?id_linea=' +line)
+		.success(function(data, status, headers, config) 
+		{
+			
+			$scope.routeLine = data;
+			
+	    	$http.get(servicesUrl + 'FindNextStationsByOrigin?line=' + line+'&origin=' +$scope.routeLine.origen.id_parada)
+			.success(function(data, status, headers, config) 
+			{
+				$scope.routeLine.paradas = data;
+				$scope.routeLine.selorigen = origen.id_parada;
+				$scope.routeLine.seldestino = destino.id_parada;
+		    	
+		    	var directionsService = new google.maps.DirectionsService;
+		    	var directionsDisplay = new google.maps.DirectionsRenderer({
+		    	    														suppressPolylines: true,
+		    	    														infoWindow: infowindow
+		    	  															});
+		    	directionsDisplay.setMap($scope.travelMap);		   	    
+		    	
+		    	$scope.calculateAndDisplayRoute(directionsService, directionsDisplay);
+		   	    $timeout(function () 
+				{            
+		   	    	google.maps.event.trigger($scope.travelMap, 'resize');
+		   	    	
+				}, 400);
+		   	    
+				//$("#rutaModal").modal('show');
+			})
+			.error(function()
+			{
+							
+			});
+		});
+    	locateUser();
+    	$.unblockUI();
+    }
+    
+    $scope.calculateAndDisplayRoute = function(directionsService, directionsDisplay)
+    {
+    	/*var waypts = [{location: '41.062317, 28.899756',stopover: true }, 
+    	              {location: '41.062276, 28.898866',  stopover: true }, 
+    	              { location: '41.061993, 28.8982', stopover: true }];
+    	*/
+    	var waypts = [];
+    	for (var i = 0; i < $scope.routeLine.paradas.length-1; i++) 
+    	{
+    		position = new google.maps.LatLng($scope.routeLine.paradas[i].latitud,$scope.routeLine.paradas[i].longitud);
+    	    waypts.push({location: position, stopover: true});    	    
+    	}
+    	
+    	$scope.routeLine.indOr = 0;
+    	$scope.routeLine.indDe = 0;
+    	
+    	for (var i = 0; i < $scope.routeLine.paradas.length; i++) 
+    	{
+    		if($scope.routeLine.paradas[i].id_parada == $scope.routeLine.selorigen)
+    		{
+    			$scope.routeLine.indOr = i;
+    		}
+    		if($scope.routeLine.paradas[i].id_parada == $scope.routeLine.seldestino)
+    		{
+    			$scope.routeLine.indDe = i;
+    		}
+    	}
+    	
+    	 directionsService.route({ origin: {lat: $scope.routeLine.origen.latitud, lng: $scope.routeLine.origen.longitud}, 
+    		 					   destination: {lat: $scope.routeLine.destino.latitud, lng: $scope.routeLine.destino.longitud},
+    		 					waypoints: waypts,
+    		 					optimizeWaypoints: false,
+    		 					travelMode: google.maps.TravelMode.DRIVING}, 
+    		 					function(response, status) {
+    		 						if (status === google.maps.DirectionsStatus.OK) {
+    		 							directionsDisplay.setOptions({directions: response,})
+    		 							var route = response.routes[0];
+    		 							$scope.renderDirectionsPolylines(response, $scope.travelMap);
+    		 						} else {
+    		 							window.alert('Directions request failed due to ' + status);
+    		 							}
+    		 						});
+    }
+    
+    var polylineOptions = {
+  		  strokeColor: '#C83939',
+  		  strokeOpacity: 1,
+  		  strokeWeight: 4
+  		};
+	var colors = ["#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#FF00FF", "#00FFFF"];
+	var polylines = [];
+	
+	$scope.renderDirectionsPolylines = function (response) 
+	{
+		 var bounds = new google.maps.LatLngBounds();
+		  
+		
+		  var color = "#00FF00";
+		  for (var i = 0; i < polylines.length; i++) 
+		  {
+		    polylines[i].setMap(null);
+		  }
+		  
+		  		  
+		  var legs = response.routes[0].legs;
+		  for (i = 0; i < legs.length; i++) 
+		  {
+		    var steps = legs[i].steps;		    
+		    if(i == $scope.routeLine.indOr+1)
+		    {
+		    	color = "#FF0000";
+		    }
+		    if(i == $scope.routeLine.indDe+1)
+		    {
+		    	color = "#00FF00";
+		    }
+		    for (j = 0; j < steps.length; j++) {
+		      var nextSegment = steps[j].path;
+		      var stepPolyline = new google.maps.Polyline(polylineOptions);
+		      stepPolyline.setOptions({
+		        strokeColor: color
+		      })
+		      for (k = 0; k < nextSegment.length; k++) {
+		        stepPolyline.getPath().push(nextSegment[k]);
+		    //    bounds.extend(nextSegment[k]);
+		      }
+		      polylines.push(stepPolyline);
+		      stepPolyline.setMap($scope.travelMap);
+		      // route click listeners, different one on each step
+		      google.maps.event.addListener(stepPolyline, 'click', function(evt) 
+		      {
+		    	 /*infowindow.setContent("you clicked on the route<br>" + evt.latLng.toUrlValue(6));
+		        infowindow.setPosition(evt.latLng);
+		        infowindow.open($scope.routeMap);*/
+		      })
+		    }
+		  }
+		  $scope.travelMap.fitBounds(bounds);		  
+		  $("#travelLocationModal").modal('show');		  
+	}
+    
 });
