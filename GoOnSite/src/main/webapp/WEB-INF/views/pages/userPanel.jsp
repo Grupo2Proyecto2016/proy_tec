@@ -53,6 +53,11 @@
 														<i class="fa fa-map-marker fa-lg " style="margin-right: 5px;"></i>Seguir
 													</a>
 												</td>
+												<td>
+													<a ng-show="ticket.estado == 3" ng-click="showRoute(ticket.viaje.linea.id_linea, ticket.parada_sube, ticket.parada_baja)" class="btn btn-sm btn-success" style="float: right;">
+														<i class="fa fa-map-marker fa-lg " style="margin-right: 5px;"></i>Recorrido
+													</a>
+												</td>
 											</tr>
 										</tbody>
 									</table>
