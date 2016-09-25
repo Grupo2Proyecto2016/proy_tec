@@ -7,6 +7,8 @@ goOnApp.controller('busController', function($scope, $http, uiGridConstants, i18
     
     i18nService.setCurrentLang('es');
     
+    $scope.ptn = /^[a-zA-Z0-9]+$/;
+    
     $scope.busForm = {};
     
     $scope.initForm = function()

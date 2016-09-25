@@ -34,9 +34,11 @@
 				<div class="form-group">
 				    <label class="control-label col-sm-4" for="matricula">Matricula:</label>
 				    <div class="col-sm-6">
-				    	<input type="text" class="form-control" name="matricula" ng-model="busForm.matricula" ng-pattern="/^[a-zA-Z0-9]+$/" required>				    	
+				    	<input type="text" class="form-control" name="matricula" ng-model="busForm.matricula" ng-pattern="ptn" required>
+				    	 <span ng-show="busf.matricula.$error.pattern" style="color:red">Solo se permiten letras y numeros en la matricula.</span>			    	
+				    	 
 			    	</div>
-			  	</div>
+			  	</div>			  	
 			  	<div class="form-group">		  		
 				    <label class="control-label col-sm-4" for="marca">Marca:</label>
 				    <div class="col-sm-6">
