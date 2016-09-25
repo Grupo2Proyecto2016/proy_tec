@@ -11,6 +11,7 @@ goOnApp.controller('busController', function($scope, $http, uiGridConstants, i18
     
     $scope.initForm = function()
     {
+    	$scope.busForm.numerov = null;
 	    $scope.busForm.matricula = null;
 	    $scope.busForm.marca = null;
 	    $scope.busForm.modelo = null;

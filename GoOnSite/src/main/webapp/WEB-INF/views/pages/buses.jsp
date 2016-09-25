@@ -35,9 +35,7 @@
 				    <label class="control-label col-sm-4" for="matricula">Matricula:</label>
 				    <div class="col-sm-6">
 				    	<input type="text" class="form-control" name="matricula" ng-model="busForm.matricula" ng-pattern="/^[a-zA-Z0-9]+$/" required>				    	
-			    	</div>		    		    	
-			    	<span ng-show="busf.num.$error.pattern" class="help-block">sarasa</span>
-			    	
+			    	</div>
 			  	</div>
 			  	<div class="form-group">		  		
 				    <label class="control-label col-sm-4" for="marca">Marca:</label>
