@@ -12,6 +12,7 @@ public class MantenimientoFormWrapper
 	public Calendar dayFrom;
 	public Calendar dayTo;
 	public Double costo;
+	public String descripcion;
 	public Taller taller;
 	public Vehiculo vehiculo;
 	public Usuario user_crea;
@@ -19,6 +20,12 @@ public class MantenimientoFormWrapper
 	public String factura;
 	
 
+	public String getDescripcion() {
+		return descripcion;
+	}
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
 	public byte[] getFacturaContent() {
 		return facturaContent;
 	}

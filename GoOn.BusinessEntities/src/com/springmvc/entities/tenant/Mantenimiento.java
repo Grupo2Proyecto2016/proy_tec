@@ -20,6 +20,7 @@ public class Mantenimiento {
 	private Date inicio;
 	private Date fin;
 	private Double costo;
+	private String descripcion;
 	@ManyToOne(fetch=FetchType.EAGER)
 	private Taller taller;
 	@ManyToOne(fetch=FetchType.EAGER)
@@ -32,6 +33,12 @@ public class Mantenimiento {
 	@Transient
 	public String factura;
 	
+	public String getDescripcion() {
+		return descripcion;
+	}
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
 	public long getId_mantenimiento() {
 		return id_mantenimiento;
 	}

@@ -27,7 +27,7 @@
 							    <div class="col-sm-9">			
 									<select name="vehiculo" class="form-control"
 										ng-model="mantenimientoForm.vehiculo"
-										ng-options="bus as bus.id_vehiculo for bus in buses"
+										ng-options="bus as bus.numerov for bus in buses"
 										required>
 										<option value="">Seleccione un vehículo</option>
 									</select>							    	
@@ -61,11 +61,17 @@
 								</div>	
 							</div>  
 						</div>						
-		  		<div class="form-group"> 
-		    		<div class="col-sm-10">
-		      		<button style="float: right" type="submit" class="btn btn-info">Crear</button>
-		    	</div>
-		  </div>
+				  		<div class="form-group">
+				  			<div class="col-sm-6">
+								<label class="control-label col-sm-3" for="dayFrom">Descripción:</label>
+								<div class="col-sm-9">
+									<textarea rows="5" cols="20" class="form-control" ng-model="mantenimientoForm.descripcion" required></textarea>
+							    </div>
+							</div> 
+				    		<div class="col-sm-6">
+				      			<button style="float: right" type="submit" class="btn btn-info">Crear</button>
+				    		</div>
+		  				</div>
 				    </div>	 			  
 		    	</div>		    	
 			</form>			
