@@ -125,15 +125,15 @@ goOnApp.controller('mantenimientoController', function($scope, $http, uiGridCons
         columnDefs:
     	[
           { name:'Costo', field: 'costo' },
-          {field: 'inicio', displayName: 'Fecha de Inicio',type: 'date', cellFilter: 'date:\'dd-MM-yyyy\'' },
-          {field: 'fin', displayName: 'Fecha de Fin',type: 'date', cellFilter: 'date:\'dd-MM-yyyy\'' },
+          {field: 'inicio', displayName: 'Fecha de Inicio',type: 'date', cellFilter: 'date:\'dd-MM-yyyy\'', cellTooltip: true },
+          {field: 'fin', displayName: 'Fecha de Fin',type: 'date', cellFilter: 'date:\'dd-MM-yyyy\'', cellTooltip: true },
 //          {field: 'inicio', displayName: 'Fecha de Inicio',type: 'date', cellFilter: 'date:\'dd-MM-yyyy H:mm\'' },
 //          {field: 'fin', displayName: 'Fecha de Fin',type: 'date', cellFilter: 'date:\'dd-MM-yyyy H:mm\'' },
           { name:'Nro Vehículo', field: 'vehiculo.numerov'},
-          { name:'Descripcion', field: 'descripcion'},
-          { name:'Taller', field: 'taller.nombre' },
-          { name: 'Nombre Usuario', field: 'user_crea.nombre' },
-          { name: 'Apellido Usuario', field: 'user_crea.apellido' },
+          { name:'Descripcion', field: 'descripcion', cellTooltip: true},
+          { name:'Taller', field: 'taller.nombre', cellTooltip: true },
+          { name: 'Nombre Usuario', field: 'user_crea.nombre', cellTooltip: true },
+          { name: 'Apellido Usuario', field: 'user_crea.apellido', cellTooltip: true },
           
           
           

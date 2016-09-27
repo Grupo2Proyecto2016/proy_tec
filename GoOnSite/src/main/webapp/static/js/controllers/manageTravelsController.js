@@ -135,16 +135,16 @@ goOnApp.controller('manageTravelsController', function($scope, $http, uiGridCons
         columnDefs:
     	[
           { name:'Linea', field: 'linea.numero' },
-          { name:'Origen', field: 'linea.origen.descripcion' },
-          { name:'Destino', field: 'linea.destino.descripcion'},
-          { name:'Salida', cellTemplate: '<div class="text-center ngCellText" style="width: 180px">{{ row.entity.inicio | date:"dd/MM/yyyy @ h:mma"}}</div>', width: 180 },
+          { name:'Origen', field: 'linea.origen.descripcion', cellTooltip: true },
+          { name:'Destino', field: 'linea.destino.descripcion', cellTooltip: true },
+          { name:'Salida', cellTemplate: '<div class="text-center ngCellText" style="width: 180px">{{ row.entity.inicio | date:"dd/MM/yyyy @ h:mma"}}</div>', width: 180, cellTooltip: true },
           { name:'Tiempo Estimado (min)', field: 'linea.tiempo_estimado' },
           { 
         	  name: 'Pasajeros Parados', 
         	  cellTemplate: '<div class="text-center ngCellText">{{row.entity.linea.viaja_parado | SiNo}}</div>'
           },
           { name:'Nº Coche', field: 'vehiculo.numerov' },
-          { name:'Conductor', field: 'getDriverName()' },
+          { name:'Conductor', field: 'getDriverName()', cellTooltip: true },
           { name: 'Acciones',
         	enableFiltering: false,
         	enableSorting: false,

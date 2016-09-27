@@ -117,8 +117,8 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
         columnDefs:
     	[
           { name:'Numero', field: 'numero' },
-          { name:'Origen', field: 'origen.descripcion' },
-          { name:'Destino', field: 'destino.descripcion'},
+          { name:'Origen', field: 'origen.descripcion', cellTooltip: true },
+          { name:'Destino', field: 'destino.descripcion', cellTooltip: true},
           { name:'Tiempo Estimado (min)', field: 'tiempo_estimado' },
           { name: 'Pasajeros Parados', cellTemplate: '<div class="text-center ngCellText">{{row.entity.viaja_parado | SiNo}}</div>' },
           

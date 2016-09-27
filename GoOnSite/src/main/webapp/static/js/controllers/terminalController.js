@@ -76,8 +76,8 @@ goOnApp.controller('terminalController', function($scope, $http, uiGridConstants
 		enableFiltering: true,
         columnDefs:
     	[
-          { name:'Nombre', field: 'descripcion' },
-          { name:'Dirección', field: 'direccion' },
+          { name:'Nombre', field: 'descripcion', cellTooltip: true },
+          { name:'Dirección', field: 'direccion', cellTooltip: true },
           { name:'Es sucursal', cellTemplate: '<div class="text-center ngCellText">{{row.entity.sucursal != null | SiNo}}</div>' }
         ]
      };

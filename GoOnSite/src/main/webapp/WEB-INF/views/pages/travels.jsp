@@ -1,12 +1,25 @@
+<style>
+	.ui-grid { color: #242729; }
+	.ui-grid-top-panel-background {
+	  background: #f00000;
+	  background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #d3741c), color-stop(1, #d3741c));
+	  background: -ms-linear-gradient(bottom, #d3741c, #d3741c);
+	  background: -moz-linear-gradient(center bottom, #d3741c 0%, #d3741c 100%);
+	  background: -o-linear-gradient(#d3741c, #d3741c);
+	  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#d3741c', endColorstr='#d3741c', GradientType=0);
+	}
+</style>
+
 <div class="jumbotron text-center">
 	<h3>Viajemos juntos</h3>
 	
 	<p>{{ message }}</p>
 </div>
 
+
 <div id="successAlert" class="row" style="display: none">
 	<div class="col-xs-1"></div>
-	<div class="col-xs-10">
+	<div class="col-sm-12">
 		<div class="alert alert-success" style="">
 		  <button type="button" class="close" ng-click="closeSuccessAlert()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 		  <strong>Éxito! </strong> <p id="successMessage"></p>
@@ -62,7 +75,7 @@
 				<div class="panel panel-default">
 					<div class="panel-body">											
 						<div class="form-group">
-						    <div class="col-sm-6">
+						    <div class="col-sm-12 col-md-6">
 							    <h5 class="control-label col-sm-6">
 							    	¿Dónde quieres ir?
 							    </h5>
@@ -72,7 +85,7 @@
 									</a>					    	
 						    	</div>
 					    	</div>
-						    <div class="col-sm-6">
+						    <div class="col-sm-12 col-md-6">
 							    <h5 class="control-label col-sm-6">
 							    	¿Dónde subes?
 							    </h5>
@@ -84,15 +97,13 @@
 					    	</div>
 				    	</div>
 				    	<div class="form-group">
-						    <div class="col-sm-6">
+						    <div class="col-sm-12">
 							    <label class="control-label col-sm-6" for="dateFrom">
 							    	Día del viaje:
 							    </label>
 							    <div class="col-sm-6">
 									<input type="date" class="form-control" min="{{minDate | date:'yyyy-MM-dd'}}" max="{{maxDate | date:'yyyy-MM-dd'}}" name="dateFrom" ng-model="travelSearch.dateFrom" required>
 							    </div>
-					    	</div>
-					    	<div class="col-sm-6">
 					    	</div>
 				    	</div>
 						<div class="form-group"> 
@@ -112,11 +123,9 @@
 
 
 <div class="row" style="margin-top: 50px;" id="travelsSearchGrid">
-	<div class="col-xs-1"></div>
-	<div class="col-xs-10">
-		<div ui-grid="travelsSearchGrid" ui-grid-pagination class="genericGridHeader"></div>
+	<div class="col-sm-12 col-md-10 col-md-offset-1">
+		<div ui-grid="travelsSearchGrid" class="genericGridHeader"></div>
 	</div>
-	<div class="col-xs-1"></div>
 </div>
 
 <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

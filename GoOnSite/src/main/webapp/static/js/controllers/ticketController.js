@@ -28,9 +28,9 @@ goOnApp.controller('ticketController', function($scope, $http, uiGridConstants, 
 		enableColumnMenus: false,
         columnDefs:
     	[
-          { name:'Cliente', field: 'ci_receptor', width: '80', enableSorting: false },
-          { name:'Origen', field: 'viaje.linea.origen.descripcion', width: '*'},
-          { name:'Destino', field: 'viaje.linea.destino.descripcion', width: '*' },
+          { name:'Cliente', field: 'ci_receptor', width: '80', enableSorting: false, cellTooltip: true },
+          { name:'Origen', field: 'viaje.linea.origen.descripcion', width: '*', cellTooltip: true },
+          { name:'Destino', field: 'viaje.linea.destino.descripcion', width: '*', cellTooltip: true },
           { name:'Salida', cellTemplate: '<div class="text-center ngCellText">{{ row.entity.viaje.inicio | date:"dd/MM/yyyy @ h:mma"}}</div>', width: '*', enableFiltering: false, enableSorting: false },
           { name:'Nº Coche', field: 'viaje.vehiculo.numerov', width: '80' },
           { name:'Costo', field: 'costo', width: '*'},

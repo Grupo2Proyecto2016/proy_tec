@@ -389,29 +389,25 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     
     $scope.travelsSearchGrid = 
     {
-		paginationPageSizes: [15, 30, 45],
-	    paginationPageSize: 15,
 		enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
-		enableFiltering: true,
+		enableFiltering: false,
+		showGridFooter: false,
+		enablePaginationControls: false,
+	    showColumnFooter: false,
+	    enableColumnMenus: false,
         columnDefs:
     	[
           { name:'Linea', field: 'numero' },
-          { name:'Origen', field: 'origen_description' },
-          { name:'Destino', field: 'destino_description'},
-          { name:'Salida', cellTemplate: '<div class="text-center ngCellText">{{ row.entity.inicio | date:"dd/MM/yyyy @ h:mma"}}</div>' },
-          //{ name:'Tiempo Estimado (min)', field: 'linea.tiempo_estimado' },
-          /*{ 
-        	  name: 'Pasajeros Parados', 
-        	  cellTemplate: '<div class="text-center ngCellText">{{row.entity.linea.viaja_parado | SiNo}}</div>'
-          },*/
+          { name:'Origen', field: 'origen_description', cellTooltip: true },
+          { name:'Destino', field: 'destino_description', cellTooltip: true },
+          { name:'Salida', cellTemplate: '<div style="padding-top:5px" class="text-center ngCellText">{{ row.entity.inicio | date:" h:mma"}}</div>' },
           { name:'Nº Coche', field: 'numerov' },
           { name:'Asientos Disp.', field: 'cantasientos' },
           { name:'Costo', field: 'valor' },
-          { name: 'Acciones',
-          	enableFiltering: false,
+          { name: 'Acciones', width: '105',
           	enableSorting: false,
-              cellTemplate:'<button style="width: 50%" class="btn-xs btn-primary" ng-click="grid.appScope.selectSeats(row.entity.id_viaje, row.entity.origen, row.entity.destino, row.entity.linea_id_linea, row.entity.id_vehiculo, row.entity.valor)">Comprar</button>'
-            	  			+  '<button style="width: 50%" class="btn-xs btn-primary" ng-click="grid.appScope.showRoute(row.entity.linea_id_linea, row.entity.origen, row.entity.destino)">Ver Ruta</button>'
+              cellTemplate:'<button style="width: 65px" class="btn-xs btn-primary" ng-click="grid.appScope.selectSeats(row.entity.id_viaje, row.entity.origen, row.entity.destino, row.entity.linea_id_linea, row.entity.id_vehiculo, row.entity.valor)">Comprar</button>'
+            	  			+  '<button style="width: 32px; margin-left: 5px" class="btn-xs btn-primary" ng-click="grid.appScope.showRoute(row.entity.linea_id_linea, row.entity.origen, row.entity.destino)">Ver</button>'
       	  }	
         ]
      };
@@ -426,10 +422,13 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     
     $scope.showOriginMap = function()
     {
-    	$("#originModal").modal('show');
-    	$timeout(function () { 
-    		google.maps.event.trigger($scope.originMap, 'resize');
-    	}, 400);
+    	if($scope.origenMarkers.length > 0)
+    	{
+    		$("#originModal").modal('show');
+    		$timeout(function () { 
+    			google.maps.event.trigger($scope.originMap, 'resize');
+    		}, 400);    		
+    	}
     };
     
     $scope.searchOrigins = function()

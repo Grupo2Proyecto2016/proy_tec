@@ -121,28 +121,32 @@ goOnApp.controller('employeesController', function($scope, $http, $filter, uiGri
     	[
           { 
         	  name:'Nombre',
-    		  cellTemplate:'<p align="center" title="{{row.entity.nombre}}">{{row.entity.nombre}}</p>'
+    		  cellTemplate:'<p align="center" title="{{row.entity.nombre}}">{{row.entity.nombre}}</p>',
+    		  cellTooltip: true
 		  },
           { 
 			  name:'Apellido', 
-			  cellTemplate:'<p align="center" title="{{row.entity.apellido}}">{{row.entity.apellido}}</p>'
+			  cellTemplate:'<p align="center" title="{{row.entity.apellido}}">{{row.entity.apellido}}</p>',
+			  cellTooltip: true
 		  },
           { name:'CI', field: 'ci' },
           { name:'Nombre de Usuario', field: 'usrname'},
           {
         	  name:'Correo', 
-        	  cellTemplate:'<p align="center" title="{{row.entity.email}}">{{row.entity.email}}</p>'
+        	  cellTemplate:'<p align="center" title="{{row.entity.email}}">{{row.entity.email}}</p>',
+        	  cellTooltip: true
 		  },
           {
 			  name: 'Dirección', 
-			  cellTemplate:'<p align="center" title="{{row.entity.direccion}}">{{row.entity.direccion}}</p>'
+			  cellTemplate:'<p align="center" title="{{row.entity.direccion}}">{{row.entity.direccion}}</p>',
+			  cellTooltip: true
 		  },
           { name: 'Rol', field: 'getRole()'
         	  , filter: {
               type: uiGridConstants.filter.SELECT,
               selectOptions: [ { value: 'Administrador', label: 'Administrador' }, { value: 'Ventas', label: 'Ventas' }, { value: 'Guarda/Conductor', label: 'Guarda/Conductor'}, { value: 'Largador', label: 'Largador'} ]
           }},
-          { name: 'Sucursal', field: 'sucursal.nombre'
+          { name: 'Sucursal', field: 'sucursal.nombre', cellTooltip: true
         	  , filter: {
               type: uiGridConstants.filter.SELECT,
               selectOptions: $scope.branchesToGrid

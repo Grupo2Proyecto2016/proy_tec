@@ -122,9 +122,9 @@ goOnApp.controller('tallerController', function($scope, $http, uiGridConstants, 
 		enableFiltering: true,
         columnDefs:
     	[
-          { name:'Nombre', field: 'nombre' },
-          { name:'Dirección', field: 'direccion' },
-          { name:'Teléfono', field: 'telefono'},
+          { name:'Nombre', field: 'nombre', cellTooltip: true },
+          { name:'Dirección', field: 'direccion', cellTooltip: true },
+          { name:'Teléfono', field: 'telefono', cellTooltip: true},
           
 //          { name: 'Acciones',
 //        	enableFiltering: false,

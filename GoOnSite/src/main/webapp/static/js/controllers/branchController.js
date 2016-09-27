@@ -113,9 +113,9 @@ goOnApp.controller('branchController', function($scope, $http, uiGridConstants, 
 		enableFiltering: true,
         columnDefs:
     	[
-          { name:'Nombre', field: 'nombre' },
-          { name:'Dirección', field: 'direccion' },
-          { name:'Teléfono', field: 'telefono'},
+          { name:'Nombre', field: 'nombre', cellTooltip: true },
+          { name:'Dirección', field: 'direccion', cellTooltip: true },
+          { name:'Teléfono', field: 'telefono', cellTooltip: true},
           { name:'Correo', field: 'mail' },      
           { name:'Posee terminal', cellTemplate: '<div class="text-center ngCellText">{{row.entity.hasTerminal | SiNo}}</div>' },
           { name: 'Acciones',
