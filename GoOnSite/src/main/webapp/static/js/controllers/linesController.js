@@ -114,6 +114,7 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
 	    paginationPageSize: 15,
 		enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
 		enableFiltering: true,
+		enableColumnMenus: false,
         columnDefs:
     	[
           { name:'Numero', field: 'numero' },

@@ -117,6 +117,7 @@ goOnApp.controller('busController', function($scope, $http, uiGridConstants, i18
 	    paginationPageSize: 15,
 		enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
 		enableFiltering: true,
+		enableColumnMenus: false,
         columnDefs:
     	[
           { name:'Nº', field: 'numerov' },

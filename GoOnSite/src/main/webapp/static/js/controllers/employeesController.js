@@ -117,6 +117,7 @@ goOnApp.controller('employeesController', function($scope, $http, $filter, uiGri
 	    paginationPageSize: 15,
 		enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
 		enableFiltering: true,
+		enableColumnMenus: false,
         columnDefs:
     	[
           { 

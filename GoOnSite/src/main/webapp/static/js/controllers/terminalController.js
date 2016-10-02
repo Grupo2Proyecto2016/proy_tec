@@ -74,6 +74,7 @@ goOnApp.controller('terminalController', function($scope, $http, uiGridConstants
 	    paginationPageSize: 15,
 		enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
 		enableFiltering: true,
+		enableColumnMenus: false,
         columnDefs:
     	[
           { name:'Nombre', field: 'descripcion', cellTooltip: true },

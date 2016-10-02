@@ -217,6 +217,7 @@ goOnApp.controller('packageController', function($scope, $http, uiGridConstants,
 		multiSelect: false,
 		modifierKeysToMultiSelect: false,
 		noUnselect: true,
+		enableColumnMenus: false,
 		onRegisterApi: function( gridApi ) 
 		{
 		    $scope.travelGridApi = gridApi;

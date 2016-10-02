@@ -122,6 +122,7 @@ goOnApp.controller('mantenimientoController', function($scope, $http, uiGridCons
 	    paginationPageSize: 15,
 		enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
 		enableFiltering: true,
+		enableColumnMenus: false,
         columnDefs:
     	[
           { name:'Costo', field: 'costo' },
