@@ -81,7 +81,7 @@
 							    </h5>
 							    <div class="col-sm-6">			
 									<a style="margin-top: 12px;" class="btn btn-primary" ng-click="showDestinationMap()">
-										<i class="fa fa-map-marker fa-lg " style="margin-right: 5px;"></i> Indicar destino
+										<i class="fa fa-map-marker fa-lg " ></i> Indicar destino
 									</a>					    	
 						    	</div>
 					    	</div>
@@ -91,7 +91,7 @@
 							    </h5>
 							    <div class="col-sm-6">			
 									<a style="margin-top: 12px;" class="btn btn-primary" ng-click="showOriginMap()" ng-disabled="origenMarkers.length<=0">
-										<i class="fa fa-map-marker fa-lg " style="margin-right: 5px;"></i> Indicar origen
+										<i class="fa fa-map-marker fa-lg "></i> Indicar origen
 									</a>					    	
 						    	</div>
 					    	</div>
@@ -108,7 +108,7 @@
 				    	</div>
 						<div class="form-group"> 
 				    		<div class="col-sm-12">
-				      			<button style="float: right" type="submit" class="btn btn-info">Buscar</button>
+				      			<button style="float: right" type="submit" class="btn btn-info" ng-disabled="listaIDSeleccionadosOrigin.length == 0 || listaIDSeleccionados.length == 0">Buscar</button>
 				    		</div>
 				    	</div>
 		    		</div>
@@ -120,9 +120,15 @@
 </div>
 
 
+<div ng-if="travels.length == 0 && firstSearch"  class="row">
+	<div class="col-xs-8 col-xs-offset-2">
+		<div class="alert alert-warning" >
+		  <strong>Ups! </strong> <p>No se encontraron viajes en la fecha seleccionada</p>
+		</div>
+	</div>
+</div>
 
-
-<div class="row" style="margin-top: 50px;" id="travelsSearchGrid">
+<div class="row" ng-if="travels.length > 0" style="margin-top: 50px;" id="travelsSearchGrid">
 	<div class="col-sm-12 col-md-10 col-md-offset-1">
 		<div ui-grid="travelsSearchGrid" class="genericGridHeader"></div>
 	</div>

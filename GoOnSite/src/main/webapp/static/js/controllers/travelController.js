@@ -20,6 +20,8 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     $scope.listaIDSeleccionadosOrigin = [];
     $scope.routeLine = {};
     
+    $scope.firstSearch = false;
+    
     $scope.seatsForm = {};
     $scope.rOption = "1";    
     $scope.frmOpt = "0";    
@@ -361,6 +363,8 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     
     $scope.searchTravels = function() 
     {
+    	$scope.firstSearch = true;
+    	
     	$("#originModal").modal('hide');
     	$.blockUI();
     	//pasar los destinos y sacar de ahi las lineas
