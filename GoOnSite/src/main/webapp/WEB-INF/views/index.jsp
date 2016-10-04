@@ -3,15 +3,18 @@
 <html ng-app="goOnApp" ng-controller="mainController as main">
     <head>
       <meta charset=UTF-8">
+      <script src="<c:url value='/static/js/jquery/jquery-1.11.1.min.js' />"></script>      
+      <script src="<c:url value='/static/js/jquery/jquery.blockUI.js' />"></script>
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXLMRyM-qhBcFx4Lvv6XxACYvWYY8ey-U&libraries=places,geometry"></script>
       <!-- STYLES -->
 	  <link rel="stylesheet" href="<c:url value='/static/css/custom.css' />" />
       <link rel="stylesheet" href="<c:url value='/static/css/font-awesome.min.css'/>" />
       
+	  <!--ESTILO CUSTOM-->
+      <link rel="stylesheet" href="<c:url value='/static/css/bootswatch/paper.css'/>" />
+      
       <!-- SCRIPTS -->
-	  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXLMRyM-qhBcFx4Lvv6XxACYvWYY8ey-U&libraries=places,geometry" async defer></script>
       <script src="<c:url value='/static/js/tokenLogic.js' />"></script>
-      <script src="<c:url value='/static/js/jquery/jquery-1.11.1.min.js' />"></script>      
-      <script src="<c:url value='/static/js/jquery/jquery.blockUI.js' />"></script>
       <script src="<c:url value='/static/js/bootstrap/bootstrap.min.js' />"></script>
       
       <script src="<c:url value='/static/js/angularjs/angular.min.js' />"></script>
@@ -25,9 +28,6 @@
       
       <!-- PAYPAL -->
       <script src="<c:url value='/static/js/paypal/dg.js' />"></script>      
-      
-	  <!--ESTILO CUSTOM-->
-      <link rel="stylesheet" href="<c:url value='/static/css/bootswatch/{{company.css}}.css'/>" />
       
 	  <link rel="stylesheet" href="<c:url value='/static/css/ui-grid.min.css' />" />
       <script src="<c:url value='/static/js/ui-grid/ui-grid.min.js' />"></script>
@@ -56,8 +56,11 @@
       <script src="<c:url value='/static/js/controllers/payPalCheckoutController.js' />"></script>
 	  <script src="<c:url value='/static/js/controllers/payPalErrorController.js' />"></script>
     </head>
-    <body style="visibility: hidden">
-
+    <body ng-show="company.css != null" >
+		<script type="text/javascript">
+			$.blockUI({ overlayCSS:  { opacity: 0.93  }}); //ESCONDEMOS LA CHANCHADA
+			setTimeout(function(){ $.unblockUI(); }, 2000);
+		</script>
         <!-- HEADER AND NAVBAR -->
         <header>
             <nav class="navbar navbar-default">
@@ -284,10 +287,10 @@
 	</div>
 
 	<script>
-		$(window).on("load", function(){
-			$('body').css('visibility', 'visible');
-			$(window).resize();
-		});
+// 		$(window).on("load", function(){
+// 			$('body').css('visibility', 'visible');
+// 			$(window).resize();
+// 		});
 		
 		$("#loginModal").on('hidden.bs.modal', function (e) {
 			$("#loginAlert").hide();

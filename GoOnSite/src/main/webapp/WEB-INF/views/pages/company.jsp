@@ -80,7 +80,7 @@
 				  <div class="form-group">
 				    <label class="control-label col-sm-4" for="css">Estilo visual:</label>
 				    <div class="col-sm-8">
-					    <select name="country" id="stylec" class="form-control" ng-model="$parent.company.css" ng-options="style.value as style.name for style in styles" required>
+					    <select name="country" id="stylec" class="form-control"  ng-change="changeStyle()" ng-model="companyForm.companycss" ng-options="style.value as style.name for style in styles" required>
 				        </select>
 			    	</div>
 				  </div>

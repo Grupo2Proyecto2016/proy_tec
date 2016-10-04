@@ -2,6 +2,8 @@ goOnApp.controller('companyController', function($scope, $http, $filter, uiGridC
 {
 	$scope.message = 'Aquí puedes editar los datos de la empresa y añadir un poco de personalización';
 	$scope.companyForm = angular.copy($scope.$parent.company);
+	$scope.companyForm.companycss = $scope.companyForm.css;
+	$scope.lastStyle = $scope.$parent.company.css;
 	$scope.countries = null;
 	
 	$http.get(AppName + 'countries').
@@ -38,7 +40,7 @@ goOnApp.controller('companyController', function($scope, $http, $filter, uiGridC
 	$scope.updateCompany = function()
 	{
 		$.blockUI();
-		$scope.companyForm.css = $scope.$parent.company.css;
+		$scope.companyForm.css = $scope.companyForm.companycss;
 		$http.post(servicesUrl + 'updateCompany', JSON.stringify($scope.companyForm))
 		.then(function(response) {
 			if(response.status == 200)
@@ -94,8 +96,10 @@ goOnApp.controller('companyController', function($scope, $http, $filter, uiGridC
     	$scope.userModel = {};
     };
        
-    $("#stylec").on('change', function(){
+    $scope.changeStyle = function(){
     	$.blockUI({ overlayCSS:  { opacity: 0.93  }}); //ESCONDEMOS LA CHANCHADA
+    	$("link[href*='"+$scope.lastStyle+".css'")[0].href = $("link[href*='"+$scope.lastStyle+".css'")[0].href.replace($scope.lastStyle, $scope.companyForm.companycss);
+    	$scope.lastStyle = $scope.companyForm.companycss;
     	setTimeout(function(){ $.unblockUI(); }, 1000);
-	});
+	};
 });
