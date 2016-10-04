@@ -97,7 +97,7 @@
 					    	</div>
 				    	</div>
 				    	<div class="form-group">
-						    <div class="col-sm-12">
+						    <div class="col-sm-8 col-sm-offset-2">
 							    <label class="control-label col-sm-6" for="dateFrom">
 							    	Día del viaje:
 							    </label>
