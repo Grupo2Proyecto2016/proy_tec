@@ -302,7 +302,7 @@ public class ViajeRepository {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 		if(sdf.format(new Date()).equals(sdf.format(dateFrom)))
 		{
-			dateFrom.setHours(dateFrom.getHours() + 3);
+			dateFrom.setHours(new Date().getHours() + 3);
 		}
 		else
 		{

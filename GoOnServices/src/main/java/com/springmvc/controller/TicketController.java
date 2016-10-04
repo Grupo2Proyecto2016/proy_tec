@@ -56,6 +56,7 @@ public class TicketController
 	@RequestMapping(value = "/searchTravels", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
 	public ResponseEntity<List<ViajesBuscados>> travels(@RequestBody TravelSearchWrapper searchData, @PathVariable String tenantid)
 	{
+		
 		List<ViajesBuscados> travels = new LinesLogic(tenantid).SearchTravelsAdvanced(searchData.dateFrom, searchData.origins, searchData.destinations); 
 		return new ResponseEntity<List<ViajesBuscados>>(travels, HttpStatus.OK);
 	}
