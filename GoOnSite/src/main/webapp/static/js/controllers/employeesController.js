@@ -155,6 +155,7 @@ goOnApp.controller('employeesController', function($scope, $http, $filter, uiGri
           { name: 'Acciones',
         	enableFiltering: false,
         	enableSorting: false,
+        	width: 120,
             cellTemplate:'<button class="btn-xs btn-warning" style="width: 50%" ng-click="grid.appScope.showUserUpdateForm(row)">Editar</button><button style="width: 50%" class="btn-xs btn-danger" ng-click="grid.appScope.showDeleteDialog(row)">Eliminar</button>' 
     	  }
         ]

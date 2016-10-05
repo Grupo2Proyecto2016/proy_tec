@@ -123,7 +123,7 @@
 <div ng-if="travels.length == 0 && firstSearch"  class="row">
 	<div class="col-xs-8 col-xs-offset-2">
 		<div class="alert alert-warning" >
-		  <strong>Ups! </strong> <p>No se encontraron viajes en la fecha seleccionada</p>
+		  <h4>Ups! </h4> <h4>No se encontraron viajes en la fecha seleccionada</h4>
 		</div>
 	</div>
 </div>

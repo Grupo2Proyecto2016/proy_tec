@@ -70,7 +70,7 @@ public class MantenimientoRepository {
 	public List<Mantenimiento> findServiceByDate(long id_vehiculo, Date inicioViaje, Date finViaje)
 	{
 		List<Mantenimiento> mantenimientos = null;
-		Query q = entityManager.createQuery("FROM Mantenimiento WHERE vehiculo_id_vehiculo = :idv "
+		Query q = entityManager.createQuery("FROM Mantenimiento WHERE vehiculo_id_vehiculo = :idv AND costo is null "
 				+ "AND id_mantenimiento NOT IN "
 				+ "(SELECT id_mantenimiento FROM Mantenimiento WHERE "
 				+ "(fin < :vi AND fin < :vf) "

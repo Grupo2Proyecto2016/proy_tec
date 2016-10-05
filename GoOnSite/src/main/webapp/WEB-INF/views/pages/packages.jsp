@@ -172,27 +172,24 @@
 
 <div id="packagesGridDiv" class="row" style="margin-top: 50px;">
 	<div class="row">
-		<div class="col-xs-3"></div>
-		<div class="col-xs-6">
+		<div class="col-sm-8 col-sm-offset-2">
 			<div class="alert alert-warning text-center">
 			  <p>Se muestran encomiendas en un rango de 30 días a partir de la fecha de origen</p>
 			</div>
 		</div>
-		<div class="col-xs-3"></div>
 	</div>
 	
 	<div class="col-xs-2"></div>	
 	<div class="col-xs-8">
 		<form class="form-horizontal" name="packsForm" role="form" ng-submit="getBranchPackages()">
 			<div class="form-group"> 
-				<div class="col-sm-3"></div>
-				<div class="col-sm-3">
+				<div class="col-sm-8 col-sm-offset-2">
 					<label class="control-label col-sm-3">Desde:</label>
 					<div class="col-sm-9">
 						<input type="date" class="form-control"  ng-model="filterMinDate" required>
 				    </div>
 				</div>
-	    		<div class="col-sm-3">
+	    		<div class="col-sm-2">
 	      			<button style="float: right; margin-top: 10px;" type="submit"  class="btn btn-sm btn-info">Filtrar</button>
 	    		</div>
 	    		<div class="col-sm-3"></div>
