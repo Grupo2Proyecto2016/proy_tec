@@ -197,21 +197,14 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     	var pesos_repartir = $scope.lineForm.costo_maximo - $scope.lineForm.costo_minimo;
     	var distancia = 0;
     	for (var i = 0; i < $scope.markers.length; i++)
-    	{    		
+    	{    
+			distancia = distancia + ($scope.markers[i].km / 1000);
+    		
     		if ($scope.markers[i].reajusta)
     		{
-    			if (distancia == 0)
-    			{
-    				distancia = $scope.markers[i].km / 1000;
-    			}
-    			$scope.markers[i].reajuste = Math.round((pesos_repartir / km_repartir) * (distancia + ($scope.markers[i].km / 1000)));
-    			//km_repartir = km_repartir  - ($scope.markers[i].km / 1000);
+    			$scope.markers[i].reajuste = Math.round((distancia *pesos_repartir) / km_repartir);
     			distancia = 0;    			
-    		}
-    		else
-    		{
-    			distancia = distancia + ($scope.markers[i].km / 1000)
-    		}
+    		}	
     		$scope.reajustes.push($scope.markers[i].reajuste);
     	}    	
     };
@@ -260,22 +253,15 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
     	var pesos_repartir = $scope.lineForm.costo_maximo - $scope.lineForm.costo_minimo;
     	var distancia = 0;
     	for (var i = 0; i < $scope.markersV.length; i++)
-    	{    		
+    	{   
+    		distancia = distancia + ($scope.markers[i].km / 1000);
+    		
     		if ($scope.markersV[i].reajusta)
     		{
-    			if (distancia == 0)
-    			{
-    				distancia = $scope.markersV[i].km / 1000;
-    			}
-    			$scope.markersV[i].reajuste = Math.round((pesos_repartir / km_repartir) * (distancia + ($scope.markersV[i].km / 1000)));
-    			//km_repartir = km_repartir  - ($scope.markers[i].km / 1000);
-    			distancia = 0;
-    		}
-    		else
-    		{
-    			distancia = distancia + ($scope.markersV[i].km / 1000)
-    		}
-    		$scope.reajustesV.push($scope.markersV[i].reajuste);
+    			$scope.markersV[i].reajuste = Math.round((distancia *pesos_repartir) / km_repartir);
+    			distancia = 0;    			
+    		}	
+    		$scope.reajustesV.push($scope.markers[i].reajuste);
     	}    	
     };
     
