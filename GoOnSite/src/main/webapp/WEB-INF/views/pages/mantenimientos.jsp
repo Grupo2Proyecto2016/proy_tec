@@ -27,7 +27,7 @@
 							    <div class="col-sm-9">			
 									<select name="vehiculo" class="form-control"
 										ng-model="mantenimientoForm.vehiculo"
-										ng-options="bus as bus.numerov for bus in buses"
+										ng-options="bus as bus.customDes for bus in buses"
 										required>
 										<option value="">Seleccione un vehículo</option>
 									</select>							    	

@@ -45,6 +45,9 @@ goOnApp.controller('mantenimientoController', function($scope, $http, uiGridCons
     	$http.get(servicesUrl + 'getBuses').success(function(data, status, headers, config) 
     	{
         	$scope.buses = data;
+        	angular.forEach($scope.buses, function(b){
+    			b.customDes = b.numerov + ": " + b.matricula;
+    		});
     	});
     };
     

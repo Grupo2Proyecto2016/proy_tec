@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Implementation-Title: MultiTenant
 Implementation-Version: 0.0.1-SNAPSHOT
-Built-By: Rolo
+Built-By: Pablo
 Implementation-Vendor-Id: com.multitenant
-Build-Jdk: 1.8.0_31
+Build-Jdk: 1.8.0_111
 Created-By: Maven Integration for Eclipse
 Implementation-Vendor: Pivotal Software, Inc.
 

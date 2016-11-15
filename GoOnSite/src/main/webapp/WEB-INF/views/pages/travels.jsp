@@ -386,7 +386,7 @@
 			<form class="form-horizontal" name="pForm" role="form" ng-submit="travelSubmit()" >
 <!-- 			ng-submit="reserveTicket()" -->
 				<div class="form-group" ng-show="$root.user.rol_id_rol == 2">			    	
-			    	<div class="col-sm-6">
+			    	<div class="col-sm-12">
 				    	<label class="control-label col-sm-5" for="receptorOpt">Receptor registrado?:</label>
 					    <div class="col-sm-7">
 					    	<select name="receptorOpt" class="form-control" ng-model="rOption" required>
@@ -397,7 +397,7 @@
 			    	</div>
 		    	</div>
 		    	<div class="form-group" ng-show="$root.user.rol_id_rol == 2">				    
-					<div class="col-sm-6">
+					<div class="col-sm-12">
 						<div ng-show="rOption == 2">
 							<label class="control-label col-sm-5" for="receptorDoc">CI Receptor:</label>
 							<div class="col-sm-7">

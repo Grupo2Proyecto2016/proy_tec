@@ -331,7 +331,10 @@
     		$http.get(servicesUrl + 'getCompany')
 	        	.then(function(response) {
 	        		$scope.company = response.data;
-	        		$("link[href*='paper.css'")[0].href = $("link[href*='paper.css'")[0].href.replace("paper", $scope.company.css);
+	        		if($("link[href*='paper.css'").length == 1)
+	        		{
+	        			$("link[href*='paper.css'")[0].href = $("link[href*='paper.css'")[0].href.replace("paper", $scope.company.css);
+	        		}
 	        		$("#logo").attr("src", $scope.company.logo);
 	        		$scope.companyInfoReady = true;
         	});

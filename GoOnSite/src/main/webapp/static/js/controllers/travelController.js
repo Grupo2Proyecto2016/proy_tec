@@ -381,7 +381,8 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 			//hace scroll hasta la tabla
 			element = document.getElementById("travelsSearchGrid");
 			alignWithTop = true;
-			element.scrollIntoView(alignWithTop);    										
+			//element.scrollIntoView(alignWithTop);   
+			$scope.$apply;
 		})
 		.error(function()
 		{
