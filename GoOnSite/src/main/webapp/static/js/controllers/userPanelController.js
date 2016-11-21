@@ -196,8 +196,8 @@ goOnApp.controller('userPanelController', function($scope, $http, $location, uiG
     $scope.travelToWatch = null;
     $scope.travelMap = new google.maps.Map(document.getElementById('travelMap'), 
 	{
-    	zoom: 12,
-    	center: {lat: -34.894418, lng: -56.165775}
+    	center: {lat: -34.2, lng: -56.5},
+        zoom: 9
 	});
     $scope.busMarker = new google.maps.Marker({
 		map: $scope.travelMap,
@@ -344,22 +344,25 @@ goOnApp.controller('userPanelController', function($scope, $http, $location, uiG
 				$scope.routeLine.paradas = data;
 				$scope.routeLine.selorigen = origen.id_parada;
 				$scope.routeLine.seldestino = destino.id_parada;
-		    	
+				$scope.travelMap.setCenter(new google.maps.LatLng(-34.2, -56.5));
+		   	    $scope.travelMap.setZoom(9);
+		   	    $scope.travelMap.panTo(new google.maps.LatLng(-34.2, -56.5));	
 		    	var directionsService = new google.maps.DirectionsService;
 		    	var directionsDisplay = new google.maps.DirectionsRenderer({
 		    	    														suppressPolylines: true,
 		    	    														infoWindow: infowindow
 		    	  															});
 		    	directionsDisplay.setMap($scope.travelMap);		   	    
-		    	
-		    	$scope.calculateAndDisplayRoute(directionsService, directionsDisplay);
+		    	$scope.travelMap.setCenter(new google.maps.LatLng(-34.2, -56.5));
+			   	$scope.travelMap.setZoom(9);
+			   	$scope.travelMap.panTo(new google.maps.LatLng(-34.2, -56.5));
+			   	$("#travelLocationModal").modal('show');
 		   	    $timeout(function () 
-				{            
+				{   $scope.travelMap.setZoom(9);	         
 		   	    	google.maps.event.trigger($scope.travelMap, 'resize');
-		   	    	
-				}, 400);
-		   	    
-				//$("#rutaModal").modal('show');
+		   	    	$scope.calculateAndDisplayRoute(directionsService, directionsDisplay);
+				}, 400);		   	    
+				
 			})
 			.error(function()
 			{
@@ -454,21 +457,21 @@ goOnApp.controller('userPanelController', function($scope, $http, $location, uiG
 		      })
 		      for (k = 0; k < nextSegment.length; k++) {
 		        stepPolyline.getPath().push(nextSegment[k]);
-		    //    bounds.extend(nextSegment[k]);
+		        bounds.extend(nextSegment[k]);
 		      }
 		      polylines.push(stepPolyline);
 		      stepPolyline.setMap($scope.travelMap);
 		      // route click listeners, different one on each step
-		      google.maps.event.addListener(stepPolyline, 'click', function(evt) 
-		      {
+		    //  google.maps.event.addListener(stepPolyline, 'click', function(evt) 
+		    //  {
 		    	 /*infowindow.setContent("you clicked on the route<br>" + evt.latLng.toUrlValue(6));
 		        infowindow.setPosition(evt.latLng);
 		        infowindow.open($scope.routeMap);*/
-		      })
+		   //   })
 		    }
 		  }
 		  $scope.travelMap.fitBounds(bounds);		  
-		  $("#travelLocationModal").modal('show');		  
+		  //$("#travelLocationModal").modal('show');		  
 	}
     
 });

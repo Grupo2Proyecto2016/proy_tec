@@ -989,29 +989,20 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 			
 	    	$http.get(servicesUrl + 'FindNextStationsByOrigin?line=' + line+'&origin=' +$scope.routeLine.origen.id_parada)
 			.success(function(data, status, headers, config) 
-			{
-						
+			{						
 				$scope.routeLine.paradas = data;
 				$scope.routeLine.selorigen = origen;
 				$scope.routeLine.seldestino = destino;
 				$scope.routeMap.setCenter(new google.maps.LatLng(-34.2, -56.5));
 		   	    $scope.routeMap.setZoom(9);
-		   	    $scope.routeMap.panTo(new google.maps.LatLng(-34.2, -56.5));		   	  
-		   	    $("#rutaModal").modal('show');
-		   	    $timeout(function () 
-   	    		{            
-   	    			$scope.routeMap.setZoom(9);		
-   	    			google.maps.event.trigger($scope.routeMap, 'resize');
-												
-		        }, 400);	
-		    	
+		   	    $scope.routeMap.panTo(new google.maps.LatLng(-34.2, -56.5));	   	    	    	
 		    	var directionsService = new google.maps.DirectionsService;
 		    	var directionsDisplay = new google.maps.DirectionsRenderer({
 		    	    														suppressPolylines: true,
 		    	    														infoWindow: infowindow
 		    	  															});
 		    	directionsDisplay.setMap($scope.routeMap);
-		   	    $scope.calculateAndDisplayRoute(directionsService, directionsDisplay);		   	    
+		   	      
 		   	    $scope.routeMap.setCenter(new google.maps.LatLng(-34.2, -56.5));
 		   	    $scope.routeMap.setZoom(9);
 		   	    $scope.routeMap.panTo(new google.maps.LatLng(-34.2, -56.5));		   	  
@@ -1020,9 +1011,9 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
    	    		{            
    	    			$scope.routeMap.setZoom(9);		
    	    			google.maps.event.trigger($scope.routeMap, 'resize');
-												
+   	    			$scope.calculateAndDisplayRoute(directionsService, directionsDisplay);		   	  								
 		        }, 400);		   	    
-				$scope.$digest();
+				//$scope.$digest();
 			})
 			.error(function()
 			{
@@ -1115,7 +1106,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 		      })
 		      for (k = 0; k < nextSegment.length; k++) {
 		        stepPolyline.getPath().push(nextSegment[k]);
-		        //bounds.extend(nextSegment[k]);
+		        bounds.extend(nextSegment[k]);
 		      }
 		      polylines.push(stepPolyline);
 		      stepPolyline.setMap($scope.routeMap);
@@ -1128,13 +1119,13 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 		      })*/
 		    }
 		  }
-		  //$scope.routeMap.fitBounds(bounds);
-		  $scope.routeMap.setCenter(new google.maps.LatLng(-34.2, -56.5));
-	   	  $scope.routeMap.setZoom(9);
-	   	  $timeout(function () 
-				{            
-					google.maps.event.trigger($scope.routeMap, 'resize');
-		        }, 400);
+		  $scope.routeMap.fitBounds(bounds);
+		  //$scope.routeMap.setCenter(new google.maps.LatLng(-34.2, -56.5));
+	   	  //$scope.routeMap.setZoom(9);
+	   	  //$timeout(function () 
+			//	{            
+				//	google.maps.event.trigger($scope.routeMap, 'resize');
+		        //}, 400);
 	}
 	
 	/*$marcadorCerca = function(lat, lng) 
