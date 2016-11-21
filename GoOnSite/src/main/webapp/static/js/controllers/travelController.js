@@ -46,8 +46,8 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     //DESTINATION MAP
     $scope.destinationMap = new google.maps.Map(document.getElementById('destinationMap'), 
     {
-      zoom: 12,
-      center: {lat: -34.894418, lng: -56.165775}
+    	center: {lat: -34.2, lng: -56.5},    	  
+        zoom: 9
     });
     
     var destinationInput = document.getElementById('destination-pac-input');
@@ -233,8 +233,10 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     //ORIGIN MAP
     $scope.originMap = new google.maps.Map(document.getElementById('originMap'), 
     {
-      zoom: 12,
-      center: {lat: -34.894418, lng: -56.165775}
+      //zoom: 12,
+      //center: {lat: -34.894418, lng: -56.165775}
+    	center: {lat: -34.4, lng: -56.5},    	  
+        zoom: 9
     });
     var originInput = document.getElementById('origin-pac-input');
     var originSearchBox = new google.maps.places.SearchBox(originInput);
@@ -419,10 +421,30 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     
     $scope.showDestinationMap = function()
     {
-    	$("#destinationModal").modal('show');
+     	$("#destinationModal").modal('show');
     	$timeout(function () {            
     		google.maps.event.trigger($scope.destinationMap, 'resize');
-        }, 400);
+        }, 400);    	 
+    	/*var bounds = new google.maps.LatLngBounds();
+    	$scope.destinoMarkers;
+    	angular.forEach($scope.stations, function(station, key) 
+        {
+    		position = new google.maps.LatLng(station.latitud,station.longitud);
+    		bounds.extend(position);
+    		
+		});
+    	window.alert(bounds.getCenter().lng());
+    	window.alert(bounds.getCenter().lng()-0.5);    	  	
+    	var micentro = new google.maps.LatLng(bounds.getCenter().lng()-1, bounds.getCenter().lat()-1);
+    	//$scope.destinationMap.setCenter(bounds.getCenter());    	
+    	$scope.destinationMap.setCenter(micentro);
+    	window.alert(micentro);
+    	$scope.destinationMap.fitBounds(bounds);    	
+    	//$scope.destinationMap.setCenter(bounds.getCenter());   	 	
+    	$scope.destinationMap.setZoom(9);
+    	$timeout(function () {            
+    		google.maps.event.trigger($scope.destinationMap, 'resize');
+        }, 400);*/   	
     };
     
     $scope.showOriginMap = function()
@@ -952,8 +974,8 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     
     $scope.routeMap = new google.maps.Map(document.getElementById('rutaMap'), 
     {
-      zoom: 12,
-      center: {lat: -34.894418, lng: -56.165775}
+    	center: {lat: -34.2, lng: -56.5},
+        zoom: 9
     });
     
     $scope.showRoute = function(line, origen, destino)
@@ -968,13 +990,20 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 	    	$http.get(servicesUrl + 'FindNextStationsByOrigin?line=' + line+'&origin=' +$scope.routeLine.origen.id_parada)
 			.success(function(data, status, headers, config) 
 			{
+						
 				$scope.routeLine.paradas = data;
 				$scope.routeLine.selorigen = origen;
 				$scope.routeLine.seldestino = destino;
-				$timeout(function () 
-				{            
-					google.maps.event.trigger($scope.routeMap, 'resize');
-		        }, 400);
+				$scope.routeMap.setCenter(new google.maps.LatLng(-34.2, -56.5));
+		   	    $scope.routeMap.setZoom(9);
+		   	    $scope.routeMap.panTo(new google.maps.LatLng(-34.2, -56.5));		   	  
+		   	    $("#rutaModal").modal('show');
+		   	    $timeout(function () 
+   	    		{            
+   	    			$scope.routeMap.setZoom(9);		
+   	    			google.maps.event.trigger($scope.routeMap, 'resize');
+												
+		        }, 400);	
 		    	
 		    	var directionsService = new google.maps.DirectionsService;
 		    	var directionsDisplay = new google.maps.DirectionsRenderer({
@@ -982,9 +1011,18 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 		    	    														infoWindow: infowindow
 		    	  															});
 		    	directionsDisplay.setMap($scope.routeMap);
-		   	    $scope.calculateAndDisplayRoute(directionsService, directionsDisplay);
-		   	    
-				$("#rutaModal").modal('show');
+		   	    $scope.calculateAndDisplayRoute(directionsService, directionsDisplay);		   	    
+		   	    $scope.routeMap.setCenter(new google.maps.LatLng(-34.2, -56.5));
+		   	    $scope.routeMap.setZoom(9);
+		   	    $scope.routeMap.panTo(new google.maps.LatLng(-34.2, -56.5));		   	  
+		   	    $("#rutaModal").modal('show');
+		   	    $timeout(function () 
+   	    		{            
+   	    			$scope.routeMap.setZoom(9);		
+   	    			google.maps.event.trigger($scope.routeMap, 'resize');
+												
+		        }, 400);		   	    
+				$scope.$digest();
 			})
 			.error(function()
 			{
@@ -1077,21 +1115,26 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 		      })
 		      for (k = 0; k < nextSegment.length; k++) {
 		        stepPolyline.getPath().push(nextSegment[k]);
-		        bounds.extend(nextSegment[k]);
+		        //bounds.extend(nextSegment[k]);
 		      }
 		      polylines.push(stepPolyline);
 		      stepPolyline.setMap($scope.routeMap);
 		      // route click listeners, different one on each step
-		      google.maps.event.addListener(stepPolyline, 'click', function(evt) 
+		      /*google.maps.event.addListener(stepPolyline, 'click', function(evt) 
 		      {
-		    	 /*infowindow.setContent("you clicked on the route<br>" + evt.latLng.toUrlValue(6));
+		    	infowindow.setContent("you clicked on the route<br>" + evt.latLng.toUrlValue(6));
 		        infowindow.setPosition(evt.latLng);
-		        infowindow.open($scope.routeMap);*/
-		      })
+		        infowindow.open($scope.routeMap);
+		      })*/
 		    }
 		  }
-		  $scope.routeMap.fitBounds(bounds);		  
-		  
+		  //$scope.routeMap.fitBounds(bounds);
+		  $scope.routeMap.setCenter(new google.maps.LatLng(-34.2, -56.5));
+	   	  $scope.routeMap.setZoom(9);
+	   	  $timeout(function () 
+				{            
+					google.maps.event.trigger($scope.routeMap, 'resize');
+		        }, 400);
 	}
 	
 	/*$marcadorCerca = function(lat, lng) 

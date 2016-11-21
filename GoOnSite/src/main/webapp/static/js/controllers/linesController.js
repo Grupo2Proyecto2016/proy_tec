@@ -632,14 +632,14 @@ goOnApp.controller('linesController', function($scope, $http, uiGridConstants, i
         
     $scope.map = new google.maps.Map(document.getElementById('map'), 
     {
-      zoom: 12,
-      center: {lat: -34.894418, lng: -56.165775}
+		zoom: 13,
+		center: {lat: -34.881508, lng: -56.199247}    
     });
     
     $scope.mapV = new google.maps.Map(document.getElementById('mapV'), 
     {
-      zoom: 12,
-      center: {lat: -34.894418, lng: -56.165775}
+    	zoom: 13,
+    	center: {lat: -34.881508, lng: -56.199247}   
     });
     
     

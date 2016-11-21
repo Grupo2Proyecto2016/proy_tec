@@ -23,8 +23,8 @@ goOnApp.controller('outBranchesController', function($scope, $http, uiGridConsta
     //MAPA\\    
     $scope.map = new google.maps.Map(document.getElementById('map'), 
     {
-        center: {lat: -34.894418, lng: -56.165775},
-        zoom: 7
+    	center: {lat: -34.894418, lng: -56.165775},
+ 	    zoom: 13 	    
     });
     
     //Create the search box and link it to the UI element.

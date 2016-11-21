@@ -64,9 +64,7 @@
 				</div>
 				<div class="panel-body">
 					<input id="pac-input" class="controls" type="text" placeholder="Search Box">
-					<div id="map" style="height: 50%">
-					
- 					</div>
+					<div id="map" style="height: 50%"></div>
 				</div>
 			</div>
 		</div>

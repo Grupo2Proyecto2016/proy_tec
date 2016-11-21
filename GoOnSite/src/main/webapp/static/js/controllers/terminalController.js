@@ -87,8 +87,8 @@ goOnApp.controller('terminalController', function($scope, $http, uiGridConstants
     
     $scope.map = new google.maps.Map(document.getElementById('map'), 
     {
-        center: {lat: -34.894418, lng: -56.165775},
-        zoom: 13
+    	 center: {lat: -34.879889, lng: -56.201546},    	 
+	     zoom: 13
     });
     			 
  // Create the search box and link it to the UI element.
