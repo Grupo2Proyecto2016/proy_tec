@@ -342,6 +342,9 @@ goOnApp.controller('userPanelController', function($scope, $http, $location, uiG
 			.success(function(data, status, headers, config) 
 			{
 				$scope.routeLine.paradas = data;
+				
+				$scope.routeLine.paradas.splice(0, 0, $scope.routeLine.origen);
+				
 				$scope.routeLine.selorigen = origen.id_parada;
 				$scope.routeLine.seldestino = destino.id_parada;
 				$scope.travelMap.setCenter(new google.maps.LatLng(-34.2, -56.5));

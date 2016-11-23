@@ -991,6 +991,9 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 			.success(function(data, status, headers, config) 
 			{						
 				$scope.routeLine.paradas = data;
+				
+				$scope.routeLine.paradas.splice(0, 0, $scope.routeLine.origen);
+				
 				$scope.routeLine.selorigen = origen;
 				$scope.routeLine.seldestino = destino;
 				$scope.routeMap.setCenter(new google.maps.LatLng(-34.2, -56.5));
@@ -1098,7 +1101,8 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 		    {
 		    	color = "#00FF00";
 		    }
-		    for (j = 0; j < steps.length; j++) {
+		    for (j = 0; j < steps.length; j++) 
+		    {
 		      var nextSegment = steps[j].path;
 		      var stepPolyline = new google.maps.Polyline(polylineOptions);
 		      stepPolyline.setOptions({
