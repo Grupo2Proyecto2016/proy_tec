@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <!-- This file has been downloaded from Bootsnipp.com. Enjoy! -->
     <script src="<c:url value='/static/js/tokenLogic.js' />"></script>
-    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 </head>
 <body>
 	<form class="form-signin" method="post" id="EntryForm">
