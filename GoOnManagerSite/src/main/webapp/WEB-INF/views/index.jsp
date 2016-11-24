@@ -12,9 +12,9 @@
       
       <!-- SCRIPTS -->
       <script src="<c:url value='/static/js/tokenLogic.js' />"></script>
-      <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+      <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
       <script src="<c:url value='/static/js/jquery/jquery.blockUI.js' />"></script>
-      <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
       
       <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
 	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-route.js"></script>
