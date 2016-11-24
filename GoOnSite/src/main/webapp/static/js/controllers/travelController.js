@@ -516,6 +516,10 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
     	$scope.seatsForm.id_vehiculo = id_vehiculo;
     	$scope.seatsForm.valor = valor;
     	
+    		
+    	$('.seatCharts-row').remove();
+    	$('.seatCharts-legendItem').remove();
+    	$('#seat-map,#seat-map *').unbind().removeData();
     	
     	$http.post(servicesUrl +'getSeats', JSON.stringify($scope.seatsForm))
 		.success(function(data, status, headers, config)
@@ -585,7 +589,7 @@ goOnApp.controller('travelController', function($scope, $http, uiGridConstants, 
 			var $cart = $('#selected-seats');
 			var $counter = $('#counter');
 			var $total = $('#total');
-
+			
 			$scope.sc = $('#seat-map').seatCharts({
 				map: array_asientos,
 				seats: {
