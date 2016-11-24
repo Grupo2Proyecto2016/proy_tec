@@ -9,8 +9,8 @@
     <link href="<c:url value='/static/css/login.css' />" rel="stylesheet"></link>
     <script src="<c:url value='/static/js/tokenLogic.js' />"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
-    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 </head>
 <body>
 <div id="fullscreen_bg" class="fullscreen_bg"/>
