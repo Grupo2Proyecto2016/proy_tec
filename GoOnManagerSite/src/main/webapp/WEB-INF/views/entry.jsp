@@ -17,4 +17,4 @@
 	$("#EntryForm").submit();
 </script>
 </body>
-</html>
+</html> 

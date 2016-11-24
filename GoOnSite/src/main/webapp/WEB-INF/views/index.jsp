@@ -29,8 +29,8 @@
       <!-- PAYPAL -->
       <script src="<c:url value='/static/js/paypal/dg.js' />"></script>      
       
-	  <link rel="stylesheet" href="<c:url value='/static/css/ui-grid.min.css' />" />
-      <script src="<c:url value='/static/js/ui-grid/ui-grid.min.js' />"></script>
+	  <link rel="stylesheet" href="<c:url value='/static/css/ui-grid.css' />" />
+      <script src="<c:url value='/static/js/ui-grid/ui-grid.js' />"></script>
       <script src="<c:url value='/static/js/seatCharts/jquery.seat-charts.js' />"></script>
       <link rel="stylesheet" href="<c:url value='/static/css/jquery.seat-charts.css' />" />
       
