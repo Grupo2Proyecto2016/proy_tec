@@ -12,6 +12,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.springmvc.exceptions.HttpNotFoundException;
 import com.springmvc.exceptions.HttpUnauthorizedException;
@@ -52,6 +54,12 @@ public class MainController {
 		{
 			throw new HttpNotFoundException();
 		}
+	}
+	
+	@RequestMapping(value = "/ui-grid/ui-grid", method = RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	public void uiGrid(@RequestHeader HttpHeaders headers, @PathVariable String tenantid) 
+	{
 	}
 	
 	@RequestMapping(value = "/{tenantid}/pages/{page}", method = RequestMethod.GET)

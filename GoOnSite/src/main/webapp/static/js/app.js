@@ -395,7 +395,13 @@
         
         $scope.getTicketStorageKey = function()
         {
-        	return $rootScope.user.usrname + "_" + $scope.company.nombreTenant + "_userTickets";
+        	while(true)
+        	{
+        		if($scope.company != null)
+        		{
+        			return $rootScope.user.usrname + "_" + $scope.company.nombreTenant + "_userTickets";        			
+        		}
+        	}
         }
         
     });
