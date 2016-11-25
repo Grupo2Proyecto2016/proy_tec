@@ -1,3 +1,4 @@
+<div>
 <div id="divTitleBuses" class="jumbotron text-center">
 	<h3>Vehículos</h3>
 	
@@ -186,4 +187,6 @@
       </div>
     </div>
   </div>
+</div>
+
 </div>

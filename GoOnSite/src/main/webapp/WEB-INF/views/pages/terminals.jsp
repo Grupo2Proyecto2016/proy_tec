@@ -1,3 +1,4 @@
+</div>
 <div id="divTitleBranches" class="jumbotron text-center">
 	<h3>Terminales</h3>
 	
@@ -90,4 +91,5 @@
       </div>
     </div>
   </div>
+</div>
 </div>

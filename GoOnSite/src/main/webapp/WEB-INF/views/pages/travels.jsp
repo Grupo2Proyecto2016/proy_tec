@@ -1,3 +1,5 @@
+<div>
+
 <style>
 	.ui-grid { color: #242729; }
 	.ui-grid-top-panel-background {
@@ -458,4 +460,5 @@
   </div>
 </div>
 
+</div>
 

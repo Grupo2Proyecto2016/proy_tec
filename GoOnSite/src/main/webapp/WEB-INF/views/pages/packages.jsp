@@ -1,3 +1,5 @@
+<div>
+
 <div class="jumbotron text-center">
 	<h3>Registro de Encomiendas</h3>
 	
@@ -230,4 +232,5 @@
       </div>
     </div>
   </div>
+ </div>
  </div>

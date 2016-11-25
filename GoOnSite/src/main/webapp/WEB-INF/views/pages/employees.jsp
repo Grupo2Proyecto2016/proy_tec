@@ -1,3 +1,4 @@
+<div>
 <div class="jumbotron text-center">
 	<h3>Manejo del Personal</h2>
 	
@@ -239,4 +240,5 @@
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
+</div>
 </div>

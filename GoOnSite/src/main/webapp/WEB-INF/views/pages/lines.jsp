@@ -1,3 +1,4 @@
+<div>
 <div id="divTitleLines" class="jumbotron text-center">
 	<h3>Líneas</h3>	
 	<p>{{ message }}</p>
@@ -429,4 +430,5 @@
       </div>
     </div>
   </div>
+ </div>
  </div>
