@@ -217,8 +217,8 @@
 </div>
 
 <div class="row" style="margin-top: 50px;">
-	<div class="col-xs-2"></div>
-	<div class="col-xs-8">
+	<div class="col-xs-1"></div>
+	<div class="col-xs-10">
 		<div ui-grid="usersGrid" ui-grid-pagination class="genericGridHeader"></div>
 	</div>
 </div>

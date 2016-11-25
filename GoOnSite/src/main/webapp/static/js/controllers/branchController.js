@@ -120,9 +120,10 @@ goOnApp.controller('branchController', function($scope, $http, uiGridConstants, 
           { name:'Correo', field: 'mail' },      
           { name:'Posee terminal', cellTemplate: '<div class="text-center ngCellText">{{row.entity.hasTerminal | SiNo}}</div>' },
           { name: 'Acciones',
-        	enableFiltering: false,
+        	width: 90,
+    	    enableFiltering: false,
         	enableSorting: false,
-            cellTemplate:'<button style="width: 50%" class="btn-xs btn-danger" ng-click="grid.appScope.showDeleteDialog(row)">Eliminar</button>'
+            cellTemplate:'<button style="width: 100%" class="btn-xs btn-danger" ng-click="grid.appScope.showDeleteDialog(row)">Eliminar</button>'
             	/*'<button style="width: 50%" class="btn-xs btn-primary" ng-click="grid.appScope.getBusDetails(row)"></button>'+
             			 */ 
             			  
