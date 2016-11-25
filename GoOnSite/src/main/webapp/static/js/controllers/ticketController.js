@@ -31,14 +31,14 @@ goOnApp.controller('ticketController', function($scope, $http, uiGridConstants, 
           { name:'Cliente', field: 'ci_receptor', width: '80', enableSorting: false, cellTooltip: true },
           { name:'Origen', field: 'viaje.linea.origen.descripcion', width: '*', cellTooltip: true },
           { name:'Destino', field: 'viaje.linea.destino.descripcion', width: '*', cellTooltip: true },
-          { name:'Salida', cellTemplate: '<div class="text-center ngCellText">{{ row.entity.viaje.inicio | date:"dd/MM/yyyy @ h:mma"}}</div>', width: '*', enableFiltering: false, enableSorting: false },
+          { name:'Salida', width: '180', cellTemplate: '<div class="text-center ngCellText">{{ row.entity.viaje.inicio | date:"dd/MM/yyyy @ h:mma"}}</div>', enableFiltering: false, enableSorting: false },
           { name:'Nº Coche', field: 'viaje.vehiculo.numerov', width: '80' },
           { name:'Costo', field: 'costo', width: '*'},
           { name:'Estado', field: 'statusDes', width: '100'},
           { name: ' ',
+        	width: '180',
           	enableFiltering: false,
           	enableSorting: false,
-          	width: '180',
             cellTemplate:
             	'<button style="width: 50px" class="btn-xs btn-info" ng-click="grid.appScope.showTicket(row)">Ver</button>'
             	+ '<button style="width: 70px" class="btn-xs btn-success" ng-show="row.entity.estado == 1" ng-click="grid.appScope.confirmReservationDialog(row)">Confirmar</button>'

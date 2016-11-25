@@ -27,26 +27,26 @@
 		<div class="col-xs-3"></div>
 	</div>
 	
-	<div class="col-xs-2"></div>	
-	<div class="col-xs-8">
+	<div class="col-xs-1"></div>	
+	<div class="col-xs-10">
 		<form class="form-horizontal" name="packsForm" role="form" ng-submit="getActiveTickets()">
 			<div class="form-group"> 
-				<div class="col-sm-3"></div>
-				<div class="col-sm-3">
+				<div class="col-sm-1"></div>
+				<div class="col-sm-6">
 					<label class="control-label col-sm-3">Desde:</label>
 					<div class="col-sm-9">
 						<input type="date" class="form-control"  ng-model="filterMinDate" required>
 				    </div>
 				</div>
-	    		<div class="col-sm-3">
+	    		<div class="col-sm-1">
 	      			<button style="float: right; margin-top: 10px;" type="submit"  class="btn btn-sm btn-info">Filtrar</button>
 	    		</div>
-	    		<div class="col-sm-3"></div>
+	    		<div class="col-sm-1"></div>
 		    </div>
 	    </form>
-		<div ui-grid="ticketsGrid" style=" height: 55%;" ui-grid-pagination></div>
+		<div ui-grid="ticketsGrid" ui-grid-pagination></div>
 	</div>
-	<div class="col-xs-2"></div>
+	<div class="col-xs-1"></div>
 </div>
 
 <div class="modal fade" id="cancelTicketModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

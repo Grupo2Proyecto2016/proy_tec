@@ -26,7 +26,7 @@ goOnApp.controller('payPalCheckoutController', function($scope, $http, uiGridCon
     				$scope.error_message = $scope.payPalInfo.msg; 
     				$("#errorModal").modal("toggle");
     			}
-    			$scope.$apply();
+    			//$scope.$apply();
     			
         	}
         	else

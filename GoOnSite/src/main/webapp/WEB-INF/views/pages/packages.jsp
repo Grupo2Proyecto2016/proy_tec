@@ -195,7 +195,7 @@
 	    		<div class="col-sm-3"></div>
 		    </div>
 	    </form>
-		<div ui-grid="packagesGrid" style=" height: 55%;" ui-grid-pagination></div>
+		<div ui-grid="packagesGrid" style="height: 55%;" ui-grid-pagination></div>
 	</div>
 	<div class="col-xs-2"></div>
 </div>
