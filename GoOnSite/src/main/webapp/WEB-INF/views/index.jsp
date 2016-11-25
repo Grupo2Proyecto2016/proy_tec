@@ -64,7 +64,6 @@
         <!-- HEADER AND NAVBAR -->
         <header>
             <nav class="navbar navbar-default">
-            <img class="img-responsive" src="static/images/google_play_icon.png" alt="" style="width: 150px; float: right; padding: 5px; margin-left: 55px;">
             <div class="container">
                 <div class="navbar-header">
                     <a class="navbar-brand pull-left">

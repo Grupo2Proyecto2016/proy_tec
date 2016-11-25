@@ -18,8 +18,8 @@
 
 <div id="divPackageForm" class="hidden" ng-show="packageOrigin != null">
 	<div class="row">
-		<div class="col-xs-2"></div>
-		<div class="col-xs-8">
+		<div class="col-xs-1"></div>
+		<div class="col-xs-10">
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<div> 
@@ -156,31 +156,31 @@
 	    		</div>
 			</form>
 		</div>
-		<div class="col-xs-2"></div>
+		<div class="col-xs-1"></div>
 	</div>
 	
 	<div class="row" ng-if="travels.length > 0" style="margin-top: 50px;">
-		<div class="col-xs-2"></div>	
-		<div class="col-xs-8">
+		<div class="col-xs-1"></div>	
+		<div class="col-xs-10">
 			<h4 class="text-center">Selecciona un viaje</h4>
 			<div ui-grid="travelsGrid" style=" height: 55%;" ui-grid-selection ui-grid-pagination></div>
 		</div>
-		<div class="col-xs-2"></div>
+		<div class="col-xs-1"></div>
 	</div>
 		
 </div>
 
 <div id="packagesGridDiv" class="row" style="margin-top: 50px;">
 	<div class="row">
-		<div class="col-sm-8 col-sm-offset-2">
+		<div class="col-sm-10 col-sm-offset-1">
 			<div class="alert alert-warning text-center">
 			  <p>Se muestran encomiendas en un rango de 30 días a partir de la fecha de origen</p>
 			</div>
 		</div>
 	</div>
 	
-	<div class="col-xs-2"></div>	
-	<div class="col-xs-8">
+	<div class="col-xs-1"></div>	
+	<div class="col-xs-10">
 		<form class="form-horizontal" name="packsForm" role="form" ng-submit="getBranchPackages()">
 			<div class="form-group"> 
 				<div class="col-sm-8 col-sm-offset-2">

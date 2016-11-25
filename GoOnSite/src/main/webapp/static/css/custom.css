@@ -1,3 +1,9 @@
+.container
+{
+	margin-right: 0px !important;
+	margin-left: 20px !important;
+}
+
 table.panelTable thead
 {
 	background: beige;
@@ -351,16 +357,22 @@ div.row
     
 }
 
-@media screen and (max-width: 768px) 
+@media screen and (max-width: 770px) 
 {
 	header, footer { position: relative; }
 	div.viewContainer { padding-top: 0px; }
 }
 
-@media screen and (max-width: 992px) and (min-width: 769px) 
+@media screen and (max-width: 990px) and (min-width: 771px) 
+{
+	div.viewContainer { padding-top: 180px; }
+}
+
+@media screen and (max-width: 1200px) and (min-width: 991px) 
 {
 	div.viewContainer { padding-top: 125px; }
 }
+
 
 
 #caja_verde{
