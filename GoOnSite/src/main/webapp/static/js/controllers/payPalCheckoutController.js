@@ -11,7 +11,6 @@ goOnApp.controller('payPalCheckoutController', function($scope, $http, uiGridCon
 		$http.post(servicesUrl +'payPaypal', JSON.stringify($scope.seatsForm))
 		.then(function(response) 
 		{
-			$.unblockUI();		
         	if(response.status == 200)
         	{	        		
     			$scope.payPalInfo = response.data;
@@ -34,6 +33,7 @@ goOnApp.controller('payPalCheckoutController', function($scope, $http, uiGridCon
         		$scope.error_message = 'Ha ocurrido un error al realizar el pago.'; 
 				$("#errorModal").modal("toggle");
         	}
+        	$.unblockUI();		
 		}
 		);
 	}	

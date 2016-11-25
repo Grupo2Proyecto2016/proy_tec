@@ -394,15 +394,18 @@
         };
         
         $scope.getTicketStorageKey = function()
-        {
-        	while(true)
-        	{
-        		if($scope.company != null)
-        		{
-        			return $rootScope.user.usrname + "_" + $scope.company.nombreTenant + "_userTickets";        			
-        		}
-        	}
-        }
+        {          
+    	   setTimeout(function() {   
+    		   if($scope.company != null)
+           		{
+           			return $rootScope.user.usrname + "_" + $scope.company.nombreTenant + "_userTickets";        			
+           		}
+    		   else
+    		   {
+    			   return $scope.getTicketStorageKey();
+    		   }
+    	   }, 1000);
+    	};  
         
     });
     
